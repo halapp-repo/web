@@ -1,18 +1,22 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+name: Build ,Test ,And Deploy Web UI To AWS
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+
+    env:
+      S3_BUCKET: halapp.io
+      DIST: build
+      REGION: eu-central-1
+      CLOUDFRONT_DISTRIBUTION: E1SC2OJCRJ6S4J
 
     strategy:
       matrix:
@@ -21,11 +25,32 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
+    
+    - run: npm install && npm run build
+
     - run: npm test
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Copy Files To The AWS S3
+      run: |
+        aws s3 sync --delete ${{ env.DIST }} s3://${{ env.S3_BUCKET }}
+
+    - name: Invalidate Cloudfront
+      run: |
+        aws cloudfront create-invalidation \
+        --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION }} \
+        --paths "/*"
+    
+
