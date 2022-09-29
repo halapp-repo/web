@@ -33,7 +33,7 @@ const InventorySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchInventories.rejected, (state, action) => {
+    builder.addCase(fetchInventories.rejected, (state) => {
       state.inventories = null;
     });
     builder.addCase(fetchInventories.fulfilled, (state, action) => {

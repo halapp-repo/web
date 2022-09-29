@@ -5,10 +5,7 @@ import MainCard from '../../components/MainCard';
 import { useEffect } from 'react';
 import { useAppDispatch } from '../../store/hooks';
 import { fetchInventories } from '../../store/inventories/inventoriesSlice';
-import { fetchPrices } from '../../store/prices/pricesSlice';
 import * as moment from 'moment-timezone';
-import { ProductType } from '../../models/product-type-type';
-import { LocationType } from '../../models/location-type';
 import { updatePricesSelectedDate } from '../../store/ui/uiSlice';
 
 const DashboardDefault = () => {

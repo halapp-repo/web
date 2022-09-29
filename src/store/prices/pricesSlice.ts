@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { PricesState } from './pricesState';
 import type { RootState } from '../index';
-import { PricesApi } from './pricesApi';
 import { Price } from '../../models/price';
 import moment from 'moment';
+import { PricesApi } from './pricesApi';
 
 const initialState = {} as PricesState;
 
@@ -15,18 +15,19 @@ export const fetchPrices = createAsyncThunk<
   let response;
   if (date == moment.tz('Europe/Istanbul').format('YYYY-MM-DD')) {
     const yesterday = moment.tz('Europe/Istanbul').subtract(1, 'd').format('YYYY-MM-DD');
-    // response = await new PricesApi().fetchPrice(location, type, yesterday, date);
+    response = await new PricesApi().fetchPrice(location, type, yesterday, date);
   } else {
-    // response = await new PricesApi().fetchPrice(location, type, date);
+    response = await new PricesApi().fetchPrice(location, type, date);
   }
-  return [
-    { Price: 10.34, ProductId: 'GRSB1001', TS: '2022-09-28T15:48:58+03:00', Unit: 'PK/125G' },
-    { Price: 12.34, ProductId: 'GRSB1001', TS: '2022-09-29T15:48:58+03:00', Unit: 'PK/125G' },
-    { Price: 23.5, ProductId: 'GPER1001', TS: '2022-09-29T15:48:58+03:00', Unit: 'KG' },
-    { Price: 12.34, ProductId: 'GRSB1001', TS: '2022-09-29T15:50:57+03:00', Unit: 'PK/125G' },
-    { Price: 23.5, ProductId: 'GPER1001', TS: '2022-09-29T15:50:57+03:00', Unit: 'KG' },
-    { Price: 25.5, ProductId: 'GPER1001', TS: '2022-09-28T15:50:57+03:00', Unit: 'KG' }
-  ];
+  return response;
+  // return [
+  //   { Price: 10.34, ProductId: 'GRSB1001', TS: '2022-09-28T15:48:58+03:00', Unit: 'PK/125G' },
+  //   { Price: 12.34, ProductId: 'GRSB1001', TS: '2022-09-29T15:48:58+03:00', Unit: 'PK/125G' },
+  //   { Price: 23.5, ProductId: 'GPER1001', TS: '2022-09-29T15:48:58+03:00', Unit: 'KG' },
+  //   { Price: 12.34, ProductId: 'GRSB1001', TS: '2022-09-29T15:50:57+03:00', Unit: 'PK/125G' },
+  //   { Price: 23.5, ProductId: 'GPER1001', TS: '2022-09-29T15:50:57+03:00', Unit: 'KG' },
+  //   { Price: 25.5, ProductId: 'GPER1001', TS: '2022-09-28T15:50:57+03:00', Unit: 'KG' }
+  // ];
 });
 
 const PricesSlice = createSlice({

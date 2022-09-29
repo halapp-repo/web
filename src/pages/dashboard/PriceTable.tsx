@@ -4,7 +4,7 @@ import { fetchPrices } from '../../store/prices/pricesSlice';
 import { selectProducts } from '../../store/inventories/inventoriesSlice';
 import { selectPricesOfSelectedDate } from '../../store/prices/pricesSlice';
 import { selectUIPricesSelectedDate } from '../../store/ui/uiSlice';
-import { RiseOutlined, FallOutlined, StockOutlined, MinusOutlined } from '@ant-design/icons';
+import { RiseOutlined, FallOutlined, MinusOutlined } from '@ant-design/icons';
 import {
   Box,
   Table,
