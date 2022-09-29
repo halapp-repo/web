@@ -17,6 +17,8 @@ jobs:
       DIST: build
       REGION: eu-central-1
       CLOUDFRONT_DISTRIBUTION: E1SC2OJCRJ6S4J
+      NODE_ENV: production
+      REACT_APP_LISTING_BASE_URL: https://rkq38xk46j.execute-api.eu-central-1.amazonaws.com/prod
 
     strategy:
       matrix:
