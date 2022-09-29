@@ -1,26 +1,25 @@
-import * as moment from 'moment-timezone'
-import { createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '../index'
+import { createSelector, createSlice } from '@reduxjs/toolkit';
+import type { RootState } from '../index';
 import { UIState } from './uiState';
-
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
-    prices: {
-        selectedDate: moment.tz('Europe/Istanbul').format("YYYY-MM-DD")
-    }
+  prices: {}
 } as UIState;
 
-
 const UISlice = createSlice({
-    name: 'ui',
-    initialState,
-    reducers: {
-        updatePricesSelectedDate: (state: UIState, action) => {
-            state.prices.selectedDate = action.payload
-        }
-    },
+  name: 'ui',
+  initialState,
+  reducers: {
+    updatePricesSelectedDate: (state: UIState, action: PayloadAction<string>) => {
+      state.prices.selectedDate = action.payload;
+    }
+  }
 });
 
-export const { updatePricesSelectedDate: updatedPricesSelectedDate } = UISlice.actions;
-export const selectUIPrices = (state: RootState) => state.ui.prices
+export const { updatePricesSelectedDate } = UISlice.actions;
+export const selectUIPricesSelectedDate = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.prices.selectedDate
+);
 export default UISlice.reducer;
