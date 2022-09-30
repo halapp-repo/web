@@ -13,10 +13,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  Chip,
-  useMediaQuery,
-  Theme
+  Typography
+  // useMediaQuery,
 } from '@mui/material';
 import { LocationType } from '../../models/location-type';
 import { ProductType } from '../../models/product-type-type';
@@ -45,7 +43,7 @@ const PriceTable = () => {
   const inventories = useAppSelector(selectProducts);
   const selectedDatePrices = useAppSelector(selectPricesOfSelectedDate);
 
-  const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  // const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const createTableRow = (prices: Price[]): ReactElement[] => {
     return Object.values(
