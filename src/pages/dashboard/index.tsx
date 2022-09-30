@@ -24,7 +24,7 @@ const DashboardDefault = () => {
       justifyContent="center"
       columnSpacing={2.75}
       alignItems="center">
-      <Grid item xs={12} md={10} lg={8}>
+      <Grid item xs={12} md={8} lg={6}>
         <MainCard sx={{ mt: 2 }}>
           <PriceTable />
         </MainCard>

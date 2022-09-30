@@ -4,7 +4,7 @@ import { fetchPrices } from '../../store/prices/pricesSlice';
 import { selectProducts } from '../../store/inventories/inventoriesSlice';
 import { selectPricesOfSelectedDate } from '../../store/prices/pricesSlice';
 import { selectUIPricesSelectedDate } from '../../store/ui/uiSlice';
-import { RiseOutlined, FallOutlined, MinusOutlined } from '@ant-design/icons';
+import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import {
   Box,
   Table,
@@ -90,35 +90,31 @@ const PriceTable = () => {
           <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={p.ProductId}>
             <TableCell align="left">{p.ProductName}</TableCell>
             <TableCell align="left">{p.Unit}</TableCell>
-            {!matchesSm && (
-              <TableCell align="left">
-                <Chip
-                  variant="filled"
-                  color={increase > 0 ? 'warning' : increase < 0 ? 'success' : 'secondary'}
-                  icon={
-                    <>
-                      {increase == 0 && (
-                        <MinusOutlined style={{ fontSize: '0.75rem', color: 'inherit' }} />
-                      )}
-                      {increase > 0 && (
-                        <RiseOutlined style={{ fontSize: '0.75rem', color: 'inherit' }} />
-                      )}
-                      {increase < 0 && (
-                        <FallOutlined style={{ fontSize: '0.75rem', color: 'inherit' }} />
-                      )}
-                    </>
-                  }
-                  label={`%${Math.abs(increase)}`}
-                  sx={{ ml: 1.25, pl: 1 }}
-                  size="small"
-                />
-              </TableCell>
-            )}
-
             <TableCell align="right">
-              <Typography variant="h5" color="inherit">
+              {/* <Typography variant="h5" color="inherit">
                 {`₺${p.Price}`}
               </Typography>
+              {increase > 1 && (
+                <Box sx={{color: 'text.secondary'}}>
+                  <CaretDownOutlined />
+                  {'test'}
+                <Box/>
+              )} */}
+              <Typography variant="h5" color="inherit">
+                {`₺${(Math.round(p.Price * 100) / 100).toFixed(2)}`}
+              </Typography>
+              {increase < 1 && (
+                <Box sx={{ color: 'success.main', display: 'inline', fontWeight: 'bold' }}>
+                  <CaretDownOutlined />
+                  {` %${increase}`}
+                </Box>
+              )}
+              {increase > 1 && (
+                <Box sx={{ color: 'error.main', display: 'inline', fontWeight: 'bold' }}>
+                  <CaretUpOutlined />
+                  {` %${increase}`}
+                </Box>
+              )}
             </TableCell>
           </TableRow>
         );
@@ -165,7 +161,6 @@ const PriceTable = () => {
             <TableRow>
               <TableCell align="left">Urun</TableCell>
               <TableCell align="left">Birim</TableCell>
-              {!matchesSm && <TableCell align="left">Gunluk Degisim</TableCell>}
               <TableCell align="right">Fiyat</TableCell>
             </TableRow>
           </TableHead>
