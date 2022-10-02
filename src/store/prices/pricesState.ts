@@ -1,5 +1,8 @@
 import { Price } from '../../models/price';
 
 export interface PricesState {
-  [date: string]: Price[];
+  data: {
+    [date: string]: Price[];
+  };
+  isLoading: boolean;
 }

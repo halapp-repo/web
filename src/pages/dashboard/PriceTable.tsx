@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchPrices } from '../../store/prices/pricesSlice';
+import { fetchPrices, selectPriceIsLoading } from '../../store/prices/pricesSlice';
 import { selectProducts } from '../../store/inventories/inventoriesSlice';
 import { selectPricesOfSelectedDate } from '../../store/prices/pricesSlice';
 import { selectUIPricesSelectedDate } from '../../store/ui/uiSlice';
@@ -13,7 +13,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  CircularProgress
   // useMediaQuery,
 } from '@mui/material';
 import { LocationType } from '../../models/location-type';
@@ -42,10 +43,21 @@ const PriceTable = () => {
   const selectedDate = useAppSelector(selectUIPricesSelectedDate);
   const inventories = useAppSelector(selectProducts);
   const selectedDatePrices = useAppSelector(selectPricesOfSelectedDate);
+  const isLoading = useAppSelector(selectPriceIsLoading);
 
   // const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const createTableRow = (prices: Price[]): ReactElement[] => {
+    if (isLoading || inventories?.length == 0) {
+      return [
+        <TableRow key="0" sx={{ height: '20vh' }}>
+          <TableCell colSpan={3} align="center" sx={{ height: '80%' }}>
+            <CircularProgress />
+          </TableCell>
+        </TableRow>
+      ];
+    }
+
     return Object.values(
       //Iterate Group by
       prices.reduce((group: PriceGroup, price: Price) => {
@@ -89,26 +101,17 @@ const PriceTable = () => {
             <TableCell align="left">{p.ProductName}</TableCell>
             <TableCell align="left">{p.Unit}</TableCell>
             <TableCell align="right">
-              {/* <Typography variant="h5" color="inherit">
-                {`₺${p.Price}`}
-              </Typography>
-              {increase > 1 && (
-                <Box sx={{color: 'text.secondary'}}>
-                  <CaretDownOutlined />
-                  {'test'}
-                <Box/>
-              )} */}
               <Typography variant="h5" color="inherit">
                 {`₺${(Math.round(p.Price * 100) / 100).toFixed(2)}`}
               </Typography>
-              {increase < 1 && (
-                <Box sx={{ color: 'success.main', display: 'inline', fontWeight: 'bold' }}>
+              {increase < 0 && (
+                <Box sx={{ color: 'error.main', display: 'inline', fontWeight: 'bold' }}>
                   <CaretDownOutlined />
                   {` %${increase}`}
                 </Box>
               )}
-              {increase > 1 && (
-                <Box sx={{ color: 'error.main', display: 'inline', fontWeight: 'bold' }}>
+              {increase > 0 && (
+                <Box sx={{ color: 'success.main', display: 'inline', fontWeight: 'bold' }}>
                   <CaretUpOutlined />
                   {` %${increase}`}
                 </Box>

@@ -10,7 +10,7 @@ export const fetchInventories = createAsyncThunk<Inventory[]>('inventories/fetch
   if (rawLocalInventories) {
     const { ttl, inventories } = JSON.parse(rawLocalInventories);
     const duration = moment.duration(moment().diff(moment(ttl)));
-    if (duration.asHours() < 24) {
+    if (duration.asHours() < 6) {
       return inventories as Inventory[];
     }
   }
