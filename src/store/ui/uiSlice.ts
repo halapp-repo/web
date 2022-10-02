@@ -11,13 +11,13 @@ const UISlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    updatePricesSelectedDate: (state: UIState, action: PayloadAction<string>) => {
+    updateSelectedDate: (state: UIState, action: PayloadAction<string>) => {
       state.prices.selectedDate = action.payload;
     }
   }
 });
 
-export const { updatePricesSelectedDate } = UISlice.actions;
+export const { updateSelectedDate } = UISlice.actions;
 export const selectUIPricesSelectedDate = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.prices.selectedDate
