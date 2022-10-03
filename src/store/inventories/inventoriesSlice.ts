@@ -48,4 +48,8 @@ export const selectProducts = createSelector(
   [(state: RootState) => state.inventories.inventories],
   (invs) => invs?.filter((i) => i.InventoryType == 'product')
 );
+export const selectCategories = createSelector(
+  [(state: RootState) => state.inventories.inventories],
+  (invs) => invs?.filter((i) => i.InventoryType == 'category')
+);
 export default InventorySlice.reducer;

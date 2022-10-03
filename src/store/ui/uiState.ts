@@ -1,5 +1,8 @@
 export interface UIState {
-    prices: {
-        selectedDate: string
-    }
+  listing: {
+    selectedDate: string;
+    selectedCategory: string;
+    filteredProductName: string;
+    selectedCity: string;
+  };
 }

@@ -3,7 +3,10 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchPrices, selectPriceIsLoading } from '../../store/prices/pricesSlice';
 import { selectProducts } from '../../store/inventories/inventoriesSlice';
 import { selectPricesOfSelectedDate } from '../../store/prices/pricesSlice';
-import { selectUIPricesSelectedDate } from '../../store/ui/uiSlice';
+import {
+  selectUIListingSelectedDate,
+  selectUIListingProductNameFilter
+} from '../../store/ui/uiSlice';
 import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import {
   Box,
@@ -14,13 +17,16 @@ import {
   TableHead,
   TableRow,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Toolbar
   // useMediaQuery,
 } from '@mui/material';
-import { LocationType } from '../../models/location-type';
+import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type-type';
 import { Price } from '../../models/price';
 import { getNewestPricesByDate } from '../../models/services/price.model.service';
+import moment from 'moment';
+import { selectUIListingSelectedCity } from '../../store/ui/uiSlice';
 
 interface PriceListItem {
   Price: number;
@@ -40,10 +46,12 @@ const calculatePercentage = (price: PriceListItem): number => {
 };
 const PriceTable = () => {
   const dispatch = useAppDispatch();
-  const selectedDate = useAppSelector(selectUIPricesSelectedDate);
+  const selectedDate = useAppSelector(selectUIListingSelectedDate);
   const inventories = useAppSelector(selectProducts);
   const selectedDatePrices = useAppSelector(selectPricesOfSelectedDate);
   const isLoading = useAppSelector(selectPriceIsLoading);
+  const filteringProductName = useAppSelector(selectUIListingProductNameFilter);
+  const selectedCity = useAppSelector(selectUIListingSelectedCity);
 
   // const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
@@ -93,13 +101,28 @@ const PriceTable = () => {
         const textB = b.ProductName.toUpperCase();
         return textA < textB ? -1 : textA > textB ? 1 : 0;
       })
+      .filter((p) => {
+        if (!filteringProductName) {
+          return true;
+        } else {
+          return p.ProductName.toLocaleLowerCase().includes(filteringProductName);
+        }
+      })
       .map((p) => {
         const increase = calculatePercentage(p);
 
         return (
           <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={p.ProductId}>
-            <TableCell align="left">{p.ProductName}</TableCell>
-            <TableCell align="left">{p.Unit}</TableCell>
+            <TableCell align="left">
+              <Typography variant="body1" color="inherit">
+                {p.ProductName}
+              </Typography>
+            </TableCell>
+            <TableCell align="left">
+              <Typography variant="body1" color="inherit">
+                {p.Unit}
+              </Typography>
+            </TableCell>
             <TableCell align="right">
               <Typography variant="h5" color="inherit">
                 {`₺${(Math.round(p.Price * 100) / 100).toFixed(2)}`}
@@ -129,7 +152,7 @@ const PriceTable = () => {
     if (!selectedDatePrices) {
       dispatch(
         fetchPrices({
-          location: LocationType.istanbul,
+          location: City.istanbul,
           type: ProductType.produce,
           date: selectedDate
         })
@@ -147,8 +170,15 @@ const PriceTable = () => {
           maxWidth: '100%',
           '& td, & th': { whiteSpace: 'nowrap' }
         }}>
+        <Toolbar>
+          <Typography variant="h3" color="inherit">
+            {selectedDate && moment(selectedDate).format('DD.MM.YYYY')}
+            <Typography color="text.secondary" variant="body2">
+              Meyve/Sebze {'>'} {selectedCity && selectedCity.toUpperCase()}
+            </Typography>
+          </Typography>
+        </Toolbar>
         <Table
-          aria-labelledby="tableTitle"
           sx={{
             width: '100%',
             '& .MuiTableCell-root:first-child': {
