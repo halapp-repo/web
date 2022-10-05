@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { plainToClass } from 'class-transformer';
 import { PriceDTO } from '../../models/dtos/price.dto';
 import { Price } from '../../models/price';
 
@@ -38,15 +39,7 @@ export class PricesApi {
       })
       .then((response) => {
         const { data } = response;
-        return data.map(
-          (d) =>
-            <Price>{
-              Price: d.Price,
-              ProductId: d.ProductId,
-              TS: d.TS,
-              Unit: d.Unit
-            }
-        );
+        return data.map((d) => plainToClass(Price, d));
       });
   }
 }
