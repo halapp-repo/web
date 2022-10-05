@@ -19,7 +19,8 @@ import {
   Typography,
   CircularProgress,
   Toolbar,
-  TableSortLabel
+  TableSortLabel,
+  Button
   // useMediaQuery,
 } from '@mui/material';
 import { City } from '../../models/city';
@@ -30,6 +31,7 @@ import moment from 'moment';
 import { selectUIListingSelectedCity } from '../../store/ui/uiSlice';
 import { Order } from '../../utils/order';
 import { getComparator } from '../../utils/sort';
+import PriceTableRow from './PriceTableRow';
 
 interface PriceListItem {
   Price: number;
@@ -43,12 +45,6 @@ interface PriceGroup {
   [key: string]: Price[];
 }
 
-const calculatePercentage = (price: PriceListItem): number => {
-  if (!price.PreviousPrice) {
-    return 0;
-  }
-  return Math.round(((price.Price - price.PreviousPrice) / price.PreviousPrice) * 100);
-};
 const PriceTable = () => {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof SortablePriceListItem>('ProductName');
@@ -73,86 +69,54 @@ const PriceTable = () => {
         </TableRow>
       ];
     }
-    return (
-      Object.values(
-        //Iterate Group by
-        prices.reduce((group: PriceGroup, price: Price) => {
-          //Group Prices by ProductId
-          const { ProductId } = price;
-          if (group[ProductId]) {
-            group[ProductId].push(price);
-          } else {
-            group[ProductId] = [price];
-          }
-          return group;
-        }, {})
-      )
-        .map((pricesByProductId: Price[]): PriceListItem | null => {
-          const [todayPrice, yesterdayPrice] = getNewestPricesByDate(pricesByProductId);
-          if (!todayPrice || !todayPrice.isSameAsSelectedDate(selectedDate)) {
-            return null;
-          }
-          return {
-            Price: todayPrice.Price,
-            ProductName:
-              inventories?.find((i) => i.ProductId == todayPrice.ProductId)?.Name ||
-              todayPrice.ProductId,
-            Unit: todayPrice.Unit,
-            ProductId: todayPrice.ProductId,
-            PreviousPrice: yesterdayPrice?.Price
-          } as PriceListItem;
-        })
-        .filter(Boolean)
-        .map((a) => a!)
-        // .sort((a, b) => {
-        //   const textA = a.ProductName.toUpperCase();
-        //   const textB = b.ProductName.toUpperCase();
-        //   return textA < textB ? -1 : textA > textB ? 1 : 0;
-        // })
-        .sort(getComparator(order, orderBy))
-        .filter((p) => {
-          if (!filteringProductName) {
-            return true;
-          } else {
-            return p.ProductName.toLocaleLowerCase().includes(filteringProductName);
-          }
-        })
-        .map((p) => {
-          const increase = calculatePercentage(p);
-
-          return (
-            <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={p.ProductId}>
-              <TableCell align="left">
-                <Typography variant="body1" color="inherit">
-                  {p.ProductName}
-                </Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="body1" color="inherit">
-                  {p.Unit}
-                </Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="h5" color="inherit">
-                  {`₺${(Math.round(p.Price * 100) / 100).toFixed(2)}`}
-                </Typography>
-                {increase < 0 && (
-                  <Box sx={{ color: 'error.main', display: 'inline', fontWeight: 'bold' }}>
-                    <CaretDownOutlined />
-                    {` %${increase}`}
-                  </Box>
-                )}
-                {increase > 0 && (
-                  <Box sx={{ color: 'success.main', display: 'inline', fontWeight: 'bold' }}>
-                    <CaretUpOutlined />
-                    {` %${increase}`}
-                  </Box>
-                )}
-              </TableCell>
-            </TableRow>
-          );
-        })
-    );
+    return Object.values(
+      //Iterate Group by
+      prices.reduce((group: PriceGroup, price: Price) => {
+        //Group Prices by ProductId
+        const { ProductId } = price;
+        if (group[ProductId]) {
+          group[ProductId].push(price);
+        } else {
+          group[ProductId] = [price];
+        }
+        return group;
+      }, {})
+    )
+      .map((pricesByProductId: Price[]): PriceListItem | null => {
+        const [todayPrice, yesterdayPrice] = getNewestPricesByDate(pricesByProductId);
+        if (!todayPrice || !todayPrice.isSameAsSelectedDate(selectedDate)) {
+          return null;
+        }
+        return {
+          Price: todayPrice.Price,
+          ProductName:
+            inventories?.find((i) => i.ProductId == todayPrice.ProductId)?.Name ||
+            todayPrice.ProductId,
+          Unit: todayPrice.Unit,
+          ProductId: todayPrice.ProductId,
+          PreviousPrice: yesterdayPrice?.Price
+        } as PriceListItem;
+      })
+      .filter(Boolean)
+      .map((a) => a!)
+      .sort(getComparator(order, orderBy))
+      .filter((p) => {
+        if (!filteringProductName) {
+          return true;
+        } else {
+          return p.ProductName.toLowerCase().includes(filteringProductName);
+        }
+      })
+      .map((p) => (
+        <PriceTableRow
+          key={p.ProductId}
+          Price={p.Price}
+          ProductId={p.ProductId}
+          ProductName={p.ProductName}
+          Unit={p.Unit}
+          PreviousPrice={p.PreviousPrice}
+        />
+      ));
   };
 
   const handleRequestSort = (

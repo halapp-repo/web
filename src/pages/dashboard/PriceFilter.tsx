@@ -81,6 +81,9 @@ const PriceFilter = () => {
   const handleClearFilter = () => {
     setQuery('');
     dispatch(updateListingSelectedDate());
+    if (expanded) {
+      setExpanded(!expanded);
+    }
   };
 
   const Content = () => {
