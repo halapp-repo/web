@@ -8,7 +8,11 @@ const store = configureStore({
     prices: pricesReducer,
     inventories: inventoriesReducer,
     ui: uiReducer
-  }
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false
+    })
 });
 
 export default store;

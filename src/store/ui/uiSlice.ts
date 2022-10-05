@@ -1,3 +1,5 @@
+import moment from 'moment';
+import 'moment-timezone';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import { UIState } from './uiState';
@@ -15,8 +17,21 @@ const UISlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    updateListingSelectedDate: (state: UIState, action: PayloadAction<string>) => {
-      state.listing.selectedDate = action.payload;
+    updateListingSelectedDate: (
+      state: UIState,
+      action: PayloadAction<string | undefined | null>
+    ) => {
+      const rawPayload = action.payload;
+      let selectedDate: string;
+      if (!rawPayload || !moment(rawPayload).isValid()) {
+        selectedDate = moment.tz('Europe/Istanbul').format('YYYY-MM-DD');
+      } else {
+        selectedDate = rawPayload;
+      }
+      state.listing.selectedDate = selectedDate;
+      const url = new URL(window.location.href);
+      url.searchParams.set('selected_date', selectedDate);
+      window.history.pushState({}, '', url);
     },
     updateListingProductNameFilter: (state: UIState, action: PayloadAction<string>) => {
       state.listing.filteredProductName = action.payload.toLowerCase();

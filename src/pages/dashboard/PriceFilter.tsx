@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import 'moment-timezone';
+
 import {
   Box,
   useMediaQuery,
@@ -18,7 +20,8 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
+  Button
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
@@ -28,7 +31,8 @@ import { selectUIListingSelectedDate } from '../../store/ui/uiSlice';
 import {
   updateListingSelectedDate,
   updateListingProductNameFilter,
-  selectUIListingSelectedCity
+  selectUIListingSelectedCity,
+  selectUIListingProductNameFilter
 } from '../../store/ui/uiSlice';
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -36,34 +40,30 @@ interface ExpandMoreProps extends IconButtonProps {
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { ...other } = props;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { expand, ...other } = props;
   return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest
-  })
-}));
-
-// const CustomToggleButton = styled(ToggleButton)({
-//   '&.Mui-selected, &.Mui-selected:hover': {
-//     color: 'white',
-//     backgroundColor: '#ffffff',
-//     border: '2px solid rgb(255, 196, 35)'
-//   }
-// });
+})(({ theme, expand }) => {
+  return {
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest
+    })
+  };
+});
 
 const PriceFilter = () => {
   const dispatch = useAppDispatch();
   // const categories = useAppSelector(selectCategories);
   const selectedDate = useAppSelector(selectUIListingSelectedDate);
   const selectedCity = useAppSelector(selectUIListingSelectedCity);
+  const filteringProductName = useAppSelector(selectUIListingProductNameFilter);
 
   const matchesSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [expanded, setExpanded] = React.useState(false);
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(filteringProductName || '');
   useEffect(() => {
     const timeOutId = setTimeout(() => dispatch(updateListingProductNameFilter(query)), 500);
     return () => clearTimeout(timeOutId);
@@ -78,16 +78,14 @@ const PriceFilter = () => {
       dispatch(updateListingSelectedDate(valuex));
     }
   };
+  const handleClearFilter = () => {
+    setQuery('');
+    dispatch(updateListingSelectedDate());
+  };
 
   const Content = () => {
     return (
       <Stack spacing={2}>
-        {/* <ToggleButtonGroup size="small" exclusive>
-          <CustomToggleButton value="left" selected={true} sx={{ height: '10vh', width: '10vh' }}>
-            <img src="/img/apple.png" alt="apple" width="100%" height="100%" />
-          </CustomToggleButton>
-        </ToggleButtonGroup>
-        <Divider variant="middle" /> */}
         {!matchesSM && (
           <>
             <TextField
@@ -121,9 +119,14 @@ const PriceFilter = () => {
             <MenuItem value={'istanbul'}>Istanbul</MenuItem>
           </Select>
         </FormControl>
+        <Divider variant="middle" />
+        <Button variant="outlined" onClick={handleClearFilter}>
+          Temizle
+        </Button>
       </Stack>
     );
   };
+  console.log('render');
   return (
     <Box>
       <Card>

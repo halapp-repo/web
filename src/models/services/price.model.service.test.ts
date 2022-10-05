@@ -1,6 +1,8 @@
+import 'reflect-metadata';
 import { Price } from '../../../src/models/price';
 import { getNewestPricesByDate as getNewestPriceByDate } from '../../../src/models/services/price.model.service';
 import timezone from 'moment-timezone';
+import { plainToClass } from 'class-transformer';
 
 describe('PriceModelService', () => {
   test('getTodayPrices', () => {
@@ -11,7 +13,7 @@ describe('PriceModelService', () => {
         Unit: 'AB',
         TS: timezone.tz('Europe/Istanbul').format()
       }
-    ];
+    ].map((r) => plainToClass(Price, r));
     const [today, yesterday] = getNewestPriceByDate(prices);
     expect(today).toEqual(prices[0]);
     expect(yesterday).toEqual(undefined);
@@ -25,7 +27,7 @@ describe('PriceModelService', () => {
         Unit: 'AB',
         TS: timezone.tz('Europe/Istanbul').subtract(1, 'd').format()
       }
-    ];
+    ].map((r) => plainToClass(Price, r));
     const [today, yesterday] = getNewestPriceByDate(prices);
     expect(today).toEqual(prices[0]);
     expect(yesterday).toEqual(undefined);
@@ -44,7 +46,7 @@ describe('PriceModelService', () => {
         Unit: 'AB',
         TS: timezone.tz('Europe/Istanbul').format()
       }
-    ];
+    ].map((r) => plainToClass(Price, r));
     const [today, yesterday] = getNewestPriceByDate(prices);
     expect(today).toEqual(prices[1]);
     expect(yesterday).toEqual(undefined);
@@ -63,7 +65,7 @@ describe('PriceModelService', () => {
         Unit: 'AB',
         TS: timezone.tz('Europe/Istanbul').format()
       }
-    ];
+    ].map((r) => plainToClass(Price, r));
     const [today, yesterday] = getNewestPriceByDate(prices);
     expect(today).toEqual(prices[1]);
     expect(yesterday).toEqual(prices[0]);
