@@ -18,11 +18,11 @@ export const fetchPrices = createAsyncThunk<
   let response;
   if (date == moment.tz('Europe/Istanbul').format('YYYY-MM-DD')) {
     const yesterday = moment.tz('Europe/Istanbul').subtract(1, 'd').format('YYYY-MM-DD');
-    // response = await new PricesApi().fetchPrice(location, type, yesterday, date);
+    response = await new PricesApi().fetchPrice(location, type, yesterday, date);
   } else {
-    //response = await new PricesApi().fetchPrice(location, type, date, date);
+    response = await new PricesApi().fetchPrice(location, type, date, date);
   }
-  // return response;
+  return response;
   return [
     { Price: 27, ProductId: 'GSTB1001', TS: '2022-10-03T09:56:27+03:00', Unit: 'KG' },
     { Price: 8, ProductId: 'GPTT1003', TS: '2022-10-03T09:56:27+03:00', Unit: 'KG' },

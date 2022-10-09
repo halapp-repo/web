@@ -5,7 +5,7 @@ export class Price {
   Price!: number;
   Unit!: string;
   TS!: string;
-  isSameAsSelectedDate(date: string): boolean {
-    return moment(this.TS).isSame(new Date(date), 'day');
+  isSameAsSelectedDate(selectedDate: string): boolean {
+    return moment(this.TS).isSame(new Date(selectedDate), 'day');
   }
 }

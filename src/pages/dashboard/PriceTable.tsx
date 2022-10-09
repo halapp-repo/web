@@ -7,7 +7,6 @@ import {
   selectUIListingSelectedDate,
   selectUIListingProductNameFilter
 } from '../../store/ui/uiSlice';
-import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import {
   Box,
   Table,
@@ -19,12 +18,10 @@ import {
   Typography,
   CircularProgress,
   Toolbar,
-  TableSortLabel,
-  Button
-  // useMediaQuery,
+  TableSortLabel
 } from '@mui/material';
 import { City } from '../../models/city';
-import { ProductType } from '../../models/product-type-type';
+import { ProductType } from '../../models/product-type';
 import { Price } from '../../models/price';
 import { getNewestPricesByDate } from '../../models/services/price.model.service';
 import moment from 'moment';
@@ -32,6 +29,7 @@ import { selectUIListingSelectedCity } from '../../store/ui/uiSlice';
 import { Order } from '../../utils/order';
 import { getComparator } from '../../utils/sort';
 import PriceTableRow from './PriceTableRow';
+import PriceDialog from './PriceDialog';
 
 interface PriceListItem {
   Price: number;
@@ -48,6 +46,7 @@ interface PriceGroup {
 const PriceTable = () => {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof SortablePriceListItem>('ProductName');
+  const [open, setOpen] = React.useState<string>('');
 
   const dispatch = useAppDispatch();
   const selectedDate = useAppSelector(selectUIListingSelectedDate);
@@ -57,7 +56,35 @@ const PriceTable = () => {
   const filteringProductName = useAppSelector(selectUIListingProductNameFilter);
   const selectedCity = useAppSelector(selectUIListingSelectedCity);
 
-  // const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const handleRequestSort = (
+    event: React.MouseEvent<unknown>,
+    property: keyof SortablePriceListItem
+  ) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+  const handleOpenAnalyticsPanel = (event: React.MouseEvent<unknown>, productId: string) => {
+    setOpen(productId);
+  };
+  const handleCloseAnalyticsPanel = (event: React.MouseEvent<unknown>) => {
+    setOpen('');
+  };
+
+  useEffect(() => {
+    if (!selectedDate) {
+      return;
+    }
+    if (!selectedDatePrices) {
+      dispatch(
+        fetchPrices({
+          location: City.istanbul,
+          type: ProductType.produce,
+          date: selectedDate
+        })
+      );
+    }
+  }, [selectedDate]);
 
   const createTableRow = (prices: Price[]): ReactElement[] => {
     if (isLoading || inventories?.length == 0) {
@@ -115,33 +142,11 @@ const PriceTable = () => {
           ProductName={p.ProductName}
           Unit={p.Unit}
           PreviousPrice={p.PreviousPrice}
+          OpenAnalyticsPanel={handleOpenAnalyticsPanel}
         />
       ));
   };
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof SortablePriceListItem
-  ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  useEffect(() => {
-    if (!selectedDate) {
-      return;
-    }
-    if (!selectedDatePrices) {
-      dispatch(
-        fetchPrices({
-          location: City.istanbul,
-          type: ProductType.produce,
-          date: selectedDate
-        })
-      );
-    }
-  }, [selectedDate]);
   return (
     <Box>
       <TableContainer
@@ -195,6 +200,12 @@ const PriceTable = () => {
           <TableBody>{createTableRow(selectedDatePrices || [])}</TableBody>
         </Table>
       </TableContainer>
+      <PriceDialog
+        Location={City.istanbul}
+        Type={ProductType.produce}
+        CloseAnalyticsPanel={handleCloseAnalyticsPanel}
+        ProductId={open}
+      />
     </Box>
   );
 };
