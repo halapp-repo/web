@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
+import { City } from '../../models/city';
 import { PriceDTO } from '../../models/dtos/price.dto';
+import { IntervalType } from '../../models/interval-type';
 import { Price } from '../../models/price';
+import { ProductType } from '../../models/product-type';
 
-export class PricesApi {
+export class ProductPricesApi {
   baseUrl: string;
   mapper: PriceToPriceDTOMapper;
   constructor() {
@@ -15,23 +18,22 @@ export class PricesApi {
     this.mapper = new PriceToPriceDTOMapper();
   }
 
-  async fetchPrice(
-    location: string,
-    type: string,
-    fromDate?: string,
+  async fetchProductPrices(
+    productId: string,
+    duration: IntervalType,
+    location: City,
+    type: ProductType,
+    fromDate: string,
     toDate?: string
   ): Promise<Price[]> {
     return await axios
-      .get<PriceDTO[]>(`/prices`, {
+      .get<PriceDTO[]>(`/products/${productId}/prices`, {
         baseURL: this.baseUrl,
         params: {
+          duration,
           location,
           type,
-          ...(fromDate
-            ? {
-                from_date: fromDate
-              }
-            : null),
+          from_date: fromDate,
           ...(toDate
             ? {
                 to_date: toDate

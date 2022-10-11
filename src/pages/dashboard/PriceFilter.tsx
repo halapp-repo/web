@@ -16,7 +16,6 @@ import {
   TextField,
   Divider,
   Stack,
-  //ToggleButton,
   Select,
   MenuItem,
   FormControl,
@@ -81,6 +80,9 @@ const PriceFilter = () => {
   const handleClearFilter = () => {
     setQuery('');
     dispatch(updateListingSelectedDate());
+    if (expanded) {
+      setExpanded(!expanded);
+    }
   };
 
   const Content = () => {
@@ -106,6 +108,8 @@ const PriceFilter = () => {
           label="Fiyat Tarihi"
           value={selectedDate}
           onChange={handleUpdateSelectedDate}
+          minDate="2020-01-01"
+          maxDate={moment().format('YYYY-MM-DD')}
           renderInput={(params) => <TextField {...params} />}
         />
         <Divider variant="middle" />
@@ -126,7 +130,6 @@ const PriceFilter = () => {
       </Stack>
     );
   };
-  console.log('render');
   return (
     <Box>
       <Card>

@@ -7,7 +7,6 @@ import {
   selectUIListingSelectedDate,
   selectUIListingProductNameFilter
 } from '../../store/ui/uiSlice';
-import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import {
   Box,
   Table,
@@ -20,16 +19,17 @@ import {
   CircularProgress,
   Toolbar,
   TableSortLabel
-  // useMediaQuery,
 } from '@mui/material';
 import { City } from '../../models/city';
-import { ProductType } from '../../models/product-type-type';
+import { ProductType } from '../../models/product-type';
 import { Price } from '../../models/price';
 import { getNewestPricesByDate } from '../../models/services/price.model.service';
 import moment from 'moment';
 import { selectUIListingSelectedCity } from '../../store/ui/uiSlice';
 import { Order } from '../../utils/order';
 import { getComparator } from '../../utils/sort';
+import PriceTableRow from './PriceTableRow';
+import PriceDialog from './PriceDialog';
 
 interface PriceListItem {
   Price: number;
@@ -37,21 +37,17 @@ interface PriceListItem {
   Unit: string;
   ProductId: string;
   PreviousPrice?: number;
+  IsToday: boolean;
 }
 type SortablePriceListItem = Pick<PriceListItem, 'Price' | 'ProductName'>;
 interface PriceGroup {
   [key: string]: Price[];
 }
 
-const calculatePercentage = (price: PriceListItem): number => {
-  if (!price.PreviousPrice) {
-    return 0;
-  }
-  return Math.round(((price.Price - price.PreviousPrice) / price.PreviousPrice) * 100);
-};
 const PriceTable = () => {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof SortablePriceListItem>('ProductName');
+  const [open, setOpen] = React.useState<string>('');
 
   const dispatch = useAppDispatch();
   const selectedDate = useAppSelector(selectUIListingSelectedDate);
@@ -61,100 +57,6 @@ const PriceTable = () => {
   const filteringProductName = useAppSelector(selectUIListingProductNameFilter);
   const selectedCity = useAppSelector(selectUIListingSelectedCity);
 
-  // const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-
-  const createTableRow = (prices: Price[]): ReactElement[] => {
-    if (isLoading || inventories?.length == 0) {
-      return [
-        <TableRow key="0" sx={{ height: '20vh' }}>
-          <TableCell colSpan={3} align="center" sx={{ height: '80%' }}>
-            <CircularProgress />
-          </TableCell>
-        </TableRow>
-      ];
-    }
-    return (
-      Object.values(
-        //Iterate Group by
-        prices.reduce((group: PriceGroup, price: Price) => {
-          //Group Prices by ProductId
-          const { ProductId } = price;
-          if (group[ProductId]) {
-            group[ProductId].push(price);
-          } else {
-            group[ProductId] = [price];
-          }
-          return group;
-        }, {})
-      )
-        .map((pricesByProductId: Price[]): PriceListItem | null => {
-          const [todayPrice, yesterdayPrice] = getNewestPricesByDate(pricesByProductId);
-          if (!todayPrice || !todayPrice.isSameAsSelectedDate(selectedDate)) {
-            return null;
-          }
-          return {
-            Price: todayPrice.Price,
-            ProductName:
-              inventories?.find((i) => i.ProductId == todayPrice.ProductId)?.Name ||
-              todayPrice.ProductId,
-            Unit: todayPrice.Unit,
-            ProductId: todayPrice.ProductId,
-            PreviousPrice: yesterdayPrice?.Price
-          } as PriceListItem;
-        })
-        .filter(Boolean)
-        .map((a) => a!)
-        // .sort((a, b) => {
-        //   const textA = a.ProductName.toUpperCase();
-        //   const textB = b.ProductName.toUpperCase();
-        //   return textA < textB ? -1 : textA > textB ? 1 : 0;
-        // })
-        .sort(getComparator(order, orderBy))
-        .filter((p) => {
-          if (!filteringProductName) {
-            return true;
-          } else {
-            return p.ProductName.toLocaleLowerCase().includes(filteringProductName);
-          }
-        })
-        .map((p) => {
-          const increase = calculatePercentage(p);
-
-          return (
-            <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={p.ProductId}>
-              <TableCell align="left">
-                <Typography variant="body1" color="inherit">
-                  {p.ProductName}
-                </Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="body1" color="inherit">
-                  {p.Unit}
-                </Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="h5" color="inherit">
-                  {`₺${(Math.round(p.Price * 100) / 100).toFixed(2)}`}
-                </Typography>
-                {increase < 0 && (
-                  <Box sx={{ color: 'error.main', display: 'inline', fontWeight: 'bold' }}>
-                    <CaretDownOutlined />
-                    {` %${increase}`}
-                  </Box>
-                )}
-                {increase > 0 && (
-                  <Box sx={{ color: 'success.main', display: 'inline', fontWeight: 'bold' }}>
-                    <CaretUpOutlined />
-                    {` %${increase}`}
-                  </Box>
-                )}
-              </TableCell>
-            </TableRow>
-          );
-        })
-    );
-  };
-
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof SortablePriceListItem
@@ -162,6 +64,12 @@ const PriceTable = () => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+  };
+  const handleOpenAnalyticsPanel = (_: React.MouseEvent<unknown>, productId: string) => {
+    setOpen(productId);
+  };
+  const handleCloseAnalyticsPanel = () => {
+    setOpen('');
   };
 
   useEffect(() => {
@@ -178,6 +86,70 @@ const PriceTable = () => {
       );
     }
   }, [selectedDate]);
+
+  const createTableRow = (prices: Price[]): ReactElement[] => {
+    if (isLoading || inventories?.length == 0) {
+      return [
+        <TableRow key="0" sx={{ height: '20vh' }}>
+          <TableCell colSpan={3} align="center" sx={{ height: '80%' }}>
+            <CircularProgress />
+          </TableCell>
+        </TableRow>
+      ];
+    }
+    return Object.values(
+      //Iterate Group by
+      prices.reduce((group: PriceGroup, price: Price) => {
+        //Group Prices by ProductId
+        const { ProductId } = price;
+        if (group[ProductId]) {
+          group[ProductId].push(price);
+        } else {
+          group[ProductId] = [price];
+        }
+        return group;
+      }, {})
+    )
+      .map((pricesByProductId: Price[]): PriceListItem | null => {
+        const [todayPrice, yesterdayPrice] = getNewestPricesByDate(pricesByProductId);
+        if (!todayPrice || !todayPrice.isSameAsSelectedDate(selectedDate)) {
+          return null;
+        }
+        return {
+          Price: todayPrice.Price,
+          ProductName:
+            inventories?.find((i) => i.ProductId == todayPrice.ProductId)?.Name ||
+            todayPrice.ProductId,
+          Unit: todayPrice.Unit,
+          ProductId: todayPrice.ProductId,
+          PreviousPrice: yesterdayPrice?.Price,
+          IsToday: todayPrice.isToday()
+        } as PriceListItem;
+      })
+      .filter(Boolean)
+      .map((a) => a!)
+      .sort(getComparator(order, orderBy))
+      .filter((p) => {
+        if (!filteringProductName) {
+          return true;
+        } else {
+          return p.ProductName.toLowerCase().includes(filteringProductName);
+        }
+      })
+      .map((p) => (
+        <PriceTableRow
+          key={p.ProductId}
+          Price={p.Price}
+          ProductId={p.ProductId}
+          ProductName={p.ProductName}
+          Unit={p.Unit}
+          IsToday={p.IsToday}
+          PreviousPrice={p.PreviousPrice}
+          OpenAnalyticsPanel={handleOpenAnalyticsPanel}
+        />
+      ));
+  };
+
   return (
     <Box>
       <TableContainer
@@ -231,6 +203,12 @@ const PriceTable = () => {
           <TableBody>{createTableRow(selectedDatePrices || [])}</TableBody>
         </Table>
       </TableContainer>
+      <PriceDialog
+        Location={City.istanbul}
+        Type={ProductType.produce}
+        CloseAnalyticsPanel={handleCloseAnalyticsPanel}
+        ProductId={open}
+      />
     </Box>
   );
 };
