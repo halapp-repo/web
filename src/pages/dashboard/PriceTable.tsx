@@ -65,10 +65,10 @@ const PriceTable = () => {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-  const handleOpenAnalyticsPanel = (event: React.MouseEvent<unknown>, productId: string) => {
+  const handleOpenAnalyticsPanel = (_: React.MouseEvent<unknown>, productId: string) => {
     setOpen(productId);
   };
-  const handleCloseAnalyticsPanel = (event: React.MouseEvent<unknown>) => {
+  const handleCloseAnalyticsPanel = () => {
     setOpen('');
   };
 
