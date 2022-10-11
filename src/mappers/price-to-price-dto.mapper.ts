@@ -3,7 +3,7 @@ import { Price } from '../models/price';
 import { IMapper } from './base.mapper';
 
 export class PriceToPriceDTOMapper extends IMapper<Price, PriceDTO> {
-  toDTO(arg: Price): PriceDTO {
+  toDTO(): PriceDTO {
     throw new Error('Not Implemented');
   }
   toModel(arg: PriceDTO): Price {
@@ -14,7 +14,7 @@ export class PriceToPriceDTOMapper extends IMapper<Price, PriceDTO> {
       Unit: arg.Unit
     };
   }
-  toListDTO(arg: Price[]): PriceDTO[] {
+  toListDTO(): PriceDTO[] {
     throw new Error('Not Implemented');
   }
 }
