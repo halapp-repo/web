@@ -2,11 +2,12 @@ import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import { plainToClass } from 'class-transformer';
 import { RootState } from '..';
 import { City } from '../../models/city';
-import { DurationType } from '../../models/duration-type';
 import { Price } from '../../models/price';
 import { ProductType } from '../../models/product-type';
 import { ProductPricesApi } from './productPricesApi';
 import { ProductPricesState } from './productPricesState';
+import { getComparator } from '../../utils/sort';
+import { Slot } from '../../models/slot';
 
 const initialState = {
   data: {},
@@ -15,22 +16,22 @@ const initialState = {
 
 export const fetchProductPrices = createAsyncThunk<
   Price[],
-  { productId: string; duration: DurationType; location: City; type: ProductType }
->('product-prices/fetch', async ({ productId, duration, location, type }): Promise<Price[]> => {
-  // const response = await new ProductPricesApi().fetchProductPrices(
-  //   productId,
-  //   duration,
-  //   location,
-  //   type
-  // );
-  // return response;
-  return [
-    { Price: 22, ProductId: 'GSTB1001', TS: '2022-10-04T09:56:27+03:00', Unit: 'KG' },
-    { Price: 27, ProductId: 'GSTB1001', TS: '2022-10-03T09:56:27+03:00', Unit: 'KG' },
-    { Price: 25, ProductId: 'GSTB1001', TS: '2022-10-02T09:56:27+03:00', Unit: 'KG' },
-    { Price: 24, ProductId: 'GSTB1001', TS: '2022-10-01T09:56:27+03:00', Unit: 'KG' },
-    { Price: 23, ProductId: 'GSTB1001', TS: '2022-09-30T09:56:27+03:00', Unit: 'KG' }
-  ].map((r) => plainToClass(Price, r));
+  {
+    productId: string;
+    location: City;
+    type: ProductType;
+    slot: Slot;
+  }
+>('product-prices/fetch', async ({ productId, location, type, slot }): Promise<Price[]> => {
+  const response = await new ProductPricesApi().fetchProductPrices(
+    productId,
+    slot.interval,
+    location,
+    type,
+    slot.fromDate(),
+    slot.toDate()
+  );
+  return response;
 });
 
 const ProductPricesSlice = createSlice({
@@ -40,20 +41,20 @@ const ProductPricesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchProductPrices.fulfilled, (state, action) => {
       const data = action.payload;
-      const duration = action.meta.arg.duration;
+      const slot = action.meta.arg.slot.key;
       const productId = action.meta.arg.productId;
       state.data[productId] = {
         ...state.data[productId],
-        [duration]: data
+        [slot]: data
       };
       state.isLoading = false;
     });
     builder.addCase(fetchProductPrices.rejected, (state, action) => {
-      const duration = action.meta.arg.duration;
+      const slot = action.meta.arg.slot.key;
       const productId = action.meta.arg.productId;
       state.data[productId] = {
         ...state.data[productId],
-        [duration]: []
+        [slot]: []
       };
       state.isLoading = false;
     });
@@ -66,12 +67,16 @@ const ProductPricesSlice = createSlice({
 export const selectProductPrices = createSelector(
   [
     (state: RootState) => state.productPrices.data,
-    (state: RootState, productId: string, duration: DurationType): [string, DurationType] => [
-      productId,
-      duration
-    ]
+    (state: RootState, productId: string, slot: Slot): [string, Slot] => [productId, slot]
   ],
-  (prices, [productId, duration]) => prices[productId]?.[duration]
+  (prices, [productId, slot]) => {
+    const tempPrice = prices[productId]?.[slot.key];
+    if (!tempPrice) {
+      return tempPrice;
+    } else {
+      return [...tempPrice].sort(getComparator('asc', 'TS')).map((p) => plainToClass(Price, p));
+    }
+  }
 );
 export const selectProductPricesIsLoading = createSelector(
   [(state: RootState) => state.productPrices.isLoading],

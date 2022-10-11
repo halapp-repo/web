@@ -1,16 +1,18 @@
 import axios from 'axios';
-import { plainToClass } from 'class-transformer';
+import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
 import { PriceDTO } from '../../models/dtos/price.dto';
 import { Price } from '../../models/price';
 
 export class PricesApi {
   baseUrl: string;
+  mapper: PriceToPriceDTOMapper;
   constructor() {
     const baseUrl = process.env.REACT_APP_LISTING_BASE_URL;
     if (!baseUrl) {
       throw new Error('REACT_APP_LISTING_BASE_URL is not set!');
     }
     this.baseUrl = baseUrl;
+    this.mapper = new PriceToPriceDTOMapper();
   }
 
   async fetchPrice(
@@ -39,7 +41,7 @@ export class PricesApi {
       })
       .then((response) => {
         const { data } = response;
-        return data.map((d) => plainToClass(Price, d));
+        return this.mapper.toListModel(data);
       });
   }
 }

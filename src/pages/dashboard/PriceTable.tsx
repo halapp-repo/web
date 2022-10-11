@@ -37,6 +37,7 @@ interface PriceListItem {
   Unit: string;
   ProductId: string;
   PreviousPrice?: number;
+  IsToday: boolean;
 }
 type SortablePriceListItem = Pick<PriceListItem, 'Price' | 'ProductName'>;
 interface PriceGroup {
@@ -121,7 +122,8 @@ const PriceTable = () => {
             todayPrice.ProductId,
           Unit: todayPrice.Unit,
           ProductId: todayPrice.ProductId,
-          PreviousPrice: yesterdayPrice?.Price
+          PreviousPrice: yesterdayPrice?.Price,
+          IsToday: todayPrice.isToday()
         } as PriceListItem;
       })
       .filter(Boolean)
@@ -141,6 +143,7 @@ const PriceTable = () => {
           ProductId={p.ProductId}
           ProductName={p.ProductName}
           Unit={p.Unit}
+          IsToday={p.IsToday}
           PreviousPrice={p.PreviousPrice}
           OpenAnalyticsPanel={handleOpenAnalyticsPanel}
         />

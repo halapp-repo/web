@@ -1,4 +1,4 @@
-export enum DurationType {
+export enum IntervalType {
   daily = 'daily',
   weekly = 'weekly',
   monthly = 'monthly',

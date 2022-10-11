@@ -8,4 +8,7 @@ export class Price {
   isSameAsSelectedDate(selectedDate: string): boolean {
     return moment(this.TS).isSame(new Date(selectedDate), 'day');
   }
+  isToday(): boolean {
+    return moment(this.TS).isSame(new Date(), 'day');
+  }
 }

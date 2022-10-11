@@ -1,26 +1,30 @@
 import axios from 'axios';
-import { plainToClass } from 'class-transformer';
+import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
 import { City } from '../../models/city';
 import { PriceDTO } from '../../models/dtos/price.dto';
-import { DurationType } from '../../models/duration-type';
+import { IntervalType } from '../../models/interval-type';
 import { Price } from '../../models/price';
 import { ProductType } from '../../models/product-type';
 
 export class ProductPricesApi {
   baseUrl: string;
+  mapper: PriceToPriceDTOMapper;
   constructor() {
     const baseUrl = process.env.REACT_APP_LISTING_BASE_URL;
     if (!baseUrl) {
       throw new Error('REACT_APP_LISTING_BASE_URL is not set!');
     }
     this.baseUrl = baseUrl;
+    this.mapper = new PriceToPriceDTOMapper();
   }
 
   async fetchProductPrices(
     productId: string,
-    duration: DurationType,
+    duration: IntervalType,
     location: City,
-    type: ProductType
+    type: ProductType,
+    fromDate: string,
+    toDate?: string
   ): Promise<Price[]> {
     return await axios
       .get<PriceDTO[]>(`/products/${productId}/prices`, {
@@ -28,12 +32,18 @@ export class ProductPricesApi {
         params: {
           duration,
           location,
-          type
+          type,
+          from_date: fromDate,
+          ...(toDate
+            ? {
+                to_date: toDate
+              }
+            : null)
         }
       })
       .then((response) => {
         const { data } = response;
-        return data.map((d) => plainToClass(Price, d));
+        return this.mapper.toListModel(data);
       });
   }
 }

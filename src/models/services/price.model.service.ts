@@ -1,5 +1,6 @@
 import { Price } from '../price';
 import moment from 'moment';
+import { getComparator } from '../../utils/sort';
 
 interface PriceGroup {
   [key: string]: Price[];
@@ -18,20 +19,8 @@ export const getNewestPricesByDate = (prices: Price[]): Price[] => {
     }, {})
   )
     .map((prices): Price => {
-      prices.sort((a: Price, b: Price) => {
-        // Turn your strings into dates, and then subtract them
-        // to get a value that is either negative, positive, or zero.
-        const mA = moment(a.TS);
-        const mB = moment(b.TS);
-        return mA > mB ? -1 : mA < mB ? 1 : 0;
-      });
+      prices.sort(getComparator('desc', 'TS'));
       return prices[0];
     })
-    .sort((a: Price, b: Price) => {
-      // Turn your strings into dates, and then subtract them
-      // to get a value that is either negative, positive, or zero.
-      const mA = moment(a.TS);
-      const mB = moment(b.TS);
-      return mA > mB ? -1 : mA < mB ? 1 : 0;
-    });
+    .sort(getComparator('desc', 'TS'));
 };

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { CircularProgress, Box } from '@mui/material';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { DurationType } from '../../models/duration-type';
+import { IntervalType } from '../../models/interval-type';
 import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -11,10 +11,12 @@ import {
   selectProductPrices,
   selectProductPricesIsLoading
 } from '../../store/product-prices/productPricesSlice';
+import { Slot } from '../../models/slot';
+import { Price } from '../../models/price';
 
 interface PriceChartProps {
   ProductId: string;
-  Slot: DurationType;
+  Slot: Slot;
   Location: City;
   Type: ProductType;
 }
@@ -74,14 +76,17 @@ const areaChartOptions: ApexOptions = {
     show: true,
     curve: 'smooth',
     lineCap: 'butt',
-    width: 3,
+    width: 2,
     dashArray: 0
   },
   fill: {
     type: 'gradient',
     gradient: {
       stops: [0, 90, 100],
-      type: 'vertical'
+      type: 'vertical',
+      shadeIntensity: 0,
+      opacityFrom: 0.5,
+      opacityTo: 0.3
     }
   },
   xaxis: {
@@ -122,6 +127,38 @@ const areaChartOptions: ApexOptions = {
   }
 };
 
+const generateOptions = (prices: Price[], slot: Slot): ApexOptions => {
+  return {
+    ...areaChartOptions,
+    xaxis: {
+      ...areaChartOptions.xaxis,
+      categories: prices?.map((p) => p.TS) || [],
+      tickPlacement: 'on',
+      labels: {
+        show: true,
+        rotate: -45,
+        rotateAlways: false,
+        hideOverlappingLabels: true,
+        showDuplicates: false,
+        format: (function () {
+          if (slot.interval == IntervalType.daily) {
+            return 'dddd';
+          } else if (slot.interval == IntervalType.weekly) {
+            return 'dddd';
+          } else if (slot.interval == IntervalType.monthly) {
+            return 'MMMM';
+          } else {
+            return 'yyyy';
+          }
+        })()
+      }
+    }
+  };
+};
+const generateSeries = (prices: Price[]): ApexAxisChartSeries => {
+  return [{ data: prices?.map((p) => p.Price) || [], type: 'area' }];
+};
+
 const PriceChart = ({ ProductId, Slot, Location, Type }: PriceChartProps) => {
   const dispatch = useAppDispatch();
   const prices = useAppSelector((state) => selectProductPrices(state, ProductId, Slot));
@@ -135,39 +172,14 @@ const PriceChart = ({ ProductId, Slot, Location, Type }: PriceChartProps) => {
       dispatch(
         fetchProductPrices({
           productId: ProductId,
-          duration: Slot,
           location: Location,
-          type: Type
+          type: Type,
+          slot: Slot
         })
       );
     }
   }, [ProductId, Slot, Location, Type]);
 
-  const generateOptions = (): ApexOptions => {
-    return {
-      ...areaChartOptions,
-      xaxis: {
-        ...areaChartOptions.xaxis,
-        categories: prices?.map((p) => p.TS) || [],
-        labels: {
-          format: (function () {
-            if (Slot == DurationType.daily) {
-              return 'dddd';
-            } else if (Slot == DurationType.weekly) {
-              return 'dddd';
-            } else if (Slot == DurationType.monthly) {
-              return 'MMMM';
-            } else {
-              return 'yyyy';
-            }
-          })()
-        }
-      }
-    };
-  };
-  const generateSeries = (): ApexAxisChartSeries => {
-    return [{ data: prices?.map((p) => p.Price) || [], type: 'area' }];
-  };
   return (
     <Box
       sx={{
@@ -186,7 +198,7 @@ const PriceChart = ({ ProductId, Slot, Location, Type }: PriceChartProps) => {
           }}
         />
       )}
-      <Chart options={generateOptions()} series={generateSeries()} width="100%" />
+      <Chart options={generateOptions(prices, Slot)} series={generateSeries(prices)} width="100%" />
     </Box>
   );
 };

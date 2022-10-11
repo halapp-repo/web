@@ -1,5 +1,5 @@
 import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
-import { Box, TableCell, TableRow, Typography, Button, useMediaQuery, Theme } from '@mui/material';
+import { Box, TableCell, TableRow, Typography, Button } from '@mui/material';
 
 interface PriceTableRowProps {
   ProductId: string;
@@ -7,6 +7,7 @@ interface PriceTableRowProps {
   Unit: string;
   Price: number;
   PreviousPrice?: number;
+  IsToday: boolean;
   OpenAnalyticsPanel: (event: React.MouseEvent<unknown>, productId: string) => void;
 }
 
@@ -23,6 +24,7 @@ const PriceTableRow = ({
   Unit,
   PreviousPrice,
   Price,
+  IsToday,
   OpenAnalyticsPanel
 }: PriceTableRowProps) => {
   const increase = calculatePercentage(Price, PreviousPrice);
@@ -41,11 +43,18 @@ const PriceTableRow = ({
         </Typography>
       </TableCell>
       <TableCell align="right">
-        <Button variant="text" onClick={(e) => OpenAnalyticsPanel(e, ProductId)}>
+        {IsToday ? (
+          <Button variant="text" onClick={(e) => OpenAnalyticsPanel(e, ProductId)}>
+            <Typography variant="h5" color="inherit">
+              {`₺${(Math.round(Price * 100) / 100).toFixed(2)}`}
+            </Typography>
+          </Button>
+        ) : (
           <Typography variant="h5" color="inherit">
             {`₺${(Math.round(Price * 100) / 100).toFixed(2)}`}
           </Typography>
-        </Button>
+        )}
+
         {increase < 0 && (
           <Box sx={{ color: 'error.main', display: 'inline', fontWeight: 'bold' }}>
             <CaretDownOutlined />
