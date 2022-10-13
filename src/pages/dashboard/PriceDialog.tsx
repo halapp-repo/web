@@ -17,7 +17,7 @@ import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type';
 import { useAppSelector } from '../../store/hooks';
 import { selectProductByProductId } from '../../store/inventories/inventoriesSlice';
-import { selectChartSlot } from '../../store/ui/uiSlice';
+import { selectChartSlot } from '../../store/product-prices/productPricesSlice';
 
 interface PriceDialogProps {
   ProductId: string;

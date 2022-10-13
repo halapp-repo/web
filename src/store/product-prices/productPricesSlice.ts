@@ -8,10 +8,32 @@ import { ProductPricesState } from './productPricesState';
 import { getComparator } from '../../utils/sort';
 import { ChartSlot } from '../../models/chart-slot';
 import { fetchPrices } from '../prices/pricesSlice';
+import { IntervalType } from '../../models/interval-type';
+import { trMoment } from '../../utils/timezone';
 
 const initialState = {
   data: {},
-  isLoading: false
+  isLoading: false,
+  chart: {
+    slot: {
+      '1WEEK': {
+        key: '1WEEK',
+        interval: IntervalType.daily,
+        fromDate: () => {
+          return trMoment().subtract(1, 'w').format('YYYY-MM-DD');
+        },
+        toDate: () => undefined
+      },
+      '1MONTH': {
+        key: '1MONTH',
+        interval: IntervalType.daily,
+        fromDate: () => {
+          return trMoment().subtract(1, 'M').format('YYYY-MM-DD');
+        },
+        toDate: () => undefined
+      }
+    }
+  }
 } as ProductPricesState;
 
 export const fetchProductPrices = createAsyncThunk<
@@ -41,6 +63,15 @@ const ProductPricesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchPrices.fulfilled, (state, action) => {
       const data = action.payload;
+      for (const price of data) {
+        if (price.IsToday == true && typeof price.Increase !== undefined) {
+          const { ProductId } = price;
+          state.data[ProductId] = {
+            ...state.data[ProductId],
+            dailyPriceIncrease: price.Increase || 0
+          };
+        }
+      }
     });
     builder.addCase(fetchProductPrices.fulfilled, (state, action) => {
       const data = action.payload;
@@ -48,7 +79,10 @@ const ProductPricesSlice = createSlice({
       const productId = action.meta.arg.productId;
       state.data[productId] = {
         ...state.data[productId],
-        [slot]: data
+        intervalPrices: {
+          ...state.data[productId]?.intervalPrices,
+          [slot]: data
+        }
       };
       state.isLoading = false;
     });
@@ -57,7 +91,10 @@ const ProductPricesSlice = createSlice({
       const productId = action.meta.arg.productId;
       state.data[productId] = {
         ...state.data[productId],
-        [slot]: []
+        intervalPrices: {
+          ...state.data[productId]?.intervalPrices,
+          [slot]: []
+        }
       };
       state.isLoading = false;
     });
@@ -73,7 +110,7 @@ export const selectProductPrices = createSelector(
     (state: RootState, productId: string, slot: ChartSlot): [string, ChartSlot] => [productId, slot]
   ],
   (prices, [productId, slot]) => {
-    const tempPrice = prices[productId]?.[slot.key];
+    const tempPrice = prices[productId]?.intervalPrices?.[slot.key];
     if (!tempPrice) {
       return tempPrice;
     } else {
@@ -85,5 +122,8 @@ export const selectProductPricesIsLoading = createSelector(
   [(state: RootState) => state.productPrices.isLoading],
   (isLoading) => isLoading
 );
-
+export const selectChartSlot = createSelector(
+  (state: RootState) => state.productPrices,
+  (state: ProductPricesState) => state.chart.slot
+);
 export default ProductPricesSlice.reducer;

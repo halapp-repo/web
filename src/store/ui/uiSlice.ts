@@ -5,9 +5,8 @@ import type { RootState } from '../index';
 import { UIState } from './uiState';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { City } from '../../models/city';
-import { IntervalType } from '../../models/interval-type';
-import { trMoment } from '../../utils/timezone';
 import { ProductType } from '../../models/product-type';
+import { trMoment } from '../../utils/timezone';
 
 const initialState = {
   listing: {
@@ -15,26 +14,6 @@ const initialState = {
     selectedCity: City.istanbul,
     selectedDate: trMoment().format('YYYY-MM-DD'),
     selectedCategory: ProductType.produce
-  },
-  chart: {
-    slot: {
-      '1WEEK': {
-        key: '1WEEK',
-        interval: IntervalType.daily,
-        fromDate: () => {
-          return trMoment().subtract(1, 'w').format('YYYY-MM-DD');
-        },
-        toDate: () => undefined
-      },
-      '1MONTH': {
-        key: '1MONTH',
-        interval: IntervalType.daily,
-        fromDate: () => {
-          return trMoment().subtract(1, 'M').format('YYYY-MM-DD');
-        },
-        toDate: () => undefined
-      }
-    }
   }
 } as UIState;
 
@@ -81,8 +60,5 @@ export const selectUIListingSelectedCity = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.listing.selectedCity
 );
-export const selectChartSlot = createSelector(
-  (state: RootState) => state.ui,
-  (state: UIState) => state.chart.slot
-);
+
 export default UISlice.reducer;
