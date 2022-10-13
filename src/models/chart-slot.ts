@@ -1,8 +1,10 @@
 import { IntervalType } from './interval-type';
 
-export interface Slot {
+interface ChartSlot {
   key: string;
   interval: IntervalType;
   fromDate: () => string;
   toDate: () => string | undefined;
 }
+
+export type { ChartSlot };

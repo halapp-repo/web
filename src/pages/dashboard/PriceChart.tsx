@@ -11,12 +11,12 @@ import {
   selectProductPrices,
   selectProductPricesIsLoading
 } from '../../store/product-prices/productPricesSlice';
-import { Slot } from '../../models/slot';
+import { ChartSlot } from '../../models/chart-slot';
 import { Price } from '../../models/price';
 
 interface PriceChartProps {
   ProductId: string;
-  Slot: Slot;
+  Slot: ChartSlot;
   Location: City;
   Type: ProductType;
 }
@@ -127,26 +127,25 @@ const areaChartOptions: ApexOptions = {
   }
 };
 
-const generateOptions = (prices: Price[], slot: Slot): ApexOptions => {
+const generateOptions = (prices: Price[], slot: ChartSlot): ApexOptions => {
   return {
     ...areaChartOptions,
     xaxis: {
       ...areaChartOptions.xaxis,
-      categories: prices?.map((p) => p.TS) || [],
+      categories: prices?.map((p) => p.TS.format()) || [],
       tickPlacement: 'on',
       labels: {
         show: true,
-        rotate: -45,
         rotateAlways: false,
         hideOverlappingLabels: true,
-        showDuplicates: false,
+        showDuplicates: true,
         format: (function () {
           if (slot.interval == IntervalType.daily) {
-            return 'dddd';
+            return 'dd';
           } else if (slot.interval == IntervalType.weekly) {
-            return 'dddd';
+            return 'dd';
           } else if (slot.interval == IntervalType.monthly) {
-            return 'MMMM';
+            return 'MMM';
           } else {
             return 'yyyy';
           }

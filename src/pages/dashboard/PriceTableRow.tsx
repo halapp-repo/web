@@ -6,28 +6,21 @@ interface PriceTableRowProps {
   ProductName: string;
   Unit: string;
   Price: number;
-  PreviousPrice?: number;
+  Increase: number;
   IsToday: boolean;
   OpenAnalyticsPanel: (event: React.MouseEvent<unknown>, productId: string) => void;
 }
-
-const calculatePercentage = (price: number, previousPrice?: number): number => {
-  if (!previousPrice) {
-    return 0;
-  }
-  return Math.round(((price - previousPrice) / previousPrice) * 100);
-};
 
 const PriceTableRow = ({
   ProductId,
   ProductName,
   Unit,
-  PreviousPrice,
+  Increase,
   Price,
   IsToday,
   OpenAnalyticsPanel
 }: PriceTableRowProps) => {
-  const increase = calculatePercentage(Price, PreviousPrice);
+  const increase = Increase;
 
   console.log('ROW');
   return (
@@ -56,13 +49,13 @@ const PriceTableRow = ({
         )}
 
         {increase < 0 && (
-          <Box sx={{ color: 'error.main', display: 'inline', fontWeight: 'bold' }}>
+          <Box sx={{ color: 'error.main', fontWeight: 'bold', padding: '0px 8px' }}>
             <CaretDownOutlined />
             {` %${increase}`}
           </Box>
         )}
         {increase > 0 && (
-          <Box sx={{ color: 'success.main', display: 'inline', fontWeight: 'bold' }}>
+          <Box sx={{ color: 'success.main', fontWeight: 'bold', padding: '0px 8px' }}>
             <CaretUpOutlined />
             {` %${increase}`}
           </Box>

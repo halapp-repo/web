@@ -23,7 +23,6 @@ import {
 import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type';
 import { Price } from '../../models/price';
-import { getNewestPricesByDate } from '../../models/services/price.model.service';
 import moment from 'moment';
 import { selectUIListingSelectedCity } from '../../store/ui/uiSlice';
 import { Order } from '../../utils/order';
@@ -36,13 +35,10 @@ interface PriceListItem {
   ProductName: string;
   Unit: string;
   ProductId: string;
-  PreviousPrice?: number;
+  Increase: number;
   IsToday: boolean;
 }
 type SortablePriceListItem = Pick<PriceListItem, 'Price' | 'ProductName'>;
-interface PriceGroup {
-  [key: string]: Price[];
-}
 
 const PriceTable = () => {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -97,37 +93,15 @@ const PriceTable = () => {
         </TableRow>
       ];
     }
-    return Object.values(
-      //Iterate Group by
-      prices.reduce((group: PriceGroup, price: Price) => {
-        //Group Prices by ProductId
-        const { ProductId } = price;
-        if (group[ProductId]) {
-          group[ProductId].push(price);
-        } else {
-          group[ProductId] = [price];
-        }
-        return group;
-      }, {})
-    )
-      .map((pricesByProductId: Price[]): PriceListItem | null => {
-        const [todayPrice, yesterdayPrice] = getNewestPricesByDate(pricesByProductId);
-        if (!todayPrice || !todayPrice.isSameAsSelectedDate(selectedDate)) {
-          return null;
-        }
-        return {
-          Price: todayPrice.Price,
-          ProductName:
-            inventories?.find((i) => i.ProductId == todayPrice.ProductId)?.Name ||
-            todayPrice.ProductId,
-          Unit: todayPrice.Unit,
-          ProductId: todayPrice.ProductId,
-          PreviousPrice: yesterdayPrice?.Price,
-          IsToday: todayPrice.isToday()
-        } as PriceListItem;
-      })
-      .filter(Boolean)
-      .map((a) => a!)
+    return prices
+      .map<PriceListItem>((p) => ({
+        IsToday: p.IsToday || false,
+        Price: p.Price,
+        ProductId: p.ProductId,
+        ProductName: inventories?.find((i) => i.ProductId == p.ProductId)?.Name || p.ProductId,
+        Unit: p.Unit,
+        Increase: p.Increase || 0
+      }))
       .sort(getComparator(order, orderBy))
       .filter((p) => {
         if (!filteringProductName) {
@@ -144,7 +118,7 @@ const PriceTable = () => {
           ProductName={p.ProductName}
           Unit={p.Unit}
           IsToday={p.IsToday}
-          PreviousPrice={p.PreviousPrice}
+          Increase={p.Increase}
           OpenAnalyticsPanel={handleOpenAnalyticsPanel}
         />
       ));

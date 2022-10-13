@@ -1,12 +1,12 @@
 import { Price } from '../../models/price';
 
-type PriceDuration = {
-  [slot in string]: Price[];
+type IntervalPrices = {
+  [interval in string]: Price[];
 };
 
 export interface ProductPricesState {
   data: {
-    [productId: string]: PriceDuration;
+    [productId: string]: IntervalPrices;
   };
   isLoading: boolean;
 }

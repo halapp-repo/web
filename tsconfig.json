@@ -19,6 +19,9 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "typeRoots": ["./src/@types", "./node_modules/@types"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false
   },
   "include": ["src/**/*"],
   "exclude": [

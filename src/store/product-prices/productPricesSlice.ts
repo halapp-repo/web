@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { plainToClass } from 'class-transformer';
 import { RootState } from '..';
 import { City } from '../../models/city';
 import { Price } from '../../models/price';
@@ -7,7 +6,8 @@ import { ProductType } from '../../models/product-type';
 import { ProductPricesApi } from './productPricesApi';
 import { ProductPricesState } from './productPricesState';
 import { getComparator } from '../../utils/sort';
-import { Slot } from '../../models/slot';
+import { ChartSlot } from '../../models/chart-slot';
+import { fetchPrices } from '../prices/pricesSlice';
 
 const initialState = {
   data: {},
@@ -20,7 +20,7 @@ export const fetchProductPrices = createAsyncThunk<
     productId: string;
     location: City;
     type: ProductType;
-    slot: Slot;
+    slot: ChartSlot;
   }
 >('product-prices/fetch', async ({ productId, location, type, slot }): Promise<Price[]> => {
   const response = await new ProductPricesApi().fetchProductPrices(
@@ -39,6 +39,9 @@ const ProductPricesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fetchPrices.fulfilled, (state, action) => {
+      const data = action.payload;
+    });
     builder.addCase(fetchProductPrices.fulfilled, (state, action) => {
       const data = action.payload;
       const slot = action.meta.arg.slot.key;
@@ -67,14 +70,14 @@ const ProductPricesSlice = createSlice({
 export const selectProductPrices = createSelector(
   [
     (state: RootState) => state.productPrices.data,
-    (state: RootState, productId: string, slot: Slot): [string, Slot] => [productId, slot]
+    (state: RootState, productId: string, slot: ChartSlot): [string, ChartSlot] => [productId, slot]
   ],
   (prices, [productId, slot]) => {
     const tempPrice = prices[productId]?.[slot.key];
     if (!tempPrice) {
       return tempPrice;
     } else {
-      return [...tempPrice].sort(getComparator('asc', 'TS')).map((p) => plainToClass(Price, p));
+      return [...tempPrice].sort(getComparator('asc', 'TS'));
     }
   }
 );

@@ -3,4 +3,6 @@ export interface PriceDTO {
   TS: string;
   Price: number;
   Unit: string;
+  IsToday?: boolean;
+  Increase?: number;
 }

@@ -2,9 +2,7 @@ import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import { PricesState } from './pricesState';
 import type { RootState } from '../index';
 import { Price } from '../../models/price';
-import moment from 'moment';
 import { PricesApi } from './pricesApi';
-import { plainToClass } from 'class-transformer';
 
 const initialState = {
   data: {},
@@ -15,13 +13,7 @@ export const fetchPrices = createAsyncThunk<
   Price[],
   { location: string; type: string; date: string }
 >('prices/fetch', async ({ location, type, date }): Promise<Price[]> => {
-  let response;
-  if (date == moment.tz('Europe/Istanbul').format('YYYY-MM-DD')) {
-    const yesterday = moment.tz('Europe/Istanbul').subtract(1, 'd').format('YYYY-MM-DD');
-    response = await new PricesApi().fetchPrice(location, type, yesterday, date);
-  } else {
-    response = await new PricesApi().fetchPrice(location, type, date, date);
-  }
+  const response = await new PricesApi().fetchPrice(location, type, date);
   return response;
 });
 
@@ -49,7 +41,7 @@ const PricesSlice = createSlice({
 
 export const selectPricesOfSelectedDate = createSelector(
   [(state: RootState) => state.prices.data, (state: RootState) => state.ui.listing.selectedDate],
-  (prices, selectedDate) => prices[selectedDate]?.map((p) => plainToClass(Price, p))
+  (prices, selectedDate) => prices[selectedDate]
 );
 export const selectPriceIsLoading = createSelector(
   [(state: RootState) => state.prices.isLoading],
