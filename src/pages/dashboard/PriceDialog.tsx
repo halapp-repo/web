@@ -12,7 +12,6 @@ import {
   Tabs,
   Tab
 } from '@mui/material';
-import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { CloseOutlined } from '@ant-design/icons';
 import PriceChart from './PriceChart';
 import { City } from '../../models/city';
