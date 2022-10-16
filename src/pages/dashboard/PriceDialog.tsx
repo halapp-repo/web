@@ -4,20 +4,26 @@ import {
   useMediaQuery,
   Theme,
   Dialog,
-  Button,
   DialogContent,
   DialogTitle,
   IconButton,
   useTheme,
-  Typography
+  Typography,
+  Tabs,
+  Tab
 } from '@mui/material';
+import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { CloseOutlined } from '@ant-design/icons';
 import PriceChart from './PriceChart';
 import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type';
 import { useAppSelector } from '../../store/hooks';
 import { selectProductByProductId } from '../../store/inventories/inventoriesSlice';
-import { selectChartSlot } from '../../store/product-prices/productPricesSlice';
+import {
+  selectChartSlot,
+  selectProductCurrentPrice,
+  selectProductDailyPriceIncrease
+} from '../../store/product-prices/productPricesSlice';
 
 interface PriceDialogProps {
   ProductId: string;
@@ -32,6 +38,10 @@ const PriceDialog = ({ ProductId, Location, Type, CloseAnalyticsPanel }: PriceDi
   const chartSlot = useAppSelector(selectChartSlot);
   const [slot, setSlot] = useState(chartSlot['1WEEK']);
   const product = useAppSelector((state) => selectProductByProductId(state, ProductId));
+  const currentPrice = useAppSelector((state) => selectProductCurrentPrice(state, ProductId));
+  const dailyPriceIncrease = useAppSelector((state) =>
+    selectProductDailyPriceIncrease(state, ProductId)
+  );
 
   useEffect(() => {
     setSlot(chartSlot['1WEEK']);
@@ -45,40 +55,104 @@ const PriceDialog = ({ ProductId, Location, Type, CloseAnalyticsPanel }: PriceDi
       aria-labelledby="responsive-dialog-title">
       <DialogTitle
         sx={{
-          height: `${theme.spacing(3)}`
+          height: `${theme.spacing(10)}`,
+          width: '100%',
+          paddingBottom: '0'
         }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box>
-            <Typography variant="h5">{product?.Name}</Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}>
+          <Box
+            sx={{
+              flexBasis: '80%',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+            <Typography variant="h4">{product?.Name}</Typography>
           </Box>
-          <Box>
-            <Button
-              size="small"
-              onClick={() => setSlot(chartSlot['1WEEK'])}
-              color={slot.key === chartSlot['1WEEK'].key ? 'primary' : 'secondary'}
-              variant={slot.key === chartSlot['1WEEK'].key ? 'outlined' : 'text'}>
-              1Hafta
-            </Button>
-            <Button
-              size="small"
-              onClick={() => setSlot(chartSlot['1MONTH'])}
-              color={slot.key === chartSlot['1MONTH'].key ? 'primary' : 'secondary'}
-              variant={slot.key === chartSlot['1MONTH'].key ? 'outlined' : 'text'}>
-              1Ay
-            </Button>
-            <IconButton onClick={CloseAnalyticsPanel}>
-              <CloseOutlined />
-            </IconButton>
-          </Box>
+          <IconButton onClick={CloseAnalyticsPanel} color="error">
+            <CloseOutlined />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50px',
+            display: 'flex'
+          }}>
+          <Typography variant="h3" color="text.secondary" fontWeight="bold">
+            ₺{currentPrice}
+          </Typography>
+          <span>&nbsp;</span>
+          {dailyPriceIncrease !== 0 && (
+            <Typography
+              variant="body2"
+              color={dailyPriceIncrease > 0 ? 'success' : 'error'}
+              sx={{
+                alignSelf: 'flex-start'
+              }}>
+              {`%${dailyPriceIncrease}`}
+            </Typography>
+          )}
         </Box>
       </DialogTitle>
       <DialogContent
         sx={{
-          paddingTop: `calc(${theme.spacing(3)}/2 )!important`,
-          paddingBottom: `calc(${theme.spacing(3)}/2 )!important`,
-          width: `calc(100% - ${theme.spacing(3)} )`
+          padding: `${theme.spacing(5)} 0 ${theme.spacing(5)} 0`,
+          overflowY: 'hidden',
+          width: {
+            sx: '100%',
+            sm: `calc(100% - ${theme.spacing(11)} )`
+          }
         }}>
-        <Box>
+        <Box
+          sx={{
+            flexGrow: 1,
+            bgcolor: 'background.paper',
+            display: {
+              sx: 'block',
+              sm: 'flex'
+            },
+            height: '100%'
+          }}>
+          {matchesSM && (
+            <Tabs
+              variant="scrollable"
+              value={slot.key}
+              sx={{ borderRight: 1, borderColor: 'divider', width: '100%' }}>
+              <Tab
+                label="1H"
+                value={chartSlot['1WEEK'].key}
+                onClick={() => setSlot(chartSlot['1WEEK'])}
+              />
+              <Tab
+                label="1A"
+                value={chartSlot['1MONTH'].key}
+                onClick={() => setSlot(chartSlot['1MONTH'])}
+              />
+            </Tabs>
+          )}
+          {matchesSM || (
+            <Tabs
+              orientation="vertical"
+              variant="scrollable"
+              value={slot.key}
+              sx={{ borderRight: 1, borderColor: 'divider', width: '10%' }}>
+              <Tab
+                label="1H"
+                value={chartSlot['1WEEK'].key}
+                onClick={() => setSlot(chartSlot['1WEEK'])}
+              />
+              <Tab
+                label="1A"
+                value={chartSlot['1MONTH'].key}
+                onClick={() => setSlot(chartSlot['1MONTH'])}
+              />
+            </Tabs>
+          )}
           <PriceChart Slot={slot} ProductId={ProductId} Location={Location} Type={Type} />
         </Box>
       </DialogContent>

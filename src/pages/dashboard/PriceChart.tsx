@@ -70,6 +70,11 @@ const areaChartOptions: ApexOptions = {
     defaultLocale: 'tr',
     animations: {
       enabled: false
+    },
+    events: {
+      mounted: (chart) => {
+        chart.windowResizeHandler();
+      }
     }
   },
   stroke: {
@@ -102,10 +107,7 @@ const areaChartOptions: ApexOptions = {
     }
   },
   yaxis: {
-    title: {
-      text: '₺',
-      rotate: 0
-    }
+    show: false
   },
   dataLabels: {
     enabled: true

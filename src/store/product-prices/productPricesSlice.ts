@@ -68,7 +68,8 @@ const ProductPricesSlice = createSlice({
           const { ProductId } = price;
           state.data[ProductId] = {
             ...state.data[ProductId],
-            dailyPriceIncrease: price.Increase || 0
+            dailyPriceIncrease: price.Increase || 0,
+            currentPrice: price.Price
           };
         }
       }
@@ -125,5 +126,19 @@ export const selectProductPricesIsLoading = createSelector(
 export const selectChartSlot = createSelector(
   (state: RootState) => state.productPrices,
   (state: ProductPricesState) => state.chart.slot
+);
+export const selectProductDailyPriceIncrease = createSelector(
+  [
+    (state: RootState) => state.productPrices,
+    (state: RootState, productId: string): string => productId
+  ],
+  (state: ProductPricesState, productId: string) => state.data[productId]?.dailyPriceIncrease
+);
+export const selectProductCurrentPrice = createSelector(
+  [
+    (state: RootState) => state.productPrices,
+    (state: RootState, productId: string): string => productId
+  ],
+  (state: ProductPricesState, productId: string) => state.data[productId]?.currentPrice
 );
 export default ProductPricesSlice.reducer;

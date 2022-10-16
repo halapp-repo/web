@@ -5,6 +5,7 @@ type IntervalPrices = {
   [interval in string]: Price[];
 };
 type ProductProps = {
+  currentPrice: number;
   dailyPriceIncrease: number;
   intervalPrices: IntervalPrices;
 };
