@@ -15,28 +15,14 @@ export class PricesApi {
     this.mapper = new PriceToPriceDTOMapper();
   }
 
-  async fetchPrice(
-    location: string,
-    type: string,
-    fromDate?: string,
-    toDate?: string
-  ): Promise<Price[]> {
+  async fetchPrice(location: string, type: string, date: string): Promise<Price[]> {
     return await axios
       .get<PriceDTO[]>(`/prices`, {
         baseURL: this.baseUrl,
         params: {
           location,
           type,
-          ...(fromDate
-            ? {
-                from_date: fromDate
-              }
-            : null),
-          ...(toDate
-            ? {
-                to_date: toDate
-              }
-            : null)
+          date
         }
       })
       .then((response) => {

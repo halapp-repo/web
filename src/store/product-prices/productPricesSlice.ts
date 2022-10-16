@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { plainToClass } from 'class-transformer';
 import { RootState } from '..';
 import { City } from '../../models/city';
 import { Price } from '../../models/price';
@@ -7,11 +6,34 @@ import { ProductType } from '../../models/product-type';
 import { ProductPricesApi } from './productPricesApi';
 import { ProductPricesState } from './productPricesState';
 import { getComparator } from '../../utils/sort';
-import { Slot } from '../../models/slot';
+import { ChartSlot } from '../../models/chart-slot';
+import { fetchPrices } from '../prices/pricesSlice';
+import { IntervalType } from '../../models/interval-type';
+import { trMoment } from '../../utils/timezone';
 
 const initialState = {
   data: {},
-  isLoading: false
+  isLoading: false,
+  chart: {
+    slot: {
+      '1WEEK': {
+        key: '1WEEK',
+        interval: IntervalType.daily,
+        fromDate: () => {
+          return trMoment().subtract(1, 'w').format('YYYY-MM-DD');
+        },
+        toDate: () => undefined
+      },
+      '1MONTH': {
+        key: '1MONTH',
+        interval: IntervalType.daily,
+        fromDate: () => {
+          return trMoment().subtract(1, 'M').format('YYYY-MM-DD');
+        },
+        toDate: () => undefined
+      }
+    }
+  }
 } as ProductPricesState;
 
 export const fetchProductPrices = createAsyncThunk<
@@ -20,7 +42,7 @@ export const fetchProductPrices = createAsyncThunk<
     productId: string;
     location: City;
     type: ProductType;
-    slot: Slot;
+    slot: ChartSlot;
   }
 >('product-prices/fetch', async ({ productId, location, type, slot }): Promise<Price[]> => {
   const response = await new ProductPricesApi().fetchProductPrices(
@@ -39,13 +61,29 @@ const ProductPricesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fetchPrices.fulfilled, (state, action) => {
+      const data = action.payload;
+      for (const price of data) {
+        if (price.IsToday == true && typeof price.Increase !== undefined) {
+          const { ProductId } = price;
+          state.data[ProductId] = {
+            ...state.data[ProductId],
+            dailyPriceIncrease: price.Increase || 0,
+            currentPrice: price.Price
+          };
+        }
+      }
+    });
     builder.addCase(fetchProductPrices.fulfilled, (state, action) => {
       const data = action.payload;
       const slot = action.meta.arg.slot.key;
       const productId = action.meta.arg.productId;
       state.data[productId] = {
         ...state.data[productId],
-        [slot]: data
+        intervalPrices: {
+          ...state.data[productId]?.intervalPrices,
+          [slot]: data
+        }
       };
       state.isLoading = false;
     });
@@ -54,7 +92,10 @@ const ProductPricesSlice = createSlice({
       const productId = action.meta.arg.productId;
       state.data[productId] = {
         ...state.data[productId],
-        [slot]: []
+        intervalPrices: {
+          ...state.data[productId]?.intervalPrices,
+          [slot]: []
+        }
       };
       state.isLoading = false;
     });
@@ -67,14 +108,14 @@ const ProductPricesSlice = createSlice({
 export const selectProductPrices = createSelector(
   [
     (state: RootState) => state.productPrices.data,
-    (state: RootState, productId: string, slot: Slot): [string, Slot] => [productId, slot]
+    (state: RootState, productId: string, slot: ChartSlot): [string, ChartSlot] => [productId, slot]
   ],
   (prices, [productId, slot]) => {
-    const tempPrice = prices[productId]?.[slot.key];
+    const tempPrice = prices[productId]?.intervalPrices?.[slot.key];
     if (!tempPrice) {
       return tempPrice;
     } else {
-      return [...tempPrice].sort(getComparator('asc', 'TS')).map((p) => plainToClass(Price, p));
+      return [...tempPrice].sort(getComparator('asc', 'TS'));
     }
   }
 );
@@ -82,5 +123,22 @@ export const selectProductPricesIsLoading = createSelector(
   [(state: RootState) => state.productPrices.isLoading],
   (isLoading) => isLoading
 );
-
+export const selectChartSlot = createSelector(
+  (state: RootState) => state.productPrices,
+  (state: ProductPricesState) => state.chart.slot
+);
+export const selectProductDailyPriceIncrease = createSelector(
+  [
+    (state: RootState) => state.productPrices,
+    (state: RootState, productId: string): string => productId
+  ],
+  (state: ProductPricesState, productId: string) => state.data[productId]?.dailyPriceIncrease
+);
+export const selectProductCurrentPrice = createSelector(
+  [
+    (state: RootState) => state.productPrices,
+    (state: RootState, productId: string): string => productId
+  ],
+  (state: ProductPricesState, productId: string) => state.data[productId]?.currentPrice
+);
 export default ProductPricesSlice.reducer;

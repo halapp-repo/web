@@ -5,11 +5,15 @@ import type { RootState } from '../index';
 import { UIState } from './uiState';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { City } from '../../models/city';
+import { ProductType } from '../../models/product-type';
+import { trMoment } from '../../utils/timezone';
 
 const initialState = {
   listing: {
     filteredProductName: '',
-    selectedCity: City.istanbul
+    selectedCity: City.istanbul,
+    selectedDate: trMoment().format('YYYY-MM-DD'),
+    selectedCategory: ProductType.produce
   }
 } as UIState;
 
@@ -56,4 +60,5 @@ export const selectUIListingSelectedCity = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.listing.selectedCity
 );
+
 export default UISlice.reducer;
