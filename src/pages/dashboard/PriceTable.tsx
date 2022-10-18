@@ -132,8 +132,7 @@ const PriceTable = () => {
           overflowX: 'auto',
           position: 'relative',
           display: 'block',
-          maxWidth: '100%',
-          '& td, & th': { whiteSpace: 'nowrap' }
+          maxWidth: '100%'
         }}>
         <Toolbar>
           <Typography variant="h3" color="inherit">
