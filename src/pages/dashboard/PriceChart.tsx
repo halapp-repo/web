@@ -138,14 +138,15 @@ const generateOptions = (prices: Price[], slot: ChartSlot): ApexOptions => {
       tickPlacement: 'on',
       labels: {
         show: true,
+        rotate: -45,
         rotateAlways: false,
         hideOverlappingLabels: true,
-        showDuplicates: true,
+        showDuplicates: false,
         format: (function () {
           if (slot.interval == IntervalType.daily) {
-            return 'dd';
+            return 'dd/MM';
           } else if (slot.interval == IntervalType.weekly) {
-            return 'dd';
+            return 'dd/MM';
           } else if (slot.interval == IntervalType.monthly) {
             return 'MMM';
           } else {
