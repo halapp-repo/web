@@ -5,4 +5,5 @@ export interface PriceDTO {
   Unit: string;
   IsToday?: boolean;
   Increase?: number;
+  IsActive?: boolean;
 }

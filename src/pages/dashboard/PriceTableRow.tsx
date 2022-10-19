@@ -8,6 +8,7 @@ interface PriceTableRowProps {
   Price: number;
   Increase: number;
   IsToday: boolean;
+  IsActive: boolean;
   OpenAnalyticsPanel: (event: React.MouseEvent<unknown>, productId: string) => void;
 }
 
@@ -18,11 +19,11 @@ const PriceTableRow = ({
   Increase,
   Price,
   IsToday,
+  IsActive,
   OpenAnalyticsPanel
 }: PriceTableRowProps) => {
   const increase = Increase;
 
-  console.log('ROW');
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={ProductId}>
       <TableCell align="left">
@@ -36,7 +37,7 @@ const PriceTableRow = ({
         </Typography>
       </TableCell>
       <TableCell align="right">
-        {IsToday ? (
+        {IsToday || IsActive ? (
           <Button variant="text" onClick={(e) => OpenAnalyticsPanel(e, ProductId)}>
             <Typography variant="h5" color="inherit">
               {`₺${(Math.round(Price * 100) / 100).toFixed(2)}`}

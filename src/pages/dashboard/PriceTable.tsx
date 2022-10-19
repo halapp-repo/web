@@ -37,6 +37,7 @@ interface PriceListItem {
   ProductId: string;
   Increase: number;
   IsToday: boolean;
+  IsActive: boolean;
 }
 type SortablePriceListItem = Pick<PriceListItem, 'Price' | 'ProductName'>;
 
@@ -100,7 +101,8 @@ const PriceTable = () => {
         ProductId: p.ProductId,
         ProductName: inventories?.find((i) => i.ProductId == p.ProductId)?.Name || p.ProductId,
         Unit: p.Unit,
-        Increase: p.Increase || 0
+        Increase: p.Increase || 0,
+        IsActive: p.IsActive || false
       }))
       .sort(getComparator(order, orderBy))
       .filter((p) => {
@@ -119,6 +121,7 @@ const PriceTable = () => {
           Unit={p.Unit}
           IsToday={p.IsToday}
           Increase={p.Increase}
+          IsActive={p.IsActive}
           OpenAnalyticsPanel={handleOpenAnalyticsPanel}
         />
       ));

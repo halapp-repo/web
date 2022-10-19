@@ -89,7 +89,7 @@ const PriceDialog = ({ ProductId, Location, Type, CloseAnalyticsPanel }: PriceDi
           {dailyPriceIncrease !== 0 && (
             <Typography
               variant="body2"
-              color={dailyPriceIncrease > 0 ? 'success' : 'error'}
+              color={dailyPriceIncrease > 0 ? 'success.main' : 'error.main'}
               sx={{
                 alignSelf: 'flex-start'
               }}>

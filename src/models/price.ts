@@ -15,4 +15,5 @@ export class Price {
 
   IsToday?: boolean;
   Increase?: number;
+  IsActive?: boolean;
 }

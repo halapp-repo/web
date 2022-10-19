@@ -14,7 +14,8 @@ export class PriceToPriceDTOMapper extends IMapper<Price, PriceDTO> {
       Price: arg.Price,
       Unit: arg.Unit,
       IsToday: arg.IsToday,
-      Increase: arg.Increase
+      Increase: arg.Increase,
+      IsActive: arg.IsActive
     });
   }
   toListDTO(): PriceDTO[] {
