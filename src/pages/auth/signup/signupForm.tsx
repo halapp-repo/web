@@ -4,12 +4,11 @@ import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
 
-import AuthWrapper from '../AuthWrapper';
-import AuthCard from '../AuthCard';
-
 interface FormValues {
+  fullName: string;
   email: string;
   password: string;
+  code: string;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -23,13 +22,14 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             color="text.secondary"
             fontWeight="bold"
             sx={{ display: 'flex', justifyContent: 'center' }}>
-            {'Giriş yap veya kayıt ol'}
+            {'Kayıt Ol'}
           </Typography>
           <Form>
             <Stack spacing={1}>
+              <Field name="fullName" label="Isim ve Soyisim" component={AppTextField} />
               <Field type="email" name="email" label="Email" component={AppTextField} />
               <Field type="password" name="password" label="Sifre" component={AppTextField} />
-
+              <Field type="hidden" name="code" />
               <Button
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
@@ -39,9 +39,9 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Typography variant="body1">{'Hala kayıt olmadınız mı?'}</Typography>
-                <Button variant="text" component={RouterLink} to="/signup">
-                  {'Kayit Ol'}
+                <Typography variant="body1">{"HalApp'e üyeyseniz"}</Typography>
+                <Button variant="text" component={RouterLink} to="/signin">
+                  {'Giris yap'}
                 </Button>
               </Box>
             </Stack>
@@ -52,20 +52,31 @@ const InnerForm = (props: FormikProps<FormValues>) => {
   );
 };
 
-const SignInForm = withFormik({
+interface MyFormProps {
+  code: string;
+}
+
+const SignUpForm = withFormik<MyFormProps, FormValues>({
   // Transform outer props into form values
   mapPropsToValues: (props) => {
     return {
       email: '',
-      password: ''
+      password: '',
+      fullName: '',
+      code: props.code
     };
   },
   // Add a custom validation function (this can be async too!)
   validationSchema: Yup.object().shape({
+    fullName: Yup.string()
+      .min(2, 'min 2')
+      .max(50, 'max 50')
+      .required('Lütfen ad ve soyadınızı giriniz.'),
     email: Yup.string()
       .email('Lütfen geçerli bir email adresi giriniz.')
       .required('Lütfen email adresinizi giriniz.'),
-    password: Yup.string().required('gerekli')
+    password: Yup.string().required('gerekli'),
+    code: Yup.string().required('Required')
   }),
 
   handleSubmit: (values) => {
@@ -73,16 +84,4 @@ const SignInForm = withFormik({
   }
 })(InnerForm);
 
-const createSigninForm = () => <SignInForm />;
-
-const SignIn = () => {
-  return (
-    <>
-      <AuthWrapper>
-        <AuthCard>{createSigninForm()}</AuthCard>
-      </AuthWrapper>
-    </>
-  );
-};
-
-export default SignIn;
+export { SignUpForm };

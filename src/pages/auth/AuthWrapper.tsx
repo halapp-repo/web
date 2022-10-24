@@ -7,16 +7,7 @@ interface Props {
 
 const AuthWrapper = ({ children }: Props) => (
   <Box>
-    <Grid
-      container
-      direction="column"
-      sx={{
-        minHeight: {
-          xs: '100vh',
-          md: '100%'
-        }
-      }}
-      justifyContent="flex-start">
+    <Grid container direction="column" justifyContent="flex-start">
       <Grid item xs={12} container justifyContent="center" alignItems="center">
         <Grid item xs={12} sm={5}>
           {children}
