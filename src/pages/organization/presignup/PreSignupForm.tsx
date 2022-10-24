@@ -40,7 +40,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             {`Şirketinizi HalApp'e Ekleyin`}
           </Typography>
           <Form>
-            <Stack spacing={1}>
+            <Stack spacing={2}>
               <Field name="organizationName" label="Sirket Ismi" component={AppTextField} />
               <Field
                 name="address.formattedAddress"

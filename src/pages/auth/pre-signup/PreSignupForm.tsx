@@ -19,19 +19,25 @@ interface FormValues {
   email: string;
   phoneNumber: string;
   address: OrganizationAddress;
-  url?: string;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
   const { touched, errors, isSubmitting, dirty, isValid, setFieldValue } = props;
 
   const handlePlaceChanged = (props: AddressOutput) => {
-    console.log({ props });
+    if (props.businessStatus) {
+      props.name && setFieldValue('organizationName', props.name);
+      props.phoneNumber && setFieldValue('phoneNumber', props.phoneNumber);
+    }
+    props.county && setFieldValue('county', props.county);
+    props.city && setFieldValue('city', props.city);
+    props.zipCode && setFieldValue('zipCode', props.zipCode);
   };
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <Stack spacing={1}>
+        <Stack spacing={2}>
           <Typography
             variant="h4"
             color="text.secondary"
@@ -40,8 +46,37 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             {`Şirketinizi HalApp'e Ekleyin`}
           </Typography>
           <Form>
-            <Stack spacing={1}>
+            <Stack spacing={2}>
               <Field name="organizationName" label="Sirket Ismi" component={AppTextField} />
+              <Field
+                name="address.formattedAddress"
+                label="Adres"
+                component={AddressField}
+                onPlaceChanged={handlePlaceChanged}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Field
+                  name="county"
+                  label="ilce"
+                  component={AppTextField}
+                  InputLabelProps={{ shrink: true }}
+                  disabled
+                />
+                <Field
+                  name="city"
+                  label="il"
+                  component={AppTextField}
+                  InputLabelProps={{ shrink: true }}
+                  disabled
+                />
+                <Field
+                  name="zipCode"
+                  label="Posta Kodu"
+                  component={AppTextField}
+                  InputLabelProps={{ shrink: true }}
+                  disabled
+                />
+              </Box>
               <Field type="email" name="email" label="Email" component={AppTextField} />
               <Field
                 defaultCountry="TR"
@@ -51,17 +86,13 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 component={MuiTelInput}
                 onChange={(value: string) => setFieldValue('phoneNumber', value)}
               />
-              <Field
-                name="address.formattedAddress"
-                label="Adres"
-                component={AddressField}
-                onPlaceChanged={handlePlaceChanged}
-              />
+              <Field type="hidden" name="country" />
+              <Box sx={{ height: '20px' }} />
               <Button
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
                 variant="contained">
-                Submit
+                Kaydet
               </Button>
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

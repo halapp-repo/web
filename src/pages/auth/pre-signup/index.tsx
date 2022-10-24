@@ -18,11 +18,7 @@ const PreSignup = () => {
           <Grid item md={6}>
             <MainCard
               sx={{
-                p: 1,
-                position: 'fixed',
-                top: '0',
-                height: '100vh',
-                width: '100vh'
+                p: 1
               }}>
               <AddressMap />
             </MainCard>

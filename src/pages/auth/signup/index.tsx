@@ -2,13 +2,12 @@ import { useSearchParams } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
 import AuthCard from '../AuthCard';
 import { SignUpForm } from './signupForm';
-import { PreSignUpForm } from './preSignupForm';
 
 const createSignupForm = (code: string | null | undefined) => {
   if (code) {
     return <SignUpForm code={code} />;
   } else {
-    return <PreSignUpForm />;
+    return <div>{'xxx'}</div>;
   }
 };
 

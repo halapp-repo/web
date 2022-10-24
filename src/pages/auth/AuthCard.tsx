@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 // project import
 import MainCard from '../../components/MainCard';
 import Logo from '../../components/logo/Logo';
+import { Link } from 'react-router-dom';
 
 // ==============================|| AUTHENTICATION - CARD WRAPPER ||============================== //
 interface Props {
@@ -25,7 +26,9 @@ const AuthCard = ({ children }: Props) => (
       }
     }}>
     <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 }, display: 'flex', justifyContent: 'center' }}>
-      <Logo Size="medium" />
+      <Link to={'/'}>
+        <Logo Size="medium" />
+      </Link>
     </Box>
     <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 } }}>{children}</Box>
   </MainCard>

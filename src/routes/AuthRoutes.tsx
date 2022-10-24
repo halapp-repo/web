@@ -6,6 +6,7 @@ import MinimalLayout from '../layouts/MinimalLayout';
 // render - login
 const SignUp = Loadable(lazy(() => import('../pages/auth/signup')));
 const SignIn = Loadable(lazy(() => import('../pages/auth/signin')));
+const PreSignUp = Loadable(lazy(() => import('../pages/auth/pre-signup')));
 
 // ==============================|| AUTH ROUTING ||============================== //
 
@@ -20,6 +21,10 @@ const AuthRoutes = {
     {
       path: '/signin',
       element: <SignIn />
+    },
+    {
+      path: '/presignup',
+      element: <PreSignUp />
     }
   ]
 };
