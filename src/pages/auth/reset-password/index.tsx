@@ -1,8 +1,9 @@
 import AuthCard from '../AuthCard';
 import AuthWrapper from '../AuthWrapper';
+import OTP from './OTP';
 
 const createResetPasswordForm = () => {
-  return 'xxx';
+  return <OTP />;
 };
 
 const ResetPassword = () => {

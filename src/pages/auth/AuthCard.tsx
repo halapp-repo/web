@@ -18,7 +18,7 @@ const AuthCard = ({ children }: Props) => (
     sx={{
       minWidth: { xs: '100%', md: 350 },
       maxWidth: { xs: '100%', md: 350 },
-      minHeight: { xs: '100vh', sm: 'inherit' },
+      // minHeight: { xs: '100vh', sm: 'inherit' },
       margin: { xs: 0, sm: 1, md: 3 },
       '& > *': {
         flexGrow: 1,

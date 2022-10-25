@@ -9,7 +9,8 @@ interface AddressOutput {
   country: string | undefined;
   zipCode: string | undefined;
   phoneNumber: string | undefined;
-  url: string | undefined;
+  lng: number | undefined;
+  lat: number | undefined;
   name: string | undefined;
   businessStatus?: string | undefined;
 }
@@ -22,7 +23,8 @@ const options = {
     'business_status',
     'international_phone_number',
     'url',
-    'name'
+    'name',
+    'geometry'
   ]
 } as google.maps.places.AutocompleteOptions;
 
@@ -39,6 +41,8 @@ const parsePlace = (place: google.maps.places.PlaceResult): AddressOutput | unde
     },
     {} as { [key: string]: string }
   );
+  const lat = place.geometry?.location?.lat();
+  const lng = place.geometry?.location?.lng();
   return {
     formattedAddress: place.formatted_address,
     county: addressComponent['administrative_area_level_2'],
@@ -46,7 +50,8 @@ const parsePlace = (place: google.maps.places.PlaceResult): AddressOutput | unde
     country: addressComponent['country'],
     zipCode: addressComponent['postal_code'],
     name: place.name,
-    url: place.url,
+    lat,
+    lng,
     phoneNumber: place['international_phone_number'],
     businessStatus: place['business_status']
   };

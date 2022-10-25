@@ -4,7 +4,7 @@ import { lazy } from 'react';
 import Loadable from '../components/Loadable';
 import MainLayout from '../layouts/MainLayout';
 // render - login
-const PreSignup = Loadable(lazy(() => import('../pages/organization/presignup')));
+const Enrollment = Loadable(lazy(() => import('../pages/organization/enrollment')));
 
 // ==============================|| AUTH ROUTING ||============================== //
 
@@ -13,8 +13,8 @@ const OrganizationRoutes = {
   element: <MainLayout />,
   children: [
     {
-      path: '/organization/presignup',
-      element: <PreSignup />
+      path: '/organization/enrollment',
+      element: <Enrollment />
     }
   ]
 };

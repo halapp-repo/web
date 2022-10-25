@@ -34,7 +34,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
                 variant="contained">
-                Submit
+                {'Kaydet'}
               </Button>
 
               <Box sx={{ height: '50px' }} />

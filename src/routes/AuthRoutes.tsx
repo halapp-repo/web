@@ -2,17 +2,18 @@ import { lazy } from 'react';
 
 // project import
 import Loadable from '../components/Loadable';
+import MainLayout from '../layouts/MainLayout';
 import MinimalLayout from '../layouts/MinimalLayout';
 // render - login
 const SignUp = Loadable(lazy(() => import('../pages/auth/signup')));
 const SignIn = Loadable(lazy(() => import('../pages/auth/signin')));
-const PreSignUp = Loadable(lazy(() => import('../pages/auth/pre-signup')));
+const ResetPassword = Loadable(lazy(() => import('../pages/auth/reset-password')));
 
 // ==============================|| AUTH ROUTING ||============================== //
 
 const AuthRoutes = {
   path: '/',
-  element: <MinimalLayout />,
+  element: <MainLayout />,
   children: [
     {
       path: '/signup',
@@ -23,8 +24,8 @@ const AuthRoutes = {
       element: <SignIn />
     },
     {
-      path: '/presignup',
-      element: <PreSignUp />
+      path: '/resetpassword',
+      element: <ResetPassword />
     }
   ]
 };

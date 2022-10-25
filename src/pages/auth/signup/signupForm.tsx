@@ -1,5 +1,5 @@
 import { Typography, Grid, Stack, Box, Button } from '@mui/material';
-import { withFormik, FormikProps, FormikErrors, Form, Field } from 'formik';
+import { withFormik, FormikProps, Form, Field } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
@@ -34,7 +34,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
                 variant="contained">
-                Submit
+                {'Kaydet'}
               </Button>
 
               <Box sx={{ height: '50px' }} />

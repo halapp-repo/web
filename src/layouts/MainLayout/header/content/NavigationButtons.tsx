@@ -1,6 +1,6 @@
 import { Stack, IconButton } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-// import { AreaChartOutlined } from '@ant-design/icons';
+import { ShopOutlined } from '@ant-design/icons';
 
 const defaultStyle = {
   textDecoration: 'none'
@@ -13,16 +13,16 @@ const activeStyle = {
 const NavigationButtons = () => {
   return (
     <Stack direction="row" spacing={2}>
-      <NavLink to="dashboard" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
+      <NavLink to="/organization" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
+        <IconButton sx={{ fontSize: '2rem', color: 'text.primary' }} disableRipple>
+          <ShopOutlined />
+        </IconButton>
+      </NavLink>
+      <NavLink to="/dashboard" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
         <IconButton sx={{ fontSize: '2rem' }} disableRipple>
           ₺
         </IconButton>
       </NavLink>
-      {/* <NavLink to="statistics" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
-        <IconButton sx={{ fontSize: '2rem', color: 'text.primary' }} disableRipple>
-          <AreaChartOutlined />
-        </IconButton>
-      </NavLink> */}
     </Stack>
   );
 };

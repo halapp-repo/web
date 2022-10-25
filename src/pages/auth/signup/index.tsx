@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
 import AuthCard from '../AuthCard';
-import { SignUpForm } from './signupForm';
+import { SignUpForm } from './SignupForm';
 
 const createSignupForm = (code: string | null | undefined) => {
   if (code) {
