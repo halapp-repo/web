@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import AuthCard from '../AuthCard';
 import AuthWrapper from '../AuthWrapper';
 import OTP from './OTP';
