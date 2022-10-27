@@ -6,7 +6,7 @@ const Footer = () => {
     <Box sx={{ minHeight: '50px', borderTop: '1px solid #f0f0f0' }}>
       <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
             {'© 2022 HalApp'}
           </Typography>
         </Grid>
@@ -21,12 +21,12 @@ const Footer = () => {
             alignItems: 'center'
           }}>
           <Box>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body1" color="text.secondary">
               {`Esentepe, Kolektif House, Talatpaşa Cd. No: 5/1, 34394 Şişli/İstanbul`}
             </Typography>
           </Box>
           <Box>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body1" color="text.secondary">
               {`info@halapp.io`}
             </Typography>
           </Box>
