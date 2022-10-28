@@ -26,8 +26,21 @@ const Enrollment = () => {
     dispatch(createOrganizationEnrollmentRequest(arg));
   };
   const createEnrollmentPage = () => {
-    if (didSendEnrollmentRequest) {
-      return()
+    if (!didSendEnrollmentRequest) {
+      return (
+        <Box>
+          <Grid
+            container
+            rowSpacing={4.5}
+            justifyContent="center"
+            columnSpacing={2.75}
+            alignItems="center">
+            <Grid item xs={12} sm={6} md={4}>
+              <MainCard sx={{ p: 5 }}>{'XXXX'}</MainCard>
+            </Grid>
+          </Grid>
+        </Box>
+      );
     }
     return (
       <Box>
