@@ -27,6 +27,11 @@ const Contact = () => {
             <WhatsAppOutlined /> (0538) 450 36 72
           </Link>
         </Typography>
+        <Typography
+          align="center"
+          sx={{ fontSize: 20, fontWeight: 'bold', color: 'rgb(255, 196, 35)' }}>
+          {'Ücretsiz Teslimat!'}
+        </Typography>
       </CardContent>
     </Card>
   );
