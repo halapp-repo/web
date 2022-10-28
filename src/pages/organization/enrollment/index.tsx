@@ -27,6 +27,7 @@ const Enrollment = () => {
   };
   const createEnrollmentPage = () => {
     if (didSendEnrollmentRequest) {
+      return()
     }
     return (
       <Box>
