@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
 import { MuiTelInput } from 'mui-tel-input';
 import { AddressField, AddressOutput } from '../../../components/form/AddressField';
+import { OrganizationEnrollmentDTO } from '../../../models/dtos/organization-enrollment.dto';
 
 interface OrganizationAddress {
   formattedAddress: string;
@@ -33,6 +34,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
     props.county && setFieldValue('address.county', props.county);
     props.city && setFieldValue('address.city', props.city);
     props.zipCode && setFieldValue('address.zipCode', props.zipCode);
+    props.country && setFieldValue('address.country', props.country);
     props.lat && props.lng && values.onLocationChanged(`${props.lat}`, `${props.lng}`);
   };
 
@@ -45,16 +47,18 @@ const InnerForm = (props: FormikProps<FormValues>) => {
           </Typography>
           <Form>
             <Stack spacing={2}>
-              <Field name="organizationName" label="Sirket Ismi" component={AppTextField} />
               <Typography variant="h5" color="text.primary" fontWeight="bold">
                 {`Adres bilgileri`}
               </Typography>
+
               <Field
                 name="address.formattedAddress"
-                label="Adres"
+                label="Konum"
                 component={AddressField}
                 onPlaceChanged={handlePlaceChanged}
+                placeholder="Konum Girin"
               />
+
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Field
                   name="address.county"
@@ -78,6 +82,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                   disabled
                 />
               </Box>
+              <Field name="organizationName" label="Sirket Ismi" component={AppTextField} />
               <Typography variant="h5" color="text.primary" fontWeight="bold">
                 {`Kontak bilgileri`}
               </Typography>
@@ -115,6 +120,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 interface EnrollmentFormProps {
   onLocationChanged: (lat: string, lng: string) => void;
+  onSubmit: (arg: OrganizationEnrollmentDTO) => void;
 }
 
 const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
@@ -154,8 +160,19 @@ const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
     })
   }),
 
-  handleSubmit: (values) => {
+  handleSubmit: (values, { props, setSubmitting }) => {
     // do submitting things
+    props.onSubmit({
+      organizationName: values.organizationName,
+      email: values.email,
+      phoneNumber: values.phoneNumber,
+      formattedAddress: values.address.formattedAddress,
+      county: values.address.county,
+      city: values.address.city,
+      zipCode: values.address.zipCode,
+      country: values.address.country
+    });
+    setSubmitting(false);
   }
 })(InnerForm);
 

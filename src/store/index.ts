@@ -3,13 +3,15 @@ import pricesReducer from './prices/pricesSlice';
 import inventoriesReducer from './inventories/inventoriesSlice';
 import uiReducer from './ui/uiSlice';
 import productPricesReducer from './product-prices/productPricesSlice';
+import organizationsReducer from './organizations/organizationsSlice';
 
 const store = configureStore({
   reducer: {
     prices: pricesReducer,
     inventories: inventoriesReducer,
     ui: uiReducer,
-    productPrices: productPricesReducer
+    productPrices: productPricesReducer,
+    organizations: organizationsReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

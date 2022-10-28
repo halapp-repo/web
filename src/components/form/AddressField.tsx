@@ -58,7 +58,8 @@ const parsePlace = (place: google.maps.places.PlaceResult): AddressOutput | unde
 };
 
 const AddressField: React.FC<
-  FieldProps & TextFieldProps & { onPlaceChanged: (addressProps: AddressOutput) => void }
+  FieldProps &
+    TextFieldProps & { onPlaceChanged: (addressProps: AddressOutput) => void; placeholder?: string }
 > = (props) => {
   const autoCompleteRef = useRef() as MutableRefObject<google.maps.places.Autocomplete>;
   const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
