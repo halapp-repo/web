@@ -26,7 +26,7 @@ const Enrollment = () => {
     dispatch(createOrganizationEnrollmentRequest(arg));
   };
   const createEnrollmentPage = () => {
-    if (!didSendEnrollmentRequest) {
+    if (didSendEnrollmentRequest) {
       return (
         <Box>
           <Grid

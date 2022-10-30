@@ -1,7 +1,7 @@
+import * as Yup from 'yup';
 import { Typography, Grid, Stack, Box, Button } from '@mui/material';
 import { withFormik, FormikProps, Form, Field } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
-import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
 import { MuiTelInput } from 'mui-tel-input';
 import { AddressField, AddressOutput } from '../../../components/form/AddressField';
@@ -24,15 +24,22 @@ interface FormValues {
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { isSubmitting, dirty, isValid, setFieldValue, values } = props;
+  const { isSubmitting, dirty, isValid, setFieldValue, values, setFieldTouched } = props;
 
   const handlePlaceChanged = (props: AddressOutput) => {
+    setFieldValue('organizationName', '');
+    setFieldValue('phoneNumber', '');
+    setFieldValue('address.zipCode', '');
+
     if (props.businessStatus) {
       props.name && setFieldValue('organizationName', props.name);
       props.phoneNumber && setFieldValue('phoneNumber', props.phoneNumber);
     }
     props.county && setFieldValue('address.county', props.county);
-    props.city && setFieldValue('address.city', props.city);
+    if (props.city) {
+      setFieldValue('address.city', props.city, true);
+      setTimeout(() => setFieldTouched('address.city', true), 500);
+    }
     props.zipCode && setFieldValue('address.zipCode', props.zipCode);
     props.country && setFieldValue('address.country', props.country);
     props.lat && props.lng && values.onLocationChanged(`${props.lat}`, `${props.lng}`);
@@ -45,7 +52,10 @@ const InnerForm = (props: FormikProps<FormValues>) => {
           <Typography variant="h4" color="text.primary" fontWeight="bold">
             {`Şirketinizi HalApp'e Ekleyin`}
           </Typography>
-          <Form>
+          <Form
+            onKeyPress={(e) => {
+              e.which === 13 && e.preventDefault();
+            }}>
             <Stack spacing={2}>
               <Typography variant="h5" color="text.primary" fontWeight="bold">
                 {`Adres bilgileri`}
@@ -154,8 +164,10 @@ const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
     address: Yup.object().shape({
       formattedAddress: Yup.string().required('Lütfen adres giriniz.'),
       county: Yup.string().required(),
-      city: Yup.string().required(),
-      zipCode: Yup.string().required(),
+      city: Yup.string()
+        .required('Lütfen sehir giriniz.')
+        .equals(['İstanbul', 'Istanbul'], 'Sadece istanbul girilebilir'),
+      zipCode: Yup.string(),
       country: Yup.string().required()
     })
   }),

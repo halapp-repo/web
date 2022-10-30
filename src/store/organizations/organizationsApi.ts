@@ -9,23 +9,34 @@ export class OrganizationsApi {
   mapper: OrganizationToOrganizationDTOMapper;
 
   constructor() {
-    const baseUrl = process.env.REACT_APP_LISTING_BASE_URL;
+    const baseUrl = process.env.REACT_APP_ACCOUNT_BASE_URL;
     if (!baseUrl) {
-      throw new Error('REACT_APP_LISTING_BASE_URL is not set!');
+      throw new Error('REACT_APP_ACCOUNT_BASE_URL is not set!');
     }
     this.baseUrl = baseUrl;
     this.mapper = new OrganizationToOrganizationDTOMapper();
   }
 
   async createEnrollmentRequest(request: OrganizationEnrollmentDTO): Promise<void> {
-    return await axios.post('/organization/enrollment', request, {
-      baseURL: this.baseUrl
+    return await axios.post('/organizations/enrollment', JSON.stringify(request), {
+      baseURL: this.baseUrl,
+      headers: {
+        'content-type': 'application/json'
+      }
     });
+    // await fetch(`${this.baseUrl}/organizations/enrollment`, {
+    //   body: JSON.stringify(request),
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json;charset=UTF-8'
+    //   },
+    //   mode: 'no-cors'
+    // });
   }
 
   async fetchOrganizations(): Promise<Organization[]> {
     return await axios
-      .get<OrganizationDTO[]>('/organization', {
+      .get<OrganizationDTO[]>('/organizations', {
         baseURL: this.baseUrl
       })
       .then((response) => {
