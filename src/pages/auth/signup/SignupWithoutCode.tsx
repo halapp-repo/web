@@ -3,7 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 
 // project import
 import MainCard from '../../../components/MainCard';
-import Logo from '../../../components/logo/Logo';
 
 const SignUpWithoutCode = () => {
   return (

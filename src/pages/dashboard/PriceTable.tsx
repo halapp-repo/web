@@ -163,7 +163,7 @@ const PriceTable = () => {
                   onClick={(e) => handleRequestSort(e, 'ProductName')}
                   active={orderBy === 'ProductName'}
                   direction={orderBy === 'ProductName' ? order : 'asc'}>
-                  Urun
+                  Ürün
                 </TableSortLabel>
               </TableCell>
               <TableCell align="left">Birim</TableCell>
