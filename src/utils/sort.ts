@@ -3,12 +3,13 @@ import { Order } from './order';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let aVal: any = a[orderBy];
+  const aVal: any = a[orderBy];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let bVal: any = b[orderBy];
+  const bVal: any = b[orderBy];
   if (typeof a[orderBy] === 'string') {
-    aVal = (aVal as string).toUpperCase();
-    bVal = (bVal as string).toUpperCase();
+    const aValStr = (aVal as string).toLocaleUpperCase('tr-TR');
+    const bValStr = (bVal as string).toLocaleUpperCase('tr-TR');
+    return bValStr.localeCompare(aValStr, 'en');
   }
   if (bVal < aVal) {
     return -1;
@@ -32,4 +33,4 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export { getComparator };
+export { getComparator, descendingComparator };
