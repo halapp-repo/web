@@ -12,19 +12,19 @@ const ResetPassword = Loadable(lazy(() => import('../pages/auth/reset-password')
 // ==============================|| AUTH ROUTING ||============================== //
 
 const AuthRoutes = {
-  path: '/',
+  path: '/auth',
   element: <MainLayout />,
   children: [
     {
-      path: '/signup',
+      path: '/auth/signup',
       element: <SignUp />
     },
     {
-      path: '/signin',
+      path: '/auth/signin',
       element: <SignIn />
     },
     {
-      path: '/resetpassword',
+      path: '/auth/resetpassword',
       element: <ResetPassword />
     }
   ]

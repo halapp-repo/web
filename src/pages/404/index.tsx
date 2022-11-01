@@ -1,5 +1,5 @@
 import { Box, Grid, useMediaQuery, Theme, Stack, Typography } from '@mui/material';
-import Logo404 from '../../components/logo/Logo404';
+import Icon404 from '../../components/icons/Icon404';
 
 const NotFound = () => {
   return (
@@ -16,7 +16,7 @@ const NotFound = () => {
               404
             </Typography>
           </Box>
-          <Logo404 Size="xx-large" />
+          <Icon404 Size="xx-large" />
         </Stack>
       </Grid>
     </Grid>

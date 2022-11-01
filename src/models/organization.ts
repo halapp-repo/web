@@ -8,5 +8,5 @@ interface OrganizationAddress {
 
 export class Organization {
   Name: string;
-  address: OrganizationAddress;
+  Address: OrganizationAddress;
 }

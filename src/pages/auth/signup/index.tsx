@@ -2,12 +2,23 @@ import { useSearchParams } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
 import AuthCard from '../AuthCard';
 import { SignUpForm } from './SignupForm';
+import SignUpWithoutCode from './SignupWithoutCode';
 
 const createSignupForm = (code: string | null | undefined) => {
   if (code) {
-    return <SignUpForm code={code} />;
+    return (
+      <AuthWrapper>
+        <AuthCard>
+          <SignUpForm code={code} />
+        </AuthCard>
+      </AuthWrapper>
+    );
   } else {
-    return <div>{'xxx'}</div>;
+    return (
+      <AuthWrapper>
+        <SignUpWithoutCode />
+      </AuthWrapper>
+    );
   }
 };
 
@@ -15,13 +26,7 @@ const SignUp = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get('code');
 
-  return (
-    <>
-      <AuthWrapper>
-        <AuthCard>{createSignupForm(code)}</AuthCard>
-      </AuthWrapper>
-    </>
-  );
+  return <>{createSignupForm(code)}</>;
 };
 
 export default SignUp;

@@ -1,5 +1,5 @@
 import { SvgIcon } from '@mui/material';
-import { ReactComponent as LogoContent } from './logo404.svg';
+import { ReactComponent as LogoContent } from './icon404.svg';
 
 type LogoSize = 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
 
@@ -7,7 +7,7 @@ interface LogoProps {
   Size?: LogoSize;
 }
 
-const Logo404 = ({ Size }: LogoProps) => {
+const Icon404 = ({ Size }: LogoProps) => {
   let logoSize = '2em';
   switch (Size) {
     case 'small':
@@ -36,4 +36,4 @@ const Logo404 = ({ Size }: LogoProps) => {
     </SvgIcon>
   );
 };
-export default Logo404;
+export default Icon404;

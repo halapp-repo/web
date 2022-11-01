@@ -1,8 +1,9 @@
 import { Typography, Grid, Stack, Box, Button } from '@mui/material';
-import { withFormik, FormikProps, FormikErrors, Form, Field } from 'formik';
+import { withFormik, FormikProps, Form, Field } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
+import { NavLink } from 'react-router-dom';
 
 import AuthWrapper from '../AuthWrapper';
 import AuthCard from '../AuthCard';
@@ -26,9 +27,28 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             {'Giriş yap veya kayıt ol'}
           </Typography>
           <Form>
-            <Stack spacing={1}>
+            <Stack spacing={2}>
               <Field type="email" name="email" label="Email" component={AppTextField} />
-              <Field type="password" name="password" label="Sifre" component={AppTextField} />
+              <Box sx={{ display: 'block' }}>
+                <Field
+                  type="password"
+                  name="password"
+                  label="Sifre"
+                  component={AppTextField}
+                  sx={{ width: '100%' }}
+                />
+                <Button
+                  component={NavLink}
+                  to={'/auth/resetpassword'}
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    minWidth: 'auto',
+                    float: 'right',
+                    clear: 'right'
+                  }}>
+                  {'Şifremi unuttum'}
+                </Button>
+              </Box>
 
               <Button
                 type="submit"
@@ -39,9 +59,9 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Typography variant="body1">{'Hala kayıt olmadınız mı?'}</Typography>
-                <Button variant="text" component={RouterLink} to="/signup">
-                  {'Kayit Ol'}
+                <Typography variant="body1">{'Hala üye olmadınız mı?'}</Typography>
+                <Button variant="text" component={RouterLink} to="/organization/enrollment">
+                  {'Üye Ol'}
                 </Button>
               </Box>
             </Stack>

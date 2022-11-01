@@ -33,8 +33,20 @@ const OrganizationsSlice = createSlice({
       const data = action.payload;
       state.Organizations = [...(state.Organizations || []), ...(data || [])];
     });
-    builder.addCase(createOrganizationEnrollmentRequest.fulfilled, (state) => {
-      state.DidSendOrganizationEnrollment = true;
+    builder.addCase(createOrganizationEnrollmentRequest.fulfilled, (state, action) => {
+      state.Enrollment = {
+        DidSendOrganizationEnrollment: true,
+        Organization: {
+          Name: action.meta.arg.organizationName,
+          Address: {
+            FormattedAddress: action.meta.arg.formattedAddress,
+            City: action.meta.arg.city,
+            Country: action.meta.arg.country,
+            County: action.meta.arg.county,
+            ZipCode: action.meta.arg.zipCode
+          }
+        }
+      };
     });
   }
 });
@@ -44,9 +56,9 @@ export const selectOrganizations = createSelector(
   (org: OrganizationsState) => org.Organizations
 );
 
-export const selectSendOrganizationEnrollment = createSelector(
+export const selectOrganizationEnrollment = createSelector(
   [(state: RootState) => state.organizations],
-  (org: OrganizationsState) => org.DidSendOrganizationEnrollment
+  (org: OrganizationsState) => org.Enrollment
 );
 
 export default OrganizationsSlice.reducer;

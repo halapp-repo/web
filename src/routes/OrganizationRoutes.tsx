@@ -14,10 +14,6 @@ const OrganizationRoutes = {
   element: <MainLayout />,
   children: [
     {
-      path: '/organization',
-      element: <Dashboard />
-    },
-    {
       path: '/organization/enrollment',
       element: <Enrollment />
     }

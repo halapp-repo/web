@@ -6,13 +6,14 @@ import { EnrollmentForm } from './EnrollmentForm';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   createOrganizationEnrollmentRequest,
-  selectSendOrganizationEnrollment
+  selectOrganizationEnrollment
 } from '../../../store/organizations/organizationsSlice';
 import { OrganizationEnrollmentDTO } from '../../../models/dtos/organization-enrollment.dto';
+import PostEnrollment from './PostEnrollment';
 
 const Enrollment = () => {
   const dispatch = useAppDispatch();
-  const didSendEnrollmentRequest = useAppSelector(selectSendOrganizationEnrollment);
+  const enrollmentRequest = useAppSelector(selectOrganizationEnrollment);
 
   const matchesMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   const [location, setLocation] = useState({} as { [key in 'LNG' | 'LAT']: string });
@@ -26,7 +27,7 @@ const Enrollment = () => {
     dispatch(createOrganizationEnrollmentRequest(arg));
   };
   const createEnrollmentPage = () => {
-    if (didSendEnrollmentRequest) {
+    if (enrollmentRequest?.DidSendOrganizationEnrollment) {
       return (
         <Box>
           <Grid
@@ -36,7 +37,9 @@ const Enrollment = () => {
             columnSpacing={2.75}
             alignItems="center">
             <Grid item xs={12} sm={6} md={4}>
-              <MainCard sx={{ p: 5 }}>{'XXXX'}</MainCard>
+              <MainCard sx={{ p: 5 }}>
+                <PostEnrollment />
+              </MainCard>
             </Grid>
           </Grid>
         </Box>

@@ -96,7 +96,13 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               <Typography variant="h5" color="text.primary" fontWeight="bold">
                 {`Kontak bilgileri`}
               </Typography>
-              <Field type="email" name="email" label="Email" component={AppTextField} />
+              <Field
+                type="email"
+                name="email"
+                label="Email"
+                component={AppTextField}
+                sx={{ dispay: 'flex', width: '100%' }}
+              />
               <Field
                 defaultCountry="TR"
                 name="phoneNumber"
@@ -116,7 +122,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Typography variant="body1">{"HalApp'e üyeyseniz"}</Typography>
-                <Button variant="text" component={RouterLink} to="/signin">
+                <Button variant="text" component={RouterLink} to="/auth/signin">
                   {'Giris yap'}
                 </Button>
               </Box>
@@ -164,9 +170,7 @@ const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
     address: Yup.object().shape({
       formattedAddress: Yup.string().required('Lütfen adres giriniz.'),
       county: Yup.string().required(),
-      city: Yup.string()
-        .required('Lütfen sehir giriniz.')
-        .equals(['İstanbul', 'Istanbul'], 'Sadece istanbul girilebilir'),
+      city: Yup.string().required('Lütfen sehir giriniz.'),
       zipCode: Yup.string(),
       country: Yup.string().required()
     })
@@ -175,7 +179,7 @@ const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
   handleSubmit: (values, { props, setSubmitting }) => {
     // do submitting things
     props.onSubmit({
-      organizationName: values.organizationName,
+      organizationName: values.organizationName.replace(/\b\w/g, (l) => l.toUpperCase()),
       email: values.email,
       phoneNumber: values.phoneNumber,
       formattedAddress: values.address.formattedAddress,
