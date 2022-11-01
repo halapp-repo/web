@@ -29,6 +29,7 @@ import { Order } from '../../utils/order';
 import { getComparator } from '../../utils/sort';
 import PriceTableRow from './PriceTableRow';
 import PriceDialog from './PriceDialog';
+import { contains } from '../../utils/filter';
 
 interface PriceListItem {
   Price: number;
@@ -109,7 +110,7 @@ const PriceTable = () => {
         if (!filteringProductName) {
           return true;
         } else {
-          return p.ProductName.toLowerCase().includes(filteringProductName);
+          return contains(p.ProductName.toLowerCase(), filteringProductName);
         }
       })
       .map((p) => (
