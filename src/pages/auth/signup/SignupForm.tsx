@@ -5,10 +5,10 @@ import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
 
 interface FormValues {
-  fullName: string;
   email: string;
   password: string;
   code: string;
+  onSignup: (email: string, password: string) => void;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -26,7 +26,6 @@ const InnerForm = (props: FormikProps<FormValues>) => {
           </Typography>
           <Form>
             <Stack spacing={1}>
-              <Field name="fullName" label="Isim ve Soyisim" component={AppTextField} />
               <Field type="email" name="email" label="Email" component={AppTextField} />
               <Field type="password" name="password" label="Sifre" component={AppTextField} />
               <Field type="hidden" name="code" />
@@ -36,7 +35,6 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 variant="contained">
                 {'Kaydet'}
               </Button>
-
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Typography variant="body1">{"HalApp'e üyeyseniz"}</Typography>
@@ -54,6 +52,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 interface MyFormProps {
   code: string;
+  onSignup: (email: string, password: string) => void;
 }
 
 const SignUpForm = withFormik<MyFormProps, FormValues>({
@@ -62,25 +61,28 @@ const SignUpForm = withFormik<MyFormProps, FormValues>({
     return {
       email: '',
       password: '',
-      fullName: '',
-      code: props.code
+      code: props.code,
+      onSignup: props.onSignup
     };
   },
   // Add a custom validation function (this can be async too!)
   validationSchema: Yup.object().shape({
-    fullName: Yup.string()
-      .min(2, 'min 2')
-      .max(50, 'max 50')
-      .required('Lütfen ad ve soyadınızı giriniz.'),
     email: Yup.string()
       .email('Lütfen geçerli bir email adresi giriniz.')
       .required('Lütfen email adresinizi giriniz.'),
-    password: Yup.string().required('gerekli'),
+    password: Yup.string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{7,})/,
+        'Şifreniz en az 7 karakter olmalı. Büyük, küçük harf ve rakam içermelidir.'
+      )
+      .required('sifre gerekli'),
     code: Yup.string().required('Required')
   }),
 
-  handleSubmit: (values) => {
+  handleSubmit: (values, { props, setSubmitting }) => {
     // do submitting things
+    props.onSignup(values.email, values.password);
+    setSubmitting(false);
   }
 })(InnerForm);
 

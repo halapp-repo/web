@@ -21,7 +21,7 @@
     "typeRoots": ["./src/@types", "./node_modules/@types"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
   },
   "include": ["src/**/*"],
   "exclude": [

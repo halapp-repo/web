@@ -1,10 +1,10 @@
-import { Typography, Grid, Stack, Box, Button, Divider } from '@mui/material';
+import { Typography, Stack, Box, Button, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 // project import
 import MainCard from '../../../components/MainCard';
 
-const SignUpWithoutCode = () => {
+const SignUpWithoutCompanyCode = () => {
   return (
     <MainCard
       sx={{
@@ -43,4 +43,4 @@ const SignUpWithoutCode = () => {
   );
 };
 
-export default SignUpWithoutCode;
+export default SignUpWithoutCompanyCode;

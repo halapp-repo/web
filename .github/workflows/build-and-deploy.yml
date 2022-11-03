@@ -20,7 +20,11 @@ jobs:
       NODE_ENV: production
       REACT_APP_LISTING_BASE_URL: https://rkq38xk46j.execute-api.eu-central-1.amazonaws.com/prod
       REACT_APP_ACCOUNT_BASE_URL: https://2eudwcewvh.execute-api.eu-central-1.amazonaws.com/prod
-      GOOGLE_API_KEY: AIzaSyDunADvBNBfepVIioODBP3Cq-MjIHKE268
+      REACT_APP_GOOGLE_API_KEY: AIzaSyDunADvBNBfepVIioODBP3Cq-MjIHKE268
+      REACT_APP_COGNITO_USERPOOL_ID: XXX,
+      REACT_APP_COGNITO_CLIENT_ID: XXX
+      REACT_APP_AWS_REGION: eu-central-1
+
 
     strategy:
       matrix:
