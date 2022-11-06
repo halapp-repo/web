@@ -3,12 +3,11 @@ import { withFormik, FormikProps, Form, Field } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
+import { NavLink } from 'react-router-dom';
 
 interface FormValues {
   email: string;
   password: string;
-  code: string;
-  onSignup: (email: string, password: string, code: string) => Promise<void>;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -22,27 +21,44 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             color="text.secondary"
             fontWeight="bold"
             sx={{ display: 'flex', justifyContent: 'center' }}>
-            {'Kayıt Ol'}
+            {'Giriş yap veya kayıt ol'}
           </Typography>
-          <Form
-            onKeyPress={(e) => {
-              e.which === 13 && e.preventDefault();
-            }}>
-            <Stack spacing={1}>
+          <Form>
+            <Stack spacing={2}>
               <Field type="email" name="email" label="Email" component={AppTextField} />
-              <Field type="password" name="password" label="Sifre" component={AppTextField} />
-              <Field type="hidden" name="code" />
+              <Box sx={{ display: 'block' }}>
+                <Field
+                  type="password"
+                  name="password"
+                  label="Sifre"
+                  component={AppTextField}
+                  sx={{ width: '100%' }}
+                />
+                <Button
+                  component={NavLink}
+                  to={'/auth/resetpassword'}
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    minWidth: 'auto',
+                    float: 'right',
+                    clear: 'right'
+                  }}>
+                  {'Şifremi unuttum'}
+                </Button>
+              </Box>
+
               <Button
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
                 variant="contained">
                 {'Kaydet'}
               </Button>
+
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Typography variant="body1">{"HalApp'e üyeyseniz"}</Typography>
-                <Button variant="text" component={RouterLink} to="/signin">
-                  {'Giris yap'}
+                <Typography variant="body1">{'Hala üye olmadınız mı?'}</Typography>
+                <Button variant="text" component={RouterLink} to="/organization/enrollment">
+                  {'Üye Ol'}
                 </Button>
               </Box>
             </Stack>
@@ -54,18 +70,15 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 };
 
 interface MyFormProps {
-  code: string;
-  onSignup: (email: string, password: string, code: string) => Promise<void>;
+  onSignin: (email: string, password: string) => Promise<void>;
 }
 
-const SignUpForm = withFormik<MyFormProps, FormValues>({
+const SignInForm = withFormik<MyFormProps, FormValues>({
   // Transform outer props into form values
-  mapPropsToValues: (props: MyFormProps) => {
+  mapPropsToValues: (props) => {
     return {
       email: '',
-      password: '',
-      code: props.code,
-      onSignup: props.onSignup
+      password: ''
     };
   },
   // Add a custom validation function (this can be async too!)
@@ -73,20 +86,14 @@ const SignUpForm = withFormik<MyFormProps, FormValues>({
     email: Yup.string()
       .email('Lütfen geçerli bir email adresi giriniz.')
       .required('Lütfen email adresinizi giriniz.'),
-    password: Yup.string()
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{7,})/,
-        'Şifreniz en az 7 karakter olmalı. Büyük, küçük harf ve rakam içermelidir.'
-      )
-      .required('sifre gerekli'),
-    code: Yup.string().required('Required')
+    password: Yup.string().required('gerekli')
   }),
 
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
-    await props.onSignup(values.email, values.password, values.code);
+    await props.onSignin(values.email, values.password);
     setSubmitting(false);
   }
 })(InnerForm);
 
-export { SignUpForm };
+export { SignInForm };

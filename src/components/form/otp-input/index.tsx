@@ -159,6 +159,7 @@ export const OTPInputComponent = (props: OTPInputProps) => {
         .trim()
         .slice(0, length - activeInput)
         .split('');
+      const pastedCopy = [...pastedData];
       if (pastedData) {
         let nextFocusIndex = 0;
         const updatedOTPValues = [...otpValues];
@@ -174,6 +175,7 @@ export const OTPInputComponent = (props: OTPInputProps) => {
         setOTPValues(updatedOTPValues);
         setActiveInput(Math.min(nextFocusIndex + 1, length - 1));
       }
+      handleOtpChange(pastedCopy);
     },
     [activeInput, getRightValue, length, otpValues]
   );

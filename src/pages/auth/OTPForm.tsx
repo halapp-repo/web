@@ -7,11 +7,13 @@ interface FormValues {
   otp: string;
   email: string;
   length: number;
+  onResendCode: () => void;
 }
 
 interface InnerFormProps {
   onMoveNextPage: () => void;
   onSubmit: (code: string) => Promise<void>;
+  onResendCode: () => void;
   email: string;
   length: number;
 }
@@ -63,7 +65,11 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                   variant="contained">
                   {'Onayla'}
                 </Button>
-                <Button sx={{ width: '100%' }} type="submit" variant="contained">
+                <Button
+                  sx={{ width: '100%' }}
+                  type="submit"
+                  variant="contained"
+                  onClick={values.onResendCode}>
                   {'Tekrar onay kodu gönder'}
                 </Button>
               </Stack>
@@ -77,11 +83,12 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 const OTPInputForm = withFormik<InnerFormProps, FormValues>({
   // Transform outer props into form values
-  mapPropsToValues: ({ email, length }) => {
+  mapPropsToValues: ({ email, length, onResendCode }) => {
     return {
       otp: '',
       email,
-      length
+      length,
+      onResendCode
     };
   },
   // Add a custom validation function (this can be async too!)
@@ -102,23 +109,32 @@ const OTPInputForm = withFormik<InnerFormProps, FormValues>({
 const createEmailForm = (
   onMoveNextPage: () => void,
   onSubmit: (code: string) => Promise<void>,
+  onResendCode: () => void,
   email: string,
   length: number
 ) => (
-  <OTPInputForm onMoveNextPage={onMoveNextPage} onSubmit={onSubmit} email={email} length={length} />
+  <OTPInputForm
+    onMoveNextPage={onMoveNextPage}
+    onResendCode={onResendCode}
+    onSubmit={onSubmit}
+    email={email}
+    length={length}
+  />
 );
 
 const OTPForm = ({
   onMoveNextPage,
   onSubmit,
+  onResendCode,
   email,
   length
 }: {
   onMoveNextPage: () => void;
   onSubmit: (code: string) => Promise<void>;
+  onResendCode: () => void;
   email: string;
   length: number;
 }) => {
-  return <Box>{createEmailForm(onMoveNextPage, onSubmit, email, length)}</Box>;
+  return <Box>{createEmailForm(onMoveNextPage, onSubmit, onResendCode, email, length)}</Box>;
 };
 export default OTPForm;
