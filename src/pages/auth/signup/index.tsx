@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import OTPForm from '../OTPForm';
 
 const SignUp = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const userAuth = useAppSelector(selectUserAuth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -32,13 +32,13 @@ const SignUp = () => {
   };
 
   const createSignupForm = (signupCode: string | null | undefined) => {
-    if (!userAuth.userId) {
+    if (!userAuth.email) {
       if (signupCode) {
         return <SignUpForm code={signupCode} onSignup={handleSignup} />;
       } else {
         return <SignUpWithoutCompanyCode />;
       }
-    } else if (userAuth.userId && !userAuth.confirmed) {
+    } else if (userAuth.email && userAuth.needConfirmation) {
       return (
         <OTPForm
           length={6}

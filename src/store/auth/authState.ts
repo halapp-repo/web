@@ -3,6 +3,8 @@ export type UserAuth = {
   authenticated: boolean;
   confirmed: boolean;
   email: string;
+  needConfirmation: boolean;
+  error?: Error | null | undefined;
 };
 
 export interface AuthState {

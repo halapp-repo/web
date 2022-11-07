@@ -15,6 +15,7 @@ const LayoutInitializer = ({ children }: Props) => {
 
   // Fetch inital Data
   useEffect(() => {
+    // dispatch()
     dispatch(fetchInventories());
     dispatch(updateListingSelectedDate(selectedDate));
   }, []);

@@ -10,7 +10,6 @@ import {
   CognitoUserSession
 } from 'amazon-cognito-identity-js';
 import cognitoUserPool from '../../aws/CognitoUserPool';
-import { UserAuth } from './authState';
 
 const signUp = (
   email: string,
@@ -43,24 +42,23 @@ const signUp = (
   });
 };
 
-const confirmSignup = (userId: string, code: string) => {
+const confirmSignup = (email: string, code: string) => {
   const newUser = new CognitoUser({
-    Username: userId,
+    Username: email,
     Pool: cognitoUserPool
   });
   const promisifiedConfirmSignup = promisify(newUser.confirmRegistration).bind(newUser);
   promisifiedConfirmSignup(code, false);
 };
 
-const resendConfirmCode = (userId: string) => {
+const resendConfirmCode = (email: string) => {
   const newUser = new CognitoUser({
-    Username: userId,
+    Username: email,
     Pool: cognitoUserPool
   });
   const promisifiedConfirmSignup = promisify(newUser.resendConfirmationCode).bind(newUser);
   promisifiedConfirmSignup();
 };
-
 interface ISignInResult {
   confirmed: boolean | undefined;
   authenticated: boolean | undefined;
@@ -80,7 +78,7 @@ const signIn = (email: string, password: string): Promise<ISignInResult> => {
   const cognitoUser = new CognitoUser(userData);
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess(session, userConfirmationNecessary?) {
+      onSuccess(session: CognitoUserSession, userConfirmationNecessary?: boolean | undefined) {
         console.log(userConfirmationNecessary);
         console.log(JSON.stringify(session));
         return resolve({
@@ -97,3 +95,4 @@ const signIn = (email: string, password: string): Promise<ISignInResult> => {
 };
 
 export { signUp, confirmSignup, resendConfirmCode, signIn };
+export type { ISignInResult };

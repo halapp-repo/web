@@ -51,7 +51,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
                 variant="contained">
-                {'Kaydet'}
+                {'Giriş Yap'}
               </Button>
 
               <Box sx={{ height: '50px' }} />
@@ -86,7 +86,12 @@ const SignInForm = withFormik<MyFormProps, FormValues>({
     email: Yup.string()
       .email('Lütfen geçerli bir email adresi giriniz.')
       .required('Lütfen email adresinizi giriniz.'),
-    password: Yup.string().required('gerekli')
+    password: Yup.string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+        'Şifreniz en az 6 karakter olmalı. Büyük, küçük harf ve rakam içermelidir.'
+      )
+      .required('sifre gerekli')
   }),
 
   handleSubmit: async (values, { props, setSubmitting }) => {

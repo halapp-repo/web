@@ -5,17 +5,20 @@ import {
   signUp as signUpFunc,
   confirmSignup as confirmSignupFunc,
   resendConfirmCode as resendConfirmCodeFunc,
-  signIn as signInFunc
+  signIn as signInFunc,
+  ISignInResult
 } from './authApi';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { SignupResponseDTO } from '../../models/dtos/signup-response.dto';
 import { SignupConfirmResponseDTO } from '../../models/dtos/signup-confirm-response.dto';
+import { SigninResponseDTO } from '../../models/dtos/signin-response.dto';
 
 const defaultUserAuth: UserAuth = {
   userId: '',
   authenticated: false,
   confirmed: false,
-  email: ''
+  email: '',
+  needConfirmation: false
 };
 
 export const signUp = createAsyncThunk<
@@ -39,8 +42,8 @@ export const confirmSignUp = createAsyncThunk<
   { state: RootState }
 >('auth/signupConfirm', async ({ code }, { getState }) => {
   const { userAuth } = getState().auth;
-  if (userAuth.userId) {
-    await confirmSignupFunc(userAuth.userId, code);
+  if (userAuth.email) {
+    await confirmSignupFunc(userAuth.email, code);
     return {
       UserConfirmed: true
     };
@@ -52,18 +55,26 @@ export const resendConfirmCode = createAsyncThunk<void, void, { state: RootState
   'auth/resendConfirm',
   async (_, { getState }) => {
     const { userAuth } = getState().auth;
-    if (userAuth.userId) {
-      await resendConfirmCodeFunc(userAuth.userId);
+    if (userAuth.email) {
+      await resendConfirmCodeFunc(userAuth.email);
     }
   }
 );
 
-export const signIn = createAsyncThunk<void, { email: string; password: string }>(
-  'auth/signin',
-  async ({ email, password }) => {
-    const res = await signInFunc(email, password);
+export const signIn = createAsyncThunk<
+  SigninResponseDTO | null,
+  { email: string; password: string }
+>('auth/signin', async ({ email, password }) => {
+  const res: ISignInResult = await signInFunc(email, password);
+  if (res) {
+    return <SigninResponseDTO>{
+      UserConfirmed: res.confirmed,
+      UserAuthenticated: res.authenticated,
+      Session: res.session
+    };
   }
-);
+  return null;
+});
 
 const initialState = {
   userAuth: defaultUserAuth
@@ -82,7 +93,9 @@ const AuthSlice = createSlice({
           ...state.userAuth,
           confirmed: data.UserConfirmed,
           userId: data.UserSub,
-          email: email
+          email: email,
+          needConfirmation: true,
+          error: null
         };
       }
     });
@@ -91,7 +104,39 @@ const AuthSlice = createSlice({
       if (data) {
         state.userAuth = {
           ...state.userAuth,
-          confirmed: data.UserConfirmed
+          confirmed: data.UserConfirmed,
+          needConfirmation: false,
+          error: null
+        };
+      }
+    });
+    builder.addCase(signIn.fulfilled, (state, action) => {
+      const data = action.payload;
+      if (data) {
+        state.userAuth = {
+          ...state.userAuth,
+          confirmed: data.UserConfirmed,
+          authenticated: data.UserAuthenticated,
+          needConfirmation: false,
+          error: null
+        };
+      }
+    });
+    builder.addCase(signIn.rejected, (state, action) => {
+      const { email } = action.meta.arg;
+      if (action.error.message === 'User is not confirmed.') {
+        state.userAuth = {
+          ...state.userAuth,
+          confirmed: false,
+          authenticated: false,
+          email,
+          needConfirmation: true,
+          error: null
+        };
+      } else if (action.error.message === 'User does not exist.') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Email adresiniz ve/veya şifreniz hatalı.')
         };
       }
     });

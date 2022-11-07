@@ -75,8 +75,8 @@ const SignUpForm = withFormik<MyFormProps, FormValues>({
       .required('Lütfen email adresinizi giriniz.'),
     password: Yup.string()
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{7,})/,
-        'Şifreniz en az 7 karakter olmalı. Büyük, küçük harf ve rakam içermelidir.'
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+        'Şifreniz en az 6 karakter olmalı. Büyük, küçük harf ve rakam içermelidir.'
       )
       .required('sifre gerekli'),
     code: Yup.string().required('Required')

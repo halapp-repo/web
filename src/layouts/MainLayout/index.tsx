@@ -14,14 +14,14 @@ const MainLayout = () => {
         margin: 0,
         flexDirection: 'column'
       }}>
-      <Header />
-      <Box component="main" sx={{ width: '100%', flex: 1, flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-        <Toolbar />
-        <LayoutInitializer>
+      <LayoutInitializer>
+        <Header />
+        <Box component="main" sx={{ width: '100%', flex: 1, flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+          <Toolbar />
           <Outlet />
-        </LayoutInitializer>
-      </Box>
-      <Footer />
+        </Box>
+        <Footer />
+      </LayoutInitializer>
     </Box>
   );
 };
