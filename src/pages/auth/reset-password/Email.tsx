@@ -10,10 +10,11 @@ interface FormValues {
 interface InnerFormProps {
   onMoveNextPage: () => void;
   setEmail: (value: string) => void;
+  onForgotPassword: (email: string) => void;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { touched, errors, isSubmitting, dirty, isValid } = props;
+  const { isSubmitting, dirty, isValid } = props;
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -32,7 +33,10 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             sx={{ display: 'flex', justifyContent: 'center' }}>
             {'Şifre yenileme bağlantısını gönderebilmemiz için email adresinize ihtiyacımız var.'}
           </Typography>
-          <Form>
+          <Form
+            onKeyPress={(e) => {
+              e.which === 13 && e.preventDefault();
+            }}>
             <Stack spacing={2}>
               <Field type="email" name="email" label="Email" component={AppTextField} />
               <Button
@@ -63,25 +67,36 @@ const EmailForm = withFormik<InnerFormProps, FormValues>({
       .required('Lütfen email adresinizi giriniz.')
   }),
 
-  handleSubmit: (values, { props, setSubmitting }) => {
+  handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
+    await props.onForgotPassword(values.email);
     props.setEmail(values.email);
     props.onMoveNextPage();
     setSubmitting(false);
   }
 })(InnerForm);
 
-const createEmailForm = (onMoveNextPage: () => void, setEmail: (value: string) => void) => (
-  <EmailForm onMoveNextPage={onMoveNextPage} setEmail={setEmail} />
+const createEmailForm = (
+  onMoveNextPage: () => void,
+  setEmail: (value: string) => void,
+  onForgotPassword: (email: string) => void
+) => (
+  <EmailForm
+    onMoveNextPage={onMoveNextPage}
+    setEmail={setEmail}
+    onForgotPassword={onForgotPassword}
+  />
 );
 
 const Email = ({
   onMoveNextPage,
-  setEmail
+  setEmail,
+  onForgotPassword
 }: {
   onMoveNextPage: () => void;
   setEmail: (value: string) => void;
+  onForgotPassword: (email: string) => void;
 }) => {
-  return <Box>{createEmailForm(onMoveNextPage, setEmail)}</Box>;
+  return <Box>{createEmailForm(onMoveNextPage, setEmail, onForgotPassword)}</Box>;
 };
 export default Email;

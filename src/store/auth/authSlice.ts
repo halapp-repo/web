@@ -7,9 +7,10 @@ import {
   resendConfirmCode as resendConfirmCodeFunc,
   signIn as signInFunc,
   signOut as signOutFunc,
-  getSession as getSessionFunc
+  getSession as getSessionFunc,
+  forgotPassword as forgotPasswordFunc
 } from './authApi';
-import { CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
+import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
 
 const defaultUserAuth: UserAuth = {
@@ -87,6 +88,13 @@ export const getSession = createAsyncThunk<AuthResponseDTO>(
       IdToken: session.idToken,
       AccessToken: session.accessToken
     };
+  }
+);
+
+export const forgotPassword = createAsyncThunk<void, { email: string }>(
+  'auth/forgotPassword',
+  async ({ email }) => {
+    await forgotPasswordFunc(email);
   }
 );
 

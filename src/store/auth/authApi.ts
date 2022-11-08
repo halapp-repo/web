@@ -123,5 +123,21 @@ const getSession = (): Promise<ISessionResponse> => {
     }
   });
 };
+const forgotPassword = (email: string) => {
+  const newUser = new CognitoUser({
+    Username: email,
+    Pool: cognitoUserPool
+  });
+  return new Promise((resolve, reject) => {
+    newUser.forgotPassword({
+      onSuccess: (result) => {
+        return resolve(result);
+      },
+      onFailure: (err) => {
+        return reject(err);
+      }
+    });
+  });
+};
 
-export { signUp, confirmSignup, resendConfirmCode, signIn, signOut, getSession };
+export { signUp, confirmSignup, resendConfirmCode, signIn, signOut, getSession, forgotPassword };
