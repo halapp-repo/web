@@ -7,6 +7,7 @@ interface FormValues {
   email: string;
   otp: string;
   password: string;
+  passwordConfirmation: string;
 }
 
 const NewPassword = (props: FormikProps<FormValues>) => {
@@ -41,6 +42,13 @@ const NewPassword = (props: FormikProps<FormValues>) => {
                 component={AppTextField}
                 sx={{ width: '100%' }}
               />
+              <Field
+                type="password"
+                name="passwordConfirmation"
+                label="Sifreyi tekrar girin"
+                component={AppTextField}
+                sx={{ width: '100%' }}
+              />
               <Button
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
@@ -67,7 +75,8 @@ const NewPasswordForm = withFormik<MyFormProps, FormValues>({
     return {
       email: props.email,
       otp: props.otp,
-      password: ''
+      password: '',
+      passwordConfirmation: ''
     };
   },
   // Add a custom validation function (this can be async too!)
@@ -79,7 +88,8 @@ const NewPasswordForm = withFormik<MyFormProps, FormValues>({
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
         'Şifreniz en az 6 karakter olmalı. Büyük, küçük harf ve rakam içermelidir.'
       )
-      .required('sifre gerekli')
+      .required('sifre gerekli'),
+    passwordConfirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Sifreler uyusmali')
   }),
 
   handleSubmit: async (values, { props, setSubmitting }) => {

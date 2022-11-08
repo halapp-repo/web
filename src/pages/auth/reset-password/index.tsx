@@ -3,11 +3,13 @@ import AuthWrapper from '../AuthWrapper';
 import { useState } from 'react';
 import Email from './Email';
 import { useAppDispatch } from '../../../store/hooks';
-import { forgotPassword } from '../../../store/auth/authSlice';
+import { confirmPassword, forgotPassword } from '../../../store/auth/authSlice';
 import OTPForm from '../OTPForm';
 import { NewPasswordForm } from './NewPassword';
+import { useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [stage, setStage] = useState(0);
   const [email, setEmail] = useState('');
@@ -17,7 +19,14 @@ const ResetPassword = () => {
     await dispatch(forgotPassword({ email }));
   };
   const handleConfirmNewPassword = async (email: string, password: string, otp: string) => {
-    true;
+    await dispatch(
+      confirmPassword({
+        email,
+        otp,
+        password
+      })
+    );
+    setStage(3);
   };
 
   const createResetPasswordForm = (stage: number) => {
@@ -48,6 +57,9 @@ const ResetPassword = () => {
         );
       case 2:
         return <NewPasswordForm email={email} otp={otp} onSubmit={handleConfirmNewPassword} />;
+      case 3:
+        navigate('/auth/signin');
+        break;
       default:
         throw new Error('unsuported stage');
     }
