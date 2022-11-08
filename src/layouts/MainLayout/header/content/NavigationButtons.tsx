@@ -1,6 +1,8 @@
-import { Stack, IconButton, Button, Typography } from '@mui/material';
+import { Stack, IconButton, Button, Typography, useMediaQuery, Theme } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-import { ShopOutlined, ShopFilled } from '@ant-design/icons';
+import Profile from './profile';
+import { useAppSelector } from '../../../../store/hooks';
+import { selectUserAuth } from '../../../../store/auth/authSlice';
 
 const defaultStyle = {
   textDecoration: 'none'
@@ -14,53 +16,52 @@ const activeButtonStyle = {
 };
 
 const NavigationButtons = () => {
+  const matchesXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+  const userAuth = useAppSelector(selectUserAuth);
   return (
     <Stack direction="row" spacing={2}>
-      <NavLink
-        to="/organization/enrollment"
-        style={({ isActive }) => (isActive ? activeButtonStyle : defaultStyle)}
-        // eslint-disable-next-line react/no-children-prop
-        children={({ isActive }) => {
-          return (
-            <Button
-              variant="outlined"
-              sx={{ whiteSpace: 'nowrap', minWidth: 'auto' }}
-              disableRipple>
-              {'Üye ol'}
-            </Button>
-          );
-        }}
-      />
-      <NavLink
-        to="/auth/signin"
-        style={({ isActive }) => (isActive ? activeButtonStyle : defaultStyle)}
-        // eslint-disable-next-line react/no-children-prop
-        children={({ isActive }) => {
-          return (
-            <Button
-              variant="contained"
-              sx={{
-                whiteSpace: 'nowrap',
-                minWidth: 'auto'
-              }}
-              disableRipple>
-              <Typography>{'Giriş yap'}</Typography>
-            </Button>
-          );
-        }}
-      />
-      {/* <NavLink
-        to="/dashboard"
-        style={({ isActive }) => (isActive ? activeIconStyle : defaultStyle)}
-        // eslint-disable-next-line react/no-children-prop
-        children={({ isActive }) => {
-          return (
-            <IconButton sx={{ fontSize: '2rem', color: 'text.primary' }} disableRipple>
-              {isActive ? <ShopFilled /> : <ShopOutlined />}
-            </IconButton>
-          );
-        }}
-      /> */}
+      {!userAuth.authenticated && (
+        <>
+          <NavLink
+            to="/organization/enrollment"
+            style={({ isActive }) => (isActive ? activeButtonStyle : defaultStyle)}
+            // eslint-disable-next-line react/no-children-prop
+            children={({ isActive }) => {
+              return (
+                <Button
+                  variant="outlined"
+                  sx={{ whiteSpace: 'nowrap', minWidth: 'auto' }}
+                  disableRipple>
+                  {'Üye ol'}
+                </Button>
+              );
+            }}
+          />
+          <NavLink
+            to="/auth/signin"
+            style={({ isActive }) => (isActive ? activeButtonStyle : defaultStyle)}
+            // eslint-disable-next-line react/no-children-prop
+            children={({ isActive }) => {
+              return (
+                <Button
+                  variant="contained"
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    minWidth: 'auto'
+                  }}
+                  disableRipple>
+                  <Typography>{'Giriş yap'}</Typography>
+                </Button>
+              );
+            }}
+          />
+        </>
+      )}
+      {userAuth.authenticated && (
+        <>
+          <Profile email={userAuth.email} />
+        </>
+      )}
     </Stack>
   );
 };

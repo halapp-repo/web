@@ -48,6 +48,8 @@ const SignUp = () => {
           onMoveNextPage={() => navigate('/dashboard')}
         />
       );
+    } else if (userAuth.email && !userAuth.needConfirmation && userAuth.confirmed) {
+      navigate('/auth/signin');
     } else {
       navigate('/dashboard');
     }

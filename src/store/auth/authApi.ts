@@ -59,12 +59,8 @@ const resendConfirmCode = (email: string) => {
   const promisifiedConfirmSignup = promisify(newUser.resendConfirmationCode).bind(newUser);
   promisifiedConfirmSignup();
 };
-interface ISignInResult {
-  confirmed: boolean | undefined;
-  authenticated: boolean | undefined;
-  session: CognitoUserSession;
-}
-const signIn = (email: string, password: string): Promise<ISignInResult> => {
+
+const signIn = (email: string, password: string): Promise<void> => {
   const authenticationData: IAuthenticationDetailsData = {
     Username: email,
     Password: password
@@ -78,14 +74,8 @@ const signIn = (email: string, password: string): Promise<ISignInResult> => {
   const cognitoUser = new CognitoUser(userData);
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess(session: CognitoUserSession, userConfirmationNecessary?: boolean | undefined) {
-        console.log(userConfirmationNecessary);
-        console.log(JSON.stringify(session));
-        return resolve({
-          confirmed: userConfirmationNecessary,
-          authenticated: true,
-          session
-        });
+      onSuccess() {
+        return resolve();
       },
       onFailure(err?: Error | undefined) {
         return reject(err?.message);
@@ -94,5 +84,44 @@ const signIn = (email: string, password: string): Promise<ISignInResult> => {
   });
 };
 
-export { signUp, confirmSignup, resendConfirmCode, signIn };
-export type { ISignInResult };
+const signOut = () => {
+  const user = cognitoUserPool.getCurrentUser();
+  if (user) {
+    user.signOut();
+  }
+};
+interface ISessionResponse {
+  email?: string;
+  idToken: string;
+  accessToken: string;
+}
+const getSession = (): Promise<ISessionResponse> => {
+  return new Promise((resolve, reject) => {
+    const user = cognitoUserPool.getCurrentUser();
+    if (user) {
+      user.getSession((err: Error | null, session: CognitoUserSession) => {
+        if (err) {
+          return reject(err.message);
+        } else {
+          if (!session || !session.isValid()) {
+            return reject('Session is not valid');
+          }
+          user.getUserAttributes((err, att) => {
+            if (err) {
+              return reject(err.message);
+            }
+            return resolve({
+              email: att?.find((a) => a.getName() === 'email')?.getValue(),
+              idToken: session.getIdToken().getJwtToken(),
+              accessToken: session.getAccessToken().getJwtToken()
+            });
+          });
+        }
+      });
+    } else {
+      return reject('There is no user');
+    }
+  });
+};
+
+export { signUp, confirmSignup, resendConfirmCode, signIn, signOut, getSession };

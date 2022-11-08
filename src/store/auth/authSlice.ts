@@ -6,38 +6,39 @@ import {
   confirmSignup as confirmSignupFunc,
   resendConfirmCode as resendConfirmCodeFunc,
   signIn as signInFunc,
-  ISignInResult
+  signOut as signOutFunc,
+  getSession as getSessionFunc
 } from './authApi';
-import { ISignUpResult } from 'amazon-cognito-identity-js';
-import { SignupResponseDTO } from '../../models/dtos/signup-response.dto';
-import { SignupConfirmResponseDTO } from '../../models/dtos/signup-confirm-response.dto';
-import { SigninResponseDTO } from '../../models/dtos/signin-response.dto';
+import { CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
+import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
 
 const defaultUserAuth: UserAuth = {
-  userId: '',
   authenticated: false,
   confirmed: false,
   email: '',
-  needConfirmation: false
+  needConfirmation: false,
+  error: null,
+  idToken: undefined,
+  accessToken: undefined
 };
 
 export const signUp = createAsyncThunk<
-  SignupResponseDTO | null,
+  AuthResponseDTO | null,
   { email: string; password: string; code: string }
 >('auth/signup', async ({ email, password, code }) => {
   const res: ISignUpResult | undefined = await signUpFunc(email, password, code);
   if (res) {
     return {
-      UserSub: res.userSub,
-      UserConfirmed: res.userConfirmed,
-      User: res.user
+      UserId: res.userSub,
+      Confirmed: res.userConfirmed,
+      Email: email
     };
   }
   return null;
 });
 
 export const confirmSignUp = createAsyncThunk<
-  SignupConfirmResponseDTO | null,
+  AuthResponseDTO | null,
   { code: string },
   { state: RootState }
 >('auth/signupConfirm', async ({ code }, { getState }) => {
@@ -45,7 +46,7 @@ export const confirmSignUp = createAsyncThunk<
   if (userAuth.email) {
     await confirmSignupFunc(userAuth.email, code);
     return {
-      UserConfirmed: true
+      Confirmed: true
     };
   }
   return null;
@@ -61,20 +62,33 @@ export const resendConfirmCode = createAsyncThunk<void, void, { state: RootState
   }
 );
 
-export const signIn = createAsyncThunk<
-  SigninResponseDTO | null,
-  { email: string; password: string }
->('auth/signin', async ({ email, password }) => {
-  const res: ISignInResult = await signInFunc(email, password);
-  if (res) {
-    return <SigninResponseDTO>{
-      UserConfirmed: res.confirmed,
-      UserAuthenticated: res.authenticated,
-      Session: res.session
+export const signIn = createAsyncThunk<AuthResponseDTO | null, { email: string; password: string }>(
+  'auth/signin',
+  async ({ email, password }) => {
+    await signInFunc(email, password);
+    return <AuthResponseDTO>{
+      Confirmed: true,
+      Authenticated: true,
+      Email: email
     };
   }
-  return null;
+);
+
+export const signOut = createAsyncThunk('auth/signout', async () => {
+  await signOutFunc();
 });
+
+export const getSession = createAsyncThunk<AuthResponseDTO>(
+  'auth/getCognitoUserSession',
+  async () => {
+    const session = await getSessionFunc();
+    return {
+      Email: session.email,
+      IdToken: session.idToken,
+      AccessToken: session.accessToken
+    };
+  }
+);
 
 const initialState = {
   userAuth: defaultUserAuth
@@ -91,8 +105,7 @@ const AuthSlice = createSlice({
       if (data) {
         state.userAuth = {
           ...state.userAuth,
-          confirmed: data.UserConfirmed,
-          userId: data.UserSub,
+          confirmed: data.Confirmed!,
           email: email,
           needConfirmation: true,
           error: null
@@ -104,7 +117,7 @@ const AuthSlice = createSlice({
       if (data) {
         state.userAuth = {
           ...state.userAuth,
-          confirmed: data.UserConfirmed,
+          confirmed: data.Confirmed!,
           needConfirmation: false,
           error: null
         };
@@ -115,10 +128,11 @@ const AuthSlice = createSlice({
       if (data) {
         state.userAuth = {
           ...state.userAuth,
-          confirmed: data.UserConfirmed,
-          authenticated: data.UserAuthenticated,
+          confirmed: data.Confirmed!,
+          authenticated: data.Authenticated!,
           needConfirmation: false,
-          error: null
+          error: null,
+          email: data.Email!
         };
       }
     });
@@ -139,6 +153,31 @@ const AuthSlice = createSlice({
           error: new Error('Email adresiniz ve/veya şifreniz hatalı.')
         };
       }
+    });
+    builder.addCase(signOut.fulfilled, (state) => {
+      state.userAuth = {
+        ...state.userAuth,
+        ...defaultUserAuth
+      };
+    });
+    builder.addCase(getSession.fulfilled, (state, action) => {
+      const { Email, IdToken, AccessToken } = action.payload;
+      state.userAuth = {
+        ...state.userAuth,
+        confirmed: true,
+        authenticated: true,
+        needConfirmation: false,
+        error: null,
+        email: Email!,
+        idToken: IdToken,
+        accessToken: AccessToken
+      };
+    });
+    builder.addCase(getSession.rejected, (state) => {
+      state.userAuth = {
+        ...state.userAuth,
+        ...defaultUserAuth
+      };
     });
   }
 });
