@@ -1,6 +1,7 @@
 import { CognitoUser } from 'amazon-cognito-identity-js';
 
 export type UserAuth = {
+  id: string;
   authenticated: boolean;
   confirmed: boolean;
   email: string;

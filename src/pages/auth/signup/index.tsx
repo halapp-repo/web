@@ -5,7 +5,7 @@ import { SignUpForm } from './SignupForm';
 import SignUpWithoutCompanyCode from './SignupWithoutCompanyCode';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  confirmSignUp,
+  confirmRegistration,
   resendConfirmCode,
   selectUserAuth,
   signUp
@@ -24,7 +24,7 @@ const SignUp = () => {
   };
 
   const handleConfirmSignup = async (otpCode: string): Promise<void> => {
-    await dispatch(confirmSignUp({ code: otpCode }));
+    await dispatch(confirmRegistration({ code: otpCode }));
   };
 
   const handleResendCode = async () => {

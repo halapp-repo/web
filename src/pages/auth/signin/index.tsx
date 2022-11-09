@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   signIn,
   selectUserAuth,
-  confirmSignUp,
+  confirmRegistration,
   resendConfirmCode
 } from '../../../store/auth/authSlice';
 import OTPForm from '../OTPForm';
@@ -21,7 +21,7 @@ const SignIn = () => {
   };
 
   const handleConfirmSignup = async (otpCode: string): Promise<void> => {
-    await dispatch(confirmSignUp({ code: otpCode }));
+    await dispatch(confirmRegistration({ code: otpCode }));
   };
 
   const handleResendCode = async () => {
@@ -35,7 +35,6 @@ const SignIn = () => {
     if (!userAuth.needConfirmation) {
       return <SignInForm onSignin={handleSignin} />;
     } else if (userAuth.needConfirmation && userAuth.email) {
-      handleResendCode();
       return (
         <OTPForm
           length={6}

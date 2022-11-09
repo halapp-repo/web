@@ -3,7 +3,7 @@ import type { RootState } from '../index';
 import { AuthState, UserAuth } from './authState';
 import {
   signUp as signUpFunc,
-  confirmSignup as confirmSignupFunc,
+  confirmRegistration as confirmRegistrationFunc,
   resendConfirmCode as resendConfirmCodeFunc,
   signIn as signInFunc,
   signOut as signOutFunc,
@@ -14,7 +14,10 @@ import {
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
 
+const CognitoUserLS = 'cognitouser';
+
 const defaultUserAuth: UserAuth = {
+  id: '',
   authenticated: false,
   confirmed: false,
   email: '',
@@ -39,14 +42,14 @@ export const signUp = createAsyncThunk<
   return null;
 });
 
-export const confirmSignUp = createAsyncThunk<
+export const confirmRegistration = createAsyncThunk<
   AuthResponseDTO | null,
   { code: string },
   { state: RootState }
->('auth/signupConfirm', async ({ code }, { getState }) => {
+>('auth/confirmRegistration', async ({ code }, { getState }) => {
   const { userAuth } = getState().auth;
   if (userAuth.email) {
-    await confirmSignupFunc(userAuth.email, code);
+    await confirmRegistrationFunc(userAuth.email, code);
     return {
       Confirmed: true
     };
@@ -67,28 +70,59 @@ export const resendConfirmCode = createAsyncThunk<void, void, { state: RootState
 export const signIn = createAsyncThunk<AuthResponseDTO | null, { email: string; password: string }>(
   'auth/signin',
   async ({ email, password }) => {
-    await signInFunc(email, password);
-    return <AuthResponseDTO>{
-      Confirmed: true,
-      Authenticated: true,
-      Email: email
-    };
+    try {
+      const response = await signInFunc(email, password);
+      localStorage.setItem(CognitoUserLS, JSON.stringify({ email }));
+      return <AuthResponseDTO>{
+        Confirmed: true,
+        Authenticated: true,
+        Email: email,
+        AccessToken: response.accessToken,
+        IdToken: response.idToken
+      };
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message === 'User is not confirmed.') {
+          resendConfirmCodeFunc(email);
+        }
+      }
+      throw err;
+    }
   }
 );
 
 export const signOut = createAsyncThunk('auth/signout', async () => {
   await signOutFunc();
+  localStorage.removeItem(CognitoUserLS);
 });
 
 export const getSession = createAsyncThunk<AuthResponseDTO>(
   'auth/getCognitoUserSession',
   async () => {
-    const session = await getSessionFunc();
-    return {
-      Email: session.email,
-      IdToken: session.idToken,
-      AccessToken: session.accessToken
-    };
+    try {
+      const session = await getSessionFunc();
+      return {
+        IdToken: session.idToken,
+        AccessToken: session.accessToken
+      };
+    } catch (err) {
+      localStorage.removeItem(CognitoUserLS);
+      throw err;
+    }
+  }
+);
+
+export const getCognitoUser = createAsyncThunk<AuthResponseDTO | null>(
+  'auth/getCognitoUser',
+  async () => {
+    const rawCognitoUser = localStorage.getItem(CognitoUserLS);
+    if (rawCognitoUser) {
+      const { email } = JSON.parse(rawCognitoUser);
+      return {
+        Email: email
+      };
+    }
+    return null;
   }
 );
 
@@ -128,7 +162,21 @@ const AuthSlice = createSlice({
         };
       }
     });
-    builder.addCase(confirmSignUp.fulfilled, (state, action) => {
+    builder.addCase(signUp.rejected, (state, action) => {
+      const error = action.error;
+      if (error.code === 'UsernameExistsException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bu Email adresi kullanılamaz. Lütfen başka bir Email adresi deneyiniz.')
+        };
+      } else {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bilinmeyen bir hata olustu.')
+        };
+      }
+    });
+    builder.addCase(confirmRegistration.fulfilled, (state, action) => {
       const data = action.payload;
       if (data) {
         state.userAuth = {
@@ -136,6 +184,49 @@ const AuthSlice = createSlice({
           confirmed: data.Confirmed!,
           needConfirmation: false,
           error: null
+        };
+      }
+    });
+    builder.addCase(confirmRegistration.rejected, (state, action) => {
+      const error = action.error;
+      if (error.code === 'ExpiredCodeException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Girdiginiz kodun süresi dolmuş, lutfen tekrar kod yaratin.')
+        };
+      } else if (error.code === 'NotAuthorizedException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bu islem icin yetkili degilsiniz.')
+        };
+      } else if (error.code === 'CodeMismatchException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Doğrulama kodu hatalı.')
+        };
+      } else {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bilinmeyen bir hata olustu.')
+        };
+      }
+    });
+    builder.addCase(resendConfirmCode.rejected, (state, action) => {
+      const error = action.error;
+      if (error.code === 'CodeDeliveryDetails') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Girdiginiz Email bulunmamaktadir.')
+        };
+      } else if (error.code === 'LimitExceededException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Deneme limitinizi doldurdunuz, biraz sonra deneyiniz.')
+        };
+      } else {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bilinmeyen bir hata olustu.')
         };
       }
     });
@@ -148,22 +239,26 @@ const AuthSlice = createSlice({
           authenticated: data.Authenticated!,
           needConfirmation: false,
           error: null,
-          email: data.Email!
+          email: data.Email!,
+          idToken: data.IdToken,
+          accessToken: data.AccessToken
         };
       }
     });
     builder.addCase(signIn.rejected, (state, action) => {
       const { email } = action.meta.arg;
-      if (action.error.message === 'User is not confirmed.') {
+      if (action.error.code === 'UserNotConfirmedException') {
         state.userAuth = {
           ...state.userAuth,
           confirmed: false,
           authenticated: false,
           email,
           needConfirmation: true,
-          error: null
+          error: new Error('Email adresinizi onaylamaniz gerekmektedir'),
+          idToken: undefined,
+          accessToken: undefined
         };
-      } else if (action.error.message === 'User does not exist.') {
+      } else if (action.error.code === 'UserNotFoundException') {
         state.userAuth = {
           ...state.userAuth,
           error: new Error('Email adresiniz ve/veya şifreniz hatalı.')
@@ -177,14 +272,13 @@ const AuthSlice = createSlice({
       };
     });
     builder.addCase(getSession.fulfilled, (state, action) => {
-      const { Email, IdToken, AccessToken } = action.payload;
+      const { IdToken, AccessToken } = action.payload;
       state.userAuth = {
         ...state.userAuth,
         confirmed: true,
         authenticated: true,
         needConfirmation: false,
         error: null,
-        email: Email!,
         idToken: IdToken,
         accessToken: AccessToken
       };
@@ -194,6 +288,57 @@ const AuthSlice = createSlice({
         ...state.userAuth,
         ...defaultUserAuth
       };
+    });
+    builder.addCase(confirmPassword.rejected, (state, action) => {
+      const error = action.error;
+      if (error.code === 'CodeMismatchException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Doğrulama kodu hatalı.')
+        };
+      } else if (error.code === 'ExpiredCodeException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Girdiginiz kodun süresi dolmuş, lutfen tekrar kod yaratin.')
+        };
+      } else {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bilinmeyen bir hata olustu.')
+        };
+      }
+    });
+    builder.addCase(forgotPassword.rejected, (state, action) => {
+      const error = action.error;
+      if (error.code === 'CodeDeliveryDetails') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bu islem icin yetkili degilsiniz.')
+        };
+      } else if (error.code === 'InvalidParameterException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Kullanici kayitli degil')
+        };
+      } else {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bilinmeyen bir hata olustu.')
+        };
+      }
+    });
+    builder.addCase(getCognitoUser.fulfilled, (state, action) => {
+      if (action.payload) {
+        const { Email } = action.payload;
+        state.userAuth = {
+          ...state.userAuth,
+          ...(Email
+            ? {
+                email: Email
+              }
+            : null)
+        };
+      }
     });
   }
 });

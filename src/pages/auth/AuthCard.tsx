@@ -8,7 +8,7 @@ import { Box, IconButton, Alert } from '@mui/material';
 import MainCard from '../../components/MainCard';
 import Logo from '../../components/logo/Logo';
 import { selectUserAuth } from '../../store/auth/authSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 
 // ==============================|| AUTHENTICATION - CARD WRAPPER ||============================== //
 interface Props {

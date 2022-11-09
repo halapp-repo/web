@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getSession } from '../store/auth/authSlice';
+import { getSession, getCognitoUser } from '../store/auth/authSlice';
 import { useAppDispatch } from '../store/hooks';
 import { fetchInventories } from '../store/inventories/inventoriesSlice';
 import { updateListingSelectedDate } from '../store/ui/uiSlice';
@@ -16,6 +16,7 @@ const LayoutInitializer = ({ children }: Props) => {
 
   // Fetch inital Data
   useEffect(() => {
+    dispatch(getCognitoUser());
     dispatch(getSession());
     dispatch(fetchInventories());
     dispatch(updateListingSelectedDate(selectedDate));

@@ -5,8 +5,10 @@ import type { RootState } from '../index';
 import { Inventory } from '../../models/inventory';
 import { InventoriesApi } from './inventoriesApi';
 
+const InventoriesLS = 'inventories';
+
 export const fetchInventories = createAsyncThunk<Inventory[]>('inventories/fetch', async () => {
-  const rawLocalInventories = localStorage.getItem('inventories');
+  const rawLocalInventories = localStorage.getItem(InventoriesLS);
   if (rawLocalInventories) {
     const { ttl, inventories } = JSON.parse(rawLocalInventories);
     const duration = moment.duration(moment().diff(moment(ttl)));
@@ -16,7 +18,7 @@ export const fetchInventories = createAsyncThunk<Inventory[]>('inventories/fetch
   }
   const inventories = await new InventoriesApi().fetchInventories();
   localStorage.setItem(
-    'inventories',
+    InventoriesLS,
     JSON.stringify({
       ttl: moment().format(),
       inventories

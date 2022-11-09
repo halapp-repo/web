@@ -25,33 +25,14 @@ import { signOut } from '../../../../../store/auth/authSlice';
 
 const iconBackColorOpen = 'grey.300';
 
-function stringToColor(string: string) {
+function stringToHslColor(str: string, s: number, l: number) {
   let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name: string) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name)
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
-  };
+  const h = hash % 360;
+  return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
 }
 
 interface ProfileProps {
@@ -92,8 +73,10 @@ const Profile = (props: ProfileProps) => {
         aria-controls={open ? 'profile-grow' : undefined}
         aria-haspopup="true"
         onClick={handleToggle}>
-        <Avatar alt="profil" sx={{ width: 32, height: 32 }}>
-          {props.email?.toUpperCase()[0]}
+        <Avatar
+          alt="profil"
+          sx={{ width: 32, height: 32, bgcolor: stringToHslColor(props.email, 30, 80) }}>
+          {props.email?.[0]}
         </Avatar>
       </ButtonBase>
       <Popper

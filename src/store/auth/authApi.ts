@@ -1,4 +1,3 @@
-import { promisify } from 'util';
 import {
   CognitoUser,
   CognitoUserAttribute,
@@ -42,13 +41,19 @@ const signUp = (
   });
 };
 
-const confirmSignup = (email: string, code: string) => {
+const confirmRegistration = (email: string, code: string) => {
   const newUser = new CognitoUser({
     Username: email,
     Pool: cognitoUserPool
   });
-  const promisifiedConfirmSignup = promisify(newUser.confirmRegistration).bind(newUser);
-  promisifiedConfirmSignup(code, false);
+  return new Promise((resolve, reject) => {
+    newUser.confirmRegistration(code, false, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
+    });
+  });
 };
 
 const resendConfirmCode = (email: string) => {
@@ -56,11 +61,18 @@ const resendConfirmCode = (email: string) => {
     Username: email,
     Pool: cognitoUserPool
   });
-  const promisifiedConfirmSignup = promisify(newUser.resendConfirmationCode).bind(newUser);
-  promisifiedConfirmSignup();
+  return new Promise((resolve, reject) => {
+    newUser.resendConfirmationCode((err, result) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(result);
+      }
+    });
+  });
 };
 
-const signIn = (email: string, password: string): Promise<void> => {
+const signIn = (email: string, password: string): Promise<ISessionResponse> => {
   const authenticationData: IAuthenticationDetailsData = {
     Username: email,
     Password: password
@@ -74,11 +86,14 @@ const signIn = (email: string, password: string): Promise<void> => {
   const cognitoUser = new CognitoUser(userData);
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess() {
-        return resolve();
+      onSuccess(session) {
+        return resolve({
+          idToken: session.getIdToken().getJwtToken(),
+          accessToken: session.getAccessToken().getJwtToken()
+        });
       },
       onFailure(err?: Error | undefined) {
-        return reject(err?.message);
+        return reject(err);
       }
     });
   });
@@ -91,7 +106,6 @@ const signOut = () => {
   }
 };
 interface ISessionResponse {
-  email?: string;
   idToken: string;
   accessToken: string;
 }
@@ -101,20 +115,14 @@ const getSession = (): Promise<ISessionResponse> => {
     if (user) {
       user.getSession((err: Error | null, session: CognitoUserSession) => {
         if (err) {
-          return reject(err.message);
+          return reject(err);
         } else {
           if (!session || !session.isValid()) {
             return reject('Session is not valid');
           }
-          user.getUserAttributes((err, att) => {
-            if (err) {
-              return reject(err.message);
-            }
-            return resolve({
-              email: att?.find((a) => a.getName() === 'email')?.getValue(),
-              idToken: session.getIdToken().getJwtToken(),
-              accessToken: session.getAccessToken().getJwtToken()
-            });
+          return resolve({
+            idToken: session.getIdToken().getJwtToken(),
+            accessToken: session.getAccessToken().getJwtToken()
           });
         }
       });
@@ -123,6 +131,7 @@ const getSession = (): Promise<ISessionResponse> => {
     }
   });
 };
+
 const forgotPassword = (email: string): Promise<void> => {
   const newUser = new CognitoUser({
     Username: email,
@@ -139,6 +148,7 @@ const forgotPassword = (email: string): Promise<void> => {
     });
   });
 };
+
 const confirmPassword = (email: string, otp: string, newPassword: string): Promise<void> => {
   const cognitoUser = new CognitoUser({
     Username: email,
@@ -158,7 +168,7 @@ const confirmPassword = (email: string, otp: string, newPassword: string): Promi
 
 export {
   signUp,
-  confirmSignup,
+  confirmRegistration,
   resendConfirmCode,
   signIn,
   signOut,
