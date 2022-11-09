@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { getSession, getCognitoUser } from '../store/auth/authSlice';
-import { useAppDispatch } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchInventories } from '../store/inventories/inventoriesSlice';
-import { updateListingSelectedDate } from '../store/ui/uiSlice';
+import { selectUISessionLoading, updateListingSelectedDate } from '../store/ui/uiSlice';
+import { Cover } from './Cover';
 
 type Props = {
   children?: React.ReactNode;
@@ -13,6 +14,7 @@ const selectedDate = urlParams.get('selected_date');
 
 const LayoutInitializer = ({ children }: Props) => {
   const dispatch = useAppDispatch();
+  const sesionLoading = useAppSelector(selectUISessionLoading);
 
   // Fetch inital Data
   useEffect(() => {
@@ -22,7 +24,16 @@ const LayoutInitializer = ({ children }: Props) => {
     dispatch(updateListingSelectedDate(selectedDate));
   }, []);
 
-  return <>{children}</>;
+  const showCover = (): boolean => {
+    return sesionLoading;
+  };
+
+  return (
+    <>
+      {showCover() && <Cover />}
+      {!showCover() && <>{children}</>}
+    </>
+  );
 };
 
 export default LayoutInitializer;

@@ -7,6 +7,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type';
 import { trMoment } from '../../utils/timezone';
+import { getSession } from '../auth/authSlice';
 
 const initialState = {
   listing: {
@@ -14,6 +15,9 @@ const initialState = {
     selectedCity: City.istanbul,
     selectedDate: trMoment().format('YYYY-MM-DD'),
     selectedCategory: ProductType.produce
+  },
+  auth: {
+    sessionLoading: true
   }
 } as UIState;
 
@@ -40,6 +44,26 @@ const UISlice = createSlice({
     updateListingProductNameFilter: (state: UIState, action: PayloadAction<string>) => {
       state.listing.filteredProductName = action.payload.toLowerCase();
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getSession.pending, (state) => {
+      state.auth = {
+        ...state.auth,
+        sessionLoading: true
+      };
+    });
+    builder.addCase(getSession.fulfilled, (state) => {
+      state.auth = {
+        ...state.auth,
+        sessionLoading: false
+      };
+    });
+    builder.addCase(getSession.rejected, (state) => {
+      state.auth = {
+        ...state.auth,
+        sessionLoading: false
+      };
+    });
   }
 });
 
@@ -59,6 +83,10 @@ export const selectUIListingProductNameFilter = createSelector(
 export const selectUIListingSelectedCity = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.listing.selectedCity
+);
+export const selectUISessionLoading = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.auth.sessionLoading
 );
 
 export default UISlice.reducer;

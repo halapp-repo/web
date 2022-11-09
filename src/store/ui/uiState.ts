@@ -5,4 +5,7 @@ export interface UIState {
     filteredProductName: string;
     selectedCity: string;
   };
+  auth: {
+    sessionLoading: boolean;
+  };
 }
