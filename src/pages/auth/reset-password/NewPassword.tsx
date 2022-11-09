@@ -11,7 +11,7 @@ interface FormValues {
 }
 
 const NewPassword = (props: FormikProps<FormValues>) => {
-  const { touched, errors, isSubmitting, dirty, isValid } = props;
+  const { isSubmitting, dirty, isValid } = props;
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>

@@ -13,5 +13,4 @@ export type UserAuth = {
 
 export interface AuthState {
   userAuth: UserAuth;
-  cognitoUser?: CognitoUser | null;
 }

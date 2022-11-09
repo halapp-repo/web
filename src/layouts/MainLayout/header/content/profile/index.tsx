@@ -5,13 +5,10 @@ import {
   ClickAwayListener,
   Paper,
   Popper,
-  Stack,
   List,
   ListItem,
   Divider,
   ListItemText,
-  ListItemAvatar,
-  Typography,
   Card,
   ListItemButton,
   ListItemIcon

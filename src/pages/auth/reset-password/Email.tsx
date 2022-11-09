@@ -55,7 +55,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 const EmailForm = withFormik<InnerFormProps, FormValues>({
   // Transform outer props into form values
-  mapPropsToValues: (props) => {
+  mapPropsToValues: () => {
     return {
       email: ''
     };
