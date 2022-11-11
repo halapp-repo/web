@@ -72,7 +72,7 @@ const Profile = (props: ProfileProps) => {
         onClick={handleToggle}>
         <Avatar
           alt="profil"
-          sx={{ width: 32, height: 32, bgcolor: stringToHslColor(props.email, 30, 80) }}>
+          sx={{ width: 32, height: 32, bgcolor: stringToHslColor(props.email, 80, 50) }}>
           {props.email?.[0]}
         </Avatar>
       </ButtonBase>

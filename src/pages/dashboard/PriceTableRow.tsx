@@ -40,12 +40,12 @@ const PriceTableRow = ({
         {IsToday || IsActive ? (
           <Button variant="text" onClick={(e) => OpenAnalyticsPanel(e, ProductId)}>
             <Typography variant="h5" color="inherit">
-              {`₺${(Math.round(Price * 100) / 100).toFixed(2)}`}
+              {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(Price)}
             </Typography>
           </Button>
         ) : (
           <Typography variant="h5" color="inherit">
-            {`₺${(Math.round(Price * 100) / 100).toFixed(2)}`}
+            {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(Price)}
           </Typography>
         )}
 
