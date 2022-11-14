@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
 import AuthCard from '../AuthCard';
@@ -5,16 +6,21 @@ import { SignUpForm } from './SignupForm';
 import SignUpWithoutCompanyCode from './SignupWithoutCompanyCode';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
+  clearError,
   confirmRegistration,
   resendConfirmCode,
+  SelectSignupCode,
   selectUserAuth,
   signUp
 } from '../../../store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import OTPForm from '../OTPForm';
+import { getSignupCodeDetails } from '../../../store/auth/authSlice';
+import { SignupCode } from '../../../models/signup-code';
 
 const SignUp = () => {
   const [searchParams] = useSearchParams();
+  const signupCode = useAppSelector(SelectSignupCode);
   const userAuth = useAppSelector(selectUserAuth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -31,7 +37,18 @@ const SignUp = () => {
     await dispatch(resendConfirmCode());
   };
 
-  const createSignupForm = (signupCode: string | null | undefined) => {
+  useEffect(() => {
+    const code = searchParams.get('code');
+    if (code && typeof signupCode === 'undefined') {
+      dispatch(getSignupCodeDetails({ code }));
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
+
+  const createSignupForm = (signupCode: SignupCode | undefined | null) => {
     if (!userAuth.email) {
       if (signupCode) {
         return <SignUpForm code={signupCode} onSignup={handleSignup} />;
@@ -54,8 +71,6 @@ const SignUp = () => {
       navigate('/dashboard');
     }
   };
-
-  const signupCode = searchParams.get('code');
 
   return (
     <AuthWrapper>

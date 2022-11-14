@@ -9,6 +9,10 @@ import {
   CognitoUserSession
 } from 'amazon-cognito-identity-js';
 import cognitoUserPool from '../../aws/CognitoUserPool';
+import { SignupCode } from '../../models/signup-code';
+import { SignupCodeDTO } from '../../models/dtos/signup-code.dto';
+import axios from 'axios';
+import { plainToClass } from 'class-transformer';
 
 const signUp = (
   email: string,
@@ -166,6 +170,29 @@ const confirmPassword = (email: string, otp: string, newPassword: string): Promi
   });
 };
 
+class AuthApi {
+  baseUrl: string;
+  constructor() {
+    const baseUrl = process.env.REACT_APP_AUTH_BASE_URL;
+    if (!baseUrl) {
+      throw new Error('REACT_APP_AUTH_BASE_URL is not set!');
+    }
+    this.baseUrl = baseUrl;
+  }
+  async getSignupCode(code: string): Promise<SignupCode> {
+    console.log(code);
+    return await axios
+      .get<SignupCodeDTO>(`/signupcode/${code}`, {
+        baseURL: this.baseUrl
+      })
+      .then((response) => {
+        console.log(response);
+        const { data } = response;
+        return plainToClass(SignupCode, data);
+      });
+  }
+}
+
 export {
   signUp,
   confirmRegistration,
@@ -174,5 +201,6 @@ export {
   signOut,
   getSession,
   forgotPassword,
-  confirmPassword
+  confirmPassword,
+  AuthApi
 };

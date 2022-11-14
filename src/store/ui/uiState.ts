@@ -8,4 +8,7 @@ export interface UIState {
   auth: {
     sessionLoading: boolean;
   };
+  global: {
+    isLoading: boolean;
+  };
 }

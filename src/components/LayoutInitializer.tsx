@@ -2,7 +2,11 @@ import { useEffect } from 'react';
 import { getSession, getCognitoUser } from '../store/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchInventories } from '../store/inventories/inventoriesSlice';
-import { selectUISessionLoading, updateListingSelectedDate } from '../store/ui/uiSlice';
+import {
+  selectUIGlobalLoading,
+  selectUISessionLoading,
+  updateListingSelectedDate
+} from '../store/ui/uiSlice';
 import { Cover } from './Cover';
 
 type Props = {
@@ -15,6 +19,7 @@ const selectedDate = urlParams.get('selected_date');
 const LayoutInitializer = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const sesionLoading = useAppSelector(selectUISessionLoading);
+  const isGlobalLoading = useAppSelector(selectUIGlobalLoading);
 
   // Fetch inital Data
   useEffect(() => {
@@ -25,7 +30,7 @@ const LayoutInitializer = ({ children }: Props) => {
   }, []);
 
   const showCover = (): boolean => {
-    return sesionLoading;
+    return sesionLoading || isGlobalLoading;
   };
 
   return (

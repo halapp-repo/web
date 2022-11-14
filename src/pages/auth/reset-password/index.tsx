@@ -1,9 +1,9 @@
 import AuthCard from '../AuthCard';
 import AuthWrapper from '../AuthWrapper';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Email from './Email';
 import { useAppDispatch } from '../../../store/hooks';
-import { confirmPassword, forgotPassword } from '../../../store/auth/authSlice';
+import { clearError, confirmPassword, forgotPassword } from '../../../store/auth/authSlice';
 import OTPForm from '../OTPForm';
 import { NewPasswordForm } from './NewPassword';
 import { useNavigate } from 'react-router-dom';
@@ -64,6 +64,11 @@ const ResetPassword = () => {
         throw new Error('unsuported stage');
     }
   };
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
+
   return (
     <>
       <AuthWrapper>

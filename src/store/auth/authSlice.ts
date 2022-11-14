@@ -9,10 +9,12 @@ import {
   signOut as signOutFunc,
   getSession as getSessionFunc,
   forgotPassword as forgotPasswordFunc,
-  confirmPassword as confirmPasswordFunc
+  confirmPassword as confirmPasswordFunc,
+  AuthApi
 } from './authApi';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
+import { SignupCode } from '../../models/signup-code';
 
 const CognitoUserLS = 'cognitouser';
 
@@ -140,14 +142,31 @@ export const confirmPassword = createAsyncThunk<
   await confirmPasswordFunc(email, otp, password);
 });
 
+export const getSignupCodeDetails = createAsyncThunk<SignupCode, { code: string }>(
+  'auth/getSignupCode',
+  async ({ code }) => {
+    const api = new AuthApi();
+    const response = await api.getSignupCode(code);
+    return response;
+  }
+);
+
 const initialState = {
-  userAuth: defaultUserAuth
+  userAuth: defaultUserAuth,
+  signupCode: undefined
 } as AuthState;
 
 const AuthSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state: AuthState) => {
+      state.userAuth = {
+        ...state.userAuth,
+        error: null
+      };
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(signUp.fulfilled, (state, action) => {
       const data = action.payload;
@@ -340,12 +359,23 @@ const AuthSlice = createSlice({
         };
       }
     });
+    builder.addCase(getSignupCodeDetails.fulfilled, (state, action) => {
+      state.signupCode = action.payload;
+    });
+    builder.addCase(getSignupCodeDetails.rejected, (state, action) => {
+      state.signupCode = null;
+    });
   }
 });
+export const { clearError } = AuthSlice.actions;
 
 export const selectUserAuth = createSelector(
   [(state: RootState) => state.auth],
   (state) => state.userAuth
+);
+export const SelectSignupCode = createSelector(
+  [(state: RootState) => state.auth],
+  (state) => state.signupCode
 );
 
 export default AuthSlice.reducer;

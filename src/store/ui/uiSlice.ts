@@ -8,6 +8,7 @@ import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type';
 import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
+import { getSignupCodeDetails } from '../auth/authSlice';
 
 const initialState = {
   listing: {
@@ -18,6 +19,9 @@ const initialState = {
   },
   auth: {
     sessionLoading: true
+  },
+  global: {
+    isLoading: false
   }
 } as UIState;
 
@@ -64,6 +68,24 @@ const UISlice = createSlice({
         sessionLoading: false
       };
     });
+    builder.addCase(getSignupCodeDetails.fulfilled, (state) => {
+      state.global = {
+        ...state.global,
+        isLoading: false
+      };
+    });
+    builder.addCase(getSignupCodeDetails.rejected, (state) => {
+      state.global = {
+        ...state.global,
+        isLoading: false
+      };
+    });
+    builder.addCase(getSignupCodeDetails.pending, (state) => {
+      state.global = {
+        ...state.global,
+        isLoading: true
+      };
+    });
   }
 });
 
@@ -87,6 +109,10 @@ export const selectUIListingSelectedCity = createSelector(
 export const selectUISessionLoading = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.auth.sessionLoading
+);
+export const selectUIGlobalLoading = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.global.isLoading
 );
 
 export default UISlice.reducer;

@@ -1,18 +1,20 @@
-import { Typography, Grid, Stack, Box, Button } from '@mui/material';
+import { Typography, Grid, Stack, Box, Button, Chip } from '@mui/material';
 import { withFormik, FormikProps, Form, Field } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
+import { ShopOutlined } from '@ant-design/icons';
+import { SignupCode } from '../../../models/signup-code';
 
 interface FormValues {
   email: string;
   password: string;
-  code: string;
+  code: SignupCode;
   onSignup: (email: string, password: string, code: string) => Promise<void>;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { touched, errors, isSubmitting, dirty, isValid } = props;
+  const { touched, errors, isSubmitting, dirty, isValid, values } = props;
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -24,6 +26,12 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             sx={{ display: 'flex', justifyContent: 'center' }}>
             {'Kayıt Ol'}
           </Typography>
+          <Chip
+            icon={<ShopOutlined />}
+            color={values.code.isActive() ? 'success' : 'error'}
+            label={values.code.OrganizationName}
+            variant="outlined"
+          />
           <Form
             onKeyPress={(e) => {
               e.which === 13 && e.preventDefault();
@@ -31,7 +39,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             <Stack spacing={1}>
               <Field type="email" name="email" label="Email" component={AppTextField} />
               <Field type="password" name="password" label="Sifre" component={AppTextField} />
-              <Field type="hidden" name="code" />
+              <Field type="hidden" name="code.Code" />
               <Button
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
@@ -41,7 +49,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Typography variant="body1">{"HalApp'e üyeyseniz"}</Typography>
-                <Button variant="text" component={RouterLink} to="/signin">
+                <Button variant="text" component={RouterLink} to="/auth/signin">
                   {'Giris yap'}
                 </Button>
               </Box>
@@ -54,7 +62,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 };
 
 interface MyFormProps {
-  code: string;
+  code: SignupCode;
   onSignup: (email: string, password: string, code: string) => Promise<void>;
 }
 
@@ -79,12 +87,14 @@ const SignUpForm = withFormik<MyFormProps, FormValues>({
         'Şifreniz en az 6 karakter olmalı. Büyük, küçük harf ve rakam içermelidir.'
       )
       .required('sifre gerekli'),
-    code: Yup.string().required('Required')
+    code: Yup.object().shape({
+      Code: Yup.string().required()
+    })
   }),
 
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
-    await props.onSignup(values.email, values.password, values.code);
+    await props.onSignup(values.email, values.password, values.code.Code);
     setSubmitting(false);
   }
 })(InnerForm);

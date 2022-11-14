@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import AuthWrapper from '../AuthWrapper';
 import AuthCard from '../AuthCard';
 import { SignInForm } from './SignInForm';
@@ -6,7 +7,8 @@ import {
   signIn,
   selectUserAuth,
   confirmRegistration,
-  resendConfirmCode
+  resendConfirmCode,
+  clearError
 } from '../../../store/auth/authSlice';
 import OTPForm from '../OTPForm';
 import { useNavigate } from 'react-router-dom';
@@ -27,6 +29,10 @@ const SignIn = () => {
   const handleResendCode = async () => {
     await dispatch(resendConfirmCode());
   };
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
 
   const createSigninForm = () => {
     if (userAuth.authenticated) {

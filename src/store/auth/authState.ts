@@ -1,4 +1,5 @@
 import { CognitoUser } from 'amazon-cognito-identity-js';
+import { SignupCode } from '../../models/signup-code';
 
 export type UserAuth = {
   id: string;
@@ -13,4 +14,5 @@ export type UserAuth = {
 
 export interface AuthState {
   userAuth: UserAuth;
+  signupCode: SignupCode | undefined | null;
 }
