@@ -8,7 +8,7 @@ import {
   selectUserAuth,
   confirmRegistration,
   resendConfirmCode,
-  clearError
+  clearStatusAndError
 } from '../../../store/auth/authSlice';
 import OTPForm from '../OTPForm';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +31,7 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    dispatch(clearError());
+    dispatch(clearStatusAndError());
   }, []);
 
   const createSigninForm = () => {

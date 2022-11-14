@@ -8,9 +8,7 @@ interface FormValues {
 }
 
 interface InnerFormProps {
-  onMoveNextPage: () => void;
-  setEmail: (value: string) => void;
-  onForgotPassword: (email: string) => void;
+  onSubmit: (email: string) => void;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -69,34 +67,14 @@ const EmailForm = withFormik<InnerFormProps, FormValues>({
 
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
-    await props.onForgotPassword(values.email);
-    props.setEmail(values.email);
-    props.onMoveNextPage();
+    await props.onSubmit(values.email);
     setSubmitting(false);
   }
 })(InnerForm);
 
-const createEmailForm = (
-  onMoveNextPage: () => void,
-  setEmail: (value: string) => void,
-  onForgotPassword: (email: string) => void
-) => (
-  <EmailForm
-    onMoveNextPage={onMoveNextPage}
-    setEmail={setEmail}
-    onForgotPassword={onForgotPassword}
-  />
-);
+const createEmailForm = (onSubmit: (email: string) => void) => <EmailForm onSubmit={onSubmit} />;
 
-const Email = ({
-  onMoveNextPage,
-  setEmail,
-  onForgotPassword
-}: {
-  onMoveNextPage: () => void;
-  setEmail: (value: string) => void;
-  onForgotPassword: (email: string) => void;
-}) => {
-  return <Box>{createEmailForm(onMoveNextPage, setEmail, onForgotPassword)}</Box>;
+const Email = ({ onSubmit }: { onSubmit: (email: string) => void }) => {
+  return <Box>{createEmailForm(onSubmit)}</Box>;
 };
 export default Email;

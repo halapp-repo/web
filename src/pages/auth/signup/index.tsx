@@ -6,7 +6,7 @@ import { SignUpForm } from './SignupForm';
 import SignUpWithoutCompanyCode from './SignupWithoutCompanyCode';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  clearError,
+  clearStatusAndError,
   confirmRegistration,
   resendConfirmCode,
   SelectSignupCode,
@@ -45,7 +45,7 @@ const SignUp = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    dispatch(clearError());
+    dispatch(clearStatusAndError());
   }, []);
 
   const createSignupForm = (signupCode: SignupCode | undefined | null) => {

@@ -11,7 +11,7 @@ interface FormValues {
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { touched, errors, isSubmitting, dirty, isValid } = props;
+  const { isSubmitting, isValid } = props;
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -47,10 +47,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 </Button>
               </Box>
 
-              <Button
-                type="submit"
-                disabled={isSubmitting || !isValid || !dirty}
-                variant="contained">
+              <Button type="submit" disabled={isSubmitting || !isValid} variant="contained">
                 {'Giriş Yap'}
               </Button>
 
@@ -93,7 +90,7 @@ const SignInForm = withFormik<MyFormProps, FormValues>({
       )
       .required('sifre gerekli')
   }),
-
+  validateOnMount: true,
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
     await props.onSignin(values.email, values.password);

@@ -26,7 +26,8 @@ const defaultUserAuth: UserAuth = {
   needConfirmation: false,
   error: null,
   idToken: undefined,
-  accessToken: undefined
+  accessToken: undefined,
+  status: undefined
 };
 
 export const signUp = createAsyncThunk<
@@ -160,9 +161,10 @@ const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    clearError: (state: AuthState) => {
+    clearStatusAndError: (state: AuthState) => {
       state.userAuth = {
         ...state.userAuth,
+        status: undefined,
         error: null
       };
     }
@@ -277,10 +279,20 @@ const AuthSlice = createSlice({
           idToken: undefined,
           accessToken: undefined
         };
+      } else if (action.error.code === 'NotAuthorizedException') {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Email adresiniz ve/veya şifreniz hatalı.')
+        };
       } else if (action.error.code === 'UserNotFoundException') {
         state.userAuth = {
           ...state.userAuth,
           error: new Error('Email adresiniz ve/veya şifreniz hatalı.')
+        };
+      } else {
+        state.userAuth = {
+          ...state.userAuth,
+          error: new Error('Bilinmeyen hata olustu.')
         };
       }
     });
@@ -308,40 +320,60 @@ const AuthSlice = createSlice({
         ...defaultUserAuth
       };
     });
+    builder.addCase(confirmPassword.fulfilled, (state, action) => {
+      state.userAuth = {
+        ...state.userAuth,
+        status: 'confirmPasswordFulfilled',
+        error: new Error('Doğrulama kodu hatalı.')
+      };
+    });
     builder.addCase(confirmPassword.rejected, (state, action) => {
       const error = action.error;
       if (error.code === 'CodeMismatchException') {
         state.userAuth = {
           ...state.userAuth,
+          status: 'confirmPasswordRejected',
           error: new Error('Doğrulama kodu hatalı.')
         };
       } else if (error.code === 'ExpiredCodeException') {
         state.userAuth = {
           ...state.userAuth,
+          status: 'confirmPasswordRejected',
           error: new Error('Girdiginiz kodun süresi dolmuş, lutfen tekrar kod yaratin.')
         };
       } else {
         state.userAuth = {
           ...state.userAuth,
+          status: 'confirmPasswordRejected',
           error: new Error('Bilinmeyen bir hata olustu.')
         };
       }
+    });
+    builder.addCase(forgotPassword.fulfilled, (state) => {
+      state.userAuth = {
+        ...state.userAuth,
+        status: 'ForgotPasswordFulfilled',
+        error: null
+      };
     });
     builder.addCase(forgotPassword.rejected, (state, action) => {
       const error = action.error;
       if (error.code === 'CodeDeliveryDetails') {
         state.userAuth = {
           ...state.userAuth,
+          status: 'ForgotPasswordRejected',
           error: new Error('Bu islem icin yetkili degilsiniz.')
         };
       } else if (error.code === 'InvalidParameterException') {
         state.userAuth = {
           ...state.userAuth,
+          status: 'ForgotPasswordRejected',
           error: new Error('Kullanici kayitli degil')
         };
       } else {
         state.userAuth = {
           ...state.userAuth,
+          status: 'ForgotPasswordRejected',
           error: new Error('Bilinmeyen bir hata olustu.')
         };
       }
@@ -367,7 +399,7 @@ const AuthSlice = createSlice({
     });
   }
 });
-export const { clearError } = AuthSlice.actions;
+export const { clearStatusAndError } = AuthSlice.actions;
 
 export const selectUserAuth = createSelector(
   [(state: RootState) => state.auth],

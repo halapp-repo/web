@@ -2,8 +2,13 @@ import AuthCard from '../AuthCard';
 import AuthWrapper from '../AuthWrapper';
 import { useState, useEffect } from 'react';
 import Email from './Email';
-import { useAppDispatch } from '../../../store/hooks';
-import { clearError, confirmPassword, forgotPassword } from '../../../store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import {
+  clearStatusAndError,
+  confirmPassword,
+  forgotPassword,
+  selectUserAuth
+} from '../../../store/auth/authSlice';
 import OTPForm from '../OTPForm';
 import { NewPasswordForm } from './NewPassword';
 import { useNavigate } from 'react-router-dom';
@@ -14,8 +19,24 @@ const ResetPassword = () => {
   const [stage, setStage] = useState(0);
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
+  const userAuth = useAppSelector(selectUserAuth);
+
+  useEffect(() => {
+    dispatch(clearStatusAndError());
+  }, []);
+
+  useEffect(() => {
+    if (userAuth.status === 'ForgotPasswordFulfilled') {
+      setStage(1);
+      dispatch(clearStatusAndError());
+    } else if (userAuth.status === 'confirmPasswordFulfilled') {
+      setStage(3);
+      dispatch(clearStatusAndError());
+    }
+  }, [userAuth]);
 
   const handleforgotPassword = async (email: string): Promise<void> => {
+    setEmail(email);
     await dispatch(forgotPassword({ email }));
   };
   const handleConfirmNewPassword = async (email: string, password: string, otp: string) => {
@@ -26,21 +47,12 @@ const ResetPassword = () => {
         password
       })
     );
-    setStage(3);
   };
 
   const createResetPasswordForm = (stage: number) => {
     switch (stage) {
       case 0:
-        return (
-          <Email
-            onMoveNextPage={() => {
-              setStage(1);
-            }}
-            setEmail={setEmail}
-            onForgotPassword={handleforgotPassword}
-          />
-        );
+        return <Email onSubmit={handleforgotPassword} />;
       case 1:
         return (
           <OTPForm
@@ -64,10 +76,6 @@ const ResetPassword = () => {
         throw new Error('unsuported stage');
     }
   };
-
-  useEffect(() => {
-    dispatch(clearError());
-  }, []);
 
   return (
     <>

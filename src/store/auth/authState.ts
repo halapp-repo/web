@@ -1,5 +1,10 @@
-import { CognitoUser } from 'amazon-cognito-identity-js';
 import { SignupCode } from '../../models/signup-code';
+
+type UserAuthStatus =
+  | 'ForgotPasswordRejected'
+  | 'ForgotPasswordFulfilled'
+  | 'confirmPasswordFulfilled'
+  | 'confirmPasswordRejected';
 
 export type UserAuth = {
   id: string;
@@ -10,9 +15,12 @@ export type UserAuth = {
   error?: Error | null | undefined;
   idToken?: string | undefined;
   accessToken?: string | undefined;
+  status?: UserAuthStatus;
 };
 
 export interface AuthState {
   userAuth: UserAuth;
-  signupCode: SignupCode | undefined | null;
+  signupCode?: SignupCode | null;
 }
+
+export type { UserAuthStatus };
