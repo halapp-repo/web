@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AppTextField } from '../../../components/form/TextField';
 import { MuiTelInput } from 'mui-tel-input';
 import { AddressField, AddressOutput } from '../../../components/form/AddressField';
-import { OrganizationEnrollmentDTO } from '../../../models/dtos/organization-enrollment.dto';
+//import { OrganizationEnrollmentDTO } from '../../../models/dtos/organization-enrollment.dto';
 
 interface OrganizationAddress {
   formattedAddress: string;
@@ -16,6 +16,7 @@ interface OrganizationAddress {
 }
 
 interface FormValues {
+  vkn: string;
   organizationName: string;
   email: string;
   phoneNumber: string;
@@ -66,7 +67,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 label="Konum"
                 component={AddressField}
                 onPlaceChanged={handlePlaceChanged}
-                placeholder="Konum Girin"
+                placeholder="Konum Girin (Şirket ismiyle de arayabilirisiniz)"
               />
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -75,24 +76,37 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                   label="ilce"
                   component={AppTextField}
                   InputLabelProps={{ shrink: true }}
-                  disabled
                 />
                 <Field
                   name="address.city"
                   label="il"
                   component={AppTextField}
                   InputLabelProps={{ shrink: true }}
-                  disabled
                 />
                 <Field
                   name="address.zipCode"
                   label="Posta Kodu"
                   component={AppTextField}
                   InputLabelProps={{ shrink: true }}
-                  disabled
                 />
               </Box>
-              <Field name="organizationName" label="Sirket Ismi" component={AppTextField} />
+
+              <Typography variant="h5" color="text.primary" fontWeight="bold">
+                {`Şirket bilgisi`}
+              </Typography>
+              <Field
+                name="vkn"
+                label="Vergi kimlik no"
+                component={AppTextField}
+                InputLabelProps={{ shrink: true }}
+              />
+              <Field
+                name="organizationName"
+                label="Sirket ismi"
+                component={AppTextField}
+                InputLabelProps={{ shrink: true }}
+              />
+
               <Typography variant="h5" color="text.primary" fontWeight="bold">
                 {`Kontak bilgileri`}
               </Typography>
@@ -136,13 +150,14 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 interface EnrollmentFormProps {
   onLocationChanged: (lat: string, lng: string) => void;
-  onSubmit: (arg: OrganizationEnrollmentDTO) => void;
+  onSubmit: (arg: any) => void;
 }
 
 const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
   // Transform outer props into form values
   mapPropsToValues: ({ onLocationChanged }) => {
     return {
+      vkn: '',
       organizationName: '',
       email: '',
       phoneNumber: '',
@@ -159,35 +174,54 @@ const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
 
   // Add a custom validation function (this can be async too!)
   validationSchema: Yup.object().shape({
+    vkn: Yup.string()
+      .length(10, '10 haneli olmak zorundadir')
+      .test({
+        test: (v): boolean => {
+          let sum = 0;
+          if (v && v.length == 10 && !isNaN(+v)) {
+            const lastDigit = +v[9];
+            for (let i = 0; i < 9; i++) {
+              const digit = +v[i];
+              const tmp = (digit + 10 - (i + 1)) % 10;
+              sum = tmp == 9 ? sum + tmp : sum + ((tmp * Math.pow(2, 10 - (i + 1))) % 9);
+            }
+            return lastDigit == (10 - (sum % 10)) % 10;
+          }
+          return false;
+        },
+        message: 'Gecersiz vergi kimlik no'
+      })
+      .required('Vergi kimlik no gerekli'),
     organizationName: Yup.string()
       .min(2, 'min 2')
       .max(50, 'max 50')
-      .required('Lütfen organizasyon adı giriniz.'),
+      .required('Lütfen sirket ismi giriniz.'),
     email: Yup.string()
       .email('Lütfen geçerli bir email adresi giriniz.')
       .required('Lütfen email adresinizi giriniz.'),
     phoneNumber: Yup.string().required('Lütfen telefonu giriniz.'),
     address: Yup.object().shape({
       formattedAddress: Yup.string().required('Lütfen adres giriniz.'),
-      county: Yup.string().required(),
+      county: Yup.string().required().required('Lütfen ilce giriniz.'),
       city: Yup.string().required('Lütfen sehir giriniz.'),
-      zipCode: Yup.string(),
-      country: Yup.string().required()
+      zipCode: Yup.string().required('Lütfen posta kodu giriniz.'),
+      country: Yup.string().required().required('Lütfen ulke giriniz.')
     })
   }),
 
   handleSubmit: (values, { props, setSubmitting }) => {
     // do submitting things
-    props.onSubmit({
-      organizationName: values.organizationName.replace(/\b\w/g, (l) => l.toUpperCase()),
-      email: values.email,
-      phoneNumber: values.phoneNumber,
-      formattedAddress: values.address.formattedAddress,
-      county: values.address.county,
-      city: values.address.city,
-      zipCode: values.address.zipCode,
-      country: values.address.country
-    });
+    // props.onSubmit({
+    //   organizationName: values.organizationName.replace(/\b\w/g, (l) => l.toUpperCase()),
+    //   email: values.email,
+    //   phoneNumber: values.phoneNumber,
+    //   formattedAddress: values.address.formattedAddress,
+    //   county: values.address.county,
+    //   city: values.address.city,
+    //   zipCode: values.address.zipCode,
+    //   country: values.address.country
+    // });
     setSubmitting(false);
   }
 })(InnerForm);

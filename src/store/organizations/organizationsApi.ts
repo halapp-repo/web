@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
-import { OrganizationEnrollmentDTO } from '../../models/dtos/organization-enrollment.dto';
 import { OrganizationDTO } from '../../models/dtos/organization.dto';
 import { Organization } from '../../models/organization';
 
@@ -17,7 +16,7 @@ export class OrganizationsApi {
     this.mapper = new OrganizationToOrganizationDTOMapper();
   }
 
-  async createEnrollmentRequest(request: OrganizationEnrollmentDTO): Promise<void> {
+  async createEnrollmentRequest(request: OrganizationDTO): Promise<void> {
     return await axios.post('/organizations/enrollment', JSON.stringify(request), {
       baseURL: this.baseUrl,
       headers: {

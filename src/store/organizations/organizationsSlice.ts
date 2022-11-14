@@ -3,7 +3,8 @@ import { OrganizationsState } from './organizationsState';
 import type { RootState } from '../index';
 import { Organization } from '../../models/organization';
 import { OrganizationsApi } from './organizationsApi';
-import { OrganizationEnrollmentDTO } from '../../models/dtos/organization-enrollment.dto';
+import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
+import { plainToClass } from 'class-transformer';
 
 const initialState = {
   Organizations: [],
@@ -17,12 +18,13 @@ export const fetchOrganizations = createAsyncThunk<Organization[]>(
     return response;
   }
 );
-export const createOrganizationEnrollmentRequest = createAsyncThunk<
-  void,
-  OrganizationEnrollmentDTO
->('organization/enroll', async (arg): Promise<void> => {
-  return await new OrganizationsApi().createEnrollmentRequest(arg);
-});
+export const createOrganizationEnrollmentRequest = createAsyncThunk<void, Organization>(
+  'organization/enroll',
+  async (arg): Promise<void> => {
+    const mapper = new OrganizationToOrganizationDTOMapper();
+    return await new OrganizationsApi().createEnrollmentRequest(mapper.toDTO(arg));
+  }
+);
 
 const OrganizationsSlice = createSlice({
   name: 'organizations',
@@ -36,16 +38,7 @@ const OrganizationsSlice = createSlice({
     builder.addCase(createOrganizationEnrollmentRequest.fulfilled, (state, action) => {
       state.Enrollment = {
         DidSendOrganizationEnrollment: true,
-        Organization: {
-          Name: action.meta.arg.organizationName,
-          Address: {
-            FormattedAddress: action.meta.arg.formattedAddress,
-            City: action.meta.arg.city,
-            Country: action.meta.arg.country,
-            County: action.meta.arg.county,
-            ZipCode: action.meta.arg.zipCode
-          }
-        }
+        Organization: plainToClass(Organization, action.meta.arg)
       };
     });
   }

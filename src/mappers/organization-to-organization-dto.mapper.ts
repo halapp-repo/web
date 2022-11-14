@@ -4,15 +4,14 @@ import { Organization } from '../models/organization';
 import { IMapper } from './base.mapper';
 
 export class OrganizationToOrganizationDTOMapper extends IMapper<Organization, OrganizationDTO> {
-  toDTO(): OrganizationDTO {
-    throw new Error('Not Implemented');
-  }
-  toListDTO(): OrganizationDTO[] {
-    throw new Error('Not Implemented');
+  toDTO(arg: Organization): OrganizationDTO {
+    return plainToClass(OrganizationDTO, arg, {
+      enableImplicitConversion: true
+    });
   }
   toModel(arg: OrganizationDTO): Organization {
-    return plainToClass(Organization, {
-      Name: arg.Name
+    return plainToClass(Organization, arg, {
+      enableImplicitConversion: true
     });
   }
 }

@@ -1,5 +1,7 @@
-interface OrganizationAddress {
-  FormattedAddress: string;
+import { Type } from 'class-transformer';
+
+class OrganizationAddress {
+  AddressLine: string;
   County: string;
   City: string;
   ZipCode: string;
@@ -7,6 +9,15 @@ interface OrganizationAddress {
 }
 
 export class Organization {
-  Name: string;
-  Address: OrganizationAddress;
+  ID?: string;
+  VKN?: string;
+  Name?: string;
+  Email?: string;
+  PhoneNumber?: string;
+
+  @Type(() => OrganizationAddress)
+  CompanyAddress?: OrganizationAddress;
+
+  @Type(() => OrganizationAddress)
+  InvoiceAddress?: OrganizationAddress;
 }

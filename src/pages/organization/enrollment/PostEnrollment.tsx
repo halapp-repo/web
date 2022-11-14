@@ -25,7 +25,11 @@ const PostEnrollment = () => {
           style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
           {`
         Talebiniz alınmıştır. 
-        24 saat içerisinde satış ekibimiz size dönüş yapacaktır. 
+        24 saat içerisinde satış ekibimiz size dönüş yapacaktır.
+
+        ${
+          enrollmentRequest?.Organization.Email || ''
+        } adresine gönderdiğimiz e-postadan kayıt olabilirsiniz. 
  
         Teşekkürler 
  
