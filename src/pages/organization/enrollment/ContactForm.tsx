@@ -42,7 +42,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               />
               <Box sx={{ height: '20px' }} />
               <Button type="submit" disabled={isSubmitting || !isValid} variant="contained">
-                Talep Gönder
+                Devam et
               </Button>
             </Stack>
           </Form>
@@ -78,8 +78,8 @@ const ContactForm = withFormik<MyFormProps, FormValues>({
 
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
-    await props.onSubmit(values.email, values.phoneNumber);
     setSubmitting(false);
+    props.onSubmit(values.email, values.phoneNumber);
   }
 })(InnerForm);
 

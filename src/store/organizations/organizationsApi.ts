@@ -23,14 +23,6 @@ export class OrganizationsApi {
         'content-type': 'application/json'
       }
     });
-    // await fetch(`${this.baseUrl}/organizations/enrollment`, {
-    //   body: JSON.stringify(request),
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json;charset=UTF-8'
-    //   },
-    //   mode: 'no-cors'
-    // });
   }
 
   async fetchOrganizations(): Promise<Organization[]> {

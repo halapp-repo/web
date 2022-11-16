@@ -2,7 +2,8 @@ import { Organization } from '../../models/organization';
 
 interface Enrollment {
   DidSendOrganizationEnrollment: boolean;
-  Organization: Organization;
+  Error?: Error | null;
+  Organization?: Organization;
 }
 
 export interface OrganizationsState {

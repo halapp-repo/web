@@ -1,4 +1,4 @@
-import { Box, Grid, MobileStepper, Button, useTheme } from '@mui/material';
+import { Box, Grid, MobileStepper, Button, useTheme, Alert } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import MainCard from '../../../components/MainCard';
@@ -12,26 +12,20 @@ import {
   selectOrganizationEnrollment
 } from '../../../store/organizations/organizationsSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { PreviewForm } from './PreviewForm';
 
 const Enrollment = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const [stage, setStage] = useState(0);
-  const [sendEnrollment, setSendEnrollment] = useState(false);
   const [organization, setOrganization] = useState(new Organization());
   const enrollmentRequest = useAppSelector(selectOrganizationEnrollment);
 
   useEffect(() => {
     if (enrollmentRequest?.DidSendOrganizationEnrollment) {
-      setStage(3);
+      setStage(4);
     }
-  }, []);
-  useEffect(() => {
-    if (sendEnrollment && organization) {
-      dispatch(createOrganizationEnrollmentRequest(organization));
-      setSendEnrollment(false);
-    }
-  }, [sendEnrollment]);
+  }, [enrollmentRequest]);
 
   const handleNext = () => {
     setStage((prevActiveStep) => prevActiveStep + 1);
@@ -101,7 +95,10 @@ const Enrollment = () => {
         PhoneNumber: phoneNumber
       };
     });
-    setSendEnrollment(true);
+    handleNext();
+  };
+  const handleSendEnrollment = async (organization: Organization): Promise<void> => {
+    dispatch(createOrganizationEnrollmentRequest(organization));
   };
 
   const getStages = (stage: number): React.ReactElement | null => {
@@ -112,6 +109,8 @@ const Enrollment = () => {
     } else if (stage === 2) {
       return <ContactForm organization={organization} onSubmit={handleContactFormSubmit} />;
     } else if (stage === 3) {
+      return <PreviewForm organization={organization} onSubmit={handleSendEnrollment} />;
+    } else if (stage === 4) {
       return <PostEnrollment />;
     }
     return null;
@@ -133,12 +132,17 @@ const Enrollment = () => {
                   flexBasis: '50%'
                 }
               }}>
+              {enrollmentRequest?.Error && (
+                <Alert variant="outlined" severity="error">
+                  {`${enrollmentRequest?.Error.message}`}
+                </Alert>
+              )}
               <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 } }}>
                 <Box>{getStages(stage)}</Box>
-                {stage < 3 && (
+                {stage < 4 && (
                   <MobileStepper
                     variant="dots"
-                    steps={3}
+                    steps={4}
                     position="static"
                     activeStep={stage}
                     sx={{ flexGrow: 1, backgroundColor: '#ffffff' }}

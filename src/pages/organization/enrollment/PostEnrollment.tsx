@@ -17,7 +17,7 @@ const PostEnrollment = () => {
           variant="h3"
           style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
           color="text.secondary">{`Selam, ${
-          enrollmentRequest?.Organization.Name || ''
+          enrollmentRequest?.Organization?.Name || ''
         } 👋`}</Typography>
         <Typography
           variant="h4"
@@ -28,7 +28,7 @@ const PostEnrollment = () => {
         24 saat içerisinde satış ekibimiz size dönüş yapacaktır.
 
         ${
-          enrollmentRequest?.Organization.Email || ''
+          enrollmentRequest?.Organization?.Email || ''
         } adresine gönderdiğimiz e-postadan kayıt olabilirsiniz. 
  
         Teşekkürler 
