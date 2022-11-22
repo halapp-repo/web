@@ -6,7 +6,7 @@ export const AppTextField: React.FC<FieldProps & TextFieldProps> = (props) => {
   const isTouched = getIn(props.form.touched, props.field.name);
   const errorMessage = getIn(props.form.errors, props.field.name);
 
-  const { error, helperText, field, form, ...rest } = props;
+  const { error, helperText, field, ...rest } = props;
 
   return (
     <TextField

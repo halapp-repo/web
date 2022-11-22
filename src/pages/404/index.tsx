@@ -1,4 +1,4 @@
-import { Box, Grid, useMediaQuery, Theme, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 import Icon404 from '../../components/icons/Icon404';
 
 const NotFound = () => {

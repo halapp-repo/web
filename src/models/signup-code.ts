@@ -1,4 +1,4 @@
-import { plainToClass, Transform, Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import moment from 'moment';
 import { trMoment } from '../utils/timezone';
 

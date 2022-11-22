@@ -11,7 +11,7 @@ interface FormValues {
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { touched, errors, values, isSubmitting, dirty, isValid, setFieldValue } = props;
+  const { isSubmitting, isValid, setFieldValue } = props;
 
   return (
     <Grid container spacing={3}>

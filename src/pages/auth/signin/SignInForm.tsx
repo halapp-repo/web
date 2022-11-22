@@ -72,7 +72,7 @@ interface MyFormProps {
 
 const SignInForm = withFormik<MyFormProps, FormValues>({
   // Transform outer props into form values
-  mapPropsToValues: (props) => {
+  mapPropsToValues: () => {
     return {
       email: '',
       password: ''
