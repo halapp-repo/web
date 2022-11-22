@@ -1,4 +1,4 @@
-import { Typography, Grid, Stack, Button, Divider, Alert } from '@mui/material';
+import { Typography, Grid, Stack, Button, Divider } from '@mui/material';
 import { withFormik, FormikProps, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Organization } from '../../../models/organization';
@@ -36,7 +36,7 @@ const PreviewItem = ({ name, title, content, content2 }: PreviewItemProps) => {
 };
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { isSubmitting, isValid, setFieldValue, values } = props;
+  const { isSubmitting, isValid, values } = props;
   const { organization } = values;
   return (
     <Grid container spacing={3}>
