@@ -13,30 +13,23 @@ import {
   ListItemButton,
   ListItemIcon
 } from '@mui/material';
-import { UserOutlined } from '@ant-design/icons';
+import { ShopOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import Transitions from '../../../../../components/Transitions';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useAppDispatch } from '../../../../../store/hooks';
 import { signOut } from '../../../../../store/auth/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { stringToHslColor } from '../../../../../utils/avatar';
 
 const iconBackColorOpen = 'grey.300';
-
-function stringToHslColor(str: string, s: number, l: number) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const h = hash % 360;
-  return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
-}
 
 interface ProfileProps {
   email: string;
 }
 
 const Profile = (props: ProfileProps) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -54,6 +47,12 @@ const Profile = (props: ProfileProps) => {
 
   const handleSignOut = async () => {
     await dispatch(signOut());
+    setOpen(false);
+  };
+
+  const handleOpenOrganizationList = () => {
+    navigate('/organization/list');
+    setOpen(false);
   };
 
   return (
@@ -71,7 +70,7 @@ const Profile = (props: ProfileProps) => {
         aria-haspopup="true"
         onClick={handleToggle}>
         <Avatar
-          alt="profil"
+          alt={props.email?.[0]}
           sx={{ width: 32, height: 32, bgcolor: stringToHslColor(props.email, 80, 50) }}>
           {props.email?.[0]}
         </Avatar>
@@ -106,15 +105,13 @@ const Profile = (props: ProfileProps) => {
                   <Card>
                     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                       <ListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={handleOpenOrganizationList}>
                           <ListItemIcon>
-                            <UserOutlined />
+                            <ShopOutlined />
                           </ListItemIcon>
                           <ListItemText
-                            primary={'Kişisel Hesap'}
+                            primary={'Şirketlerim'}
                             primaryTypographyProps={{ fontSize: '15px' }}
-                            secondary={props.email}
-                            secondaryTypographyProps={{ fontSize: '10px' }}
                           />
                         </ListItemButton>
                       </ListItem>

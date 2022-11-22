@@ -4,8 +4,8 @@ import { lazy } from 'react';
 import Loadable from '../components/Loadable';
 import MainLayout from '../layouts/MainLayout';
 // render - login
-const Dashboard = Loadable(lazy(() => import('../pages/organization')));
 const Enrollment = Loadable(lazy(() => import('../pages/organization/enrollment')));
+const OrganizationList = Loadable(lazy(() => import('../pages/organization/list')));
 
 // ==============================|| AUTH ROUTING ||============================== //
 
@@ -16,6 +16,10 @@ const OrganizationRoutes = {
     {
       path: '/organization/enrollment',
       element: <Enrollment />
+    },
+    {
+      path: '/organization/list',
+      element: <OrganizationList />
     }
   ]
 };

@@ -20,15 +20,20 @@ export class OrganizationsApi {
     return await axios.post('/organizations/enrollment', JSON.stringify(request), {
       baseURL: this.baseUrl,
       headers: {
-        'content-type': 'application/json'
+        Accept: 'application/json',
+        'content-type': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
       }
     });
   }
 
-  async fetchOrganizations(): Promise<Organization[]> {
+  async fetchOrganizations({ token }: { token: string }): Promise<Organization[]> {
     return await axios
       .get<OrganizationDTO[]>('/organizations', {
-        baseURL: this.baseUrl
+        baseURL: this.baseUrl,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
       .then((response) => {
         const { data } = response;

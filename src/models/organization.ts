@@ -1,4 +1,7 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
+import * as moment from 'moment';
+import { trMoment } from '../utils/timezone';
+import { User } from './user';
 
 class OrganizationAddress {
   AddressLine: string;
@@ -20,4 +23,13 @@ export class Organization {
 
   @Type(() => OrganizationAddress)
   InvoiceAddress?: OrganizationAddress;
+
+  @Type(() => User)
+  JoinedUsers?: User[];
+
+  @Type(() => String)
+  @Transform(({ value }: { value: string }) => trMoment(value), {
+    toClassOnly: true
+  })
+  CreatedDate?: moment.Moment;
 }

@@ -10,11 +10,16 @@ interface FormValues {
   email: string;
   password: string;
   code: SignupCode;
-  onSignup: (email: string, password: string, code: string) => Promise<void>;
+  onSignup: (
+    email: string,
+    password: string,
+    code: string,
+    organizationID: string
+  ) => Promise<void>;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { touched, errors, isSubmitting, dirty, isValid, values } = props;
+  const { isSubmitting, dirty, isValid, values } = props;
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -40,6 +45,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               <Field type="email" name="email" label="Email" component={AppTextField} />
               <Field type="password" name="password" label="Sifre" component={AppTextField} />
               <Field type="hidden" name="code.Code" />
+              <Field type="hidden" name="code.OrganizationID" />
               <Button
                 type="submit"
                 disabled={isSubmitting || !isValid || !dirty}
@@ -63,7 +69,12 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 interface MyFormProps {
   code: SignupCode;
-  onSignup: (email: string, password: string, code: string) => Promise<void>;
+  onSignup: (
+    email: string,
+    password: string,
+    code: string,
+    organizationId: string
+  ) => Promise<void>;
 }
 
 const SignUpForm = withFormik<MyFormProps, FormValues>({
@@ -88,13 +99,19 @@ const SignUpForm = withFormik<MyFormProps, FormValues>({
       )
       .required('sifre gerekli'),
     code: Yup.object().shape({
-      Code: Yup.string().required()
+      Code: Yup.string().required(),
+      OrganizationID: Yup.string().required()
     })
   }),
 
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
-    await props.onSignup(values.email, values.password, values.code.Code);
+    await props.onSignup(
+      values.email,
+      values.password,
+      values.code.Code,
+      values.code.OrganizationID
+    );
     setSubmitting(false);
   }
 })(InnerForm);

@@ -25,8 +25,13 @@ const SignUp = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleSignup = async (email: string, password: string, code: string): Promise<void> => {
-    await dispatch(signUp({ email, password, code }));
+  const handleSignup = async (
+    email: string,
+    password: string,
+    code: string,
+    organizationId: string
+  ): Promise<void> => {
+    await dispatch(signUp({ email, password, code, organizationId }));
   };
 
   const handleConfirmSignup = async (otpCode: string): Promise<void> => {
@@ -62,13 +67,13 @@ const SignUp = () => {
           email={userAuth.email}
           onSubmit={handleConfirmSignup}
           onResendCode={handleResendCode}
-          onMoveNextPage={() => navigate('/dashboard')}
+          onMoveNextPage={() => {
+            true;
+          }}
         />
       );
     } else if (userAuth.email && !userAuth.needConfirmation && userAuth.confirmed) {
       navigate('/auth/signin');
-    } else {
-      navigate('/dashboard');
     }
   };
 

@@ -1,9 +1,6 @@
 import { Typography, Stack, Box, Button, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-// project import
-import MainCard from '../../../components/MainCard';
-
 const SignUpWithoutCompanyCode = () => {
   return (
     <Stack spacing={2}>

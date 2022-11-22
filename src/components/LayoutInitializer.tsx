@@ -27,6 +27,10 @@ const LayoutInitializer = ({ children }: Props) => {
     dispatch(getSession());
     dispatch(fetchInventories());
     dispatch(updateListingSelectedDate(selectedDate));
+    const timer = setInterval(() => {
+      dispatch(getSession());
+    }, 1200000);
+    return () => clearTimeout(timer);
   }, []);
 
   const showCover = (): boolean => {

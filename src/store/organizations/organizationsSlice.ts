@@ -12,10 +12,17 @@ const initialState = {
   Enrollment: undefined
 } as OrganizationsState;
 
-export const fetchOrganizations = createAsyncThunk<Organization[]>(
+export const fetchOrganizations = createAsyncThunk<Organization[], void, { state: RootState }>(
   'organizations/fetch',
-  async (): Promise<Organization[]> => {
-    const response = await new OrganizationsApi().fetchOrganizations();
+  async (_, { getState }): Promise<Organization[]> => {
+    const { userAuth } = getState().auth;
+    if (!userAuth.authenticated || !userAuth.idToken) {
+      throw new Error('XXXXXXX');
+    }
+
+    const response = await new OrganizationsApi().fetchOrganizations({
+      token: userAuth.idToken
+    });
     return response;
   }
 );
@@ -44,7 +51,7 @@ const OrganizationsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchOrganizations.fulfilled, (state, action) => {
       const data = action.payload;
-      state.Organizations = [...(state.Organizations || []), ...(data || [])];
+      state.Organizations = [...(data || [])];
     });
     builder.addCase(createOrganizationEnrollmentRequest.fulfilled, (state, action) => {
       state.Enrollment = {

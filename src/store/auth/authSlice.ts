@@ -32,9 +32,9 @@ const defaultUserAuth: UserAuth = {
 
 export const signUp = createAsyncThunk<
   AuthResponseDTO | null,
-  { email: string; password: string; code: string }
->('auth/signup', async ({ email, password, code }) => {
-  const res: ISignUpResult | undefined = await signUpFunc(email, password, code);
+  { email: string; password: string; code: string; organizationId: string }
+>('auth/signup', async ({ email, password, code, organizationId }) => {
+  const res: ISignUpResult | undefined = await signUpFunc(email, password, code, organizationId);
   if (res) {
     return {
       UserId: res.userSub,
@@ -177,7 +177,7 @@ const AuthSlice = createSlice({
         state.userAuth = {
           ...state.userAuth,
           confirmed: data.Confirmed!,
-          email: email,
+          email: email.toUpperCase(),
           needConfirmation: true,
           error: null
         };
@@ -202,9 +202,10 @@ const AuthSlice = createSlice({
       if (data) {
         state.userAuth = {
           ...state.userAuth,
-          confirmed: data.Confirmed!,
+          confirmed: true,
           needConfirmation: false,
-          error: null
+          error: null,
+          ...(data.Email ? { email: data.Email } : null)
         };
       }
     });
@@ -253,6 +254,7 @@ const AuthSlice = createSlice({
     });
     builder.addCase(signIn.fulfilled, (state, action) => {
       const data = action.payload;
+      const { email } = action.meta.arg;
       if (data) {
         state.userAuth = {
           ...state.userAuth,
@@ -260,9 +262,9 @@ const AuthSlice = createSlice({
           authenticated: data.Authenticated!,
           needConfirmation: false,
           error: null,
-          email: data.Email!,
           idToken: data.IdToken,
-          accessToken: data.AccessToken
+          accessToken: data.AccessToken,
+          email: email.toUpperCase()
         };
       }
     });
@@ -273,7 +275,7 @@ const AuthSlice = createSlice({
           ...state.userAuth,
           confirmed: false,
           authenticated: false,
-          email,
+          email: email.toUpperCase(),
           needConfirmation: true,
           error: new Error('Email adresinizi onaylamaniz gerekmektedir'),
           idToken: undefined,
@@ -320,7 +322,7 @@ const AuthSlice = createSlice({
         ...defaultUserAuth
       };
     });
-    builder.addCase(confirmPassword.fulfilled, (state, action) => {
+    builder.addCase(confirmPassword.fulfilled, (state) => {
       state.userAuth = {
         ...state.userAuth,
         status: 'confirmPasswordFulfilled',
@@ -385,7 +387,7 @@ const AuthSlice = createSlice({
           ...state.userAuth,
           ...(Email
             ? {
-                email: Email
+                email: Email.toUpperCase()
               }
             : null)
         };
@@ -394,7 +396,7 @@ const AuthSlice = createSlice({
     builder.addCase(getSignupCodeDetails.fulfilled, (state, action) => {
       state.signupCode = action.payload;
     });
-    builder.addCase(getSignupCodeDetails.rejected, (state, action) => {
+    builder.addCase(getSignupCodeDetails.rejected, (state) => {
       state.signupCode = null;
     });
   }

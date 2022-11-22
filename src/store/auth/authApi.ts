@@ -17,16 +17,22 @@ import { plainToClass } from 'class-transformer';
 const signUp = (
   email: string,
   password: string,
-  code: string
+  code: string,
+  organizationId: string
 ): Promise<ISignUpResult | undefined> => {
+  email = email.toUpperCase();
   const emailAttribute = new CognitoUserAttribute({
     Name: 'email',
     Value: email
   });
+  const organizationIdAttributes = new CognitoUserAttribute({
+    Name: 'custom:organizationId',
+    Value: organizationId
+  });
   const metaData: ClientMetadata = {
     signupCode: code
   };
-  const attributes = [emailAttribute];
+  const attributes = [emailAttribute, organizationIdAttributes];
 
   return new Promise((resolve, reject) => {
     cognitoUserPool.signUp(
@@ -46,6 +52,7 @@ const signUp = (
 };
 
 const confirmRegistration = (email: string, code: string) => {
+  email = email.toUpperCase();
   const newUser = new CognitoUser({
     Username: email,
     Pool: cognitoUserPool
@@ -61,6 +68,7 @@ const confirmRegistration = (email: string, code: string) => {
 };
 
 const resendConfirmCode = (email: string) => {
+  email = email.toUpperCase();
   const newUser = new CognitoUser({
     Username: email,
     Pool: cognitoUserPool
@@ -77,6 +85,7 @@ const resendConfirmCode = (email: string) => {
 };
 
 const signIn = (email: string, password: string): Promise<ISessionResponse> => {
+  email = email.toUpperCase();
   const authenticationData: IAuthenticationDetailsData = {
     Username: email,
     Password: password
@@ -137,6 +146,7 @@ const getSession = (): Promise<ISessionResponse> => {
 };
 
 const forgotPassword = (email: string): Promise<void> => {
+  email = email.toUpperCase();
   const newUser = new CognitoUser({
     Username: email,
     Pool: cognitoUserPool
@@ -154,6 +164,7 @@ const forgotPassword = (email: string): Promise<void> => {
 };
 
 const confirmPassword = (email: string, otp: string, newPassword: string): Promise<void> => {
+  email = email.toUpperCase();
   const cognitoUser = new CognitoUser({
     Username: email,
     Pool: cognitoUserPool

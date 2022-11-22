@@ -14,6 +14,10 @@ import { withFormik, FormikProps, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
 import { Organization } from '../../../models/organization';
+import {
+  AddressFieldWithPlaceFromQuery,
+  AddressOutput
+} from '../../../components/form/AddressFieldWithPlaceFromQuery';
 
 interface FormValues {
   areSame: boolean;
@@ -32,15 +36,8 @@ interface FormValues {
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { isSubmitting, isValid, setFieldValue, values, setFieldTouched, getFieldProps } = props;
+  const { isSubmitting, isValid, setFieldValue, values, setFieldTouched } = props;
   const [areSame, setAreSame] = useState(values.areSame);
-  const handleAddressBlur = (e: React.FocusEvent, field: string) => {
-    const onBlurDefault = getFieldProps(field);
-    if (!onBlurDefault) {
-      return;
-    }
-    onBlurDefault.onBlur(e);
-  };
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -61,11 +58,23 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                   <Field
                     name="invoiceFormattedAddress"
                     label="Fatura adresi"
-                    component={AppTextField}
-                    // InputProps={{
-                    //   onBlur: (e: React.FocusEvent) =>
-                    //     handleAddressBlur(e, 'invoiceFormattedAddress')
-                    // }}
+                    component={AddressFieldWithPlaceFromQuery}
+                    onPlaceChanged={(e: (AddressOutput | null)[]) => {
+                      if (e && e.length === 1) {
+                        if (e[0]?.county) {
+                          setFieldValue('invoiceCounty', e[0]?.county);
+                          setTimeout(() => setFieldTouched('invoiceCounty', true), 500);
+                        }
+                        if (e[0]?.zipCode) {
+                          setFieldValue('invoiceZipCode', e[0]?.zipCode);
+                          setTimeout(() => setFieldValue('invoiceZipCode', e[0]?.zipCode), 500);
+                        }
+                        if (e[0]?.city) {
+                          setFieldValue('invoiceCity', e[0]?.city);
+                          setTimeout(() => setFieldTouched('invoiceCity', true), 500);
+                        }
+                      }
+                    }}
                     InputLabelProps={{ shrink: true }}
                   />
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -116,12 +125,24 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                     <Field
                       name="companyFormattedAddress"
                       label="İşletme adresi"
-                      component={AppTextField}
+                      component={AddressFieldWithPlaceFromQuery}
+                      onPlaceChanged={(e: (AddressOutput | null)[]) => {
+                        if (e && e.length === 1) {
+                          if (e[0]?.county) {
+                            setFieldValue('companyCounty', e[0]?.county);
+                            setTimeout(() => setFieldTouched('companyCounty', true), 500);
+                          }
+                          if (e[0]?.zipCode) {
+                            setFieldValue('companyZipCode', e[0]?.zipCode);
+                            setTimeout(() => setFieldTouched('companyZipCode', true), 500);
+                          }
+                          if (e[0]?.zipCode) {
+                            setFieldValue('companyCity', e[0]?.city);
+                            setTimeout(() => setFieldTouched('companyCity', true), 500);
+                          }
+                        }
+                      }}
                       InputLabelProps={{ shrink: true }}
-                      // InputProps={{
-                      //   onBlur: (e: React.FocusEvent) =>
-                      //     handleAddressBlur(e, 'companyFormattedAddress')
-                      // }}
                     />
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <Field
