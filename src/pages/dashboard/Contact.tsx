@@ -23,6 +23,7 @@ const Contact = () => {
         <Typography align="center">
           <Link
             href="https://api.whatsapp.com/send?phone=905384503672"
+            target="_blank"
             sx={{ display: 'inline-block', color: '#25D366', fontSize: 20 }}>
             <WhatsAppOutlined /> (0538) 450 36 72
           </Link>

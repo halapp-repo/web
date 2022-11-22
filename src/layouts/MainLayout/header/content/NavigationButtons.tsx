@@ -1,28 +1,66 @@
-import { Stack, IconButton } from '@mui/material';
+import { Stack, Button, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-// import { AreaChartOutlined } from '@ant-design/icons';
+import Profile from './profile';
+import { useAppSelector } from '../../../../store/hooks';
+import { selectUserAuth } from '../../../../store/auth/authSlice';
 
 const defaultStyle = {
   textDecoration: 'none'
 };
-const activeStyle = {
-  textDecoration: 'none',
-  borderBottom: '5px solid rgb(255, 196, 35)'
+// const activeIconStyle = {
+//   textDecoration: 'none',
+//   borderBottom: '5px solid rgb(255, 196, 35)'
+// };
+const activeButtonStyle = {
+  textDecoration: 'none'
 };
 
 const NavigationButtons = () => {
+  const userAuth = useAppSelector(selectUserAuth);
   return (
     <Stack direction="row" spacing={2}>
-      <NavLink to="dashboard" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
-        <IconButton sx={{ fontSize: '2rem' }} disableRipple>
-          ₺
-        </IconButton>
-      </NavLink>
-      {/* <NavLink to="statistics" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
-        <IconButton sx={{ fontSize: '2rem', color: 'text.primary' }} disableRipple>
-          <AreaChartOutlined />
-        </IconButton>
-      </NavLink> */}
+      {!userAuth.authenticated && (
+        <>
+          <NavLink
+            to="/organization/enrollment"
+            style={({ isActive }) => (isActive ? activeButtonStyle : defaultStyle)}
+            // eslint-disable-next-line react/no-children-prop
+            children={() => {
+              return (
+                <Button
+                  variant="outlined"
+                  sx={{ whiteSpace: 'nowrap', minWidth: 'auto' }}
+                  disableRipple>
+                  {'Üye ol'}
+                </Button>
+              );
+            }}
+          />
+          <NavLink
+            to="/auth/signin"
+            style={({ isActive }) => (isActive ? activeButtonStyle : defaultStyle)}
+            // eslint-disable-next-line react/no-children-prop
+            children={() => {
+              return (
+                <Button
+                  variant="contained"
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    minWidth: 'auto'
+                  }}
+                  disableRipple>
+                  <Typography>{'Giriş yap'}</Typography>
+                </Button>
+              );
+            }}
+          />
+        </>
+      )}
+      {userAuth.authenticated && (
+        <>
+          <Profile email={userAuth.email} />
+        </>
+      )}
     </Stack>
   );
 };

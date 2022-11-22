@@ -54,7 +54,10 @@ export default function ThemeCustomization({ children }: Props) {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes}>
-        <LocalizationProvider dateAdapter={AdapterDateFns} locale={trLocale}>
+        <LocalizationProvider
+          dateAdapter={AdapterDateFns}
+          locale={trLocale}
+          adapterLocale={trLocale}>
           <CssBaseline />
           {children}
         </LocalizationProvider>
