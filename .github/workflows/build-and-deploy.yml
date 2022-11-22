@@ -41,7 +41,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     
-    - run: npm install --save-dev typescript && npm install --save-dev @types/google.maps
+    - run: npm install --save-dev typescript
 
     - run: npm install && npm run build
 
