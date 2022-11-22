@@ -3,7 +3,7 @@ import { lazy } from 'react';
 // project import
 import Loadable from '../components/Loadable';
 import MainLayout from '../layouts/MainLayout';
-import MinimalLayout from '../layouts/MinimalLayout';
+
 // render - login
 const SignUp = Loadable(lazy(() => import('../pages/auth/signup')));
 const SignIn = Loadable(lazy(() => import('../pages/auth/signin')));
