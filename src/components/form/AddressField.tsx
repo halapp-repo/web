@@ -52,8 +52,7 @@ const parsePlace = (place: google.maps.places.PlaceResult): AddressOutput | unde
     name: place.name,
     lat,
     lng,
-    phoneNumber: place['international_phone_number'],
-    businessStatus: place['business_status']
+    phoneNumber: place['international_phone_number']
   };
 };
 
