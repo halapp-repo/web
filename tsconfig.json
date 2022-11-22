@@ -24,7 +24,7 @@
     "strictPropertyInitialization": false,
     "types": [
       "node",
-      "googlemaps"
+      "google.maps"
   ]
   },
   "include": ["src/**/*"],
