@@ -18,10 +18,14 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
-    "typeRoots": ["./src/@types", "./node_modules/@types","./node_modules/@types/googlemaps"],
+    "typeRoots": ["./src/@types", "./node_modules/@types"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
+    "types": [
+      "node",
+      "googlemaps"
+  ]
   },
   "include": ["src/**/*"],
   "exclude": [
