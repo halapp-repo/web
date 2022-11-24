@@ -7,7 +7,6 @@ type UserAuthStatus =
   | 'confirmPasswordRejected';
 
 export type UserAuth = {
-  id: string;
   authenticated: boolean;
   confirmed: boolean;
   email: string;

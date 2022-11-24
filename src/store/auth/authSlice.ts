@@ -19,7 +19,6 @@ import { SignupCode } from '../../models/signup-code';
 const CognitoUserLS = 'cognitouser';
 
 const defaultUserAuth: UserAuth = {
-  id: '',
   authenticated: false,
   confirmed: false,
   email: '',

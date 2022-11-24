@@ -8,7 +8,6 @@ import {
   selectOrganizations
 } from '../../../store/organizations/organizationsSlice';
 import PageWrapper from '../../../components/PageWrapper';
-import MainCard from '../../../components/MainCard';
 import { OrganizationListItem } from './OrganizationListItem';
 
 const OrganizationList = () => {
@@ -26,26 +25,14 @@ const OrganizationList = () => {
 
   return (
     <Box>
-      <PageWrapper>
-        <MainCard
-          sx={{
-            minWidth: { xs: '100%' },
-            maxWidth: { xs: '100%' },
-            // minHeight: { xs: '100vh', sm: 'inherit' },
-            margin: { xs: 0, sm: 1, md: 3 },
-            '& > *': {
-              flexGrow: 1,
-              flexBasis: '50%'
-            }
-          }}>
-          <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 } }}>
-            <Stack spacing={2}>
-              {organizations?.map((o) => (
-                <OrganizationListItem key={o.ID} organization={o} />
-              ))}
-            </Stack>
-          </Box>
-        </MainCard>
+      <PageWrapper md={6}>
+        <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 } }}>
+          <Stack spacing={2}>
+            {organizations?.map((o) => (
+              <OrganizationListItem key={o.ID} organization={o} />
+            ))}
+          </Stack>
+        </Box>
       </PageWrapper>
     </Box>
   );

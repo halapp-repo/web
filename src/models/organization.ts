@@ -11,12 +11,13 @@ class OrganizationAddress {
   Country: string;
 }
 
-export class Organization {
+class Organization {
   ID?: string;
   VKN?: string;
   Name?: string;
   Email?: string;
   PhoneNumber?: string;
+  Active?: boolean;
 
   @Type(() => OrganizationAddress)
   CompanyAddress?: OrganizationAddress;
@@ -24,8 +25,7 @@ export class Organization {
   @Type(() => OrganizationAddress)
   InvoiceAddress?: OrganizationAddress;
 
-  @Type(() => User)
-  JoinedUsers?: User[];
+  JoinedUsers?: string[];
 
   @Type(() => String)
   @Transform(({ value }: { value: string }) => trMoment(value), {
@@ -33,3 +33,5 @@ export class Organization {
   })
   CreatedDate?: moment.Moment;
 }
+
+export { Organization, OrganizationAddress };

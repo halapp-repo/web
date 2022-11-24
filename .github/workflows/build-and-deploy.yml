@@ -20,7 +20,7 @@ jobs:
       NODE_ENV: production
       REACT_APP_LISTING_BASE_URL: https://api.halapp.io/listing
       REACT_APP_ACCOUNT_BASE_URL: https://api.halapp.io/account
-      REACT_APP_AUTH_BASE_URL: https://api.halapp.io/account/auth
+      REACT_APP_AUTH_BASE_URL: https://api.halapp.io/auth
       REACT_APP_GOOGLE_API_KEY: AIzaSyDunADvBNBfepVIioODBP3Cq-MjIHKE268
       REACT_APP_COGNITO_USERPOOL_ID: eu-central-1_a1Vy48gOr
       REACT_APP_COGNITO_CLIENT_ID: 5g536qr72pjrt49saqb64jtedt

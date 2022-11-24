@@ -1,5 +1,4 @@
 import { Type } from 'class-transformer';
-import { UserDTO } from './user.dto';
 
 class OrganizationAddressDTO {
   AddressLine: string;
@@ -15,6 +14,7 @@ export class OrganizationDTO {
   Name?: string;
   Email?: string;
   PhoneNumber?: string;
+  Active?: boolean;
 
   @Type(() => OrganizationAddressDTO)
   CompanyAddress?: OrganizationAddressDTO;
@@ -22,8 +22,7 @@ export class OrganizationDTO {
   @Type(() => OrganizationAddressDTO)
   InvoiceAddress?: OrganizationAddressDTO;
 
-  @Type(() => UserDTO)
-  JoinedUsers?: UserDTO[];
+  JoinedUsers?: string[];
 
   CreatedDate?: string;
 }

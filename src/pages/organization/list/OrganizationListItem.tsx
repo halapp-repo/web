@@ -1,60 +1,59 @@
-import { Box, Stack, Typography, useMediaQuery, Theme, Avatar, Grid } from '@mui/material';
-import IconCompany from '../../../components/icons/IconCompany';
+import {
+  Box,
+  Stack,
+  Typography,
+  useMediaQuery,
+  Theme,
+  Chip,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Button
+} from '@mui/material';
 import { Organization } from '../../../models/organization';
-import { stringToHslColor } from '../../../utils/avatar';
 
 interface OrganizationListItemProps {
   organization: Organization;
 }
 
 const OrganizationListItem = ({ organization }: OrganizationListItemProps) => {
-  const matchesMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   return (
-    <Box>
-      <Grid container direction="row" spacing={2}>
-        {matchesMd || (
+    <Card variant="outlined">
+      <CardContent>
+        <Grid container direction="row" spacing={2}>
           <Grid item>
-            <IconCompany Size="medium" />
-          </Grid>
-        )}
-        <Grid item xs={6}>
-          <Stack spacing={1}>
-            <Typography variant="h3" color="text.primary">
-              {organization.Name}
-            </Typography>
             <Box>
-              <Typography variant="h6" color="text.secondary">
-                {organization.CompanyAddress?.AddressLine}
-              </Typography>
-              <Typography variant="h6" color="text.secondary">
-                {`${organization.CompanyAddress?.County} ${organization.CompanyAddress?.City} ${organization.CompanyAddress?.ZipCode} ${organization.CompanyAddress?.Country}`}
-              </Typography>
-            </Box>
-            <Box>
-              <Stack direction="row" spacing={1}>
-                {organization.JoinedUsers?.map((u) => {
-                  return (
-                    <Avatar
-                      key={u.ID}
-                      alt={u.Email}
-                      sx={{
-                        width: 20,
-                        height: 20,
-                        bgcolor: stringToHslColor(`${u.Email}`, 80, 50)
-                      }}>
-                      {`${u.Email[0]}`}
-                    </Avatar>
-                  );
-                })}
+              <Stack direction={'row'} spacing={2} sx={{ alignItems: 'baseline' }}>
+                <Typography gutterBottom variant="h3">
+                  {organization.Name}
+                </Typography>
+                {organization.Active ? (
+                  <Chip
+                    sx={{ borderRadius: '2em' }}
+                    label="Aktif"
+                    size="small"
+                    color="success"
+                    variant="outlined"
+                  />
+                ) : (
+                  <Chip
+                    sx={{ borderRadius: '2em' }}
+                    label="Etkin değil"
+                    size="small"
+                    color="error"
+                    variant="outlined"
+                  />
+                )}
               </Stack>
             </Box>
-          </Stack>
+          </Grid>
         </Grid>
-        <Grid item sx={{ marginLeft: 'auto' }}>
-          {organization.CreatedDate?.format('DD-MM-YYYY')}
-        </Grid>
-      </Grid>
-    </Box>
+      </CardContent>
+      <CardActions>
+        <Button size="small">{'Düzenle'}</Button>
+      </CardActions>
+    </Card>
   );
 };
 
