@@ -70,20 +70,42 @@ const TaxForm = withFormik<MyFormProps, FormValues>({
   // Add a custom validation function (this can be async too!)
   validationSchema: Yup.object().shape({
     vkn: Yup.string()
-      .length(10, '10 haneli olmak zorundadir')
+      .min(10, 'En az 10 haneli olmak zorundadir')
+      .max(11, 'En cok 11 haneli olmak zorundadir')
       .test({
         test: (v): boolean => {
-          let sum = 0;
-          if (v && v.length == 10 && !isNaN(+v)) {
-            const lastDigit = +v[9];
-            for (let i = 0; i < 9; i++) {
-              const digit = +v[i];
-              const tmp = (digit + 10 - (i + 1)) % 10;
-              sum = tmp == 9 ? sum + tmp : sum + ((tmp * Math.pow(2, 10 - (i + 1))) % 9);
+          if (v?.length === 10) {
+            let sum = 0;
+            if (v && v.length == 10 && !isNaN(+v)) {
+              const lastDigit = +v[9];
+              for (let i = 0; i < 9; i++) {
+                const digit = +v[i];
+                const tmp = (digit + 10 - (i + 1)) % 10;
+                sum = tmp == 9 ? sum + tmp : sum + ((tmp * Math.pow(2, 10 - (i + 1))) % 9);
+              }
+              return lastDigit == (10 - (sum % 10)) % 10;
             }
-            return lastDigit == (10 - (sum % 10)) % 10;
+            return false;
+          } else if (v?.length === 11) {
+            if (+v[0] === 0) {
+              return false;
+            }
+            const tekler = +v[0] + +v[2] + +v[4] + +v[6] + +v[8];
+            const ciftler = +v[1] + +v[3] + +v[5] + +v[7];
+            const basamak10 = (tekler * 7 - ciftler) % 10;
+            const toplam = (tekler + ciftler + +v[9]) % 10;
+
+            if (basamak10 != +v[9]) {
+              return false;
+            }
+            if (toplam != +v[10]) {
+              return false;
+            } else {
+              return true;
+            }
+          } else {
+            return false;
           }
-          return false;
         },
         message: 'Gecersiz vergi kimlik no'
       })
