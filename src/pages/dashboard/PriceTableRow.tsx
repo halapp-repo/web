@@ -1,5 +1,6 @@
 import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { Box, TableCell, TableRow, Typography, Button } from '@mui/material';
+import React from 'react';
 
 interface PriceTableRowProps {
   ProductId: string;
@@ -24,8 +25,15 @@ const PriceTableRow = ({
 }: PriceTableRowProps) => {
   const increase = Increase;
 
+  const handleOnClick = (e: React.TouchEvent | React.MouseEvent) => {
+    console.log(e);
+  };
+
   return (
-    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={ProductId}>
+    <TableRow
+      onClick={handleOnClick}
+      sx={{ '&:last-child td, &:last-child th': { border: 0 }, width: '100%', cursor: 'pointer' }}
+      key={ProductId}>
       <TableCell align="left">
         <Typography variant="body1" color="inherit">
           {ProductName}
@@ -38,7 +46,12 @@ const PriceTableRow = ({
       </TableCell>
       <TableCell align="right">
         {IsToday || IsActive ? (
-          <Button variant="text" onClick={(e) => OpenAnalyticsPanel(e, ProductId)}>
+          <Button
+            variant="text"
+            onClick={(e) => {
+              e.stopPropagation();
+              OpenAnalyticsPanel(e, ProductId);
+            }}>
             <Typography variant="h5" color="inherit">
               {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(Price)}
             </Typography>

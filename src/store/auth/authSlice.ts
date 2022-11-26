@@ -10,7 +10,8 @@ import {
   getSession as getSessionFunc,
   forgotPassword as forgotPasswordFunc,
   confirmPassword as confirmPasswordFunc,
-  AuthApi
+  AuthApi,
+  getUserAttributes as getUserAttributesFunc
 } from './authApi';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
@@ -19,6 +20,7 @@ import { SignupCode } from '../../models/signup-code';
 const CognitoUserLS = 'cognitouser';
 
 const defaultUserAuth: UserAuth = {
+  id: '',
   authenticated: false,
   confirmed: false,
   email: '',
@@ -26,7 +28,8 @@ const defaultUserAuth: UserAuth = {
   error: null,
   idToken: undefined,
   accessToken: undefined,
-  status: undefined
+  status: undefined,
+  isAdmin: false
 };
 
 export const signUp = createAsyncThunk<
@@ -74,13 +77,20 @@ export const signIn = createAsyncThunk<AuthResponseDTO | null, { email: string; 
   async ({ email, password }) => {
     try {
       const response = await signInFunc(email, password);
-      localStorage.setItem(CognitoUserLS, JSON.stringify({ email }));
+      const userAttr = await getUserAttributesFunc(response.user);
+
+      localStorage.setItem(
+        CognitoUserLS,
+        JSON.stringify({ email: userAttr.Email, id: userAttr.ID, isAdmin: userAttr.IsAdmin })
+      );
       return <AuthResponseDTO>{
         Confirmed: true,
         Authenticated: true,
         Email: email,
         AccessToken: response.accessToken,
-        IdToken: response.idToken
+        IdToken: response.idToken,
+        IsAdmin: userAttr.IsAdmin,
+        UserId: userAttr.ID
       };
     } catch (err) {
       if (err instanceof Error) {
@@ -119,9 +129,11 @@ export const getCognitoUser = createAsyncThunk<AuthResponseDTO | null>(
   async () => {
     const rawCognitoUser = localStorage.getItem(CognitoUserLS);
     if (rawCognitoUser) {
-      const { email } = JSON.parse(rawCognitoUser);
+      const { email, id, isAdmin } = JSON.parse(rawCognitoUser);
       return {
-        Email: email
+        Email: email,
+        UserId: id,
+        IsAdmin: isAdmin
       };
     }
     return null;
@@ -263,7 +275,17 @@ const AuthSlice = createSlice({
           error: null,
           idToken: data.IdToken,
           accessToken: data.AccessToken,
-          email: email.toUpperCase()
+          email: email.toUpperCase(),
+          ...(data.UserId
+            ? {
+                id: data.UserId
+              }
+            : null),
+          ...(data.IsAdmin
+            ? {
+                isAdmin: data.IsAdmin
+              }
+            : null)
         };
       }
     });
@@ -381,14 +403,20 @@ const AuthSlice = createSlice({
     });
     builder.addCase(getCognitoUser.fulfilled, (state, action) => {
       if (action.payload) {
-        const { Email } = action.payload;
+        const { Email, UserId, IsAdmin } = action.payload;
         state.userAuth = {
           ...state.userAuth,
           ...(Email
             ? {
                 email: Email.toUpperCase()
               }
-            : null)
+            : null),
+          ...(UserId
+            ? {
+                id: UserId
+              }
+            : null),
+          ...(IsAdmin ? { isAdmin: true } : null)
         };
       }
     });
