@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import Logo from '../../../../components/logo/Logo';
 import NavigationButtons from './NavigationButtons';
@@ -10,7 +10,11 @@ const HeaderContent = () => {
         to="/"
         // eslint-disable-next-line react/no-children-prop
         children={() => {
-          return <Logo />;
+          return (
+            <Stack direction={'row'}>
+              <Logo />
+            </Stack>
+          );
         }}
       />
       <Box sx={{ width: '100%', ml: 1 }} />

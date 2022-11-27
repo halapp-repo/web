@@ -31,7 +31,10 @@ const LogoText = ({ Size }: LogoProps) => {
   }
 
   return (
-    <SvgIcon sx={{ display: 'flex', width: logoSize, height: logoSize, mr: 1 }}>
+    <SvgIcon
+      viewBox="0 0 249 81.6"
+      preserveAspectRatio="xMidYMid meet"
+      sx={{ display: 'flex', width: logoSize, height: 'auto' }}>
       <LogoContent />
     </SvgIcon>
   );

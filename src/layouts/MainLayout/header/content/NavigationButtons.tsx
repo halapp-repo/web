@@ -29,6 +29,7 @@ const NavigationButtons = () => {
               return (
                 <Button
                   variant="outlined"
+                  color="blackNWhite"
                   sx={{ whiteSpace: 'nowrap', minWidth: 'auto' }}
                   disableRipple>
                   {'Üye ol'}

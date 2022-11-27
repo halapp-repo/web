@@ -1,7 +1,8 @@
 import { InstagramOutlined } from '@ant-design/icons';
-import { Box, Grid, Typography, IconButton } from '@mui/material';
+import { Box, Grid, Typography, IconButton, Stack } from '@mui/material';
 import { useMemo } from 'react';
 import moment from 'moment';
+import LogoText from '../../../components/logo/LogoText';
 
 const Footer = () => {
   const year = useMemo(() => moment().format('YYYY'), []);
@@ -9,9 +10,16 @@ const Footer = () => {
     <Box sx={{ minHeight: '50px', borderTop: '1px solid #f0f0f0' }}>
       <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Typography variant="body1" color="text.secondary">
-            {`© ${year} HalApp`}
-          </Typography>
+          <Stack
+            direction={'row'}
+            spacing={1}
+            justifyContent="center"
+            sx={{ alignItems: 'normal' }}>
+            <Typography variant="body1" color="text.secondary">
+              {`© ${year} `}
+            </Typography>
+            <LogoText />
+          </Stack>
         </Grid>
         <Grid
           item

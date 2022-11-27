@@ -124,7 +124,7 @@ const PriceFilter = () => {
           </Select>
         </FormControl>
         <Divider variant="middle" />
-        <Button variant="outlined" onClick={handleClearFilter}>
+        <Button variant="outlined" onClick={handleClearFilter} color="blackNWhite">
           Temizle
         </Button>
       </Stack>

@@ -55,10 +55,9 @@ const Theme = (colors: PalettesProps) => {
       A300: greyColors.A700,
       contrastText: greyColors[0]
     },
-    tertiary: {
+    blackNWhite: {
       main: '#000',
-      contrastText: '#fff',
-      name: 'tertiary'
+      contrastText: '#fff'
     },
     error: {
       lighter: red[0],
