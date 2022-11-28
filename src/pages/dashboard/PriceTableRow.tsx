@@ -32,7 +32,11 @@ const PriceTableRow = ({
   return (
     <TableRow
       onClick={handleOnClick}
-      sx={{ '&:last-child td, &:last-child th': { border: 0 }, width: '100%', cursor: 'pointer' }}
+      sx={{
+        '&:last-child td, &:last-child th': { border: 0 },
+        width: '100%',
+        cursor: IsToday || IsActive ? 'pointer' : 'default'
+      }}
       key={ProductId}>
       <TableCell align="left">
         <Typography variant="body1" color="inherit">
