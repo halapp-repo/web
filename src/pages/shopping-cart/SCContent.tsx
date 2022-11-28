@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Box, Divider, List } from '@mui/material';
 import IconFruits from '../../components/icons/IconFruits';
 import { useAppSelector } from '../../store/hooks';

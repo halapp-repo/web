@@ -11,4 +11,7 @@ export interface UIState {
   global: {
     isLoading: boolean;
   };
+  shoppingCart: {
+    isOpen: boolean;
+  };
 }

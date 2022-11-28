@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Drawer, Box } from '@mui/material';
-import MainCard from '../../components/MainCard';
+import React, { useState } from 'react';
+import { Drawer } from '@mui/material';
 import ShoppingCartContent from '../shopping-cart/SCContent';
+import { selectUIShoppingCartIsOpen, toggleShoppingCart } from '../../store/ui/uiSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 const ShoppingCartDrawer = () => {
-  const [state, setState] = useState({
-    isOpen: true
-  });
+  const dispatch = useAppDispatch();
+  const isOpen = useAppSelector(selectUIShoppingCartIsOpen);
 
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -16,16 +16,17 @@ const ShoppingCartDrawer = () => {
     ) {
       return;
     }
-    setState({ ...state, isOpen: open });
+    dispatch(toggleShoppingCart(open));
   };
+
   return (
     <>
       <Drawer
         anchor={'right'}
-        open={state.isOpen}
+        open={isOpen}
         PaperProps={{
           sx: {
-            width: '80%'
+            width: { xs: '80%', md: '50', lg: '30%' }
           }
         }}
         onClose={toggleDrawer(false)}>
