@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import MainCard from '../../components/MainCard';
-import ShoppingCartContent from '../shopping-cart/ShoppingCartContent';
+import ShoppingCartContent from '../shopping-cart/SCContent';
 
 const ShoppingCartInPage = () => {
   return (

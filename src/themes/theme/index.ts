@@ -56,8 +56,8 @@ const Theme = (colors: PalettesProps) => {
       contrastText: greyColors[0]
     },
     blackNWhite: {
-      main: '#000',
-      contrastText: '#fff'
+      main: '#051e34',
+      contrastText: '#ffc423'
     },
     error: {
       lighter: red[0],

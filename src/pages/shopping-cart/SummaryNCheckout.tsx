@@ -1,7 +1,12 @@
 import { Button, Divider, Box, Typography, useMediaQuery, Theme } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import { ShoppingCart } from '../../models/shopping-cart';
 
-const SummaryNCheckout = () => {
+interface SummaryNCheckoutProps {
+  ShoppingCart: ShoppingCart;
+}
+
+const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
   const matchesMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   const location = useLocation();
 
@@ -19,7 +24,7 @@ const SummaryNCheckout = () => {
           <strong>{'Toplam :'}</strong>
         </Typography>
         <Typography variant="body1">
-          <strong>{'XXXXX'}</strong>
+          <strong>{ShoppingCart.TotalAmount}</strong>
         </Typography>
       </Box>
       {(matchesMd || location.pathname !== '/dashboard') && (

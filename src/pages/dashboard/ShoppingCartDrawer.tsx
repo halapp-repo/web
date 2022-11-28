@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Drawer, Box } from '@mui/material';
 import MainCard from '../../components/MainCard';
-import ShoppingCartContent from '../shopping-cart/ShoppingCartContent';
+import ShoppingCartContent from '../shopping-cart/SCContent';
 
 const ShoppingCartDrawer = () => {
   const [state, setState] = useState({
