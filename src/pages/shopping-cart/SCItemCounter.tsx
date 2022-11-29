@@ -1,9 +1,9 @@
 import { Stack, Box } from '@mui/material';
 import { ShoppingOutlined } from '@ant-design/icons';
-import { ShoppingCart } from '../../models/shopping-cart';
+import { ShoppingCartDTO } from '../../models/dtos/shopping-cart.dto';
 
 interface ShoppingCartItemCounterProps {
-  ShoppingCart: ShoppingCart;
+  ShoppingCart: ShoppingCartDTO;
 }
 
 const ShoppingCartItemCounter = ({ ShoppingCart }: ShoppingCartItemCounterProps) => {

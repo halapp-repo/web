@@ -230,13 +230,11 @@ class AuthApi {
     this.baseUrl = baseUrl;
   }
   async getSignupCode(code: string): Promise<SignupCode> {
-    console.log(code);
     return await axios
       .get<SignupCodeDTO>(`/signupcode/${code}`, {
         baseURL: this.baseUrl
       })
       .then((response) => {
-        console.log(response);
         const { data } = response;
         return plainToClass(SignupCode, data);
       });

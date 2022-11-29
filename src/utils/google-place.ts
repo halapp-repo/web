@@ -35,7 +35,7 @@ class GooglePlace {
             reject('no data');
           }
           const formattedAddress = candidates[0]['formatted_address'];
-          console.log(formattedAddress);
+
           resolve({
             County: 'xx',
             City: 'xx',

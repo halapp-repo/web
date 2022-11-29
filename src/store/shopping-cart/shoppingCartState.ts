@@ -1,8 +1,5 @@
-interface ShoppingCartItem {
-  productId: string;
-  count: number;
-}
+import { ShoppingCart } from '../../models/shopping-cart';
 
 export interface ShoppingCartState {
-  items: ShoppingCartItem[];
+  cart: ShoppingCart;
 }

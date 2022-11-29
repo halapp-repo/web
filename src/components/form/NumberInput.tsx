@@ -5,9 +5,10 @@ interface NumberInputProps {
   MinNumber: number;
   MaxNumber?: number;
   Counter?: number;
+  Disabled?: boolean;
 }
 
-const NumberInput = ({ Counter, MinNumber, MaxNumber }: NumberInputProps) => {
+const NumberInput = ({ Counter, MinNumber, MaxNumber, Disabled }: NumberInputProps) => {
   const [counter, setCounter] = useState(Counter || MinNumber);
 
   const handleIncrement = () => {
@@ -32,11 +33,13 @@ const NumberInput = ({ Counter, MinNumber, MaxNumber }: NumberInputProps) => {
 
   return (
     <ButtonGroup disableElevation size="small" aria-label="small outlined button group">
-      <Button onClick={handleDecrement} color="blackNWhite">
+      <Button disabled={Disabled} onClick={handleDecrement} color="blackNWhite">
         -
       </Button>
-      <Button variant="contained">{counter}</Button>
-      <Button onClick={handleIncrement} color="blackNWhite">
+      <Button disabled={Disabled} variant="contained">
+        {counter}
+      </Button>
+      <Button disabled={Disabled} onClick={handleIncrement} color="blackNWhite">
         +
       </Button>
     </ButtonGroup>

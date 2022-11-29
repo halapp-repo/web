@@ -1,13 +1,30 @@
 import { Box, Divider, List } from '@mui/material';
 import IconFruits from '../../components/icons/IconFruits';
-import { useAppSelector } from '../../store/hooks';
-import { selectShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 import ShoppingCartListItem from './SCListItem';
 import ShoppingCartItemCounter from './SCItemCounter';
 import SummaryNCheckout from './SummaryNCheckout';
+import { useEffect } from 'react';
+import { fetchTodaysPrices, selectPricesOfToday } from '../../store/prices/pricesSlice';
+import { City } from '../../models/city';
+import { ProductType } from '../../models/product-type';
 
 const ShoppingCartContent = () => {
-  const shoppingCart = useAppSelector(selectShoppingCart);
+  const shoppingCart = useAppSelector(selectEnhancedShoppingCart);
+  const todaysPrices = useAppSelector(selectPricesOfToday);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!todaysPrices) {
+      dispatch(
+        fetchTodaysPrices({
+          location: City.istanbul,
+          type: ProductType.produce
+        })
+      );
+    }
+  }, []);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
