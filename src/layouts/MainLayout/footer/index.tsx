@@ -14,11 +14,11 @@ const Footer = () => {
             direction={'row'}
             spacing={1}
             justifyContent="center"
-            sx={{ alignItems: 'normal' }}>
+            sx={{ alignItems: 'center' }}>
             <Typography variant="body1" color="text.secondary">
               {`© ${year} `}
             </Typography>
-            <LogoText />
+            <LogoText sx={{ marginTop: '3px !important' }} />
           </Stack>
         </Grid>
         <Grid

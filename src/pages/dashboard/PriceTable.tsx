@@ -8,7 +8,8 @@ import {
 import { selectProducts } from '../../store/inventories/inventoriesSlice';
 import {
   selectUIListingSelectedDate,
-  selectUIListingProductNameFilter
+  selectUIListingProductNameFilter,
+  updateListingSelectedDate
 } from '../../store/ui/uiSlice';
 import {
   Box,
@@ -66,7 +67,7 @@ const PriceTable = () => {
 
   useEffect(() => {
     if (!selectedDate) {
-      return;
+      dispatch(updateListingSelectedDate());
     }
     if (!selectedDatePrices) {
       dispatch(

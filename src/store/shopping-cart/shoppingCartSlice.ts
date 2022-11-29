@@ -11,32 +11,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
   cart: {
-    Items: [
-      {
-        ProductId: 'GRSB1001',
-        Count: 2
-      },
-      {
-        ProductId: 'GPER1002',
-        Count: 3
-      },
-      {
-        ProductId: 'GPPP1004',
-        Count: 7
-      },
-      {
-        ProductId: 'GPPP1004',
-        Count: 7
-      },
-      {
-        ProductId: 'GPPP1004',
-        Count: 7
-      },
-      {
-        ProductId: 'GPPP1004',
-        Count: 7
-      }
-    ]
+    Items: []
   }
 } as ShoppingCartState;
 
@@ -63,11 +38,36 @@ const ShoppingCartSlice = createSlice({
           return i;
         })
       };
+    },
+    addCartItem: (state: ShoppingCartState, action: PayloadAction<string>) => {
+      const item = state.cart.Items.find((i) => i.ProductId === action.payload);
+      if (item) {
+        state.cart = {
+          ...state.cart,
+          Items: [...(state.cart.Items || [])].map((i) => {
+            if (i.ProductId === action.payload) {
+              i.Count = i.Count + 1;
+            }
+            return i;
+          })
+        };
+      } else {
+        state.cart = {
+          ...state.cart,
+          Items: [
+            {
+              ProductId: action.payload,
+              Count: 1
+            },
+            ...(state.cart.Items || [])
+          ]
+        };
+      }
     }
   }
 });
 
-export const { removeCartItem, updateCartItemCount } = ShoppingCartSlice.actions;
+export const { removeCartItem, updateCartItemCount, addCartItem } = ShoppingCartSlice.actions;
 
 export const selectShoppingCart = createSelector(
   [(state: RootState) => state.shoppingCart],

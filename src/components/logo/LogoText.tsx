@@ -5,9 +5,10 @@ type LogoSize = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
 interface LogoProps {
   Size?: LogoSize;
+  sx?: object;
 }
 
-const LogoText = ({ Size }: LogoProps) => {
+const LogoText = ({ Size, sx }: LogoProps) => {
   let logoSize = '2em';
   switch (Size) {
     case 'x-small':
@@ -34,7 +35,7 @@ const LogoText = ({ Size }: LogoProps) => {
     <SvgIcon
       viewBox="0 0 249 81.6"
       preserveAspectRatio="xMidYMid meet"
-      sx={{ display: 'flex', width: logoSize, height: 'auto' }}>
+      sx={{ display: 'flex', width: logoSize, height: 'auto', ...(sx || {}) }}>
       <LogoContent />
     </SvgIcon>
   );
