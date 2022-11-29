@@ -1,6 +1,6 @@
 import { Button, Divider, Box, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import { ShoppingCartDTO } from '../../models/dtos/shopping-cart.dto';
+import { ShoppingCartDTO } from '../../models/dtos/shopping-cart-list-item.dto';
 
 interface SummaryNCheckoutProps {
   ShoppingCart: ShoppingCartDTO;

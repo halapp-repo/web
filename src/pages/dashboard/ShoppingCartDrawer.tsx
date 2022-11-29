@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Drawer } from '@mui/material';
 import ShoppingCartContent from '../shopping-cart/SCContent';
 import { selectUIShoppingCartIsOpen, toggleShoppingCart } from '../../store/ui/uiSlice';

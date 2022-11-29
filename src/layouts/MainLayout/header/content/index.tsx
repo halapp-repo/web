@@ -5,7 +5,7 @@ import LogoText from '../../../../components/logo/LogoText';
 import NavigationButtons from './NavigationButtons';
 
 const HeaderContent = () => {
-  const matchesMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+  const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   return (
     <>
@@ -16,11 +16,15 @@ const HeaderContent = () => {
           return (
             <Stack direction={'row'}>
               <Logo />
+              {matchesSm || (
+                <Box sx={{ mt: '15px' }}>
+                  <LogoText Size="medium" />
+                </Box>
+              )}
             </Stack>
           );
         }}
       />
-      {matchesMd || <LogoText Size="medium" />}
       <Box sx={{ width: '100%', ml: 1 }} />
       <NavigationButtons />
     </>

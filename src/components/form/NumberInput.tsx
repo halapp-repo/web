@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { ButtonGroup, Button } from '@mui/material';
 
 interface NumberInputProps {
@@ -6,10 +6,23 @@ interface NumberInputProps {
   MaxNumber?: number;
   Counter?: number;
   Disabled?: boolean;
+  CounterText?: (counter: number) => string | ReactElement;
+  OnUpdateCounter: (counter: number) => void;
 }
 
-const NumberInput = ({ Counter, MinNumber, MaxNumber, Disabled }: NumberInputProps) => {
+const NumberInput = ({
+  Counter,
+  MinNumber,
+  MaxNumber,
+  Disabled,
+  CounterText,
+  OnUpdateCounter
+}: NumberInputProps) => {
   const [counter, setCounter] = useState(Counter || MinNumber);
+
+  useEffect(() => {
+    OnUpdateCounter(counter);
+  }, [counter]);
 
   const handleIncrement = () => {
     setCounter((prev) => {
@@ -37,7 +50,7 @@ const NumberInput = ({ Counter, MinNumber, MaxNumber, Disabled }: NumberInputPro
         -
       </Button>
       <Button disabled={Disabled} variant="contained">
-        {counter}
+        {CounterText ? CounterText(counter) : counter}
       </Button>
       <Button disabled={Disabled} onClick={handleIncrement} color="blackNWhite">
         +

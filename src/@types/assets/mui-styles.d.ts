@@ -1,5 +1,4 @@
 import { PaletteColorOptions } from '@mui/material';
-import { ButtonPropsColorOverrides } from '@mui/material';
 
 declare module '@mui/material/styles' {
   interface PaletteOptions {

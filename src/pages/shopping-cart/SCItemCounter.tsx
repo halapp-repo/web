@@ -1,6 +1,6 @@
 import { Stack, Box } from '@mui/material';
 import { ShoppingOutlined } from '@ant-design/icons';
-import { ShoppingCartDTO } from '../../models/dtos/shopping-cart.dto';
+import { ShoppingCartDTO } from '../../models/dtos/shopping-cart-list-item.dto';
 
 interface ShoppingCartItemCounterProps {
   ShoppingCart: ShoppingCartDTO;

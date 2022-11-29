@@ -4,6 +4,8 @@ import type { RootState } from '../index';
 import { Price } from '../../models/price';
 import { PricesApi } from './pricesApi';
 import { trMoment } from '../../utils/timezone';
+import { PriceListItemDTO } from '../../models/dtos/price-list-item.dto';
+import { plainToInstance } from 'class-transformer';
 
 const initialState = {
   data: {},
@@ -74,5 +76,24 @@ export const selectPricesOfToday = createSelector(
   (prices) => {
     return prices[trMoment().format('YYYY-MM-DD')];
   }
+);
+export const selectPriceListItemsOfSelectedDate = createSelector(
+  [
+    (state: RootState) => state.prices.data,
+    (state: RootState) => state.inventories.inventories,
+    (state: RootState) => state.ui.listing.selectedDate
+  ],
+  (prices, inventories, selectedDate) =>
+    prices[selectedDate]?.map<PriceListItemDTO>((p) =>
+      plainToInstance(PriceListItemDTO, {
+        IsToday: p.IsToday || false,
+        Price: p.Price,
+        ProductId: p.ProductId,
+        ProductName: inventories?.find((i) => i.ProductId == p.ProductId)?.Name || p.ProductId,
+        Unit: p.Unit,
+        Increase: p.Increase || 0,
+        IsActive: p.IsActive || false
+      })
+    )
 );
 export default PricesSlice.reducer;

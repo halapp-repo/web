@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import MainCard from '../../components/MainCard';
 import ShoppingCartContent from '../shopping-cart/SCContent';
 

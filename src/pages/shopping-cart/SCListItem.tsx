@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 import { DeleteOutlined } from '@ant-design/icons';
 import { NumberInput } from '../../components/form/NumberInput';
-import { ShoppingCartItemDTO } from '../../models/dtos/shopping-cart.dto';
+import { ShoppingCartListItemDTO } from '../../models/dtos/shopping-cart-list-item.dto';
 import { useAppDispatch } from '../../store/hooks';
-import { removeCartItem } from '../../store/shopping-cart/shoppingCartSlice';
+import { removeCartItem, updateCartItemCount } from '../../store/shopping-cart/shoppingCartSlice';
 
 interface ShoppingCartItemProps {
-  Item: ShoppingCartItemDTO;
+  Item: ShoppingCartListItemDTO;
 }
 
 const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
@@ -23,6 +23,14 @@ const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
 
   const handleDeleteCartItem = (productId: string) => {
     dispatch(removeCartItem(productId));
+  };
+  const handleUpdateCounter = (counter: number, productId: string) => {
+    dispatch(
+      updateCartItemCount({
+        Count: counter,
+        ProductId: productId
+      })
+    );
   };
 
   return (
@@ -39,7 +47,20 @@ const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
         secondary={
           <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <NumberInput Disabled={!active} MinNumber={1} Counter={Item.Count} />
+              <NumberInput
+                Disabled={!active}
+                MinNumber={1}
+                Counter={Item.Count}
+                CounterText={(counter: number) => (
+                  <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: '5px' }}>
+                    <Typography>{`${counter}`}</Typography>
+                    <Typography variant="subtitle2">{`${Item.Unit}`}</Typography>
+                  </Box>
+                )}
+                OnUpdateCounter={(counter) => {
+                  handleUpdateCounter(counter, Item.ProductId);
+                }}
+              />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Stack direction={'row'} spacing={1}>
