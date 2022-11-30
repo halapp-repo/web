@@ -10,12 +10,15 @@ import {
 } from '@mui/material';
 import { Organization } from '../../../models/organization';
 import { UserOutlined } from '@ant-design/icons';
+import { useAppSelector } from '../../../store/hooks';
+import { selectUserAuth } from '../../../store/auth/authSlice';
 
 interface OrganizationListItemProps {
   Organization: Organization;
 }
 
 const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
+  const userAuth = useAppSelector(selectUserAuth);
   return (
     <ListItem>
       <ListItemText
@@ -58,9 +61,11 @@ const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
       />
       <ListItemSecondaryAction>
         <Stack direction={'column'} spacing={1}>
-          <Button variant="outlined" size="small" color="blackNWhite">
-            {'Activate'}
-          </Button>
+          {userAuth.isAdmin && (
+            <Button variant="outlined" size="small" color="blackNWhite">
+              {'Activate'}
+            </Button>
+          )}
           <Button variant="outlined" size="small" color="blackNWhite">
             {'Düzenle'}
           </Button>
