@@ -8,12 +8,37 @@ import { InventoriesState } from '../inventories/inventoriesState';
 import { selectPricesOfToday } from '../prices/pricesSlice';
 import { ShoppingCartState } from './shoppingCartState';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { UserSessionLS } from '../auth/authSlice';
 
 const initialState = {
   cart: {
     Items: []
   }
 } as ShoppingCartState;
+
+const saveToLC = (cart: ShoppingCart) => {
+  const rawUserSession = localStorage.getItem(UserSessionLS);
+  if (rawUserSession) {
+    let userSession = JSON.parse(rawUserSession);
+    userSession = {
+      ...userSession,
+      cart
+    };
+    localStorage.setItem(UserSessionLS, JSON.stringify(userSession));
+  }
+};
+const getFromLC = (): ShoppingCart | null => {
+  const rawUserSession = localStorage.getItem(UserSessionLS);
+  if (rawUserSession) {
+    const userSession = JSON.parse(rawUserSession);
+    if (userSession.cart) {
+      return userSession.cart as ShoppingCart;
+    } else {
+      return null;
+    }
+  }
+  return null;
+};
 
 const ShoppingCartSlice = createSlice({
   name: 'shopping-cart',
@@ -24,6 +49,7 @@ const ShoppingCartSlice = createSlice({
         ...state.cart,
         Items: [...(state.cart.Items || [])].filter((i) => i.ProductId !== action.payload)
       };
+      saveToLC(state.cart);
     },
     updateCartItemCount: (
       state: ShoppingCartState,
@@ -38,6 +64,7 @@ const ShoppingCartSlice = createSlice({
           return i;
         })
       };
+      saveToLC(state.cart);
     },
     addCartItem: (state: ShoppingCartState, action: PayloadAction<string>) => {
       const item = state.cart.Items.find((i) => i.ProductId === action.payload);
@@ -63,11 +90,22 @@ const ShoppingCartSlice = createSlice({
           ]
         };
       }
+      saveToLC(state.cart);
+    },
+    fetchCartItem: (state: ShoppingCartState) => {
+      const cart = getFromLC();
+      if (cart) {
+        state.cart = {
+          ...cart,
+          Items: [...(cart.Items || [])]
+        };
+      }
     }
   }
 });
 
-export const { removeCartItem, updateCartItemCount, addCartItem } = ShoppingCartSlice.actions;
+export const { removeCartItem, updateCartItemCount, addCartItem, fetchCartItem } =
+  ShoppingCartSlice.actions;
 
 export const selectShoppingCart = createSelector(
   [(state: RootState) => state.shoppingCart],

@@ -1,5 +1,4 @@
 import { Box, Divider, List } from '@mui/material';
-import IconFruits from '../../components/icons/IconFruits';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 import ShoppingCartListItem from './SCListItem';
@@ -9,6 +8,7 @@ import { useEffect } from 'react';
 import { fetchTodaysPrices, selectPricesOfToday } from '../../store/prices/pricesSlice';
 import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type';
+import ShoppingCartEmptyListContent from './SCEmptyListContent';
 
 const ShoppingCartContent = () => {
   const shoppingCart = useAppSelector(selectEnhancedShoppingCart);
@@ -48,9 +48,10 @@ const ShoppingCartContent = () => {
             })}
           </List>
         ) : (
-          <IconFruits Size="large" />
+          <ShoppingCartEmptyListContent />
         )}
       </Box>
+
       <Box sx={{ p: '16px' }}>
         <SummaryNCheckout ShoppingCart={shoppingCart} />
       </Box>

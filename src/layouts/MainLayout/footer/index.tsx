@@ -1,5 +1,5 @@
 import { InstagramOutlined } from '@ant-design/icons';
-import { Box, Grid, Typography, IconButton, Stack } from '@mui/material';
+import { Box, Grid, Typography, IconButton, Stack, Button, Link } from '@mui/material';
 import { useMemo } from 'react';
 import moment from 'moment';
 import LogoText from '../../../components/logo/LogoText';
@@ -37,9 +37,11 @@ const Footer = () => {
             </Typography>
           </Box>
           <Box>
-            <Typography variant="body1" color="text.secondary">
-              <a href="mailto: info@halapp.io">{`info@halapp.io`}</a>
-            </Typography>
+            <Button color="primary" href="mailto: info@halapp.io" component={Link}>
+              <Typography variant="body1" color="text.secondary">
+                {`info@halapp.io`}
+              </Typography>
+            </Button>
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'center' }}>

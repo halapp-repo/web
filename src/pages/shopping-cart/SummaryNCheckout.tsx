@@ -31,7 +31,7 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
           {'Continue shopping'}
         </Button>
       )}
-      <Button sx={{ width: '100%' }} variant="contained">
+      <Button sx={{ width: '100%' }} variant="contained" disabled={ShoppingCart.Items.length === 0}>
         {'Checkout'}
       </Button>
     </>

@@ -17,7 +17,7 @@ import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
 import { SignupCode } from '../../models/signup-code';
 
-const CognitoUserLS = 'cognitouser';
+export const UserSessionLS = 'usersession';
 
 const defaultUserAuth: UserAuth = {
   id: '',
@@ -80,7 +80,7 @@ export const signIn = createAsyncThunk<AuthResponseDTO | null, { email: string; 
       const userAttr = await getUserAttributesFunc(response.user);
 
       localStorage.setItem(
-        CognitoUserLS,
+        UserSessionLS,
         JSON.stringify({ email: userAttr.Email, id: userAttr.ID, isAdmin: userAttr.IsAdmin })
       );
       return <AuthResponseDTO>{
@@ -105,29 +105,24 @@ export const signIn = createAsyncThunk<AuthResponseDTO | null, { email: string; 
 
 export const signOut = createAsyncThunk('auth/signout', async () => {
   await signOutFunc();
-  localStorage.removeItem(CognitoUserLS);
+  localStorage.removeItem(UserSessionLS);
 });
 
 export const getSession = createAsyncThunk<AuthResponseDTO>(
   'auth/getCognitoUserSession',
   async () => {
-    try {
-      const session = await getSessionFunc();
-      return {
-        IdToken: session.idToken,
-        AccessToken: session.accessToken
-      };
-    } catch (err) {
-      localStorage.removeItem(CognitoUserLS);
-      throw err;
-    }
+    const session = await getSessionFunc();
+    return {
+      IdToken: session.idToken,
+      AccessToken: session.accessToken
+    };
   }
 );
 
 export const getCognitoUser = createAsyncThunk<AuthResponseDTO | null>(
   'auth/getCognitoUser',
   async () => {
-    const rawCognitoUser = localStorage.getItem(CognitoUserLS);
+    const rawCognitoUser = localStorage.getItem(UserSessionLS);
     if (rawCognitoUser) {
       const { email, id, isAdmin } = JSON.parse(rawCognitoUser);
       return {

@@ -117,6 +117,10 @@ const signIn = (email: string, password: string): Promise<ISignInResponse> => {
   });
 };
 
+const getCurrentUser = (): CognitoUser | null => {
+  return cognitoUserPool.getCurrentUser();
+};
+
 const signOut = () => {
   const user = cognitoUserPool.getCurrentUser();
   if (user) {
@@ -251,5 +255,6 @@ export {
   forgotPassword,
   confirmPassword,
   getUserAttributes,
-  AuthApi
+  AuthApi,
+  getCurrentUser
 };
