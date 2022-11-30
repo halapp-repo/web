@@ -4,6 +4,7 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useAppSelector, useAppDispatch } from '../../../../../store/hooks';
 import { selectShoppingCart } from '../../../../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../../../../store/ui/uiSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -16,10 +17,16 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 
 const ShoppingCartNavButton = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const theme = useTheme();
   const shoppingCart = useAppSelector(selectShoppingCart);
   const handleShoppingCartClicked = () => {
-    dispatch(toggleShoppingCart());
+    if (location.pathname !== '/dashboard') {
+      navigate('/shopping-cart');
+    } else {
+      dispatch(toggleShoppingCart());
+    }
   };
 
   return (

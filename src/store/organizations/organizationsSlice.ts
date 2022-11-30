@@ -8,7 +8,9 @@ import { plainToClass } from 'class-transformer';
 import { AxiosError } from 'axios';
 
 const initialState = {
-  Organizations: [],
+  Organizations: {
+    IsLoading: false
+  },
   Enrollment: undefined
 } as OrganizationsState;
 
@@ -51,7 +53,24 @@ const OrganizationsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchOrganizations.fulfilled, (state, action) => {
       const data = action.payload;
-      state.Organizations = [...(data || [])];
+      state.Organizations = {
+        ...state.Organizations,
+        List: [...(data || [])],
+        IsLoading: false
+      };
+    });
+    builder.addCase(fetchOrganizations.pending, (state) => {
+      state.Organizations = {
+        ...state.Organizations,
+        IsLoading: true
+      };
+    });
+    builder.addCase(fetchOrganizations.rejected, (state) => {
+      state.Organizations = {
+        ...state.Organizations,
+        List: [],
+        IsLoading: false
+      };
     });
     builder.addCase(createOrganizationEnrollmentRequest.fulfilled, (state, action) => {
       state.Enrollment = {

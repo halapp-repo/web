@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Box, Stack } from '@mui/material';
+import { List, CircularProgress, Box, Typography, Divider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import {
   selectOrganizations
 } from '../../../store/organizations/organizationsSlice';
 import PageWrapper from '../../../components/PageWrapper';
+import MainCard from '../../../components/MainCard';
 import { OrganizationListItem } from './OrganizationListItem';
 
 const OrganizationList = () => {
@@ -19,22 +20,44 @@ const OrganizationList = () => {
     if (!userAuth.authenticated) {
       navigate('/auth/signin');
     } else {
-      dispatch(fetchOrganizations());
+      if (!organizations?.List) {
+        dispatch(fetchOrganizations());
+      }
     }
   }, [userAuth]);
 
   return (
-    <Box>
-      <PageWrapper md={6}>
-        <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 } }}>
-          <Stack spacing={2}>
-            {organizations?.map((o) => (
-              <OrganizationListItem key={o.ID} organization={o} />
+    <PageWrapper md={6} lg={4}>
+      <MainCard>
+        <List
+          subheader={
+            <Box
+              sx={{
+                padding: '8px 16px 8px 16px',
+                color: '#ffc423',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: '20px'
+              }}>
+              <Typography>{'🏪 Sirketlerim'}</Typography>
+            </Box>
+          }>
+          {organizations?.IsLoading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
+          )}
+          {organizations?.IsLoading ||
+            organizations?.List?.map((i) => (
+              <>
+                <Divider />
+                <OrganizationListItem Organization={i} key={i.ID} />
+              </>
             ))}
-          </Stack>
-        </Box>
-      </PageWrapper>
-    </Box>
+        </List>
+      </MainCard>
+    </PageWrapper>
   );
 };
 

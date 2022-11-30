@@ -8,13 +8,8 @@ interface ShoppingCartItemCounterProps {
 
 const ShoppingCartItemCounter = ({ ShoppingCart }: ShoppingCartItemCounterProps) => {
   return (
-    <Stack
-      direction={'row'}
-      spacing={2}
-      sx={{ padding: '8px 16px 8px 16px', bgcolor: '#051e34', color: '#ffc423' }}>
-      <Box>
-        <ShoppingOutlined />
-      </Box>
+    <Stack direction={'row'} spacing={2} sx={{ padding: '8px 16px 8px 16px', color: '#ffc423' }}>
+      <Box>🧺</Box>
       <Box>{`Ürün sayısı ${ShoppingCart.Items.length}`}</Box>
     </Stack>
   );

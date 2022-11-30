@@ -7,6 +7,9 @@ interface Enrollment {
 }
 
 export interface OrganizationsState {
-  Organizations?: Organization[] | null;
+  Organizations?: {
+    List?: Organization[];
+    IsLoading: boolean;
+  };
   Enrollment?: Enrollment | undefined;
 }

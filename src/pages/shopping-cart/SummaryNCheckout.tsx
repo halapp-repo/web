@@ -1,5 +1,5 @@
 import { Button, Divider, Box, Typography } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingCartDTO } from '../../models/dtos/shopping-cart-list-item.dto';
 
 interface SummaryNCheckoutProps {
@@ -8,6 +8,7 @@ interface SummaryNCheckoutProps {
 
 const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -27,8 +28,12 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
         </Typography>
       </Box>
       {location.pathname !== '/dashboard' && (
-        <Button sx={{ width: '100%', marginBottom: '5px' }} variant="outlined">
-          {'Continue shopping'}
+        <Button
+          sx={{ width: '100%', marginBottom: '5px' }}
+          variant="outlined"
+          color="blackNWhite"
+          onClick={() => navigate('/dashboard')}>
+          {'Alışverişe devam et'}
         </Button>
       )}
       <Button sx={{ width: '100%' }} variant="contained" disabled={ShoppingCart.Items.length === 0}>

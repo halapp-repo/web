@@ -1,7 +1,15 @@
-import { Box } from '@mui/material';
+import MainCard from '../../components/MainCard';
+import PageWrapper from '../../components/PageWrapper';
+import ShoppingCartContent from './SCContent';
 
 const ShoppingCart = () => {
-  return <Box>{'XXX'} </Box>;
+  return (
+    <PageWrapper md={6} lg={4}>
+      <MainCard>
+        <ShoppingCartContent />
+      </MainCard>
+    </PageWrapper>
+  );
 };
 
 export default ShoppingCart;
