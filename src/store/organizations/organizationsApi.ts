@@ -40,4 +40,38 @@ export class OrganizationsApi {
         return this.mapper.toListModel(data);
       });
   }
+  async fetchAllOrganizations({ token }: { token: string }): Promise<Organization[]> {
+    return await axios
+      .get<OrganizationDTO[]>('/admin/organizations', {
+        baseURL: this.baseUrl,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then((response) => {
+        const { data } = response;
+        return this.mapper.toListModel(data);
+      });
+  }
+  async toggleOrganizationActivation({
+    isActive,
+    organizationId,
+    token
+  }: {
+    isActive: boolean;
+    organizationId: string;
+    token: string;
+  }): Promise<void> {
+    return await axios.put(
+      `/admin/organization/${organizationId}`,
+      { IsActive: isActive },
+      {
+        baseURL: this.baseUrl,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
 }

@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { List, CircularProgress, Box, Typography, Divider } from '@mui/material';
+import { List, CircularProgress, Box, Typography, Divider, Button } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import {
+  fetchAllOrganizations,
   fetchOrganizations,
   selectOrganizations
 } from '../../../store/organizations/organizationsSlice';
@@ -26,6 +27,10 @@ const OrganizationList = () => {
     }
   }, [userAuth]);
 
+  const handleFetchAllOrganizations = () => {
+    dispatch(fetchAllOrganizations());
+  };
+
   return (
     <PageWrapper md={6} lg={4}>
       <MainCard>
@@ -40,7 +45,17 @@ const OrganizationList = () => {
                 alignItems: 'center',
                 marginBottom: '20px'
               }}>
-              <Typography>{'🏪 Sirketlerim'}</Typography>
+              {userAuth.isAdmin ? (
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="admin"
+                  onClick={handleFetchAllOrganizations}>
+                  {'Fetch all organizations'}
+                </Button>
+              ) : (
+                <Typography>{'🏪 Sirketlerim'}</Typography>
+              )}
             </Box>
           }>
           {organizations?.IsLoading && (

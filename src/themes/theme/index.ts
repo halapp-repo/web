@@ -59,6 +59,10 @@ const Theme = (colors: PalettesProps) => {
       main: '#051e34',
       contrastText: '#ffc423'
     },
+    admin: {
+      main: '#8753de',
+      contrastText: '#fff'
+    },
     error: {
       lighter: red[0],
       light: red[2],

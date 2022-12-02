@@ -10,8 +10,9 @@ import {
 } from '@mui/material';
 import { Organization } from '../../../models/organization';
 import { UserOutlined } from '@ant-design/icons';
-import { useAppSelector } from '../../../store/hooks';
+import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
+import { toggleOrganizationActivation } from '../../../store/organizations/organizationsSlice';
 
 interface OrganizationListItemProps {
   Organization: Organization;
@@ -19,6 +20,13 @@ interface OrganizationListItemProps {
 
 const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
   const userAuth = useAppSelector(selectUserAuth);
+  const dispatch = useAppDispatch();
+
+  const toggleOrganizatinActivation = () => {
+    Organization.Active = !Organization.Active;
+    dispatch(toggleOrganizationActivation(Organization));
+  };
+
   return (
     <ListItem>
       <ListItemText
@@ -62,8 +70,12 @@ const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
       <ListItemSecondaryAction>
         <Stack direction={'column'} spacing={1}>
           {userAuth.isAdmin && (
-            <Button variant="outlined" size="small" color="blackNWhite">
-              {'Activate'}
+            <Button
+              variant="contained"
+              size="small"
+              color="admin"
+              onClick={toggleOrganizatinActivation}>
+              {Organization.Active ? 'Deactivate' : 'Activate'}
             </Button>
           )}
           <Button variant="outlined" size="small" color="blackNWhite">
