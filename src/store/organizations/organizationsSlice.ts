@@ -177,6 +177,22 @@ export const selectOrganizations = createSelector(
   [(state: RootState) => state.organizations],
   (org: OrganizationsState) => org.Organizations
 );
+export const selectIndividualOrganization = createSelector(
+  [
+    (state: RootState) => state.organizations,
+    (state: RootState, orgId?: string): string | undefined => orgId
+  ],
+  (org: OrganizationsState, orgId?: string) => {
+    if (orgId) {
+      const organization = org.Organizations?.List?.find((o) => o.ID === orgId);
+      if (!organization) {
+        return null;
+      }
+      return organization;
+    }
+    return null;
+  }
+);
 
 export const selectOrganizationEnrollment = createSelector(
   [(state: RootState) => state.organizations],

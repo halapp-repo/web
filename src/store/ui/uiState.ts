@@ -10,6 +10,7 @@ export interface UIState {
   };
   global: {
     isLoading: boolean;
+    disableToolbarGutters: boolean;
   };
   shoppingCart: {
     isOpen: boolean;

@@ -82,11 +82,13 @@ const PriceDialog = ({ ProductId, Location, Type, CloseAnalyticsPanel }: PriceDi
             top: '50px',
             display: 'flex'
           }}>
-          <Typography variant="h3" color="text.secondary" fontWeight="bold">
-            ₺{currentPrice}
-          </Typography>
+          {currentPrice && (
+            <Typography variant="h3" color="text.secondary" fontWeight="bold">
+              ₺{currentPrice}
+            </Typography>
+          )}
           <span>&nbsp;</span>
-          {dailyPriceIncrease !== 0 && (
+          {dailyPriceIncrease && dailyPriceIncrease !== 0 && (
             <Typography
               variant="body2"
               color={dailyPriceIncrease > 0 ? 'success.main' : 'error.main'}

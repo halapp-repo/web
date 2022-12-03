@@ -21,7 +21,8 @@ const initialState = {
     sessionLoading: true
   },
   global: {
-    isLoading: false
+    isLoading: false,
+    disableToolbarGutters: false
   },
   shoppingCart: {
     isOpen: false
@@ -57,6 +58,9 @@ const UISlice = createSlice({
       } else {
         state.shoppingCart.isOpen = action.payload;
       }
+    },
+    toggleDisableToolbarGutter: (state: UIState, action: PayloadAction<boolean>) => {
+      state.global.disableToolbarGutters = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -99,8 +103,12 @@ const UISlice = createSlice({
   }
 });
 
-export const { updateListingSelectedDate, updateListingProductNameFilter, toggleShoppingCart } =
-  UISlice.actions;
+export const {
+  updateListingSelectedDate,
+  updateListingProductNameFilter,
+  toggleShoppingCart,
+  toggleDisableToolbarGutter
+} = UISlice.actions;
 export const selectUIListingSelectedDate = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.listing.selectedDate
@@ -128,6 +136,10 @@ export const selectUIGlobalLoading = createSelector(
 export const selectUIShoppingCartIsOpen = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.shoppingCart.isOpen
+);
+export const selectUIGlobalToolbarGutter = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.global.disableToolbarGutters
 );
 
 export default UISlice.reducer;

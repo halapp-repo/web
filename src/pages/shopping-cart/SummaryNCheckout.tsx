@@ -10,6 +10,10 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const checkout = () => {
+    console.log('xxx');
+  };
+
   return (
     <>
       <Divider sx={{ marginBottom: '10px' }} />
@@ -36,8 +40,12 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
           {'Alışverişe devam et'}
         </Button>
       )}
-      <Button sx={{ width: '100%' }} variant="contained" disabled={ShoppingCart.Items.length === 0}>
-        {'Checkout'}
+      <Button
+        sx={{ width: '100%' }}
+        variant="contained"
+        disabled={ShoppingCart.Items.length === 0}
+        onClick={checkout}>
+        {'Teslim et'}
       </Button>
     </>
   );

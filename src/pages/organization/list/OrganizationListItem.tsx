@@ -13,6 +13,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { toggleOrganizationActivation } from '../../../store/organizations/organizationsSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface OrganizationListItemProps {
   Organization: Organization;
@@ -21,6 +22,7 @@ interface OrganizationListItemProps {
 const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
   const userAuth = useAppSelector(selectUserAuth);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const toggleOrganizatinActivation = () => {
     Organization.Active = !Organization.Active;
@@ -28,7 +30,11 @@ const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
   };
 
   return (
-    <ListItem>
+    <ListItem
+      button
+      onClick={() => {
+        navigate(`/organization/${Organization.ID}`);
+      }}>
       <ListItemText
         inset={false}
         primary={
@@ -78,9 +84,6 @@ const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
               {Organization.Active ? 'Deactivate' : 'Activate'}
             </Button>
           )}
-          <Button variant="outlined" size="small" color="blackNWhite">
-            {'Düzenle'}
-          </Button>
         </Stack>
       </ListItemSecondaryAction>
     </ListItem>
