@@ -72,7 +72,6 @@ const AddressField: React.FC<
     autoCompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, options);
     autoCompleteRef.current.addListener('place_changed', async function () {
       const place = await autoCompleteRef.current.getPlace();
-      console.log({ place });
       form.setFieldValue(field.name, place.formatted_address);
       const parsedAddress = parsePlace(place);
       if (parsedAddress && onPlaceChanged) {

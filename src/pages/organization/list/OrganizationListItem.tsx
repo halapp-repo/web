@@ -1,60 +1,92 @@
-import { Box, Stack, Typography, useMediaQuery, Theme, Avatar, Grid } from '@mui/material';
-import IconCompany from '../../../components/icons/IconCompany';
+import {
+  Box,
+  Stack,
+  Typography,
+  Chip,
+  Button,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction
+} from '@mui/material';
 import { Organization } from '../../../models/organization';
-import { stringToHslColor } from '../../../utils/avatar';
+import { UserOutlined } from '@ant-design/icons';
+import { useAppSelector, useAppDispatch } from '../../../store/hooks';
+import { selectUserAuth } from '../../../store/auth/authSlice';
+import { toggleOrganizationActivation } from '../../../store/organizations/organizationsSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface OrganizationListItemProps {
-  organization: Organization;
+  Organization: Organization;
 }
 
-const OrganizationListItem = ({ organization }: OrganizationListItemProps) => {
-  const matchesMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
+  const userAuth = useAppSelector(selectUserAuth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const toggleOrganizatinActivation = () => {
+    Organization.Active = !Organization.Active;
+    dispatch(toggleOrganizationActivation(Organization));
+  };
+
   return (
-    <Box>
-      <Grid container direction="row" spacing={2}>
-        {matchesMd || (
-          <Grid item>
-            <IconCompany Size="medium" />
-          </Grid>
-        )}
-        <Grid item xs={6}>
-          <Stack spacing={1}>
-            <Typography variant="h3" color="text.primary">
-              {organization.Name}
-            </Typography>
-            <Box>
-              <Typography variant="h6" color="text.secondary">
-                {organization.CompanyAddress?.AddressLine}
-              </Typography>
-              <Typography variant="h6" color="text.secondary">
-                {`${organization.CompanyAddress?.County} ${organization.CompanyAddress?.City} ${organization.CompanyAddress?.ZipCode} ${organization.CompanyAddress?.Country}`}
-              </Typography>
-            </Box>
-            <Box>
-              <Stack direction="row" spacing={1}>
-                {organization.JoinedUsers?.map((u) => {
-                  return (
-                    <Avatar
-                      key={u.ID}
-                      alt={u.Email}
-                      sx={{
-                        width: 20,
-                        height: 20,
-                        bgcolor: stringToHslColor(`${u.Email}`, 80, 50)
-                      }}>
-                      {`${u.Email[0]}`}
-                    </Avatar>
-                  );
-                })}
-              </Stack>
-            </Box>
+    <ListItem
+      button
+      onClick={() => {
+        navigate(`/organization/${Organization.ID}`);
+      }}>
+      <ListItemText
+        inset={false}
+        primary={
+          <Stack direction={'row'} spacing={2}>
+            <Typography variant="h4">{Organization.Name}</Typography>
+            {Organization.Active ? (
+              <Chip
+                sx={{ borderRadius: '2em' }}
+                label="Aktif"
+                size="small"
+                color="success"
+                variant="outlined"
+              />
+            ) : (
+              <Chip
+                sx={{ borderRadius: '2em' }}
+                label="Etkin değil"
+                size="small"
+                color="error"
+                variant="outlined"
+              />
+            )}
           </Stack>
-        </Grid>
-        <Grid item sx={{ marginLeft: 'auto' }}>
-          {organization.CreatedDate?.format('DD-MM-YYYY')}
-        </Grid>
-      </Grid>
-    </Box>
+        }
+        secondary={
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="body2">{Organization.CompanyAddress?.AddressLine}</Typography>
+            <Typography variant="body2">
+              {`${Organization.CompanyAddress?.County} ${Organization.CompanyAddress?.City} ${Organization.CompanyAddress?.ZipCode} ${Organization.CompanyAddress?.Country}`}{' '}
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row', marginTop: '10px', gap: '10px' }}>
+              <Box>
+                <UserOutlined /> {Organization.JoinedUsers?.length || 0}
+              </Box>
+            </Box>
+          </Box>
+        }
+      />
+      <ListItemSecondaryAction>
+        <Stack direction={'column'} spacing={1}>
+          {userAuth.isAdmin && (
+            <Button
+              variant="contained"
+              size="small"
+              color="admin"
+              onClick={toggleOrganizatinActivation}>
+              {Organization.Active ? 'Deactivate' : 'Activate'}
+            </Button>
+          )}
+        </Stack>
+      </ListItemSecondaryAction>
+    </ListItem>
   );
 };
 

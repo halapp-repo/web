@@ -7,4 +7,5 @@ export interface AuthResponseDTO {
   Error?: Error | undefined;
   IdToken?: string | undefined;
   AccessToken?: string | undefined;
+  IsAdmin?: boolean;
 }

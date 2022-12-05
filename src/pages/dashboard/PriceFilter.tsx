@@ -95,7 +95,7 @@ const PriceFilter = () => {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               id="outlined-basic"
-              label="Urun adi"
+              label="Ürün adı"
               variant="outlined"
             />
             <Divider variant="middle" />
@@ -124,7 +124,7 @@ const PriceFilter = () => {
           </Select>
         </FormControl>
         <Divider variant="middle" />
-        <Button variant="outlined" onClick={handleClearFilter}>
+        <Button variant="outlined" onClick={handleClearFilter} color="blackNWhite">
           Temizle
         </Button>
       </Stack>

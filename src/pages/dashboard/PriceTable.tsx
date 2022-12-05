@@ -1,11 +1,15 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchPrices, selectPriceIsLoading } from '../../store/prices/pricesSlice';
+import {
+  fetchPrices,
+  selectPriceIsLoading,
+  selectPriceListItemsOfSelectedDate
+} from '../../store/prices/pricesSlice';
 import { selectProducts } from '../../store/inventories/inventoriesSlice';
-import { selectPricesOfSelectedDate } from '../../store/prices/pricesSlice';
 import {
   selectUIListingSelectedDate,
-  selectUIListingProductNameFilter
+  selectUIListingProductNameFilter,
+  updateListingSelectedDate
 } from '../../store/ui/uiSlice';
 import {
   Box,
@@ -22,7 +26,6 @@ import {
 } from '@mui/material';
 import { City } from '../../models/city';
 import { ProductType } from '../../models/product-type';
-import { Price } from '../../models/price';
 import moment from 'moment';
 import { selectUIListingSelectedCity } from '../../store/ui/uiSlice';
 import { Order } from '../../utils/order';
@@ -30,17 +33,9 @@ import { getComparator } from '../../utils/sort';
 import PriceTableRow from './PriceTableRow';
 import PriceDialog from './PriceDialog';
 import { contains } from '../../utils/filter';
+import { PriceListItemDTO } from '../../models/dtos/price-list-item.dto';
 
-interface PriceListItem {
-  Price: number;
-  ProductName: string;
-  Unit: string;
-  ProductId: string;
-  Increase: number;
-  IsToday: boolean;
-  IsActive: boolean;
-}
-type SortablePriceListItem = Pick<PriceListItem, 'Price' | 'ProductName'>;
+type SortablePriceListItem = Pick<PriceListItemDTO, 'Price' | 'ProductName'>;
 
 const PriceTable = () => {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -50,7 +45,7 @@ const PriceTable = () => {
   const dispatch = useAppDispatch();
   const selectedDate = useAppSelector(selectUIListingSelectedDate);
   const inventories = useAppSelector(selectProducts);
-  const selectedDatePrices = useAppSelector(selectPricesOfSelectedDate);
+  const selectedDatePrices = useAppSelector(selectPriceListItemsOfSelectedDate);
   const isLoading = useAppSelector(selectPriceIsLoading);
   const filteringProductName = useAppSelector(selectUIListingProductNameFilter);
   const selectedCity = useAppSelector(selectUIListingSelectedCity);
@@ -72,7 +67,7 @@ const PriceTable = () => {
 
   useEffect(() => {
     if (!selectedDate) {
-      return;
+      dispatch(updateListingSelectedDate());
     }
     if (!selectedDatePrices) {
       dispatch(
@@ -85,7 +80,7 @@ const PriceTable = () => {
     }
   }, [selectedDate]);
 
-  const createTableRow = (prices: Price[]): ReactElement[] => {
+  const createTableRow = (prices: PriceListItemDTO[]): ReactElement[] => {
     if (isLoading || inventories?.length == 0) {
       return [
         <TableRow key="0" sx={{ height: '20vh' }}>
@@ -96,15 +91,6 @@ const PriceTable = () => {
       ];
     }
     return prices
-      .map<PriceListItem>((p) => ({
-        IsToday: p.IsToday || false,
-        Price: p.Price,
-        ProductId: p.ProductId,
-        ProductName: inventories?.find((i) => i.ProductId == p.ProductId)?.Name || p.ProductId,
-        Unit: p.Unit,
-        Increase: p.Increase || 0,
-        IsActive: p.IsActive || false
-      }))
       .sort(getComparator(order, orderBy))
       .filter((p) => {
         if (!filteringProductName) {
@@ -115,14 +101,8 @@ const PriceTable = () => {
       })
       .map((p) => (
         <PriceTableRow
+          PriceListItem={p}
           key={p.ProductId}
-          Price={p.Price}
-          ProductId={p.ProductId}
-          ProductName={p.ProductName}
-          Unit={p.Unit}
-          IsToday={p.IsToday}
-          Increase={p.Increase}
-          IsActive={p.IsActive}
           OpenAnalyticsPanel={handleOpenAnalyticsPanel}
         />
       ));
@@ -142,7 +122,7 @@ const PriceTable = () => {
           <Typography variant="h3" color="inherit">
             {selectedDate && moment(selectedDate).format('DD.MM.YYYY')}
             <Typography color="text.secondary" variant="body2">
-              Meyve/Sebze {'>'} {selectedCity && selectedCity.toUpperCase()}
+              {`Meyve/Sebze > ${selectedCity && selectedCity.toUpperCase()}`}
             </Typography>
           </Typography>
         </Toolbar>

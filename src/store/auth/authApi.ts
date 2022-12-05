@@ -83,8 +83,11 @@ const resendConfirmCode = (email: string) => {
     });
   });
 };
+interface ISignInResponse extends ISessionResponse {
+  user: CognitoUser;
+}
 
-const signIn = (email: string, password: string): Promise<ISessionResponse> => {
+const signIn = (email: string, password: string): Promise<ISignInResponse> => {
   email = email.toUpperCase();
   const authenticationData: IAuthenticationDetailsData = {
     Username: email,
@@ -102,7 +105,9 @@ const signIn = (email: string, password: string): Promise<ISessionResponse> => {
       onSuccess(session) {
         return resolve({
           idToken: session.getIdToken().getJwtToken(),
-          accessToken: session.getAccessToken().getJwtToken()
+          accessToken: session.getAccessToken().getJwtToken(),
+          session,
+          user: cognitoUser
         });
       },
       onFailure(err?: Error | undefined) {
@@ -110,6 +115,10 @@ const signIn = (email: string, password: string): Promise<ISessionResponse> => {
       }
     });
   });
+};
+
+const getCurrentUser = (): CognitoUser | null => {
+  return cognitoUserPool.getCurrentUser();
 };
 
 const signOut = () => {
@@ -121,6 +130,7 @@ const signOut = () => {
 interface ISessionResponse {
   idToken: string;
   accessToken: string;
+  session: CognitoUserSession;
 }
 const getSession = (): Promise<ISessionResponse> => {
   return new Promise((resolve, reject) => {
@@ -135,7 +145,8 @@ const getSession = (): Promise<ISessionResponse> => {
           }
           return resolve({
             idToken: session.getIdToken().getJwtToken(),
-            accessToken: session.getAccessToken().getJwtToken()
+            accessToken: session.getAccessToken().getJwtToken(),
+            session
           });
         }
       });
@@ -181,6 +192,38 @@ const confirmPassword = (email: string, otp: string, newPassword: string): Promi
   });
 };
 
+interface UserAttributes {
+  ID: string;
+  IsAdmin: boolean;
+  Email: string;
+}
+const getUserAttributes = (user: CognitoUser): Promise<UserAttributes> => {
+  return new Promise((resolve, reject) => {
+    user.getUserAttributes((err, result) => {
+      if (err) {
+        return reject(err);
+      } else if (!result) {
+        return reject('Empty attributes');
+      } else {
+        const att = {} as UserAttributes;
+        for (let i = 0; i < result?.length || 0; i++) {
+          if (result[i].getName() === 'sub') {
+            att['ID'] = result[i].getValue();
+            continue;
+          } else if (result[i].getName() === 'email') {
+            att['Email'] = result[i].getValue();
+            continue;
+          } else if (result[i].getName() === 'custom:isAdmin') {
+            att['IsAdmin'] = result[i].getValue() === 'true';
+            continue;
+          }
+        }
+        return resolve(att);
+      }
+    });
+  });
+};
+
 class AuthApi {
   baseUrl: string;
   constructor() {
@@ -191,13 +234,11 @@ class AuthApi {
     this.baseUrl = baseUrl;
   }
   async getSignupCode(code: string): Promise<SignupCode> {
-    console.log(code);
     return await axios
       .get<SignupCodeDTO>(`/signupcode/${code}`, {
         baseURL: this.baseUrl
       })
       .then((response) => {
-        console.log(response);
         const { data } = response;
         return plainToClass(SignupCode, data);
       });
@@ -213,5 +254,7 @@ export {
   getSession,
   forgotPassword,
   confirmPassword,
-  AuthApi
+  getUserAttributes,
+  AuthApi,
+  getCurrentUser
 };

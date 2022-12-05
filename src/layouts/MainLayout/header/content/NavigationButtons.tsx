@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import Profile from './profile';
 import { useAppSelector } from '../../../../store/hooks';
 import { selectUserAuth } from '../../../../store/auth/authSlice';
+import { ShoppingCartNavButton } from './shopping-cart';
 
 const defaultStyle = {
   textDecoration: 'none'
@@ -29,6 +30,7 @@ const NavigationButtons = () => {
               return (
                 <Button
                   variant="outlined"
+                  color="blackNWhite"
                   sx={{ whiteSpace: 'nowrap', minWidth: 'auto' }}
                   disableRipple>
                   {'Üye ol'}
@@ -58,6 +60,7 @@ const NavigationButtons = () => {
       )}
       {userAuth.authenticated && (
         <>
+          <ShoppingCartNavButton />
           <Profile email={userAuth.email} />
         </>
       )}

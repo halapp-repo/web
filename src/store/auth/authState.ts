@@ -16,6 +16,7 @@ export type UserAuth = {
   idToken?: string | undefined;
   accessToken?: string | undefined;
   status?: UserAuthStatus;
+  isAdmin: boolean;
 };
 
 export interface AuthState {

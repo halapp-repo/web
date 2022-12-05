@@ -1,7 +1,8 @@
 import { InstagramOutlined } from '@ant-design/icons';
-import { Box, Grid, Typography, IconButton } from '@mui/material';
+import { Box, Grid, Typography, IconButton, Stack, Button, Link } from '@mui/material';
 import { useMemo } from 'react';
 import moment from 'moment';
+import LogoText from '../../../components/logo/LogoText';
 
 const Footer = () => {
   const year = useMemo(() => moment().format('YYYY'), []);
@@ -9,9 +10,16 @@ const Footer = () => {
     <Box sx={{ minHeight: '50px', borderTop: '1px solid #f0f0f0' }}>
       <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Typography variant="body1" color="text.secondary">
-            {`© ${year} HalApp`}
-          </Typography>
+          <Stack
+            direction={'row'}
+            spacing={1}
+            justifyContent="center"
+            sx={{ alignItems: 'center' }}>
+            <Typography variant="body1" color="text.secondary">
+              {`© ${year} `}
+            </Typography>
+            <LogoText sx={{ marginTop: '3px !important' }} />
+          </Stack>
         </Grid>
         <Grid
           item
@@ -29,9 +37,11 @@ const Footer = () => {
             </Typography>
           </Box>
           <Box>
-            <Typography variant="body1" color="text.secondary">
-              <a href="mailto: info@halapp.io">{`info@halapp.io`}</a>
-            </Typography>
+            <Button color="primary" href="mailto: info@halapp.io" component={Link}>
+              <Typography variant="body1" color="text.secondary">
+                {`info@halapp.io`}
+              </Typography>
+            </Button>
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'center' }}>

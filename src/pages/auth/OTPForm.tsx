@@ -23,7 +23,6 @@ const InnerForm = (props: FormikProps<FormValues>) => {
   const handleOTPChanges = (otp: string) => {
     setFieldTouched('otp', true);
     setFieldValue('otp', otp);
-    console.log(otp);
   };
 
   return (

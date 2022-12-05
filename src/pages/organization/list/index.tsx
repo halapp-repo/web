@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { Box, Stack } from '@mui/material';
+import { List, CircularProgress, Box, Typography, Divider, Button } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import {
+  fetchAllOrganizations,
   fetchOrganizations,
   selectOrganizations
 } from '../../../store/organizations/organizationsSlice';
@@ -20,34 +21,58 @@ const OrganizationList = () => {
     if (!userAuth.authenticated) {
       navigate('/auth/signin');
     } else {
-      dispatch(fetchOrganizations());
+      if (!organizations?.List) {
+        dispatch(fetchOrganizations());
+      }
     }
   }, [userAuth]);
 
+  const handleFetchAllOrganizations = () => {
+    dispatch(fetchAllOrganizations());
+  };
+
   return (
-    <Box>
-      <PageWrapper>
-        <MainCard
-          sx={{
-            minWidth: { xs: '100%' },
-            maxWidth: { xs: '100%' },
-            // minHeight: { xs: '100vh', sm: 'inherit' },
-            margin: { xs: 0, sm: 1, md: 3 },
-            '& > *': {
-              flexGrow: 1,
-              flexBasis: '50%'
-            }
-          }}>
-          <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 } }}>
-            <Stack spacing={2}>
-              {organizations?.map((o) => (
-                <OrganizationListItem key={o.ID} organization={o} />
-              ))}
-            </Stack>
-          </Box>
-        </MainCard>
-      </PageWrapper>
-    </Box>
+    <PageWrapper md={6} lg={4}>
+      <MainCard>
+        <List
+          subheader={
+            <Box
+              sx={{
+                padding: '8px 16px 8px 16px',
+                color: '#ffc423',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: '20px'
+              }}>
+              {userAuth.isAdmin ? (
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="admin"
+                  onClick={handleFetchAllOrganizations}>
+                  {'Fetch all organizations'}
+                </Button>
+              ) : (
+                <Typography>{'🏪 Sirketlerim'}</Typography>
+              )}
+            </Box>
+          }>
+          {organizations?.IsLoading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
+          )}
+          {organizations?.IsLoading ||
+            organizations?.List?.map((i) => (
+              <>
+                <Divider />
+                <OrganizationListItem Organization={i} key={i.ID} />
+              </>
+            ))}
+        </List>
+      </MainCard>
+    </PageWrapper>
   );
 };
 

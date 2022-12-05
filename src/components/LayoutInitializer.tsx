@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { getSession, getCognitoUser } from '../store/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchInventories } from '../store/inventories/inventoriesSlice';
+import { fetchCartItem } from '../store/shopping-cart/shoppingCartSlice';
 import {
   selectUIGlobalLoading,
   selectUISessionLoading,
@@ -27,6 +28,7 @@ const LayoutInitializer = ({ children }: Props) => {
     dispatch(getSession());
     dispatch(fetchInventories());
     dispatch(updateListingSelectedDate(selectedDate));
+    dispatch(fetchCartItem());
     const timer = setInterval(() => {
       dispatch(getSession());
     }, 1200000);

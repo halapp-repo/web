@@ -1,9 +1,10 @@
 // material-ui
+
 import { Grid } from '@mui/material';
 import PriceTable from './PriceTable';
 import MainCard from '../../components/MainCard';
-import Contact from './Contact';
 import PriceFilter from './PriceFilter';
+import ShoppingCartDrawer from './ShoppingCartDrawer';
 
 const Dashboard = () => {
   return (
@@ -19,9 +20,7 @@ const Dashboard = () => {
         </MainCard>
       </Grid>
       <Grid item xs={12} sm={3} md={3} lg={3}>
-        <MainCard sx={{ mt: 2 }}>
-          <Contact />
-        </MainCard>
+        <ShoppingCartDrawer />
       </Grid>
     </Grid>
   );

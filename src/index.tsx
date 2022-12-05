@@ -8,7 +8,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import state from './store/index';
 
-console.log(process.env.REACT_APP_LISTING_BASE_URL);
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <Provider store={state}>
