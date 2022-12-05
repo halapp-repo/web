@@ -42,6 +42,30 @@ export const fetchAllOrganizations = createAsyncThunk<Organization[], void, { st
     return response;
   }
 );
+export const updateOrganization = createAsyncThunk<
+  Organization,
+  Organization,
+  { state: RootState }
+>('organization/update', async (arg, { getState }): Promise<Organization> => {
+  const { userAuth } = getState().auth;
+  if (!userAuth.authenticated || !userAuth.idToken) {
+    throw new Error('Unauthenticated');
+  }
+  const mapper = new OrganizationToOrganizationDTOMapper();
+  try {
+    return await new OrganizationsApi().updateOrganization({
+      token: userAuth.idToken,
+      organization: mapper.toDTO(arg)
+    });
+  } catch (err) {
+    console.log(err);
+    if (err instanceof AxiosError) {
+      throw new Error(JSON.stringify(err.response?.data || { message: 'Bilinmeyen hata olustu' }));
+    } else {
+      throw err;
+    }
+  }
+});
 
 export const createOrganizationEnrollmentRequest = createAsyncThunk<void, Organization>(
   'organization/enroll',
@@ -89,6 +113,25 @@ const OrganizationsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    /**
+     * UPDATE ORGANIZATION
+     */
+    builder.addCase(updateOrganization.fulfilled, (state, action) => {
+      const organization = action.payload;
+      state.Organizations = {
+        ...state.Organizations,
+        IsLoading: false,
+        List: [...(state.Organizations?.List || [])].map((l) => {
+          if (l.ID === organization.ID) {
+            return organization;
+          }
+          return l;
+        })
+      };
+    });
+    /*
+     * ADMIN / TOGGLE ACTIVATION
+     */
     builder.addCase(toggleOrganizationActivation.fulfilled, (state, action) => {
       const { ID, Active } = action.meta.arg;
       state.Organizations = {

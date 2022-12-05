@@ -3,13 +3,16 @@ import { Box, Tabs, Tab } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   fetchOrganizations,
-  selectIndividualOrganization
+  selectIndividualOrganization,
+  updateOrganization
 } from '../../../store/organizations/organizationsSlice';
 import { useParams } from 'react-router-dom';
 import PageWrapper from '../../../components/PageWrapper';
 import MainCard from '../../../components/MainCard';
 import { toggleDisableToolbarGutter } from '../../../store/ui/uiSlice';
-import GeneralOrganizationInformation from './GeneralOrganizationInformation';
+import GeneralInformationForm from './GeneralInformationForm';
+import { Organization } from '../../../models/organization';
+import GeneralInformation from './GeneralInformation';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -36,6 +39,7 @@ const OrganizationEdit = () => {
   const { organizationId } = useParams();
   const dispatch = useAppDispatch();
   const [tab, setTab] = useState(0);
+  const [generalInformationEditMode, setGeneralInformationEditMode] = useState(false);
 
   const organization = useAppSelector((state) =>
     selectIndividualOrganization(state, organizationId)
@@ -54,6 +58,12 @@ const OrganizationEdit = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
+  const handleUpdateOrganizationInformation = async (organization: Organization): Promise<void> => {
+    dispatch(updateOrganization(organization));
+  };
+  const toggleGeneralInformationEditMode = (editMode: boolean) => {
+    setGeneralInformationEditMode(editMode);
+  };
 
   return (
     <>
@@ -69,11 +79,24 @@ const OrganizationEdit = () => {
           </Tabs>
         </MainCard>
       </PageWrapper>
-      <PageWrapper md={8} lg={6}>
-        <TabPanel value={tab} index={0}>
-          <GeneralOrganizationInformation />
-        </TabPanel>
-      </PageWrapper>
+      {organization && (
+        <PageWrapper md={8} lg={6}>
+          <TabPanel value={tab} index={0}>
+            {generalInformationEditMode ? (
+              <GeneralInformationForm
+                Organization={organization}
+                OnSubmit={handleUpdateOrganizationInformation}
+                OnCancel={() => toggleGeneralInformationEditMode(false)}
+              />
+            ) : (
+              <GeneralInformation
+                Organization={organization}
+                OnEnterEditMode={() => toggleGeneralInformationEditMode(true)}
+              />
+            )}
+          </TabPanel>
+        </PageWrapper>
+      )}
     </>
   );
 };

@@ -150,7 +150,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 interface EnrollmentFormProps {
   onLocationChanged: (lat: string, lng: string) => void;
-  onSubmit: (arg: any) => void;
+  onSubmit: (arg: unknown) => void;
 }
 
 const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
@@ -210,7 +210,7 @@ const EnrollmentForm = withFormik<EnrollmentFormProps, FormValues>({
     })
   }),
 
-  handleSubmit: (values, { props, setSubmitting }) => {
+  handleSubmit: (values, { setSubmitting }) => {
     // do submitting things
     // props.onSubmit({
     //   organizationName: values.organizationName.replace(/\b\w/g, (l) => l.toUpperCase()),

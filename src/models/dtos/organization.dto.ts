@@ -24,5 +24,6 @@ export class OrganizationDTO {
 
   JoinedUsers?: string[];
 
+  @Type(() => String)
   CreatedDate?: string;
 }

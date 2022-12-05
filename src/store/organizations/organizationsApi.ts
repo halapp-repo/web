@@ -74,4 +74,24 @@ export class OrganizationsApi {
       }
     );
   }
+  async updateOrganization({
+    token,
+    organization
+  }: {
+    token: string;
+    organization: OrganizationDTO;
+  }): Promise<Organization> {
+    return await axios
+      .put<OrganizationDTO>(`/organization/${organization.ID}`, JSON.stringify(organization), {
+        baseURL: this.baseUrl,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((response) => {
+        const { data } = response;
+        return this.mapper.toModel(data);
+      });
+  }
 }
