@@ -115,7 +115,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               </Box>
               <Divider textAlign="left">
                 <Typography color="primary" variant="body2">
-                  {'İşletme / Teslimat adresi'}
+                  {'İşletme adresi'}
                 </Typography>
               </Divider>
               <Box>
@@ -191,7 +191,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                   variant="outlined"
                   color="blackNWhite"
                   onClick={props.values.OnCancel}>
-                  {'iptal'}
+                  {'İptal'}
                 </Button>
                 <Button
                   type="submit"

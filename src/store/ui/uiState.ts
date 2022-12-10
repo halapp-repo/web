@@ -10,9 +10,15 @@ export interface UIState {
   };
   global: {
     isLoading: boolean;
-    disableToolbarGutters: boolean;
   };
   shoppingCart: {
     isOpen: boolean;
+  };
+  organization: {
+    currentTab: number;
+    generalInfoEditMode: boolean;
+  };
+  checkout: {
+    orderNote: string;
   };
 }

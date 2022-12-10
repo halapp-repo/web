@@ -11,7 +11,7 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
   const navigate = useNavigate();
 
   const checkout = () => {
-    console.log('xxx');
+    navigate('/checkout');
   };
 
   return (
@@ -45,7 +45,7 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
         variant="contained"
         disabled={ShoppingCart.Items.length === 0}
         onClick={checkout}>
-        {'Teslim et'}
+        {'Teslimat adımına geç'}
       </Button>
     </>
   );

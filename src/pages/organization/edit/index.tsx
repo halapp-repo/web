@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Box, Tabs, Tab } from '@mui/material';
+import { useEffect } from 'react';
+import { Box, Tabs, Tab, CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   fetchOrganizations,
@@ -9,10 +10,14 @@ import {
 import { useParams } from 'react-router-dom';
 import PageWrapper from '../../../components/PageWrapper';
 import MainCard from '../../../components/MainCard';
-import { toggleDisableToolbarGutter } from '../../../store/ui/uiSlice';
 import GeneralInformationForm from './GeneralInformationForm';
 import { Organization } from '../../../models/organization';
 import GeneralInformation from './GeneralInformation';
+import {
+  selectUIOrganization,
+  updateOrganization as updateUIOrganization
+} from '../../../store/ui/uiSlice';
+import { DeliveryAddresses } from './DeliveryAddresses';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -36,33 +41,90 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const OrganizationEdit = () => {
+  const navigator = useNavigate();
   const { organizationId } = useParams();
   const dispatch = useAppDispatch();
-  const [tab, setTab] = useState(0);
-  const [generalInformationEditMode, setGeneralInformationEditMode] = useState(false);
+  const { currentTab, generalInfoEditMode } = useAppSelector(selectUIOrganization);
 
   const organization = useAppSelector((state) =>
     selectIndividualOrganization(state, organizationId)
   );
+
   useEffect(() => {
-    dispatch(toggleDisableToolbarGutter(true));
     if (!organization) {
       dispatch(fetchOrganizations());
     }
 
     return () => {
-      dispatch(toggleDisableToolbarGutter(false));
+      dispatch(
+        updateUIOrganization({
+          tab: 0,
+          generalInfoEditMode: false
+        })
+      );
     };
   }, []);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue);
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    dispatch(
+      updateUIOrganization({
+        tab: newValue
+      })
+    );
   };
   const handleUpdateOrganizationInformation = async (organization: Organization): Promise<void> => {
     dispatch(updateOrganization(organization));
   };
   const toggleGeneralInformationEditMode = (editMode: boolean) => {
-    setGeneralInformationEditMode(editMode);
+    dispatch(
+      updateUIOrganization({
+        generalInfoEditMode: editMode
+      })
+    );
+  };
+  const generateTabs = (tab: number, organization: Organization | null): JSX.Element => {
+    if (!organization) {
+      return (
+        <PageWrapper md={8} lg={6}>
+          <Box
+            sx={{
+              width: '100%',
+              height: '200px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+            <CircularProgress />
+          </Box>
+        </PageWrapper>
+      );
+    }
+    if (tab === 0) {
+      // General Info
+      if (generalInfoEditMode) {
+        return (
+          <TabPanel value={0} index={0}>
+            <GeneralInformationForm
+              Organization={organization}
+              OnSubmit={handleUpdateOrganizationInformation}
+              OnCancel={() => toggleGeneralInformationEditMode(false)}
+            />
+          </TabPanel>
+        );
+      } else {
+        return (
+          <TabPanel value={0} index={0}>
+            <GeneralInformation
+              Organization={organization}
+              OnEnterEditMode={() => toggleGeneralInformationEditMode(true)}
+            />
+          </TabPanel>
+        );
+      }
+    } else if (tab === 1) {
+      return <DeliveryAddresses />;
+    }
+    throw new Error('Not Found Tab error');
   };
 
   return (
@@ -70,33 +132,19 @@ const OrganizationEdit = () => {
       <PageWrapper>
         <MainCard>
           <Tabs
-            value={tab}
-            onChange={handleChange}
+            value={currentTab}
+            onChange={handleTabChange}
             variant="scrollable"
             scrollButtons
             allowScrollButtonsMobile>
-            <Tab label="Şirket Bilgisi" />
+            <Tab label="Şirket Bilgisi" value={0} />
+            <Tab label="Teslimat Adresleri" value={1} />
           </Tabs>
         </MainCard>
       </PageWrapper>
-      {organization && (
-        <PageWrapper md={8} lg={6}>
-          <TabPanel value={tab} index={0}>
-            {generalInformationEditMode ? (
-              <GeneralInformationForm
-                Organization={organization}
-                OnSubmit={handleUpdateOrganizationInformation}
-                OnCancel={() => toggleGeneralInformationEditMode(false)}
-              />
-            ) : (
-              <GeneralInformation
-                Organization={organization}
-                OnEnterEditMode={() => toggleGeneralInformationEditMode(true)}
-              />
-            )}
-          </TabPanel>
-        </PageWrapper>
-      )}
+      <PageWrapper md={8} lg={6}>
+        {generateTabs(currentTab, organization)}
+      </PageWrapper>
     </>
   );
 };
