@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { trMoment } from '../utils/timezone';
 
 class OrganizationAddress {
+  Active?: boolean;
   AddressLine: string;
   County: string;
   City: string;
@@ -31,6 +32,9 @@ class Organization {
     toClassOnly: true
   })
   CreatedDate?: moment.Moment;
+
+  @Type(() => OrganizationAddress)
+  DeliveryAddresses: OrganizationAddress[];
 }
 
 export { Organization, OrganizationAddress };

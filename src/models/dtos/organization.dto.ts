@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 
-class OrganizationAddressDTO {
+export class OrganizationAddressDTO {
+  Active?: boolean;
   AddressLine: string;
   County: string;
   City: string;
@@ -26,4 +27,7 @@ export class OrganizationDTO {
 
   @Type(() => String)
   CreatedDate?: string;
+
+  @Type(() => OrganizationAddressDTO)
+  DeliveryAddresses: OrganizationAddressDTO[];
 }

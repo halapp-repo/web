@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Box, Tabs, Tab, CircularProgress } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   fetchOrganizations,
@@ -41,7 +40,6 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const OrganizationEdit = () => {
-  const navigator = useNavigate();
   const { organizationId } = useParams();
   const dispatch = useAppDispatch();
   const { currentTab, generalInfoEditMode } = useAppSelector(selectUIOrganization);
@@ -103,26 +101,36 @@ const OrganizationEdit = () => {
       // General Info
       if (generalInfoEditMode) {
         return (
-          <TabPanel value={0} index={0}>
-            <GeneralInformationForm
-              Organization={organization}
-              OnSubmit={handleUpdateOrganizationInformation}
-              OnCancel={() => toggleGeneralInformationEditMode(false)}
-            />
-          </TabPanel>
+          <PageWrapper md={8} lg={6}>
+            <TabPanel value={0} index={0}>
+              <GeneralInformationForm
+                Organization={organization}
+                OnSubmit={handleUpdateOrganizationInformation}
+                OnCancel={() => toggleGeneralInformationEditMode(false)}
+              />
+            </TabPanel>
+          </PageWrapper>
         );
       } else {
         return (
-          <TabPanel value={0} index={0}>
-            <GeneralInformation
-              Organization={organization}
-              OnEnterEditMode={() => toggleGeneralInformationEditMode(true)}
-            />
-          </TabPanel>
+          <PageWrapper md={6} lg={5}>
+            <TabPanel value={0} index={0}>
+              <GeneralInformation
+                Organization={organization}
+                OnEnterEditMode={() => toggleGeneralInformationEditMode(true)}
+              />
+            </TabPanel>
+          </PageWrapper>
         );
       }
     } else if (tab === 1) {
-      return <DeliveryAddresses />;
+      return (
+        <PageWrapper md={6} lg={5}>
+          <TabPanel value={1} index={1}>
+            <DeliveryAddresses Organization={organization} />
+          </TabPanel>
+        </PageWrapper>
+      );
     }
     throw new Error('Not Found Tab error');
   };
@@ -142,9 +150,7 @@ const OrganizationEdit = () => {
           </Tabs>
         </MainCard>
       </PageWrapper>
-      <PageWrapper md={8} lg={6}>
-        {generateTabs(currentTab, organization)}
-      </PageWrapper>
+      {generateTabs(currentTab, organization)}
     </>
   );
 };

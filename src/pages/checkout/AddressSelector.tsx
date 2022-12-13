@@ -12,6 +12,8 @@ import {
   Button
 } from '@mui/material';
 import { Organization } from '../../models/organization';
+import { useAppDispatch } from '../../store/hooks';
+import { updateOrganization } from '../../store/ui/uiSlice';
 
 interface AddressSelectorProps {
   Organizations: Organization[];
@@ -19,6 +21,7 @@ interface AddressSelectorProps {
 
 const AddressSelector = ({ Organizations }: AddressSelectorProps) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,6 +33,7 @@ const AddressSelector = ({ Organizations }: AddressSelectorProps) => {
   }, []);
 
   const handleChangeAddress = (organizationId: string) => {
+    dispatch(updateOrganization({ tab: 1, generalInfoEditMode: false }));
     navigate(`/organization/${organizationId}`);
   };
 
@@ -70,6 +74,7 @@ const AddressSelector = ({ Organizations }: AddressSelectorProps) => {
             }}
             secondaryAction={
               <Stack direction={'column'} justifyContent="space-around">
+                <Radio value={org.ID} />
                 <Button
                   onClick={(e) => {
                     e.preventDefault();
@@ -77,7 +82,6 @@ const AddressSelector = ({ Organizations }: AddressSelectorProps) => {
                   }}>
                   {'Değiştir'}
                 </Button>
-                <Radio value={org.ID} />
               </Stack>
             }>
             <ListItemText

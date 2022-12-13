@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
 import { OrganizationsState } from './organizationsState';
 import type { RootState } from '../index';
-import { Organization } from '../../models/organization';
+import { Organization, OrganizationAddress } from '../../models/organization';
 import { OrganizationsApi } from './organizationsApi';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
 import { plainToClass } from 'class-transformer';
 import { AxiosError } from 'axios';
+import { OrganizationAddressDTO } from '../../models/dtos/organization.dto';
 
 const initialState = {
   Organizations: {
@@ -66,6 +67,30 @@ export const updateOrganization = createAsyncThunk<
     }
   }
 });
+export const updateOrganizationDeliveryAddresses = createAsyncThunk<
+  Organization,
+  { deliveryAddresses: OrganizationAddress[]; organizationId: string },
+  { state: RootState }
+>('organization/updateDeliveryAddresses', async (arg, { getState }): Promise<Organization> => {
+  const { userAuth } = getState().auth;
+  if (!userAuth.authenticated || !userAuth.idToken) {
+    throw new Error('Unauthenticated');
+  }
+  try {
+    return await new OrganizationsApi().updateOrganizationDeliveryAddresses({
+      token: userAuth.idToken,
+      organizationId: arg.organizationId,
+      deliveryAddresses: arg.deliveryAddresses
+    });
+  } catch (err) {
+    console.log(err);
+    if (err instanceof AxiosError) {
+      throw new Error(JSON.stringify(err.response?.data || { message: 'Bilinmeyen hata olustu' }));
+    } else {
+      throw err;
+    }
+  }
+});
 
 export const createOrganizationEnrollmentRequest = createAsyncThunk<void, Organization>(
   'organization/enroll',
@@ -113,6 +138,25 @@ const OrganizationsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    /**
+     * UPDATE ORGANIZATION DELIVERY ADDRESSES
+     */
+    builder.addCase(updateOrganizationDeliveryAddresses.fulfilled, (state, action) => {
+      const organizationId = action.meta.arg.organizationId;
+      const organization = action.payload;
+
+      state.Organizations = {
+        ...state.Organizations,
+        IsLoading: false,
+        List: [...(state.Organizations?.List || [])].map((l) => {
+          if (l.ID === organizationId) {
+            return organization;
+          }
+          return l;
+        })
+      };
+    });
+
     /**
      * UPDATE ORGANIZATION
      */
