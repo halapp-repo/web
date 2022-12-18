@@ -15,7 +15,7 @@ import { SummaryNPlaceOrder } from './SummaryNPlaceOrder';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 import { Comment } from './Comment';
 import { toggleShoppingCart } from '../../store/ui/uiSlice';
-import { DeliveryDate } from './DeliveryDate';
+import { DeliveryTime } from './DeliveryTime';
 
 const Checkout = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +54,7 @@ const Checkout = () => {
         </Grid>
         <Grid item xs={12}>
           <MainCard sx={{ mt: 2, p: 2 }}>
-            <DeliveryDate />
+            <DeliveryTime />
           </MainCard>
         </Grid>
         <Grid item xs={12}>

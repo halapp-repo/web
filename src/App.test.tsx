@@ -1,9 +1,18 @@
 import 'reflect-metadata';
+import { Provider } from 'react-redux';
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import { BrowserRouter } from 'react-router-dom';
+import state from './store/index';
 
-test.skip('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders learn react link', async () => {
+  const result = render(
+    <Provider store={state}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  );
+  const app = result.container.getElementsByClassName('App');
+  expect(app[0]).not.toBeNull();
 });

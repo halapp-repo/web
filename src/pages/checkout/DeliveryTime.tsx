@@ -6,14 +6,23 @@ import moment from 'moment';
 
 type OrderDeliveryTuple = [string, string];
 
-const DeliveryDate = () => {
+const DeliveryTime = () => {
   const [selectedTime, setSelectedTime] = useState(OrderDeliveryTime.morning);
 
   const createOptions = (): OrderDeliveryTuple[] => {
+    let currentTime = trMoment();
+    if (!currentTime.isBetween(moment('00:00', 'hh:mm'), moment('05:00', 'hh:mm'))) {
+      currentTime = currentTime.add(1, 'd');
+    }
     return Object.keys(OrderDeliveryTime).map((odt) => {
       if (odt === OrderDeliveryTime.morning) {
         trMoment();
-        return [odt, 'xxx'];
+        return [
+          odt,
+          `${currentTime.format('dddd')}, ${currentTime.format('MMM')}. ${currentTime.format(
+            'DD'
+          )} (06:00-11:00)`
+        ];
       }
       throw new Error('Unsupported type');
     });
@@ -36,7 +45,6 @@ const DeliveryDate = () => {
           </Box>
         }>
         {createOptions().map(([key, value]: OrderDeliveryTuple) => {
-          console.log(key, value);
           return (
             <ListItem
               selected={true}
@@ -73,4 +81,4 @@ const DeliveryDate = () => {
   );
 };
 
-export { DeliveryDate };
+export { DeliveryTime };
