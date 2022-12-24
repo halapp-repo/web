@@ -1,8 +1,8 @@
 import { Stack, Box } from '@mui/material';
-import { ShoppingCartDTO } from '../../models/dtos/shopping-cart-list-item.dto';
+import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 
 interface ShoppingCartItemCounterProps {
-  ShoppingCart: ShoppingCartDTO;
+  ShoppingCart: ShoppingCartList;
 }
 
 const ShoppingCartItemCounter = ({ ShoppingCart }: ShoppingCartItemCounterProps) => {

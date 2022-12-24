@@ -1,4 +1,4 @@
-class PriceListItemDTO {
+class PriceListItemVM {
   Price: number;
   ProductName: string;
   Unit: string;
@@ -14,4 +14,4 @@ class PriceListItemDTO {
   }
 }
 
-export { PriceListItemDTO };
+export { PriceListItemVM };

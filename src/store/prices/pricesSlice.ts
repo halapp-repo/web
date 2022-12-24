@@ -4,7 +4,7 @@ import type { RootState } from '../index';
 import { Price } from '../../models/price';
 import { PricesApi } from './pricesApi';
 import { trMoment } from '../../utils/timezone';
-import { PriceListItemDTO } from '../../models/dtos/price-list-item.dto';
+import { PriceListItemVM } from '../../models/viewmodels/price-list-item.dto';
 import { plainToInstance } from 'class-transformer';
 
 const initialState = {
@@ -84,8 +84,8 @@ export const selectPriceListItemsOfSelectedDate = createSelector(
     (state: RootState) => state.ui.listing.selectedDate
   ],
   (prices, inventories, selectedDate) =>
-    prices[selectedDate]?.map<PriceListItemDTO>((p) =>
-      plainToInstance(PriceListItemDTO, {
+    prices[selectedDate]?.map<PriceListItemVM>((p) =>
+      plainToInstance(PriceListItemVM, {
         IsToday: p.IsToday || false,
         Price: p.Price,
         ProductId: p.ProductId,

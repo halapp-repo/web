@@ -1,13 +1,13 @@
 import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { Box, TableCell, TableRow, Typography, Button } from '@mui/material';
 import React from 'react';
-import { PriceListItemDTO } from '../../models/dtos/price-list-item.dto';
+import { PriceListItemVM } from '../../models/viewmodels/price-list-item.dto';
 import { useAppDispatch } from '../../store/hooks';
 import { addCartItem } from '../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../store/ui/uiSlice';
 
 interface PriceTableRowProps {
-  PriceListItem: PriceListItemDTO;
+  PriceListItem: PriceListItemVM;
   OpenAnalyticsPanel: (event: React.MouseEvent<unknown>, productId: string) => void;
 }
 

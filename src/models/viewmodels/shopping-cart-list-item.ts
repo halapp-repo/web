@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 
-class ShoppingCartListItemDTO {
+class ShoppingCartListItem {
   ProductId: string;
   Name: string;
   Price?: number;
@@ -25,9 +25,9 @@ class ShoppingCartListItemDTO {
   }
 }
 
-class ShoppingCartDTO {
-  @Type(() => ShoppingCartListItemDTO)
-  Items: ShoppingCartListItemDTO[];
+class ShoppingCartList {
+  @Type(() => ShoppingCartListItem)
+  Items: ShoppingCartListItem[];
 
   get TotalAmount(): string {
     let total = 0;
@@ -40,4 +40,4 @@ class ShoppingCartDTO {
   }
 }
 
-export { ShoppingCartDTO, ShoppingCartListItemDTO };
+export { ShoppingCartList, ShoppingCartListItem };

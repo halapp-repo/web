@@ -31,14 +31,23 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   };
 });
 
-const Comment = () => {
+interface OrderNoteProps {
+  SetNote: (note: string) => Promise<void>;
+}
+
+const OrderNote = ({ SetNote }: OrderNoteProps) => {
   const dispatch = useAppDispatch();
   const [expanded, setExpanded] = React.useState(false);
   const [orderNote, setOrderNote] = useState(useAppSelector(selectUICheckoutOrderNote) || '');
 
   useEffect(() => {
-    const timeOutId = setTimeout(() => dispatch(updateCheckoutOrderNote(orderNote)), 500);
-    return () => clearTimeout(timeOutId);
+    const timeOutId = setTimeout(() => {
+      dispatch(updateCheckoutOrderNote(orderNote));
+      SetNote(orderNote);
+    }, 1000);
+    return () => {
+      clearTimeout(timeOutId);
+    };
   }, [orderNote]);
 
   const handleExpandClick = () => {
@@ -72,4 +81,4 @@ const Comment = () => {
   );
 };
 
-export { Comment };
+export { OrderNote };

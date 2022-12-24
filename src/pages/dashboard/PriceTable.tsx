@@ -33,9 +33,9 @@ import { getComparator } from '../../utils/sort';
 import PriceTableRow from './PriceTableRow';
 import PriceDialog from './PriceDialog';
 import { contains } from '../../utils/filter';
-import { PriceListItemDTO } from '../../models/dtos/price-list-item.dto';
+import { PriceListItemVM } from '../../models/viewmodels/price-list-item.dto';
 
-type SortablePriceListItem = Pick<PriceListItemDTO, 'Price' | 'ProductName'>;
+type SortablePriceListItem = Pick<PriceListItemVM, 'Price' | 'ProductName'>;
 
 const PriceTable = () => {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -80,7 +80,7 @@ const PriceTable = () => {
     }
   }, [selectedDate]);
 
-  const createTableRow = (prices: PriceListItemDTO[]): ReactElement[] => {
+  const createTableRow = (prices: PriceListItemVM[]): ReactElement[] => {
     if (isLoading || inventories?.length == 0) {
       return [
         <TableRow key="0" sx={{ height: '20vh' }}>

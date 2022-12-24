@@ -6,7 +6,6 @@ import { OrganizationsApi } from './organizationsApi';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
 import { plainToClass } from 'class-transformer';
 import { AxiosError } from 'axios';
-import { OrganizationAddressDTO } from '../../models/dtos/organization.dto';
 
 const initialState = {
   Organizations: {

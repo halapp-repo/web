@@ -1,15 +1,63 @@
 import { Stack, Box, Button, Typography, Divider } from '@mui/material';
-import { ShoppingCartDTO } from '../../models/dtos/shopping-cart-list-item.dto';
+import { useEffect, useState } from 'react';
+import { City } from '../../models/city';
+import { OrderItemDTO } from '../../models/dtos/order-item.dto';
+import { ProductType } from '../../models/product-type';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
+import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
+import { toggleShoppingCart } from '../../store/ui/uiSlice';
 
 interface SummaryNPlaceOrderProps {
-  ShoppingCart: ShoppingCartDTO;
+  IsValid: boolean;
+  SetOrderItems: (orderItems: OrderItemDTO[]) => Promise<void>;
 }
 
-const SummaryNPlaceOrder = ({ ShoppingCart }: SummaryNPlaceOrderProps) => {
+const SummaryNPlaceOrder = ({ IsValid, SetOrderItems }: SummaryNPlaceOrderProps) => {
+  const dispatch = useAppDispatch();
+  const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
+
+  useEffect(() => {
+    dispatch(
+      fetchTodaysPrices({
+        location: City.istanbul,
+        type: ProductType.produce
+      })
+    );
+    const timer = setInterval(() => {
+      dispatch(fetchTodaysPrices({ location: City.istanbul, type: ProductType.produce }));
+    }, 300000);
+
+    return () => {
+      clearTimeout(timer);
+      dispatch(toggleShoppingCart(false));
+    };
+  }, []);
+
+  useEffect(() => {
+    if (ShoppingCart) {
+      SetOrderItems(
+        ShoppingCart.Items.map(
+          (i) =>
+            ({
+              Count: i.Count,
+              Price: i.Price!,
+              ProductId: i.ProductId,
+              Unit: i.Unit!
+            } as OrderItemDTO)
+        )
+      );
+    }
+  }, [ShoppingCart]);
+
   return (
     <Stack spacing={1}>
       <Box>
-        <Button variant="contained" sx={{ width: '100%', fontWeight: 'bold' }}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={IsValid}
+          sx={{ width: '100%', fontWeight: 'bold' }}>
           {'Ürünleri gönder'}
         </Button>
         <Typography variant="body2" color="secondary">

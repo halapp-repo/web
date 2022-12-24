@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 import { DeleteOutlined } from '@ant-design/icons';
 import { NumberInput } from '../../components/form/NumberInput';
-import { ShoppingCartListItemDTO } from '../../models/dtos/shopping-cart-list-item.dto';
+import { ShoppingCartListItem as SCItem } from '../../models/viewmodels/shopping-cart-list-item';
 import { useAppDispatch } from '../../store/hooks';
 import { removeCartItem, updateCartItemCount } from '../../store/shopping-cart/shoppingCartSlice';
 
 interface ShoppingCartItemProps {
-  Item: ShoppingCartListItemDTO;
+  Item: SCItem;
 }
 
 const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
