@@ -58,7 +58,6 @@ export const updateOrganization = createAsyncThunk<
       organization: mapper.toDTO(arg)
     });
   } catch (err) {
-    console.log(err);
     if (err instanceof AxiosError) {
       throw new Error(JSON.stringify(err.response?.data || { message: 'Bilinmeyen hata olustu' }));
     } else {
@@ -82,7 +81,6 @@ export const updateOrganizationDeliveryAddresses = createAsyncThunk<
       deliveryAddresses: arg.deliveryAddresses
     });
   } catch (err) {
-    console.log(err);
     if (err instanceof AxiosError) {
       throw new Error(JSON.stringify(err.response?.data || { message: 'Bilinmeyen hata olustu' }));
     } else {

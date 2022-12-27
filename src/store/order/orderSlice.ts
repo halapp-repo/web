@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { OrderItemDTO } from '../../models/dtos/order-item.dto';
-import { Order } from '../../models/order';
 import { OrganizationAddress } from '../../models/organization';
+import { trMoment } from '../../utils/timezone';
 import { OrderApi } from './orderApi';
 
 const initialState = {
@@ -33,7 +33,8 @@ export const CreateOrder = createAsyncThunk<
       orderItems,
       orderNote,
       organizationId,
-      token: userAuth.idToken
+      token: userAuth.idToken,
+      orderDate: trMoment()
     });
   }
 );

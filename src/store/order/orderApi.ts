@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Moment } from 'moment';
 import { OrderItemDTO } from '../../models/dtos/order-item.dto';
 import { OrganizationAddress } from '../../models/organization';
 
@@ -10,13 +11,15 @@ export class OrderApi {
     organizationId,
     deliveryAddress,
     orderNote,
-    orderItems
+    orderItems,
+    orderDate
   }: {
     token: string;
     organizationId: string;
     deliveryAddress: OrganizationAddress;
     orderNote: string;
     orderItems: OrderItemDTO[];
+    orderDate: Moment;
   }): Promise<void> {
     return await axios.post(
       '/orders',
@@ -24,7 +27,8 @@ export class OrderApi {
         organizationId,
         deliveryAddress,
         orderNote,
-        orderItems
+        orderItems,
+        orderDate: orderDate.valueOf()
       }),
       {
         baseURL: this.baseUrl,

@@ -57,7 +57,7 @@ const OrderNote = ({ SetNote }: OrderNoteProps) => {
   return (
     <Box sx={{ p: '0px 8px 0px 8px' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography fontWeight={'bold'}>{'Sipariş Notunuz'}</Typography>
+        <Typography fontWeight={'bold'}>{'Sipariş Notu'}</Typography>
         <CardActions disableSpacing>
           <ExpandMore expand={expanded} onClick={handleExpandClick}>
             <ExpandMoreIcon />

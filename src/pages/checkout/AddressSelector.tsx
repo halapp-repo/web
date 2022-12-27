@@ -12,6 +12,7 @@ import {
   Stack,
   Button
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { Organization, OrganizationAddress } from '../../models/organization';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { updateOrganization } from '../../store/ui/uiSlice';
@@ -29,31 +30,36 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
   const Organizations = useAppSelector(selectOrganizations);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [selectedOrganization, setSelectedOrganization] = useState<string | null>(null);
+  const [selectedOrganizationID, setSelectedOrganizationID] = useState<string | null>(null);
 
   useEffect(() => {
-    if (Organizations && Organizations?.List?.length === 1) {
-      if (Organizations.List[0]) {
-        setSelectedOrganization(Organizations.List[0].ID!);
+    if (Organizations) {
+      const activeOrg = Organizations?.List?.filter((o) => o.Active === true);
+      if (activeOrg?.length === 1) {
+        setSelectedOrganizationID(activeOrg[0].ID!);
       }
     }
   }, [Organizations]);
 
   useEffect(() => {
-    if (!Organizations?.List) {
+    if (
+      typeof Organizations === 'undefined' ||
+      typeof Organizations.List === 'undefined' ||
+      Organizations.List.length === 0
+    ) {
       dispatch(fetchOrganizations());
     }
   }, []);
 
   useEffect(() => {
-    if (selectedOrganization && Organizations?.List) {
-      const org = Organizations.List.find((o) => o.ID == selectedOrganization);
+    if (selectedOrganizationID && Organizations?.List) {
+      const org = Organizations.List.find((o) => o.ID == selectedOrganizationID);
       if (org) {
         const deliveryAddress = org.getDeliveryAddress();
-        SetAddress(selectedOrganization, instanceToInstance(deliveryAddress!));
+        SetAddress(selectedOrganizationID, instanceToInstance(deliveryAddress!));
       }
     }
-  }, [selectedOrganization]);
+  }, [selectedOrganizationID]);
 
   const handleChangeOrganization = (organizationId: string) => {
     dispatch(updateOrganization({ tab: 1, generalInfoEditMode: false }));
@@ -65,9 +71,9 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
     return (
       <ListItem
         onClick={() => {
-          setSelectedOrganization(org.ID!);
+          setSelectedOrganizationID(org.ID!);
         }}
-        selected={org.ID === selectedOrganization}
+        selected={org.ID === selectedOrganizationID}
         button
         key={org.ID}
         sx={{
@@ -115,9 +121,28 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
       </ListItem>
     );
   };
+  const createEmptyAddress = (): JSX.Element => {
+    return (
+      <Box
+        sx={{
+          padding: '4px 8px 4px 8px',
+          marginBottom: '10px'
+        }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Typography>{'Etkin şirketiniz bulmamaktadır'}</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Typography variant="body1">{'Hala üye olmadınız mı?'}</Typography>
+          <Button variant="text" component={RouterLink} to="/organization/enrollment">
+            {'Üye Ol'}
+          </Button>
+        </Box>
+      </Box>
+    );
+  };
 
   return (
-    <RadioGroup value={selectedOrganization}>
+    <RadioGroup value={selectedOrganizationID}>
       <List
         subheader={
           <Box
@@ -129,7 +154,8 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
             <Typography fontWeight={'bold'}>{'Teslimat Adresi'}</Typography>
           </Box>
         }>
-        {Organizations?.List?.map((org) => getListItem(org))}
+        {Organizations?.List?.every((org) => !org.Active) && createEmptyAddress()}
+        {Organizations?.List?.filter((org) => org.Active).map((org) => getListItem(org))}
       </List>
     </RadioGroup>
   );

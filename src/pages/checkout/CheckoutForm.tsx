@@ -16,17 +16,18 @@ interface FormValues {
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { isSubmitting, isValid, setFieldValue } = props;
+  const { isSubmitting, isValid, setFieldValue, setFieldTouched } = props;
 
   const handleSetAddress = async (
     orgId: string,
     deliveryAddress: OrganizationAddress
   ): Promise<void> => {
     setFieldValue('organizationId', orgId, true);
+    setTimeout(() => setFieldTouched('organizationId', true));
     setFieldValue('deliveryAddress', deliveryAddress, true);
   };
   const handleSetNote = async (note: string): Promise<void> => {
-    setFieldValue('orderNote', note, true);
+    setFieldValue('orderNote', note);
   };
   const handleSetOrderItems = async (orderItems: OrderItemDTO[]) => {
     setFieldValue('orderItems', orderItems, true);
@@ -106,7 +107,7 @@ const CheckoutForm = withFormik<MyFormProps, FormValues>({
       .min(1)
       .required()
   }),
-  validateOnMount: true,
+  validateOnMount: false,
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
     await props.onSubmit(
