@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import { withFormik, FormikProps, Form } from 'formik';
 import * as Yup from 'yup';
 import MainCard from '../../components/MainCard';
-import { OrderItemDTO } from '../../models/dtos/order-item.dto';
+import { OrderItemDTO } from '../../models/dtos/order.dto';
 import { OrganizationAddress } from '../../models/organization';
 import { AddressSelector } from './AddressSelector';
 import { OrderNote } from './OrderNote';
@@ -23,14 +23,17 @@ const InnerForm = (props: FormikProps<FormValues>) => {
     deliveryAddress: OrganizationAddress
   ): Promise<void> => {
     setFieldValue('organizationId', orgId, true);
-    setTimeout(() => setFieldTouched('organizationId', true));
+    setTimeout(() => setFieldTouched('organizationId', true), 500);
     setFieldValue('deliveryAddress', deliveryAddress, true);
+    setTimeout(() => setFieldTouched('deliveryAddress', true), 500);
   };
   const handleSetNote = async (note: string): Promise<void> => {
     setFieldValue('orderNote', note);
+    setTimeout(() => setFieldTouched('orderNote', true), 500);
   };
   const handleSetOrderItems = async (orderItems: OrderItemDTO[]) => {
     setFieldValue('orderItems', orderItems, true);
+    setTimeout(() => setFieldTouched('orderItems', true), 500);
   };
 
   return (

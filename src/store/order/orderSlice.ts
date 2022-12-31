@@ -1,40 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { OrderItemDTO } from '../../models/dtos/order-item.dto';
-import { OrganizationAddress } from '../../models/organization';
-import { trMoment } from '../../utils/timezone';
+import { OrderDTO } from '../../models/dtos/order.dto';
+import { Order } from '../../models/order';
 import { OrderApi } from './orderApi';
 
 const initialState = {
   isLoading: false
 };
 
-export const CreateOrder = createAsyncThunk<
-  void,
-  {
-    orderNote: string;
-    organizationId: string;
-    deliveryAddress: OrganizationAddress;
-    orderItems: OrderItemDTO[];
-  },
-  { state: RootState }
->(
+export const CreateOrder = createAsyncThunk<Order, OrderDTO, { state: RootState }>(
   'orders/create',
-  async (
-    { orderNote, organizationId, deliveryAddress, orderItems },
-    { getState }
-  ): Promise<void> => {
+  async (order, { getState }): Promise<Order> => {
     const { userAuth } = getState().auth;
     if (!userAuth.authenticated || !userAuth.idToken) {
       throw new Error('Unauthenticated');
     }
-    const response = await new OrderApi().createOrder({
-      deliveryAddress,
-      orderItems,
-      orderNote,
-      organizationId,
+    return await new OrderApi().createOrder({
       token: userAuth.idToken,
-      orderDate: trMoment()
+      order: order
     });
   }
 );

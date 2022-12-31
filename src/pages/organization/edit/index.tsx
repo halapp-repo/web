@@ -11,12 +11,12 @@ import PageWrapper from '../../../components/PageWrapper';
 import MainCard from '../../../components/MainCard';
 import GeneralInformationForm from './GeneralInformationForm';
 import { Organization } from '../../../models/organization';
-import GeneralInformation from './GeneralInformation';
 import {
   selectUIOrganization,
   updateOrganization as updateUIOrganization
 } from '../../../store/ui/uiSlice';
 import { DeliveryAddresses } from './DeliveryAddresses';
+import Information from './Information';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -83,7 +83,7 @@ const OrganizationEdit = () => {
   const generateTabs = (tab: number, organization: Organization | null): JSX.Element => {
     if (!organization) {
       return (
-        <PageWrapper md={8} lg={6}>
+        <PageWrapper md={6} lg={5}>
           <Box
             sx={{
               width: '100%',
@@ -101,7 +101,7 @@ const OrganizationEdit = () => {
       // General Info
       if (generalInfoEditMode) {
         return (
-          <PageWrapper md={8} lg={6}>
+          <PageWrapper md={6} lg={5}>
             <TabPanel value={0} index={0}>
               <GeneralInformationForm
                 Organization={organization}
@@ -115,7 +115,7 @@ const OrganizationEdit = () => {
         return (
           <PageWrapper md={6} lg={5}>
             <TabPanel value={0} index={0}>
-              <GeneralInformation
+              <Information
                 Organization={organization}
                 OnEnterEditMode={() => toggleGeneralInformationEditMode(true)}
               />
@@ -137,7 +137,7 @@ const OrganizationEdit = () => {
 
   return (
     <>
-      <PageWrapper>
+      <PageWrapper md={6} lg={5}>
         <MainCard>
           <Tabs
             value={currentTab}

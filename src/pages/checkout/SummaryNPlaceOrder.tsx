@@ -1,7 +1,7 @@
 import { Stack, Box, Button, Typography, Divider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { City } from '../../models/city';
-import { OrderItemDTO } from '../../models/dtos/order-item.dto';
+import { OrderItemDTO } from '../../models/dtos/order.dto';
 import { ProductType } from '../../models/product-type';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchTodaysPrices } from '../../store/prices/pricesSlice';

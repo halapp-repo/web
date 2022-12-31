@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
-import { OrganizationAddressDTO, OrganizationDTO } from '../../models/dtos/organization.dto';
+import { OrganizationDTO } from '../../models/dtos/organization.dto';
 import { Organization, OrganizationAddress } from '../../models/organization';
 
 export class OrganizationsApi {

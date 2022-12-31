@@ -1,3 +1,8 @@
+import { Transform, Type } from 'class-transformer';
+import moment from 'moment';
+import { trMoment } from '../utils/timezone';
+import { OrganizationAddress } from './organization';
+
 class OrderItem {
   ProductId: string;
   Price: number;
@@ -6,10 +11,24 @@ class OrderItem {
 }
 
 class Order {
-  organizationId: string;
-  createdBy: string;
-  deliveryAddress: string;
-  orderItems: OrderItem[];
+  Id: string;
+  OrganizationId: string;
+
+  @Type(() => OrganizationAddress)
+  DeliveryAddress: OrganizationAddress;
+
+  CreatedBy: string;
+
+  @Type(() => Number)
+  @Transform(({ value }: { value: string }) => trMoment(value), {
+    toClassOnly: true
+  })
+  TS: moment.Moment;
+
+  @Type(() => OrderItem)
+  Items: OrderItem[];
+
+  Note?: string;
 }
 
 export { Order, OrderItem };

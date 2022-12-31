@@ -1,44 +1,25 @@
 import axios from 'axios';
-import { Moment } from 'moment';
-import { OrderItemDTO } from '../../models/dtos/order-item.dto';
-import { OrganizationAddress } from '../../models/organization';
+import { OrderDTO } from '../../models/dtos/order.dto';
+import { Order } from '../../models/order';
 
 export class OrderApi {
   baseUrl: string;
-
-  async createOrder({
-    token,
-    organizationId,
-    deliveryAddress,
-    orderNote,
-    orderItems,
-    orderDate
-  }: {
-    token: string;
-    organizationId: string;
-    deliveryAddress: OrganizationAddress;
-    orderNote: string;
-    orderItems: OrderItemDTO[];
-    orderDate: Moment;
-  }): Promise<void> {
-    return await axios.post(
-      '/orders',
-      JSON.stringify({
-        organizationId,
-        deliveryAddress,
-        orderNote,
-        orderItems,
-        orderDate: orderDate.valueOf()
-      }),
-      {
-        baseURL: this.baseUrl,
-        headers: {
-          Accept: 'application/json',
-          'content-type': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8',
-          Authorization: `Bearer ${token}`
-        }
+  constructor() {
+    const baseUrl = process.env.REACT_APP_ORDER_BASE_URL;
+    if (!baseUrl) {
+      throw new Error('REACT_APP_ORDER_BASE_URL is not set!');
+    }
+    this.baseUrl = baseUrl;
+  }
+  async createOrder({ token, order }: { token: string; order: OrderDTO }): Promise<Order> {
+    return await axios.post('/orders', JSON.stringify(order), {
+      baseURL: this.baseUrl,
+      headers: {
+        Accept: 'application/json',
+        'content-type': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`
       }
-    );
+    });
   }
 }
