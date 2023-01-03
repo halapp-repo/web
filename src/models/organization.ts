@@ -9,6 +9,16 @@ class OrganizationAddress {
   City: string;
   ZipCode: string;
   Country: string;
+
+  compareOther(other: OrganizationAddress): boolean {
+    return (
+      this.AddressLine === other.AddressLine &&
+      this.City === other.City &&
+      this.Country === other.Country &&
+      this.County === other.County &&
+      this.ZipCode === other.ZipCode
+    );
+  }
 }
 
 class Organization {
@@ -73,6 +83,12 @@ class Organization {
     this.CompanyAddress.Country = addr.Country;
     this.CompanyAddress.County = addr.County;
     this.CompanyAddress.ZipCode = addr.ZipCode;
+  }
+  areInvoiceAndCompanyAddressesSame(): boolean {
+    if (!this.CompanyAddress || !this.InvoiceAddress) {
+      return false;
+    }
+    return this.CompanyAddress.compareOther(this.InvoiceAddress);
   }
 }
 

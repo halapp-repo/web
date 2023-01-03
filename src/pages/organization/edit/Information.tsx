@@ -58,26 +58,41 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
                 </Typography>
               </Stack>
               <Divider sx={{ m: '10px 0px' }} />
-              <Grid container>
-                <Grid item md={6}>
-                  <Typography variant="body1" color="secondary" fontWeight={'bold'}>
-                    {'Fatura Adresi'}
-                  </Typography>
-                  <Typography variant="body1">
-                    {Organization.InvoiceAddress?.AddressLine}
-                  </Typography>
-                  <Typography variant="body1">{`${Organization.InvoiceAddress?.County} ${Organization.InvoiceAddress?.City} ${Organization.InvoiceAddress?.ZipCode} ${Organization.InvoiceAddress?.Country}`}</Typography>
+              {Organization.areInvoiceAndCompanyAddressesSame() || (
+                <Grid container>
+                  <Grid item md={6}>
+                    <Typography variant="body1" color="secondary" fontWeight={'bold'}>
+                      {'Fatura Adresi'}
+                    </Typography>
+                    <Typography variant="body1">
+                      {Organization.InvoiceAddress?.AddressLine}
+                    </Typography>
+                    <Typography variant="body1">{`${Organization.InvoiceAddress?.County} ${Organization.InvoiceAddress?.City} ${Organization.InvoiceAddress?.ZipCode} ${Organization.InvoiceAddress?.Country}`}</Typography>
+                  </Grid>
+                  <Grid item md={6}>
+                    <Typography variant="body1" color="secondary" fontWeight={'bold'}>
+                      {'Sirket Adresi'}
+                    </Typography>
+                    <Typography variant="body1">
+                      {Organization.CompanyAddress?.AddressLine}
+                    </Typography>
+                    <Typography variant="body1">{`${Organization.CompanyAddress?.County} ${Organization.CompanyAddress?.City} ${Organization.CompanyAddress?.ZipCode} ${Organization.CompanyAddress?.Country}`}</Typography>
+                  </Grid>
                 </Grid>
-                <Grid item md={6}>
-                  <Typography variant="body1" color="secondary" fontWeight={'bold'}>
-                    {'Sirket Adresi'}
-                  </Typography>
-                  <Typography variant="body1">
-                    {Organization.CompanyAddress?.AddressLine}
-                  </Typography>
-                  <Typography variant="body1">{`${Organization.CompanyAddress?.County} ${Organization.CompanyAddress?.City} ${Organization.CompanyAddress?.ZipCode} ${Organization.CompanyAddress?.Country}`}</Typography>
+              )}
+              {Organization.areInvoiceAndCompanyAddressesSame() && (
+                <Grid container>
+                  <Grid item md={6}>
+                    <Typography variant="body1" color="secondary" fontWeight={'bold'}>
+                      {'Fatura/Sirket Adresi'}
+                    </Typography>
+                    <Typography variant="body1">
+                      {Organization.InvoiceAddress?.AddressLine}
+                    </Typography>
+                    <Typography variant="body1">{`${Organization.InvoiceAddress?.County} ${Organization.InvoiceAddress?.City} ${Organization.InvoiceAddress?.ZipCode} ${Organization.InvoiceAddress?.Country}`}</Typography>
+                  </Grid>
                 </Grid>
-              </Grid>
+              )}
             </Box>
           </Stack>
         </Grid>

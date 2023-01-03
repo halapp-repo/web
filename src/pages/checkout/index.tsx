@@ -20,7 +20,7 @@ const Checkout = () => {
         Items: orderItems,
         OrganizationId: organizationId,
         Note: orderNote,
-        TS: trMoment().valueOf()
+        TS: trMoment().format()
       })
     );
   };
