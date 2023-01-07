@@ -9,17 +9,13 @@ class OrderItemDTO {
 
 class OrderDTO {
   Id?: string;
-
   OrganizationId: string;
-
+  Status?: string;
   DeliveryAddress: OrganizationAddress;
-
   CreatedBy?: string;
-
-  TS: string;
-
+  CreatedDate?: string;
   Items: OrderItemDTO[];
-
+  TS: string;
   Note?: string;
 }
 

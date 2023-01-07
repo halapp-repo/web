@@ -13,7 +13,7 @@ import {
   ListItemButton,
   ListItemIcon
 } from '@mui/material';
-import { ShopOutlined } from '@ant-design/icons';
+import { ScheduleOutlined, ShopOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import Transitions from '../../../../../components/Transitions';
 import { LogoutOutlined } from '@ant-design/icons';
@@ -52,6 +52,10 @@ const Profile = (props: ProfileProps) => {
 
   const handleOpenOrganizationList = () => {
     navigate('/organization/list');
+    setOpen(false);
+  };
+  const handleOpenOrderList = () => {
+    navigate('/orders');
     setOpen(false);
   };
 
@@ -111,6 +115,18 @@ const Profile = (props: ProfileProps) => {
                           </ListItemIcon>
                           <ListItemText
                             primary={'Şirketlerim'}
+                            primaryTypographyProps={{ fontSize: '15px' }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem disablePadding>
+                        <ListItemButton onClick={handleOpenOrderList}>
+                          <ListItemIcon>
+                            <ScheduleOutlined />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={'Siparişlerim'}
                             primaryTypographyProps={{ fontSize: '15px' }}
                           />
                         </ListItemButton>

@@ -191,17 +191,25 @@ const OrganizationsSlice = createSlice({
      */
     builder.addCase(fetchOrganizations.fulfilled, (state, action) => {
       const data = action.payload;
-      state.Organizations = {
-        ...state.Organizations,
-        List: [...(data || [])],
-        IsLoading: false
+      state = {
+        ...state,
+        Organizations: {
+          ...state.Organizations,
+          List: [...(data || [])],
+          IsLoading: false
+        }
       };
+      return state;
     });
     builder.addCase(fetchOrganizations.pending, (state) => {
-      state.Organizations = {
-        ...state.Organizations,
-        IsLoading: true
+      state = {
+        ...state,
+        Organizations: {
+          ...state.Organizations,
+          IsLoading: true
+        }
       };
+      return state;
     });
     builder.addCase(fetchOrganizations.rejected, (state) => {
       state.Organizations = {
@@ -261,6 +269,7 @@ export const selectOrganizations = createSelector(
   [(state: RootState) => state.organizations],
   (org: OrganizationsState) => org.Organizations
 );
+
 export const selectIndividualOrganization = createSelector(
   [
     (state: RootState) => state.organizations,

@@ -47,6 +47,12 @@ const ShoppingCartSlice = createSlice({
   name: 'shopping-cart',
   initialState,
   reducers: {
+    removeAllItems: (state: ShoppingCartState) => {
+      state.cart = {
+        Items: []
+      };
+      saveToLC(state.cart);
+    },
     removeCartItem: (state: ShoppingCartState, action: PayloadAction<string>) => {
       state.cart = {
         ...state.cart,
@@ -107,7 +113,7 @@ const ShoppingCartSlice = createSlice({
   }
 });
 
-export const { removeCartItem, updateCartItemCount, addCartItem, fetchCartItem } =
+export const { removeCartItem, updateCartItemCount, addCartItem, fetchCartItem, removeAllItems } =
   ShoppingCartSlice.actions;
 
 export const selectShoppingCart = createSelector(

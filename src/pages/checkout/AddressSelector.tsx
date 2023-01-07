@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -14,46 +14,34 @@ import {
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization, OrganizationAddress } from '../../models/organization';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppDispatch } from '../../store/hooks';
 import { updateOrganization } from '../../store/ui/uiSlice';
-import {
-  fetchOrganizations,
-  selectOrganizations
-} from '../../store/organizations/organizationsSlice';
 import { instanceToInstance } from 'class-transformer';
+import { OrganizationsContext } from './OrganizationsContext';
 
 interface AddressSelectorProps {
   SetAddress: (orgId: string, deliveryAddress: OrganizationAddress) => Promise<void>;
 }
 
 const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
-  const Organizations = useAppSelector(selectOrganizations);
+  const organizations = useContext(OrganizationsContext);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedOrganizationID, setSelectedOrganizationID] = useState<string | null>(null);
 
   useEffect(() => {
-    if (Organizations) {
-      const activeOrg = Organizations?.List?.filter((o) => o.Active === true);
+    if (organizations) {
+      const activeOrg = organizations?.filter((o) => o.Active === true);
       if (activeOrg?.length === 1) {
         setSelectedOrganizationID(activeOrg[0].ID!);
       }
     }
-  }, [Organizations]);
+  }, [organizations]);
 
   useEffect(() => {
-    if (
-      typeof Organizations === 'undefined' ||
-      typeof Organizations.List === 'undefined' ||
-      Organizations.List.length === 0
-    ) {
-      dispatch(fetchOrganizations());
-    }
-  }, []);
-
-  useEffect(() => {
-    if (selectedOrganizationID && Organizations?.List) {
-      const org = Organizations.List.find((o) => o.ID == selectedOrganizationID);
+    if (selectedOrganizationID && organizations) {
+      const org = organizations.find((o) => o.ID == selectedOrganizationID);
       if (org) {
         const deliveryAddress = org.getDeliveryAddress();
         SetAddress(selectedOrganizationID, instanceToInstance(deliveryAddress!));
@@ -154,8 +142,8 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
             <Typography fontWeight={'bold'}>{'Teslimat Adresi'}</Typography>
           </Box>
         }>
-        {Organizations?.List?.every((org) => !org.Active) && createEmptyAddress()}
-        {Organizations?.List?.filter((org) => org.Active).map((org) => getListItem(org))}
+        {organizations?.every((org) => !org.Active) && createEmptyAddress()}
+        {organizations?.filter((org) => org.Active).map((org) => getListItem(org))}
       </List>
     </RadioGroup>
   );

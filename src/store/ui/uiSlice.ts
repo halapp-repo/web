@@ -86,6 +86,9 @@ const UISlice = createSlice({
     },
     updateCheckoutOrderNote: (state: UIState, action: PayloadAction<string>) => {
       state.checkout.orderNote = action.payload;
+    },
+    toggleGlobalIsLoading: (state: UIState, action: PayloadAction<boolean>) => {
+      state.global.isLoading = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -133,7 +136,8 @@ export const {
   updateListingProductNameFilter,
   toggleShoppingCart,
   updateOrganization,
-  updateCheckoutOrderNote
+  updateCheckoutOrderNote,
+  toggleGlobalIsLoading
 } = UISlice.actions;
 
 export const selectUIListingSelectedDate = createSelector(
