@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import AuthWrapper from '../AuthWrapper';
+import { useSearchParams } from 'react-router-dom';
 import AuthCard from '../AuthCard';
 import { SignInForm } from './SignInForm';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -8,18 +9,27 @@ import {
   selectUserAuth,
   confirmRegistration,
   resendConfirmCode,
-  clearStatusAndError
+  clearStatusAndError,
+  getSignupCodeDetails,
+  SelectSignupCode
 } from '../../../store/auth/authSlice';
 import OTPForm from '../OTPForm';
 import { useNavigate } from 'react-router-dom';
+import { SignupCode } from '../../../models/signup-code';
 
 const SignIn = () => {
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userAuth = useAppSelector(selectUserAuth);
+  const signupCode = useAppSelector(SelectSignupCode);
 
-  const handleSignin = async (email: string, password: string): Promise<void> => {
-    await dispatch(signIn({ email, password }));
+  const handleSignin = async (
+    email: string,
+    password: string,
+    code?: SignupCode | null
+  ): Promise<void> => {
+    await dispatch(signIn({ email, password, code }));
   };
 
   const handleConfirmSignup = async (otpCode: string): Promise<void> => {
@@ -34,12 +44,19 @@ const SignIn = () => {
     dispatch(clearStatusAndError());
   }, []);
 
+  useEffect(() => {
+    const code = searchParams.get('code');
+    if (code && typeof signupCode === 'undefined') {
+      dispatch(getSignupCodeDetails({ code }));
+    }
+  }, [searchParams]);
+
   const createSigninForm = () => {
     if (userAuth.authenticated) {
       navigate('/dashboard');
     }
     if (!userAuth.needConfirmation) {
-      return <SignInForm onSignin={handleSignin} />;
+      return <SignInForm code={signupCode} onSignin={handleSignin} />;
     } else if (userAuth.needConfirmation && userAuth.email) {
       return (
         <OTPForm

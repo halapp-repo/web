@@ -11,7 +11,7 @@ export class OrderToOrderDTOMapper extends IMapper<Order, OrderDTO> {
   }
   toModel(arg: OrderDTO): Order {
     return plainToClass(Order, {
-      Id: arg.Id,
+      Id: arg.Id!,
       OrganizationId: arg.OrganizationId,
       DeliveryAddress: {
         AddressLine: arg.DeliveryAddress.AddressLine,
@@ -28,8 +28,8 @@ export class OrderToOrderDTOMapper extends IMapper<Order, OrderDTO> {
         Unit: i.Unit
       })),
       Note: arg.Note,
-      CreatedDate: arg.CreatedDate,
+      CreatedDate: arg.CreatedDate!,
       Status: arg.Status
-    } as Order);
+    });
   }
 }

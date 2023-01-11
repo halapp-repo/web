@@ -72,36 +72,36 @@ export const resendConfirmCode = createAsyncThunk<void, void, { state: RootState
   }
 );
 
-export const signIn = createAsyncThunk<AuthResponseDTO | null, { email: string; password: string }>(
-  'auth/signin',
-  async ({ email, password }) => {
-    try {
-      const response = await signInFunc(email, password);
-      const userAttr = await getUserAttributesFunc(response.user);
+export const signIn = createAsyncThunk<
+  AuthResponseDTO | null,
+  { email: string; password: string; code?: SignupCode | null }
+>('auth/signin', async ({ email, password, code }) => {
+  try {
+    const response = await signInFunc(email, password, code && code.isActive() ? code.Code : null);
+    const userAttr = await getUserAttributesFunc(response.user);
 
-      localStorage.setItem(
-        UserSessionLS,
-        JSON.stringify({ email: userAttr.Email, id: userAttr.ID, isAdmin: userAttr.IsAdmin })
-      );
-      return <AuthResponseDTO>{
-        Confirmed: true,
-        Authenticated: true,
-        Email: email,
-        AccessToken: response.accessToken,
-        IdToken: response.idToken,
-        IsAdmin: userAttr.IsAdmin,
-        UserId: userAttr.ID
-      };
-    } catch (err) {
-      if (err instanceof Error) {
-        if (err.message === 'User is not confirmed.') {
-          resendConfirmCodeFunc(email);
-        }
+    localStorage.setItem(
+      UserSessionLS,
+      JSON.stringify({ email: userAttr.Email, id: userAttr.ID, isAdmin: userAttr.IsAdmin })
+    );
+    return <AuthResponseDTO>{
+      Confirmed: true,
+      Authenticated: true,
+      Email: email,
+      AccessToken: response.accessToken,
+      IdToken: response.idToken,
+      IsAdmin: userAttr.IsAdmin,
+      UserId: userAttr.ID
+    };
+  } catch (err) {
+    if (err instanceof Error) {
+      if (err.message === 'User is not confirmed.') {
+        resendConfirmCodeFunc(email);
       }
-      throw err;
     }
+    throw err;
   }
-);
+});
 
 export const signOut = createAsyncThunk('auth/signout', async () => {
   await signOutFunc();

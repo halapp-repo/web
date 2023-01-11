@@ -36,7 +36,7 @@ class Order {
   @Transform(({ value }: { value: string }) => trMoment(value), {
     toClassOnly: true
   })
-  CreatedDate?: moment.Moment;
+  CreatedDate: moment.Moment;
 
   @Type(() => String)
   @Transform(({ value }: { value: string }) => OrderStatus[value as keyof typeof OrderStatus], {

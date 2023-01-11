@@ -56,6 +56,9 @@ const OrderSlice = createSlice({
       state.IsLoading = false;
       state.List[trMoment().format('MMYYYY')] = undefined;
     });
+    builder.addCase(createOrder.pending, (state, action) => {
+      state.IsLoading = true;
+    });
     builder.addCase(createOrder.rejected, (state, action) => {
       state.IsLoading = false;
     });
@@ -68,9 +71,11 @@ const OrderSlice = createSlice({
       };
       state.IsLoading = false;
     });
-    //
     builder.addCase(fetchOrdersByMonth.rejected, (state) => {
       state.IsLoading = false;
+    });
+    builder.addCase(fetchOrdersByMonth.pending, (state) => {
+      state.IsLoading = true;
     });
   }
 });

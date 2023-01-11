@@ -7,7 +7,8 @@ import {
   useMediaQuery,
   Typography,
   Select,
-  MenuItem
+  MenuItem,
+  SelectChangeEvent
 } from '@mui/material';
 import { ReactElement, useEffect } from 'react';
 import { Organization } from '../../models/organization';
@@ -47,13 +48,21 @@ const OrganizationSelect = ({
       );
     } else {
       return (
-        <Select value={selectedOrganizationId} label="Sirketler">
-          {Organizations.map((o) => (
-            <MenuItem key={o.ID!} value={o.ID!}>
-              {o.Name!}
-            </MenuItem>
-          ))}
-        </Select>
+        <Box sx={{ p: '0px 10px' }}>
+          <Select
+            value={selectedOrganizationId!}
+            sx={{ width: '100%' }}
+            label="Sirketler"
+            onChange={(event: SelectChangeEvent) => {
+              SetOrganization(event.target.value as string);
+            }}>
+            {Organizations.map((o) => (
+              <MenuItem key={o.ID!} value={o.ID!}>
+                {o.Name!}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
       );
     }
   };
