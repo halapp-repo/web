@@ -2,13 +2,14 @@ import { ReactNode } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 // material-ui
-import { Box, IconButton, Alert } from '@mui/material';
+import { Box, IconButton, Alert, Button } from '@mui/material';
 
 // project import
 import MainCard from '../../components/MainCard';
 import Logo from '../../components/logo/Logo';
 import { selectUserAuth } from '../../store/auth/authSlice';
 import { useAppSelector } from '../../store/hooks';
+import { Link, useSearchParams } from 'react-router-dom';
 
 // ==============================|| AUTHENTICATION - CARD WRAPPER ||============================== //
 interface Props {
@@ -31,6 +32,7 @@ const AuthCard = ({
   }
 }: Props) => {
   const userAuth = useAppSelector(selectUserAuth);
+  const [searchParams] = useSearchParams();
 
   return (
     <MainCard
@@ -69,6 +71,17 @@ const AuthCard = ({
       {userAuth.error && (
         <Alert variant="outlined" severity="error">
           {`${userAuth.error.message}`}
+          {userAuth.error.ErrorCode === 'UsernameExistsException' && searchParams.get('code') && (
+            <Box>
+              {`Lütfen Giriş Yapın`}
+              <Button
+                variant="text"
+                component={Link}
+                to={`/auth/signin?code=${searchParams.get('code')}`}>
+                {'Giris yap'}
+              </Button>
+            </Box>
+          )}
         </Alert>
       )}
       <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 } }}>{children}</Box>

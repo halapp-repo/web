@@ -1,5 +1,13 @@
 import { SignupCode } from '../../models/signup-code';
 
+export class AuthError extends Error {
+  ErrorCode?: string;
+  constructor(message: string, errorCode?: string) {
+    super(message);
+    this.ErrorCode = errorCode;
+  }
+}
+
 type UserAuthStatus =
   | 'ForgotPasswordRejected'
   | 'ForgotPasswordFulfilled'
@@ -12,7 +20,7 @@ export type UserAuth = {
   confirmed: boolean;
   email: string;
   needConfirmation: boolean;
-  error?: Error | null | undefined;
+  error?: AuthError | null | undefined;
   idToken?: string | undefined;
   accessToken?: string | undefined;
   status?: UserAuthStatus;

@@ -1,6 +1,6 @@
 import { createSelector, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
-import { AuthState, UserAuth } from './authState';
+import { AuthError, AuthState, UserAuth } from './authState';
 import {
   signUp as signUpFunc,
   confirmRegistration as confirmRegistrationFunc,
@@ -194,12 +194,12 @@ const AuthSlice = createSlice({
       if (error.code === 'UsernameExistsException') {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Bu Email adresi kullanılamaz. Lütfen başka bir Email adresi deneyiniz.')
+          error: new AuthError(`${action.meta.arg.email} kullanimda.`, error.code)
         };
       } else {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Bilinmeyen bir hata olustu.')
+          error: new AuthError('Bilinmeyen bir hata olustu.')
         };
       }
     });
@@ -220,22 +220,22 @@ const AuthSlice = createSlice({
       if (error.code === 'ExpiredCodeException') {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Girdiginiz kodun süresi dolmuş, lutfen tekrar kod yaratin.')
+          error: new AuthError('Girdiginiz kodun süresi dolmuş, lutfen tekrar kod yaratin.')
         };
       } else if (error.code === 'NotAuthorizedException') {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Bu islem icin yetkili degilsiniz.')
+          error: new AuthError('Bu islem icin yetkili degilsiniz.')
         };
       } else if (error.code === 'CodeMismatchException') {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Doğrulama kodu hatalı.')
+          error: new AuthError('Doğrulama kodu hatalı.')
         };
       } else {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Bilinmeyen bir hata olustu.')
+          error: new AuthError('Bilinmeyen bir hata olustu.')
         };
       }
     });
@@ -244,17 +244,17 @@ const AuthSlice = createSlice({
       if (error.code === 'CodeDeliveryDetails') {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Girdiginiz Email bulunmamaktadir.')
+          error: new AuthError('Girdiginiz Email bulunmamaktadir.')
         };
       } else if (error.code === 'LimitExceededException') {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Deneme limitinizi doldurdunuz, biraz sonra deneyiniz.')
+          error: new AuthError('Deneme limitinizi doldurdunuz, biraz sonra deneyiniz.')
         };
       } else {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Bilinmeyen bir hata olustu.')
+          error: new AuthError('Bilinmeyen bir hata olustu.')
         };
       }
     });
@@ -293,24 +293,24 @@ const AuthSlice = createSlice({
           authenticated: false,
           email: email.toUpperCase(),
           needConfirmation: true,
-          error: new Error('Email adresinizi onaylamaniz gerekmektedir'),
+          error: new AuthError('Email adresinizi onaylamaniz gerekmektedir'),
           idToken: undefined,
           accessToken: undefined
         };
       } else if (action.error.code === 'NotAuthorizedException') {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Email adresiniz ve/veya şifreniz hatalı.')
+          error: new AuthError('Email adresiniz ve/veya şifreniz hatalı.')
         };
       } else if (action.error.code === 'UserNotFoundException') {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Email adresiniz ve/veya şifreniz hatalı.')
+          error: new AuthError('Email adresiniz ve/veya şifreniz hatalı.')
         };
       } else {
         state.userAuth = {
           ...state.userAuth,
-          error: new Error('Bilinmeyen hata olustu.')
+          error: new AuthError('Bilinmeyen hata olustu.')
         };
       }
     });
@@ -342,7 +342,7 @@ const AuthSlice = createSlice({
       state.userAuth = {
         ...state.userAuth,
         status: 'confirmPasswordFulfilled',
-        error: new Error('Doğrulama kodu hatalı.')
+        error: new AuthError('Doğrulama kodu hatalı.')
       };
     });
     builder.addCase(confirmPassword.rejected, (state, action) => {
@@ -351,19 +351,19 @@ const AuthSlice = createSlice({
         state.userAuth = {
           ...state.userAuth,
           status: 'confirmPasswordRejected',
-          error: new Error('Doğrulama kodu hatalı.')
+          error: new AuthError('Doğrulama kodu hatalı.')
         };
       } else if (error.code === 'ExpiredCodeException') {
         state.userAuth = {
           ...state.userAuth,
           status: 'confirmPasswordRejected',
-          error: new Error('Girdiginiz kodun süresi dolmuş, lutfen tekrar kod yaratin.')
+          error: new AuthError('Girdiginiz kodun süresi dolmuş, lutfen tekrar kod yaratin.')
         };
       } else {
         state.userAuth = {
           ...state.userAuth,
           status: 'confirmPasswordRejected',
-          error: new Error('Bilinmeyen bir hata olustu.')
+          error: new AuthError('Bilinmeyen bir hata olustu.')
         };
       }
     });
@@ -380,19 +380,19 @@ const AuthSlice = createSlice({
         state.userAuth = {
           ...state.userAuth,
           status: 'ForgotPasswordRejected',
-          error: new Error('Bu islem icin yetkili degilsiniz.')
+          error: new AuthError('Bu islem icin yetkili degilsiniz.')
         };
       } else if (error.code === 'InvalidParameterException') {
         state.userAuth = {
           ...state.userAuth,
           status: 'ForgotPasswordRejected',
-          error: new Error('Kullanici kayitli degil')
+          error: new AuthError('Kullanici kayitli degil')
         };
       } else {
         state.userAuth = {
           ...state.userAuth,
           status: 'ForgotPasswordRejected',
-          error: new Error('Bilinmeyen bir hata olustu.')
+          error: new AuthError('Bilinmeyen bir hata olustu.')
         };
       }
     });
