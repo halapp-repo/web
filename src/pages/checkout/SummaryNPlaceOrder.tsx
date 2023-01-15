@@ -1,7 +1,7 @@
 import { Stack, Box, Button, Typography, Divider } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { City } from '../../models/city';
-import { OrderItemDTO } from '../../models/dtos/order.dto';
+import { OrderItemVM } from '@halapp/common';
 import { ProductType } from '../../models/product-type';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
@@ -10,7 +10,7 @@ import { toggleShoppingCart } from '../../store/ui/uiSlice';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
-  SetOrderItems: (orderItems: OrderItemDTO[]) => Promise<void>;
+  SetOrderItems: (orderItems: OrderItemVM[]) => Promise<void>;
 }
 
 const SummaryNPlaceOrder = ({ IsValid, SetOrderItems }: SummaryNPlaceOrderProps) => {
@@ -44,7 +44,7 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems }: SummaryNPlaceOrderProps)
               Price: i.Price!,
               ProductId: i.ProductId,
               Unit: i.Unit!
-            } as OrderItemDTO)
+            } as OrderItemVM)
         )
       );
     }

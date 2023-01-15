@@ -1,8 +1,10 @@
-import { Order } from '../../models/order';
+import { OrderVM } from '@halapp/common';
 
 export interface OrdersState {
   List: {
-    [k: string]: Order[] | undefined;
+    [orgId: string]: {
+      [filterName: string]: OrderVM[] | undefined;
+    };
   };
   IsLoading: boolean;
 }

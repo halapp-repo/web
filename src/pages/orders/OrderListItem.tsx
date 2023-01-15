@@ -20,7 +20,7 @@ const OrderListItem = ({ Order }: OrderListItemProps) => {
   return (
     <Grid container rowSpacing={1} justifyContent="right" columnSpacing={1} alignItems="right">
       <Grid item xs={8}>
-        <List>
+        <List disablePadding={true}>
           {Order.Items.map((i) => (
             <ListItem key={i.ProductId}>
               <ListItemText
@@ -49,7 +49,7 @@ const OrderListItem = ({ Order }: OrderListItemProps) => {
               <Typography variant="body2" fontWeight={'bold'}>
                 {'Toplam Ücret'}
               </Typography>
-              <Typography variant="body1" color={red[900]}>
+              <Typography variant="body1" fontWeight={'bold'} color={red[900]}>
                 {new Intl.NumberFormat('tr-TR', {
                   style: 'currency',
                   currency: 'TRY'

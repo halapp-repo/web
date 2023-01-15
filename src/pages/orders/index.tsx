@@ -27,7 +27,9 @@ const ShoppingCart = () => {
   const userAuth = useAppSelector(selectUserAuth);
   const dispatch = useAppDispatch();
   const organizations = useAppSelector(selectOrganizations);
-  const orders = useAppSelector((state) => selectOrdersByMonth(state, trMoment()));
+  const orders = useAppSelector((state) =>
+    selectOrdersByMonth(state, selectedOrganization || '', trMoment())
+  );
   const ordersAreLoading = useAppSelector(selectOrderIsLoading);
 
   useEffect(() => {

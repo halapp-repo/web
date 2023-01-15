@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { OrderItemDTO } from '../../models/dtos/order.dto';
 import { OrganizationAddress } from '../../models/organization';
 import { CheckoutForm } from './CheckoutForm';
 import { createOrder } from '../../store/orders/ordersSlice';
@@ -13,6 +12,7 @@ import {
 import { removeAllItems } from '../../store/shopping-cart/shoppingCartSlice';
 import { Overlay } from '../../components/Overlay';
 import { useNavigate } from 'react-router-dom';
+import { OrderItemVM, OrderVM } from '@halapp/common';
 
 const Checkout = () => {
   const organizations = useAppSelector(selectOrganizations);
@@ -33,16 +33,20 @@ const Checkout = () => {
     orderNote: string,
     organizationId: string,
     deliveryAddress: OrganizationAddress,
-    orderItems: OrderItemDTO[]
+    orderItems: OrderItemVM[]
   ): Promise<void> => {
     await dispatch(
       createOrder({
+        Id: '0',
+        Status: '',
+        CreatedBy: '',
+        CreatedDate: '',
         DeliveryAddress: deliveryAddress,
         Items: orderItems,
         OrganizationId: organizationId,
         Note: orderNote,
         TS: trMoment().format()
-      })
+      } as OrderVM)
     );
     dispatch(removeAllItems());
     navigate('/orders');

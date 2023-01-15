@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import { withFormik, FormikProps, Form } from 'formik';
 import * as Yup from 'yup';
 import MainCard from '../../components/MainCard';
-import { OrderItemDTO } from '../../models/dtos/order.dto';
+import { OrderItemVM } from '@halapp/common';
 import { OrganizationAddress } from '../../models/organization';
 import { AddressSelector } from './AddressSelector';
 import { OrderNote } from './OrderNote';
@@ -12,7 +12,7 @@ interface FormValues {
   orderNote: string;
   organizationId: string;
   deliveryAddress?: OrganizationAddress;
-  orderItems: OrderItemDTO[];
+  orderItems: OrderItemVM[];
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -31,7 +31,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
     setFieldValue('orderNote', note);
     setTimeout(() => setFieldTouched('orderNote', true), 500);
   };
-  const handleSetOrderItems = async (orderItems: OrderItemDTO[]) => {
+  const handleSetOrderItems = async (orderItems: OrderItemVM[]) => {
     setFieldValue('orderItems', orderItems, true);
     setTimeout(() => setFieldTouched('orderItems', true), 500);
   };
@@ -72,7 +72,7 @@ interface MyFormProps {
     orderNote: string,
     organizationId: string,
     deliveryAddress: OrganizationAddress,
-    orderItems: OrderItemDTO[]
+    orderItems: OrderItemVM[]
   ) => Promise<void>;
 }
 

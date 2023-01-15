@@ -1,20 +1,21 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { OrderDTO } from '../../models/dtos/order.dto';
-import { Order } from '../../models/order';
 import { OrderApi } from './ordersApi';
 import { OrdersState } from './ordersState';
 import moment from 'moment';
 import { trMoment } from '../../utils/timezone';
+import { OrderVM } from '@halapp/common';
+import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
+import { InventoriesState } from '../inventories/inventoriesState';
 
 const initialState = {
   IsLoading: false,
   List: {}
 } as OrdersState;
 
-export const createOrder = createAsyncThunk<Order, OrderDTO, { state: RootState }>(
+export const createOrder = createAsyncThunk<OrderVM, OrderVM, { state: RootState }>(
   'orders/create',
-  async (order, { getState }): Promise<Order> => {
+  async (order, { getState }): Promise<OrderVM> => {
     const { userAuth } = getState().auth;
     if (!userAuth.authenticated || !userAuth.idToken) {
       throw new Error('Unauthenticated');
@@ -31,10 +32,10 @@ interface FetchOrdersByMonthRequest {
   Month: moment.Moment;
 }
 export const fetchOrdersByMonth = createAsyncThunk<
-  Order[] | null,
+  OrderVM[] | null,
   FetchOrdersByMonthRequest,
   { state: RootState }
->('orders/fetchAll', async ({ OrganizationId, Month }, { getState }): Promise<Order[] | null> => {
+>('orders/fetchAll', async ({ OrganizationId, Month }, { getState }): Promise<OrderVM[] | null> => {
   const { userAuth } = getState().auth;
   if (!userAuth.authenticated || !userAuth.idToken) {
     throw new Error('Unauthenticated');
@@ -53,8 +54,12 @@ const OrderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createOrder.fulfilled, (state, action) => {
+      const { OrganizationId } = action.meta.arg;
       state.IsLoading = false;
-      state.List[trMoment().format('MMYYYY')] = undefined;
+      state.List[OrganizationId] = {
+        ...state.List[OrganizationId],
+        [trMoment().format('MMYYYY')]: undefined
+      };
     });
     builder.addCase(createOrder.pending, (state, action) => {
       state.IsLoading = true;
@@ -64,9 +69,10 @@ const OrderSlice = createSlice({
     });
     builder.addCase(fetchOrdersByMonth.fulfilled, (state, action) => {
       const month = action.meta.arg.Month;
+      const { OrganizationId } = action.meta.arg;
       const data = action.payload || [];
-      state.List = {
-        ...state.List,
+      state.List[OrganizationId] = {
+        ...state.List[OrganizationId],
         [month.format('MMYYYY')]: data
       };
       state.IsLoading = false;
@@ -83,14 +89,29 @@ const OrderSlice = createSlice({
 export const selectOrdersByMonth = createSelector(
   [
     (state: RootState) => state.orders,
-    (state: RootState, month: moment.Moment): moment.Moment => month
+    (state: RootState) => state.inventories.inventories,
+    (state: RootState, orgId: string, month: moment.Moment): [string, moment.Moment] => [
+      orgId,
+      month
+    ]
   ],
-  (ord: OrdersState, month: moment.Moment) => {
-    const list = ord.List[month.format('MMYYYY')];
+  (ord: OrdersState, inventories, [orgId, month]) => {
+    const mapper = new OrderToOrderVMMapper();
+    if (!orgId || !month) {
+      return null;
+    }
+    const list = ord.List[orgId]?.[month.format('MMYYYY')];
     if (!list || list.length === 0) {
       return null;
     }
-    return list;
+    const orderList = mapper.toListModel(list);
+    orderList.forEach((o) => {
+      o.Items.forEach((i) => {
+        i.ProductName =
+          inventories?.find((inv) => inv.ProductId === i.ProductId)?.Name || i.ProductId;
+      });
+    });
+    return orderList;
   }
 );
 export const selectOrderIsLoading = createSelector(

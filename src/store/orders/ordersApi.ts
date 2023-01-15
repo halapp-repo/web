@@ -1,23 +1,22 @@
 import axios from 'axios';
 import moment from 'moment';
-import { OrderToOrderDTOMapper } from '../../mappers/order-to-order-dto.mapper';
-import { OrderDTO } from '../../models/dtos/order.dto';
-import { Order } from '../../models/order';
+import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
+import { OrderVM } from '@halapp/common';
 
 export class OrderApi {
   baseUrl: string;
-  mapper: OrderToOrderDTOMapper;
+  mapper: OrderToOrderVMMapper;
   constructor() {
     const baseUrl = process.env.REACT_APP_ORDER_BASE_URL;
     if (!baseUrl) {
       throw new Error('REACT_APP_ORDER_BASE_URL is not set!');
     }
     this.baseUrl = baseUrl;
-    this.mapper = new OrderToOrderDTOMapper();
+    this.mapper = new OrderToOrderVMMapper();
   }
-  async createOrder({ token, order }: { token: string; order: OrderDTO }): Promise<Order> {
+  async createOrder({ token, order }: { token: string; order: OrderVM }): Promise<OrderVM> {
     return await axios
-      .post<OrderDTO>('/orders', JSON.stringify(order), {
+      .post<OrderVM>('/orders', JSON.stringify(order), {
         baseURL: this.baseUrl,
         headers: {
           Accept: 'application/json',
@@ -28,7 +27,7 @@ export class OrderApi {
       })
       .then((response) => {
         const { data } = response;
-        return this.mapper.toModel(data);
+        return data;
       });
   }
   async fetchOrders({
@@ -41,9 +40,9 @@ export class OrderApi {
     organizationId: string;
     fromDate?: moment.Moment;
     toDate?: moment.Moment;
-  }): Promise<Order[] | null> {
+  }): Promise<OrderVM[] | null> {
     return await axios
-      .get<OrderDTO[]>('/orders', {
+      .get<OrderVM[]>('/orders', {
         baseURL: this.baseUrl,
         headers: {
           Accept: 'application/json',
@@ -67,7 +66,7 @@ export class OrderApi {
       })
       .then((response) => {
         const { data } = response;
-        return this.mapper.toListModel(data);
+        return data;
       });
   }
 }

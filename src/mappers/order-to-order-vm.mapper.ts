@@ -1,15 +1,13 @@
+import { OrderVM } from '@halapp/common';
 import { plainToClass } from 'class-transformer';
-import { OrderDTO } from '../models/dtos/order.dto';
-import { PriceDTO } from '../models/dtos/price.dto';
 import { Order } from '../models/order';
-import { Price } from '../models/price';
 import { IMapper } from './base.mapper';
 
-export class OrderToOrderDTOMapper extends IMapper<Order, OrderDTO> {
-  toDTO(): OrderDTO {
+export class OrderToOrderVMMapper extends IMapper<Order, OrderVM> {
+  toDTO(): OrderVM {
     throw new Error('Not Implemented');
   }
-  toModel(arg: OrderDTO): Order {
+  toModel(arg: OrderVM): Order {
     return plainToClass(Order, {
       Id: arg.Id!,
       OrganizationId: arg.OrganizationId,
@@ -30,6 +28,6 @@ export class OrderToOrderDTOMapper extends IMapper<Order, OrderDTO> {
       Note: arg.Note,
       CreatedDate: arg.CreatedDate!,
       Status: arg.Status
-    });
+    } as OrderVM);
   }
 }
