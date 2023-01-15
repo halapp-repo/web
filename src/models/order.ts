@@ -10,6 +10,10 @@ class OrderItem {
   Price: number;
   Count: number;
   Unit: string;
+
+  totalPrice(): number {
+    return this.Count * this.Price;
+  }
 }
 
 class Order {
@@ -43,6 +47,12 @@ class Order {
     toClassOnly: true
   })
   Status: OrderStatus;
+
+  totalPrice(): number {
+    return this.Items.reduce((acc, curr) => {
+      return acc + curr.totalPrice();
+    }, 0);
+  }
 }
 
 export { Order, OrderItem };

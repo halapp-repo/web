@@ -1,17 +1,10 @@
-import {
-  Box,
-  List,
-  ListSubheader,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Typography
-} from '@mui/material';
+import { Box, List, ListSubheader, ListItem, ListItemButton, Typography } from '@mui/material';
 import { Order } from '../../models/order';
 import CircularProgress from '@mui/material/CircularProgress';
-import { getComparator } from '../../utils/sort';
 import { trMoment } from '../../utils/timezone';
 import MainCard from '../../components/MainCard';
+import OrderListItem from './OrderListItem';
+import { getComparator } from '../../utils/sort';
 
 interface OrdersContentProps {
   Orders: Order[] | null;
@@ -51,12 +44,15 @@ const createOrderListItem = (orders: Order[] | null, isLoading: boolean) => {
           <ListSubheader sx={{ backgroundColor: '#fafafb' }}>
             {trMoment(dateStr, 'DDMMYYYY').format('DD.MM.YYYY')}
           </ListSubheader>
-          {(itemsData?.get(dateStr) || []).map((item) => (
-            <ListItemButton key={`item-${dateStr}-${item.Id}`}>
-              <MainCard sx={{ mt: 2 }}>{'XXX'}</MainCard>
-              {/* <ListItemText primary={`Item ${item.CreatedDate.format('DD/MM/YYYY')}`} /> */}
-            </ListItemButton>
-          ))}
+          {(itemsData?.get(dateStr) || [])
+            .sort(getComparator('desc', 'CreatedDate'))
+            .map((item) => (
+              <ListItemButton key={`item-${dateStr}-${item.Id}`}>
+                <MainCard sx={{ width: '100%', minHeight: '100px' }}>
+                  <OrderListItem Order={item} />
+                </MainCard>
+              </ListItemButton>
+            ))}
         </ul>
       </li>
     ));
