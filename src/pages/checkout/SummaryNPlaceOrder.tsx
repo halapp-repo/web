@@ -75,7 +75,7 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems }: SummaryNPlaceOrderProps)
         </Stack>
         <Stack direction={'row'} justifyContent="space-between">
           <Typography variant="body2">{`Taşıma ve nakliye:`}</Typography>
-          <Typography variant="body2">{`${ShoppingCart.TotalAmount}`}</Typography>
+          <Typography variant="body2">{`₺0`}</Typography>
         </Stack>
       </Box>
       <Divider />

@@ -11,6 +11,7 @@ import { Order } from '../../models/order';
 import CircularProgress from '@mui/material/CircularProgress';
 import { getComparator } from '../../utils/sort';
 import { trMoment } from '../../utils/timezone';
+import MainCard from '../../components/MainCard';
 
 interface OrdersContentProps {
   Orders: Order[] | null;
@@ -47,10 +48,13 @@ const createOrderListItem = (orders: Order[] | null, isLoading: boolean) => {
     return sortedKey.map((dateStr) => (
       <li key={`section-${dateStr}`}>
         <ul>
-          <ListSubheader>{trMoment(dateStr, 'DDMMYYYY').format('DD.MM.YYYY')}</ListSubheader>
+          <ListSubheader sx={{ backgroundColor: '#fafafb' }}>
+            {trMoment(dateStr, 'DDMMYYYY').format('DD.MM.YYYY')}
+          </ListSubheader>
           {(itemsData?.get(dateStr) || []).map((item) => (
             <ListItemButton key={`item-${dateStr}-${item.Id}`}>
-              <ListItemText primary={`Item ${item.CreatedDate.format('DD/MM/YYYY')}`} />
+              <MainCard sx={{ mt: 2 }}>{'XXX'}</MainCard>
+              {/* <ListItemText primary={`Item ${item.CreatedDate.format('DD/MM/YYYY')}`} /> */}
             </ListItemButton>
           ))}
         </ul>
@@ -61,13 +65,14 @@ const createOrderListItem = (orders: Order[] | null, isLoading: boolean) => {
 
 const OrdersContent = ({ Orders, IsLoading }: OrdersContentProps) => {
   return (
-    <Box sx={{ display: 'flex', height: '100%' }}>
+    <Box sx={{ display: 'flex', height: '100%', backgroundColor: '#fafafb' }}>
       <List
         sx={{
           width: '100%',
           bgcolor: 'background.paper',
           position: 'relative',
           overflow: 'auto',
+          backgroundColor: '#fafafb',
           '& ul': { padding: 0 }
         }}
         subheader={<li />}>

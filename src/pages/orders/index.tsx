@@ -84,9 +84,7 @@ const ShoppingCart = () => {
             </MainCard>
           </Grid>
           <Grid item xs={12} sm={6} md={5}>
-            <MainCard sx={{ mt: 2 }}>
-              <OrdersContent Orders={orders} IsLoading={ordersAreLoading} />
-            </MainCard>
+            <OrdersContent Orders={orders} IsLoading={ordersAreLoading} />
           </Grid>
         </Grid>
       )}
