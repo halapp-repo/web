@@ -11,7 +11,7 @@ const ShoppingCartEmptyListContent = () => {
         alignItems: 'center'
       }}>
       <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-        {'Sepetinizde ürün bulunmamaktadır, eklemek için listdeki ürünleri üzerini tıklayınız.'}
+        {'Sepetinizde ürün bulunmamaktadır, eklemek için listedeki ürünleri üzerini tıklayınız.'}
       </Typography>
     </Box>
   );
