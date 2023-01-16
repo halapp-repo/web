@@ -1,4 +1,4 @@
-import { Divider, Box, List, ListItem, ListItemText, Chip, IconButton } from '@mui/material';
+import { Divider, List } from '@mui/material';
 import { Organization, OrganizationAddress } from '../../../models/organization';
 import { DeliveryAddressListItem } from './DeliveryAddressListItem';
 import { DeliveryAddressAddListItem } from './DeliveryAddressAddListItem';

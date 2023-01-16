@@ -1,15 +1,4 @@
-import {
-  Box,
-  Divider,
-  List,
-  Stack,
-  Theme,
-  useMediaQuery,
-  Typography,
-  Select,
-  MenuItem,
-  SelectChangeEvent
-} from '@mui/material';
+import { Box, Typography, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { ReactElement, useEffect } from 'react';
 import { Organization } from '../../models/organization';
 
