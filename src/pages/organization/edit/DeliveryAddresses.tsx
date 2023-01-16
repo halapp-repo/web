@@ -44,7 +44,7 @@ const DeliveryAddresses = ({ Organization }: DeliveryAddressesProps) => {
     );
     setDidUpdate(true);
   };
-  const deleteAddress = (index: number) => (address: OrganizationAddress) => {
+  const deleteAddress = (index: number) => () => {
     setAddresses((prev) => {
       const arr = [...(prev || [])];
       arr.splice(index, 1);
