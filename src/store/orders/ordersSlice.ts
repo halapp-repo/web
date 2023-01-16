@@ -6,7 +6,6 @@ import moment from 'moment';
 import { trMoment } from '../../utils/timezone';
 import { OrderVM } from '@halapp/common';
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
-import { InventoriesState } from '../inventories/inventoriesState';
 
 const initialState = {
   IsLoading: false,
@@ -61,10 +60,10 @@ const OrderSlice = createSlice({
         [trMoment().format('MMYYYY')]: undefined
       };
     });
-    builder.addCase(createOrder.pending, (state, action) => {
+    builder.addCase(createOrder.pending, (state) => {
       state.IsLoading = true;
     });
-    builder.addCase(createOrder.rejected, (state, action) => {
+    builder.addCase(createOrder.rejected, (state) => {
       state.IsLoading = false;
     });
     builder.addCase(fetchOrdersByMonth.fulfilled, (state, action) => {

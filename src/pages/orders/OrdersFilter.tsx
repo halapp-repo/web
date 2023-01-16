@@ -1,4 +1,4 @@
-import { Box, Divider, List, Stack, Theme, useMediaQuery } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import { Organization } from '../../models/organization';
 import OrganizationSelect from './OrganizationSelect';
 import MonthFilter from './MonthFilter';
@@ -20,8 +20,6 @@ const OrdersFilters = ({
   SetOrganization,
   SelectedOrganization
 }: OrdersFiltersProps) => {
-  const matchesSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-
   return (
     <Stack spacing={2} sx={{ display: 'flex', height: '100%', mt: '10px', mb: '10px' }}>
       <OrganizationSelect

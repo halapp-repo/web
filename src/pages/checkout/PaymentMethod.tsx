@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Box, List, Radio, RadioGroup, ListItem, ListItemText, Typography } from '@mui/material';
 import IconPosMachine from '../../components/icons/IconPosMachine';
 
