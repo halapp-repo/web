@@ -6,6 +6,7 @@ import productPricesReducer from './product-prices/productPricesSlice';
 import organizationsReducer from './organizations/organizationsSlice';
 import authReducer from './auth/authSlice';
 import shoppingCartReducer from './shopping-cart/shoppingCartSlice';
+import ordersReducer from './orders/ordersSlice';
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     productPrices: productPricesReducer,
     organizations: organizationsReducer,
     auth: authReducer,
-    shoppingCart: shoppingCartReducer
+    shoppingCart: shoppingCartReducer,
+    orders: ordersReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,18 +1,17 @@
 import ThemeCustomization from './themes';
-import Routes from './routes'
+import Routes from './routes';
 import ScrollTop from './components/ScrollTop';
 
 function App() {
   return (
     <div className="App">
-       <ThemeCustomization>
+      <ThemeCustomization>
         <ScrollTop>
-            <Routes />
+          <Routes />
         </ScrollTop>
-    </ThemeCustomization>
+      </ThemeCustomization>
     </div>
   );
 }
-
 
 export default App;

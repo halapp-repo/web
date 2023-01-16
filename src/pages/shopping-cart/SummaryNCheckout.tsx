@@ -1,9 +1,9 @@
 import { Button, Divider, Box, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingCartDTO } from '../../models/dtos/shopping-cart-list-item.dto';
+import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 
 interface SummaryNCheckoutProps {
-  ShoppingCart: ShoppingCartDTO;
+  ShoppingCart: ShoppingCartList;
 }
 
 const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
@@ -11,7 +11,7 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
   const navigate = useNavigate();
 
   const checkout = () => {
-    console.log('xxx');
+    navigate('/checkout');
   };
 
   return (
@@ -45,7 +45,7 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
         variant="contained"
         disabled={ShoppingCart.Items.length === 0}
         onClick={checkout}>
-        {'Teslim et'}
+        {'Teslimat adımına geç'}
       </Button>
     </>
   );

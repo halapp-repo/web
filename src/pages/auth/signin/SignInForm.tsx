@@ -1,17 +1,20 @@
-import { Typography, Grid, Stack, Box, Button } from '@mui/material';
+import { Typography, Grid, Stack, Box, Button, Chip } from '@mui/material';
 import { withFormik, FormikProps, Form, Field } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { AppTextField } from '../../../components/form/TextField';
 import { NavLink } from 'react-router-dom';
+import { SignupCode } from '../../../models/signup-code';
+import { ShopOutlined } from '@ant-design/icons';
 
 interface FormValues {
   email: string;
   password: string;
+  code?: SignupCode | null;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { isSubmitting, isValid } = props;
+  const { isSubmitting, isValid, values } = props;
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -23,6 +26,14 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             sx={{ display: 'flex', justifyContent: 'center' }}>
             {'Giriş yap veya kayıt ol'}
           </Typography>
+          {values.code && values.code.isActive() && (
+            <Chip
+              icon={<ShopOutlined />}
+              color={'success'}
+              label={values.code.OrganizationName}
+              variant="outlined"
+            />
+          )}
           <Form>
             <Stack spacing={2}>
               <Field type="email" name="email" label="Email" component={AppTextField} />
@@ -67,15 +78,17 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 };
 
 interface MyFormProps {
-  onSignin: (email: string, password: string) => Promise<void>;
+  onSignin: (email: string, password: string, code?: SignupCode | null) => Promise<void>;
+  code?: SignupCode | null;
 }
 
 const SignInForm = withFormik<MyFormProps, FormValues>({
   // Transform outer props into form values
-  mapPropsToValues: () => {
+  mapPropsToValues: (props) => {
     return {
       email: '',
-      password: ''
+      password: '',
+      code: props.code
     };
   },
   // Add a custom validation function (this can be async too!)
@@ -93,7 +106,7 @@ const SignInForm = withFormik<MyFormProps, FormValues>({
   validateOnMount: true,
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
-    await props.onSignin(values.email, values.password);
+    await props.onSignin(values.email, values.password, values.code);
     setSubmitting(false);
   }
 })(InnerForm);

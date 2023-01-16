@@ -2,11 +2,7 @@ import { AppBar, Toolbar } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Content from './content';
 
-interface HeaderProps {
-  disableToolbarGutter?: boolean;
-}
-
-const Header = ({ disableToolbarGutter = false }: HeaderProps) => {
+const Header = () => {
   const theme = useTheme();
 
   return (
@@ -14,7 +10,7 @@ const Header = ({ disableToolbarGutter = false }: HeaderProps) => {
       position="fixed"
       color="inherit"
       elevation={0}
-      sx={{ borderBottom: !disableToolbarGutter ? `1px solid ${theme.palette.divider}` : '0px' }}>
+      sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
       <Toolbar>
         <Content />
       </Toolbar>

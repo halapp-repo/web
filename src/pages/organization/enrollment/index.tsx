@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import MainCard from '../../../components/MainCard';
 import { TaxForm } from './TaxForm';
-import { Organization } from '../../../models/organization';
+import { Organization, OrganizationAddress } from '../../../models/organization';
 import { AddressForm } from './AddressForm';
 import { ContactForm } from './ContactForm';
 import PostEnrollment from './PostEnrollment';
@@ -13,6 +13,7 @@ import {
 } from '../../../store/organizations/organizationsSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { PreviewForm } from './PreviewForm';
+import { instanceToInstance, plainToInstance } from 'class-transformer';
 
 const Enrollment = () => {
   const dispatch = useAppDispatch();
@@ -35,11 +36,10 @@ const Enrollment = () => {
   };
   const handleTaxFormSubmit = (vkn: string, organizationName: string): void => {
     setOrganization((prevOrg) => {
-      return {
-        ...prevOrg,
-        VKN: vkn,
-        Name: organizationName
-      };
+      const org = instanceToInstance(prevOrg);
+      org.VKN = vkn;
+      org.Name = organizationName;
+      return org;
     });
     handleNext();
   };
@@ -67,33 +67,35 @@ const Enrollment = () => {
     companyCountry: string;
   }): void => {
     setOrganization((prevOrg) => {
-      return {
-        ...prevOrg,
-        InvoiceAddress: {
+      const org = instanceToInstance(prevOrg);
+      org.setCompanyAddress(
+        plainToInstance(OrganizationAddress, {
           AddressLine: invoiceFormattedAddress,
           City: invoiceCity,
           County: invoiceCounty,
           ZipCode: invoiceZipCode,
           Country: invoiceCountry
-        },
-        CompanyAddress: {
+        })
+      );
+      org.setInvoiceAddress(
+        plainToInstance(OrganizationAddress, {
           AddressLine: companyFormattedAddress,
           City: companyCity,
           County: companyCounty,
           ZipCode: companyZipCode,
           Country: companyCountry
-        }
-      };
+        })
+      );
+      return org;
     });
     handleNext();
   };
   const handleContactFormSubmit = async (email: string, phoneNumber: string): Promise<void> => {
     setOrganization((prevOrg) => {
-      return {
-        ...prevOrg,
-        Email: email,
-        PhoneNumber: phoneNumber
-      };
+      const org = instanceToInstance(prevOrg);
+      org.Email = email;
+      org.PhoneNumber = phoneNumber;
+      return org;
     });
     handleNext();
   };

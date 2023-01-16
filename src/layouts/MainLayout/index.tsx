@@ -3,11 +3,8 @@ import { Outlet } from 'react-router-dom';
 import Header from './header';
 import LayoutInitializer from '../../components/LayoutInitializer';
 import Footer from './footer';
-import { selectUIGlobalToolbarGutter } from '../../store/ui/uiSlice';
-import { useAppSelector } from '../../store/hooks';
 
 const MainLayout = () => {
-  const toolbarGutterDisable = useAppSelector(selectUIGlobalToolbarGutter);
   return (
     <Box
       sx={{
@@ -18,7 +15,7 @@ const MainLayout = () => {
         flexDirection: 'column'
       }}>
       <LayoutInitializer>
-        <Header disableToolbarGutter={toolbarGutterDisable} />
+        <Header />
         <Box
           component="main"
           sx={{
@@ -26,14 +23,10 @@ const MainLayout = () => {
             flex: 1,
             flexGrow: 1
           }}>
-          <Toolbar disableGutters={toolbarGutterDisable} />
-          {toolbarGutterDisable ? (
+          <Toolbar />
+          <Box sx={{ p: { xs: 2, sm: 3 } }}>
             <Outlet />
-          ) : (
-            <Box sx={{ p: { xs: 2, sm: 3 } }}>
-              <Outlet />
-            </Box>
-          )}
+          </Box>
         </Box>
         <Footer />
       </LayoutInitializer>

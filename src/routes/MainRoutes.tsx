@@ -8,6 +8,8 @@ import MainLayout from '../layouts/MainLayout';
 // render - dashboard
 const Dashboard = Loadable(lazy(() => import('../pages/dashboard')));
 const ShoppingCart = Loadable(lazy(() => import('../pages/shopping-cart')));
+const Checkout = Loadable(lazy(() => import('../pages/checkout')));
+const Orders = Loadable(lazy(() => import('../pages/orders')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -27,6 +29,14 @@ const MainRoutes = {
     {
       path: '/shopping-cart',
       element: <ShoppingCart />
+    },
+    {
+      path: '/checkout',
+      element: <Checkout />
+    },
+    {
+      path: '/orders',
+      element: <Orders />
     }
   ]
 };

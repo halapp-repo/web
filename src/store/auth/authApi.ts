@@ -87,11 +87,22 @@ interface ISignInResponse extends ISessionResponse {
   user: CognitoUser;
 }
 
-const signIn = (email: string, password: string): Promise<ISignInResponse> => {
+const signIn = (
+  email: string,
+  password: string,
+  code?: string | null
+): Promise<ISignInResponse> => {
   email = email.toUpperCase();
   const authenticationData: IAuthenticationDetailsData = {
     Username: email,
-    Password: password
+    Password: password,
+    ...(code
+      ? {
+          ClientMetadata: {
+            signupCode: code
+          }
+        }
+      : null)
   };
   const authenticationDetails = new AuthenticationDetails(authenticationData);
 

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
 import { OrganizationsState } from './organizationsState';
 import type { RootState } from '../index';
-import { Organization } from '../../models/organization';
+import { Organization, OrganizationAddress } from '../../models/organization';
 import { OrganizationsApi } from './organizationsApi';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
 import { plainToClass } from 'class-transformer';
@@ -58,7 +58,29 @@ export const updateOrganization = createAsyncThunk<
       organization: mapper.toDTO(arg)
     });
   } catch (err) {
-    console.log(err);
+    if (err instanceof AxiosError) {
+      throw new Error(JSON.stringify(err.response?.data || { message: 'Bilinmeyen hata olustu' }));
+    } else {
+      throw err;
+    }
+  }
+});
+export const updateOrganizationDeliveryAddresses = createAsyncThunk<
+  Organization,
+  { deliveryAddresses: OrganizationAddress[]; organizationId: string },
+  { state: RootState }
+>('organization/updateDeliveryAddresses', async (arg, { getState }): Promise<Organization> => {
+  const { userAuth } = getState().auth;
+  if (!userAuth.authenticated || !userAuth.idToken) {
+    throw new Error('Unauthenticated');
+  }
+  try {
+    return await new OrganizationsApi().updateOrganizationDeliveryAddresses({
+      token: userAuth.idToken,
+      organizationId: arg.organizationId,
+      deliveryAddresses: arg.deliveryAddresses
+    });
+  } catch (err) {
     if (err instanceof AxiosError) {
       throw new Error(JSON.stringify(err.response?.data || { message: 'Bilinmeyen hata olustu' }));
     } else {
@@ -114,6 +136,25 @@ const OrganizationsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     /**
+     * UPDATE ORGANIZATION DELIVERY ADDRESSES
+     */
+    builder.addCase(updateOrganizationDeliveryAddresses.fulfilled, (state, action) => {
+      const organizationId = action.meta.arg.organizationId;
+      const organization = action.payload;
+
+      state.Organizations = {
+        ...state.Organizations,
+        IsLoading: false,
+        List: [...(state.Organizations?.List || [])].map((l) => {
+          if (l.ID === organizationId) {
+            return organization;
+          }
+          return l;
+        })
+      };
+    });
+
+    /**
      * UPDATE ORGANIZATION
      */
     builder.addCase(updateOrganization.fulfilled, (state, action) => {
@@ -150,17 +191,25 @@ const OrganizationsSlice = createSlice({
      */
     builder.addCase(fetchOrganizations.fulfilled, (state, action) => {
       const data = action.payload;
-      state.Organizations = {
-        ...state.Organizations,
-        List: [...(data || [])],
-        IsLoading: false
+      state = {
+        ...state,
+        Organizations: {
+          ...state.Organizations,
+          List: [...(data || [])],
+          IsLoading: false
+        }
       };
+      return state;
     });
     builder.addCase(fetchOrganizations.pending, (state) => {
-      state.Organizations = {
-        ...state.Organizations,
-        IsLoading: true
+      state = {
+        ...state,
+        Organizations: {
+          ...state.Organizations,
+          IsLoading: true
+        }
       };
+      return state;
     });
     builder.addCase(fetchOrganizations.rejected, (state) => {
       state.Organizations = {
@@ -220,6 +269,7 @@ export const selectOrganizations = createSelector(
   [(state: RootState) => state.organizations],
   (org: OrganizationsState) => org.Organizations
 );
+
 export const selectIndividualOrganization = createSelector(
   [
     (state: RootState) => state.organizations,

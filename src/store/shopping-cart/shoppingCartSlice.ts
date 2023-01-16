@@ -1,8 +1,11 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { plainToInstance } from 'class-transformer';
-import { ShoppingCartDTO } from '../../models/dtos/shopping-cart-list-item.dto';
+import {
+  ShoppingCartList,
+  ShoppingCartListItem
+} from '../../models/viewmodels/shopping-cart-list-item';
 import { Price } from '../../models/price';
-import { ShoppingCart, ShoppingCartItem } from '../../models/shopping-cart';
+import { ShoppingCart } from '../../models/shopping-cart';
 import { RootState } from '../index';
 import { InventoriesState } from '../inventories/inventoriesState';
 import { selectPricesOfToday } from '../prices/pricesSlice';
@@ -44,6 +47,12 @@ const ShoppingCartSlice = createSlice({
   name: 'shopping-cart',
   initialState,
   reducers: {
+    removeAllItems: (state: ShoppingCartState) => {
+      state.cart = {
+        Items: []
+      };
+      saveToLC(state.cart);
+    },
     removeCartItem: (state: ShoppingCartState, action: PayloadAction<string>) => {
       state.cart = {
         ...state.cart,
@@ -104,7 +113,7 @@ const ShoppingCartSlice = createSlice({
   }
 });
 
-export const { removeCartItem, updateCartItemCount, addCartItem, fetchCartItem } =
+export const { removeCartItem, updateCartItemCount, addCartItem, fetchCartItem, removeAllItems } =
   ShoppingCartSlice.actions;
 
 export const selectShoppingCart = createSelector(
@@ -124,8 +133,8 @@ export const selectEnhancedShoppingCart = createSelector(
     state: ShoppingCartState,
     inventoryState: InventoriesState,
     prices: Price[]
-  ): ShoppingCartDTO => {
-    return plainToInstance(ShoppingCartDTO, {
+  ): ShoppingCartList => {
+    return plainToInstance(ShoppingCartList, {
       Items: state.cart.Items.map((itm) => {
         const price = prices?.find((p) => p.IsActive == true && p.ProductId === itm.ProductId);
         return {
@@ -140,9 +149,9 @@ export const selectEnhancedShoppingCart = createSelector(
                 Unit: price.Unit
               }
             : null)
-        } as ShoppingCartItem;
+        } as ShoppingCartListItem;
       })
-    } as ShoppingCart);
+    } as ShoppingCartList);
   }
 );
 

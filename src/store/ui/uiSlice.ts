@@ -21,11 +21,17 @@ const initialState = {
     sessionLoading: true
   },
   global: {
-    isLoading: false,
-    disableToolbarGutters: false
+    isLoading: false
   },
   shoppingCart: {
     isOpen: false
+  },
+  organization: {
+    currentTab: 0,
+    generalInfoEditMode: false
+  },
+  checkout: {
+    orderNote: ''
   }
 } as UIState;
 
@@ -59,8 +65,30 @@ const UISlice = createSlice({
         state.shoppingCart.isOpen = action.payload;
       }
     },
-    toggleDisableToolbarGutter: (state: UIState, action: PayloadAction<boolean>) => {
-      state.global.disableToolbarGutters = action.payload;
+    updateOrganization: (
+      state: UIState,
+      action: PayloadAction<{ tab?: number; generalInfoEditMode?: boolean }>
+    ) => {
+      const { tab, generalInfoEditMode } = action.payload;
+      state.organization = {
+        ...state.organization,
+        ...(typeof generalInfoEditMode !== 'undefined'
+          ? {
+              generalInfoEditMode: generalInfoEditMode
+            }
+          : null),
+        ...(typeof tab !== 'undefined'
+          ? {
+              currentTab: tab
+            }
+          : null)
+      };
+    },
+    updateCheckoutOrderNote: (state: UIState, action: PayloadAction<string>) => {
+      state.checkout.orderNote = action.payload;
+    },
+    toggleGlobalIsLoading: (state: UIState, action: PayloadAction<boolean>) => {
+      state.global.isLoading = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -107,8 +135,11 @@ export const {
   updateListingSelectedDate,
   updateListingProductNameFilter,
   toggleShoppingCart,
-  toggleDisableToolbarGutter
+  updateOrganization,
+  updateCheckoutOrderNote,
+  toggleGlobalIsLoading
 } = UISlice.actions;
+
 export const selectUIListingSelectedDate = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.listing.selectedDate
@@ -137,9 +168,13 @@ export const selectUIShoppingCartIsOpen = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.shoppingCart.isOpen
 );
-export const selectUIGlobalToolbarGutter = createSelector(
+export const selectUIOrganization = createSelector(
   (state: RootState) => state.ui,
-  (state: UIState) => state.global.disableToolbarGutters
+  (state: UIState) => state.organization
+);
+export const selectUICheckoutOrderNote = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.checkout.orderNote
 );
 
 export default UISlice.reducer;

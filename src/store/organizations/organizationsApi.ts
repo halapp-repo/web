@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
 import { OrganizationDTO } from '../../models/dtos/organization.dto';
-import { Organization } from '../../models/organization';
+import { Organization, OrganizationAddress } from '../../models/organization';
 
 export class OrganizationsApi {
   baseUrl: string;
@@ -89,6 +89,34 @@ export class OrganizationsApi {
           'Content-Type': 'application/json'
         }
       })
+      .then((response) => {
+        const { data } = response;
+        return this.mapper.toModel(data);
+      });
+  }
+  async updateOrganizationDeliveryAddresses({
+    token,
+    organizationId,
+    deliveryAddresses
+  }: {
+    token: string;
+    organizationId: string;
+    deliveryAddresses: OrganizationAddress[];
+  }): Promise<Organization> {
+    return await axios
+      .post<OrganizationDTO>(
+        `/organization/${organizationId}/deliveryaddresses`,
+        JSON.stringify({
+          DeliveryAddresses: deliveryAddresses
+        }),
+        {
+          baseURL: this.baseUrl,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
       .then((response) => {
         const { data } = response;
         return this.mapper.toModel(data);

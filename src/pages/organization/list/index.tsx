@@ -54,7 +54,7 @@ const OrganizationList = () => {
                   {'Fetch all organizations'}
                 </Button>
               ) : (
-                <Typography>{'🏪 Sirketlerim'}</Typography>
+                <Typography>{'🏪 Şirketlerim'}</Typography>
               )}
             </Box>
           }>
