@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { InventoryDTO } from '../../models/dtos/inventory.dto';
-import { Inventory } from '../../models/inventory';
+import { InventoryVM } from '@halapp/common';
 
 export class InventoriesApi {
   baseUrl: string;
@@ -11,23 +10,14 @@ export class InventoriesApi {
     }
     this.baseUrl = baseUrl;
   }
-  async fetchInventories(): Promise<Inventory[]> {
+  async fetchInventories(): Promise<InventoryVM[]> {
     return await axios
-      .get<InventoryDTO[]>('/inventories', {
+      .get<InventoryVM[]>('/inventories', {
         baseURL: this.baseUrl
       })
       .then((response) => {
         const { data } = response;
-        return data.map(
-          (d) =>
-            <Inventory>{
-              InventoryType: d.InventoryType,
-              Type: d.Type,
-              ProductId: d.ProductId,
-              Name: d.Name,
-              ImageUrl: d.ImageUrl
-            }
-        );
+        return data;
       });
   }
 }

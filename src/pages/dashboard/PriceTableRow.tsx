@@ -1,19 +1,18 @@
 import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { Box, TableCell, TableRow, Typography, Button } from '@mui/material';
 import React from 'react';
-import { PriceListItemVM } from '../../models/viewmodels/price-list-item.dto';
+import { Price } from '../../models/price';
 import { useAppDispatch } from '../../store/hooks';
 import { addCartItem } from '../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../store/ui/uiSlice';
 
 interface PriceTableRowProps {
-  PriceListItem: PriceListItemVM;
+  PriceListItem: Price;
   OpenAnalyticsPanel: (event: React.MouseEvent<unknown>, productId: string) => void;
 }
 
 const PriceTableRow = ({ PriceListItem, OpenAnalyticsPanel }: PriceTableRowProps) => {
   const dispatch = useAppDispatch();
-  const increase = PriceListItem.Increase;
 
   const handleOnClick = (productId: string, isClickable: boolean) => {
     if (!isClickable) {
@@ -23,12 +22,13 @@ const PriceTableRow = ({ PriceListItem, OpenAnalyticsPanel }: PriceTableRowProps
       dispatch(toggleShoppingCart(true));
     }
   };
+  const isToday = PriceListItem.IsToday || false;
+  const isActive = PriceListItem.IsActive || false;
+  const increase = PriceListItem.Increase || 0;
 
   return (
     <TableRow
-      onClick={() =>
-        handleOnClick(PriceListItem.ProductId, PriceListItem.IsToday || PriceListItem.IsActive)
-      }
+      onClick={() => handleOnClick(PriceListItem.ProductId, isToday || isActive)}
       sx={{
         '&:last-child td, &:last-child th': { border: 0 },
         width: '100%',

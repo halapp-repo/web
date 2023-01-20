@@ -1,8 +1,8 @@
-import { Price } from '../../models/price';
+import { PriceVM } from '@halapp/common';
 
 export interface PricesState {
   data: {
-    [date: string]: Price[];
+    [date: string]: PriceVM[];
   };
   isLoading: boolean;
 }

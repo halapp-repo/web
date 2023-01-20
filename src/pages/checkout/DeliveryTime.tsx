@@ -1,84 +1,124 @@
-import { useEffect, useState } from 'react';
-import { Box, List, Radio, RadioGroup, ListItem, ListItemText, Typography } from '@mui/material';
-import { OrderDeliveryTime } from '../../models/order-delivery-time-type';
-import { trMoment } from '../../utils/timezone';
+import { useState, useEffect } from 'react';
 import moment from 'moment';
+import { Box, List, TextField, Typography } from '@mui/material';
+import { trMoment } from '../../utils/timezone';
+import { MobileTimePicker } from '@mui/x-date-pickers';
+import { ClockCircleOutlined } from '@ant-design/icons';
 
-type OrderDeliveryTuple = [string, string];
-
-const DeliveryTime = () => {
-  const [selectedTime, setSelectedTime] = useState(OrderDeliveryTime.morning);
-
-  const createOptions = (): OrderDeliveryTuple[] => {
-    let currentTime = trMoment();
-    if (!currentTime.isBetween(moment('00:00', 'hh:mm'), moment('05:00', 'hh:mm'))) {
-      currentTime = currentTime.add(1, 'd');
+const getDeliveryTime = (
+  currentTime: moment.Moment,
+  settingTime?: moment.Moment
+): moment.Moment => {
+  const currentHour = currentTime.hour();
+  // If there is no time to set
+  if (!settingTime) {
+    // And time between 7 AM - 12 AM OR today is Saturday
+    if ((currentHour > 7 && currentHour < 24) || currentTime.isoWeekday() === 6) {
+      // make default time 5 AM next day
+      return currentTime.add(1, 'd').set('h', 5).set('m', 0);
+      // And time between 12 AM - 7 AM
+    } else {
+      const setHour = currentHour + 3;
+      // make default time (+3) if current time > 5 AM or set to 5 AM
+      return currentTime.set('h', setHour > 5 ? setHour : 5).set('m', 0);
     }
-    return Object.keys(OrderDeliveryTime).map((odt) => {
-      if (odt === OrderDeliveryTime.morning) {
-        trMoment();
-        return [
-          odt,
-          `${currentTime.format('dddd')}, ${currentTime.format('MMM')}. ${currentTime.format(
-            'DD'
-          )} (06:00-11:00)`
-        ];
-      }
-      throw new Error('Unsupported type');
-    });
-  };
-  const handleChangeDeliveryDate = (selectedDate: string) => {
-    setSelectedTime(OrderDeliveryTime[selectedDate as keyof typeof OrderDeliveryTime]);
+  } else {
+    if ((currentHour > 7 && currentHour < 24) || currentTime.isoWeekday() === 6) {
+      // make default time 5 AM next day
+      return currentTime.add(1, 'd').set('h', settingTime.hour()).set('m', 0);
+      // And time between 12 AM - 7 AM
+    } else {
+      return currentTime
+        .add(
+          currentTime.hour() >= settingTime.hour() || settingTime.hour() - currentTime.hour() < 3
+            ? 1
+            : 0,
+          'd'
+        )
+        .set('h', settingTime.hour())
+        .set('m', 0);
+    }
+  }
+};
+
+const skipSunday = (time: moment.Moment): moment.Moment => {
+  if (time.isoWeekday() === 7) {
+    return time.add(1, 'd');
+  }
+  return time;
+};
+
+interface DeliveryTimeProps {
+  SetDeliveryTime: (deliveryTime: string) => void;
+}
+
+const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
+  const [deliveryTime, setDeliveryTime] = useState<string>(
+    skipSunday(getDeliveryTime(trMoment())).format()
+  );
+
+  useEffect(() => {
+    if (deliveryTime) {
+      SetDeliveryTime(deliveryTime);
+    }
+  }, [deliveryTime]);
+
+  const handleChangeDeliveryDate = (selectedDate: string | Date) => {
+    setDeliveryTime(skipSunday(getDeliveryTime(trMoment(), trMoment(selectedDate))).format());
   };
 
   return (
-    <RadioGroup value={selectedTime}>
-      <List
-        subheader={
-          <Box
-            sx={{
-              padding: '4px 8px 4px 8px',
-              display: 'flex',
-              marginBottom: '10px'
-            }}>
-            <Typography fontWeight={'bold'}>{'Teslimat Tarihi'}</Typography>
-          </Box>
-        }>
-        {createOptions().map(([key, value]: OrderDeliveryTuple) => {
-          return (
-            <ListItem
-              selected={true}
-              button
-              key={key}
-              onClick={() => handleChangeDeliveryDate(key)}
-              sx={{
-                margin: '5px 0px 5px 0px',
-                padding: '3px 10px',
-                boxShadow: 'sm',
-                bgcolor: 'background.body',
-                '&.Mui-selected': {
-                  backgroundColor: 'inherit',
-                  border: '1px solid #ffc423',
-                  borderRadius: '8px'
-                },
-                '&.Mui-selected:hover': {
-                  backgroundColor: 'inherit'
-                }
-              }}
-              secondaryAction={<Radio value={key} />}>
-              <ListItemText
-                primary={
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <Typography fontWeight={'bold'}>{value}</Typography>
-                  </Box>
-                }
-              />
-            </ListItem>
-          );
-        })}
-      </List>
-    </RadioGroup>
+    <List
+      subheader={
+        <Box
+          sx={{
+            padding: '4px 8px 4px 8px',
+            display: 'flex',
+            marginBottom: '10px'
+          }}>
+          <Typography fontWeight={'bold'}>{'Teslimat Zamanı'}</Typography>
+        </Box>
+      }
+      sx={{ width: '100%' }}>
+      <MobileTimePicker
+        ampmInClock={false}
+        showToolbar={false}
+        openTo="hours"
+        views={['hours']}
+        inputFormat="dd.MM.yyyy HH:mm"
+        value={deliveryTime}
+        components={{
+          OpenPickerIcon: ClockCircleOutlined
+        }}
+        onChange={(newValue) => {
+          if (newValue) {
+            console.log(newValue);
+            handleChangeDeliveryDate(newValue);
+          }
+        }}
+        renderInput={(params) => <TextField {...params} fullWidth />}
+      />
+      <ul>
+        <li>
+          <Typography variant="body2" fontWeight={'bold'} color="secondary">
+            {'Cumartesi günü veriginiz siparişler , pazartesi teslim edilir.'}
+          </Typography>
+        </li>
+        <li>
+          <Typography variant="body2" fontWeight={'bold'} color="secondary">
+            {
+              'Sipariş ile teslimat saati arasında en az 3 saat olmalıdır , aksi takdirde ertesi güne teslimat yapılır.'
+            }
+          </Typography>
+        </li>
+        <li>
+          <Typography variant="body2" fontWeight={'bold'} color="secondary">
+            {"Sabah 7'ye kadar verdiğiniz siparişler aynı gün teslim edilir."}
+          </Typography>
+        </li>
+      </ul>
+    </List>
   );
 };
 
-export { DeliveryTime };
+export { DeliveryTime, getDeliveryTime, skipSunday };
