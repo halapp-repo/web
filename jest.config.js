@@ -7,6 +7,6 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest'
   },
   globals: {
-    TZ: 'utc'
+    TZ: 'PST'
   }
 };
