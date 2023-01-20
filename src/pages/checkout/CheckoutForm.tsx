@@ -18,7 +18,7 @@ interface FormValues {
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
-  const { isSubmitting, isValid, setFieldValue, setFieldTouched } = props;
+  const { isSubmitting, isValid, setFieldValue, setFieldTouched, values } = props;
 
   const handleSetAddress = async (
     orgId: string,
@@ -70,6 +70,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             <SummaryNPlaceOrder
               IsValid={isSubmitting || !isValid}
               SetOrderItems={handleSetOrderItems}
+              DeliveryTime={values.deliveryTime}
             />
           </MainCard>
         </Grid>

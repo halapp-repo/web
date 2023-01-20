@@ -7,15 +7,18 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../store/ui/uiSlice';
+import { trMoment } from '../../utils/timezone';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
   SetOrderItems: (orderItems: OrderItemVM[]) => Promise<void>;
+  DeliveryTime: string;
 }
 
-const SummaryNPlaceOrder = ({ IsValid, SetOrderItems }: SummaryNPlaceOrderProps) => {
+const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
   const dispatch = useAppDispatch();
   const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
+  const deliveryTime = trMoment(DeliveryTime);
 
   useEffect(() => {
     dispatch(
@@ -72,6 +75,16 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems }: SummaryNPlaceOrderProps)
         <Stack direction={'row'} justifyContent="space-between">
           <Typography variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
           <Typography variant="body2">{`${ShoppingCart.TotalAmount}`}</Typography>
+        </Stack>
+        <Stack direction={'row'} justifyContent="space-between">
+          <Typography variant="body2">{`Taşıma ve nakliye:`}</Typography>
+          <Typography variant="body2" color="primary">{`Ücretsiz`}</Typography>
+        </Stack>
+        <Stack direction={'row'} justifyContent="space-between">
+          <Typography variant="body2">{`Teslimat zamanı:`}</Typography>
+          <Typography variant="body2" fontWeight={'bold'}>
+            {`${deliveryTime.format('HH:mm')}-${deliveryTime.add(1, 'h').format('HH:mm')}`}
+          </Typography>
         </Stack>
       </Box>
       <Divider />

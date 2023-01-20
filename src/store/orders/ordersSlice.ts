@@ -6,6 +6,7 @@ import moment from 'moment';
 import { trMoment } from '../../utils/timezone';
 import { OrderVM } from '@halapp/common';
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
+import { signOut } from '../auth/authSlice';
 
 const initialState = {
   IsLoading: false,
@@ -52,6 +53,9 @@ const OrderSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(signOut.fulfilled, (state) => {
+      state.List = {};
+    });
     builder.addCase(createOrder.fulfilled, (state, action) => {
       const { OrganizationId } = action.meta.arg;
       state.IsLoading = false;

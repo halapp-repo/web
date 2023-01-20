@@ -6,6 +6,7 @@ import { OrganizationsApi } from './organizationsApi';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
 import { plainToClass } from 'class-transformer';
 import { AxiosError } from 'axios';
+import { signOut } from '../auth/authSlice';
 
 const initialState = {
   Organizations: {
@@ -135,6 +136,10 @@ const OrganizationsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(signOut.fulfilled, (state) => {
+      state.Organizations = undefined;
+      state.Enrollment = undefined;
+    });
     /**
      * UPDATE ORGANIZATION DELIVERY ADDRESSES
      */

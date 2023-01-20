@@ -48,6 +48,30 @@ const skipSunday = (time: moment.Moment): moment.Moment => {
   return time;
 };
 
+export const shiftPickerDateToTimezoneDate = (pickerDate: string | Date, timezone: string) => {
+  const pickerOffset = moment(pickerDate).utcOffset();
+  const utcDate = new Date();
+  utcDate.setTime(moment(pickerDate).valueOf() + pickerOffset * 60000);
+
+  const tzOffset = moment.tz(pickerDate, timezone).utcOffset();
+  const tzDate = new Date();
+  tzDate.setTime(utcDate.getTime() - tzOffset * 60000);
+
+  return tzDate;
+};
+
+export const shiftTimezoneDateToPickerDate = (tzDate: string | Date, timezone: string) => {
+  const tzUtcOffset = moment.tz(tzDate, timezone).utcOffset();
+  const utcDate = new Date();
+  utcDate.setTime(moment(tzDate).valueOf() + tzUtcOffset * 60000);
+
+  const pickerDate = new Date();
+  const pickerOffset = pickerDate.getTimezoneOffset();
+  pickerDate.setTime(utcDate.getTime() + pickerOffset * 60000);
+
+  return pickerDate;
+};
+
 interface DeliveryTimeProps {
   SetDeliveryTime: (deliveryTime: string) => void;
 }
@@ -64,7 +88,14 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
   }, [deliveryTime]);
 
   const handleChangeDeliveryDate = (selectedDate: string | Date) => {
-    setDeliveryTime(skipSunday(getDeliveryTime(trMoment(), trMoment(selectedDate))).format());
+    setDeliveryTime(
+      skipSunday(
+        getDeliveryTime(
+          trMoment(),
+          trMoment(shiftPickerDateToTimezoneDate(selectedDate, 'Europe/Istanbul'))
+        )
+      ).format()
+    );
   };
 
   return (
@@ -86,7 +117,7 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
         openTo="hours"
         views={['hours']}
         inputFormat="dd.MM.yyyy HH:mm"
-        value={deliveryTime}
+        value={shiftTimezoneDateToPickerDate(deliveryTime, 'Europe/Istanbul')}
         components={{
           OpenPickerIcon: ClockCircleOutlined
         }}
@@ -102,13 +133,6 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
         <li>
           <Typography variant="body2" fontWeight={'bold'} color="secondary">
             {'Cumartesi günü veriginiz siparişler , pazartesi teslim edilir.'}
-          </Typography>
-        </li>
-        <li>
-          <Typography variant="body2" fontWeight={'bold'} color="secondary">
-            {
-              'Sipariş ile teslimat saati arasında en az 3 saat olmalıdır , aksi takdirde ertesi güne teslimat yapılır.'
-            }
           </Typography>
         </li>
         <li>
