@@ -7,12 +7,14 @@ import { OrganizationAddress } from '../../models/organization';
 import { AddressSelector } from './AddressSelector';
 import { OrderNote } from './OrderNote';
 import { SummaryNPlaceOrder } from './SummaryNPlaceOrder';
+import { DeliveryTime } from './DeliveryTime';
 
 interface FormValues {
   orderNote: string;
   organizationId: string;
   deliveryAddress?: OrganizationAddress;
   orderItems: OrderItemVM[];
+  deliveryTime: string;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -35,6 +37,10 @@ const InnerForm = (props: FormikProps<FormValues>) => {
     setFieldValue('orderItems', orderItems, true);
     setTimeout(() => setFieldTouched('orderItems', true), 500);
   };
+  const handleSetDeliveryTime = async (deliveryTime: string) => {
+    setFieldValue('deliveryTime', deliveryTime);
+    setTimeout(() => setFieldTouched('deliveryTime', true), 500);
+  };
 
   return (
     <Form
@@ -46,6 +52,11 @@ const InnerForm = (props: FormikProps<FormValues>) => {
           <Grid item xs={12}>
             <MainCard sx={{ mt: 2, p: 2 }}>
               <AddressSelector SetAddress={handleSetAddress} />
+            </MainCard>
+          </Grid>
+          <Grid item xs={12}>
+            <MainCard sx={{ mt: 2, p: 2 }}>
+              <DeliveryTime SetDeliveryTime={handleSetDeliveryTime} />
             </MainCard>
           </Grid>
           <Grid item xs={12}>
@@ -72,7 +83,8 @@ interface MyFormProps {
     orderNote: string,
     organizationId: string,
     deliveryAddress: OrganizationAddress,
-    orderItems: OrderItemVM[]
+    orderItems: OrderItemVM[],
+    deliveryTime: string
   ) => Promise<void>;
 }
 
@@ -83,13 +95,15 @@ const CheckoutForm = withFormik<MyFormProps, FormValues>({
       orderNote: '',
       organizationId: '',
       deliveryAddress: undefined,
-      orderItems: []
+      orderItems: [],
+      deliveryTime: ''
     };
   },
   // Add a custom validation function (this can be async too!)
   validationSchema: Yup.object().shape({
     orderNote: Yup.string().optional(),
     organizationId: Yup.string().required(),
+    deliveryTime: Yup.string().required(),
     deliveryAddress: Yup.object().shape({
       Active: Yup.boolean().optional(),
       AddressLine: Yup.string().required(),
@@ -117,7 +131,8 @@ const CheckoutForm = withFormik<MyFormProps, FormValues>({
       values.orderNote,
       values.organizationId,
       values.deliveryAddress!,
-      values.orderItems
+      values.orderItems,
+      values.deliveryTime
     );
     setSubmitting(false);
   }

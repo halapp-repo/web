@@ -33,7 +33,8 @@ const Checkout = () => {
     orderNote: string,
     organizationId: string,
     deliveryAddress: OrganizationAddress,
-    orderItems: OrderItemVM[]
+    orderItems: OrderItemVM[],
+    deliveryTime: string
   ): Promise<void> => {
     await dispatch(
       createOrder({
@@ -45,7 +46,8 @@ const Checkout = () => {
         Items: orderItems,
         OrganizationId: organizationId,
         Note: orderNote,
-        TS: trMoment().format()
+        TS: trMoment().format(),
+        DeliveryTime: deliveryTime
       } as OrderVM)
     );
     dispatch(removeAllItems());

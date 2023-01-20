@@ -114,12 +114,12 @@ const PriceFilter = () => {
         />
         <Divider variant="middle" />
         <FormControl>
-          <InputLabel id="demo-simple-select-label">Sehir</InputLabel>
+          <InputLabel id="demo-simple-select-label">Şehir</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={selectedCity}
-            label="Sehir">
+            label="Şehir">
             <MenuItem value={'istanbul'}>Istanbul</MenuItem>
           </Select>
         </FormControl>

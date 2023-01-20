@@ -4,6 +4,7 @@ import { trMoment } from '../utils/timezone';
 
 export class Price {
   ProductId: string;
+  ProductName: string;
   Price: number;
   Unit: string;
 
@@ -16,4 +17,10 @@ export class Price {
   IsToday?: boolean;
   Increase?: number;
   IsActive?: boolean;
+
+  get Amount(): string {
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
+      this.Price
+    );
+  }
 }

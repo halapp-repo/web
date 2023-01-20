@@ -1,23 +1,19 @@
 import axios from 'axios';
-import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
-import { PriceDTO } from '../../models/dtos/price.dto';
-import { Price } from '../../models/price';
+import { PriceVM } from '@halapp/common';
 
 export class PricesApi {
   baseUrl: string;
-  mapper: PriceToPriceDTOMapper;
   constructor() {
     const baseUrl = process.env.REACT_APP_LISTING_BASE_URL;
     if (!baseUrl) {
       throw new Error('REACT_APP_LISTING_BASE_URL is not set!');
     }
     this.baseUrl = baseUrl;
-    this.mapper = new PriceToPriceDTOMapper();
   }
 
-  async fetchPrice(location: string, type: string, date: string): Promise<Price[]> {
+  async fetchPrice(location: string, type: string, date: string): Promise<PriceVM[]> {
     return await axios
-      .get<PriceDTO[]>(`/prices`, {
+      .get<PriceVM[]>(`/prices`, {
         baseURL: this.baseUrl,
         params: {
           location,
@@ -27,7 +23,7 @@ export class PricesApi {
       })
       .then((response) => {
         const { data } = response;
-        return this.mapper.toListModel(data);
+        return data;
       });
   }
 }

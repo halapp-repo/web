@@ -2,18 +2,18 @@ import moment from 'moment';
 import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
 import { InventoriesState } from './inventoriesState';
 import type { RootState } from '../index';
-import { Inventory } from '../../models/inventory';
 import { InventoriesApi } from './inventoriesApi';
+import { InventoryVM } from '@halapp/common';
 
 const InventoriesLS = 'inventories';
 
-export const fetchInventories = createAsyncThunk<Inventory[]>('inventories/fetch', async () => {
+export const fetchInventories = createAsyncThunk<InventoryVM[]>('inventories/fetch', async () => {
   const rawLocalInventories = localStorage.getItem(InventoriesLS);
   if (rawLocalInventories) {
     const { ttl, inventories } = JSON.parse(rawLocalInventories);
     const duration = moment.duration(moment().diff(moment(ttl)));
     if (duration.asHours() < 6) {
-      return inventories as Inventory[];
+      return inventories as InventoryVM[];
     }
   }
   const inventories = await new InventoriesApi().fetchInventories();

@@ -1,5 +1,5 @@
-import { Inventory } from '../../models/inventory';
+import { InventoryVM } from '@halapp/common';
 
 export interface InventoriesState {
-  inventories?: Inventory[] | null;
+  inventories?: InventoryVM[] | null;
 }

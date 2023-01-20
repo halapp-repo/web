@@ -9,6 +9,7 @@ import { ProductType } from '../../models/product-type';
 import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
+import { createOrder } from '../orders/ordersSlice';
 
 const initialState = {
   listing: {
@@ -126,6 +127,11 @@ const UISlice = createSlice({
       state.global = {
         ...state.global,
         isLoading: true
+      };
+    });
+    builder.addCase(createOrder.fulfilled, (state) => {
+      state.checkout = {
+        orderNote: ''
       };
     });
   }

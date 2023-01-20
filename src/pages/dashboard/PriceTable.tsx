@@ -12,7 +12,6 @@ import {
   updateListingSelectedDate
 } from '../../store/ui/uiSlice';
 import {
-  Box,
   Table,
   TableBody,
   TableCell,
@@ -33,9 +32,9 @@ import { getComparator } from '../../utils/sort';
 import PriceTableRow from './PriceTableRow';
 import PriceDialog from './PriceDialog';
 import { contains } from '../../utils/filter';
-import { PriceListItemVM } from '../../models/viewmodels/price-list-item.dto';
+import { Price } from '../../models/price';
 
-type SortablePriceListItem = Pick<PriceListItemVM, 'Price' | 'ProductName'>;
+type SortablePriceListItem = Pick<Price, 'Price' | 'ProductName'>;
 
 const PriceTable = () => {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -80,7 +79,7 @@ const PriceTable = () => {
     }
   }, [selectedDate]);
 
-  const createTableRow = (prices: PriceListItemVM[]): ReactElement[] => {
+  const createTableRow = (prices: Price[]): ReactElement[] => {
     if (isLoading || inventories?.length == 0) {
       return [
         <TableRow key="0" sx={{ height: '20vh' }}>
@@ -109,7 +108,7 @@ const PriceTable = () => {
   };
 
   return (
-    <Box>
+    <>
       <TableContainer
         sx={{
           width: '100%',
@@ -166,7 +165,7 @@ const PriceTable = () => {
         CloseAnalyticsPanel={handleCloseAnalyticsPanel}
         ProductId={open}
       />
-    </Box>
+    </>
   );
 };
 export default PriceTable;

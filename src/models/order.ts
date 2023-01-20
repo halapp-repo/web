@@ -48,6 +48,12 @@ class Order {
   })
   Status: OrderStatus;
 
+  @Type(() => String)
+  @Transform(({ value }: { value: string }) => trMoment(value), {
+    toClassOnly: true
+  })
+  DeliveryTime: moment.Moment;
+
   totalPrice(): number {
     return this.Items.reduce((acc, curr) => {
       return acc + curr.totalPrice();

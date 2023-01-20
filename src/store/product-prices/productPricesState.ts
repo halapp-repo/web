@@ -1,8 +1,8 @@
+import { PriceVM } from '@halapp/common';
 import { ChartSlot } from '../../models/chart-slot';
-import { Price } from '../../models/price';
 
 type IntervalPrices = {
-  [interval in string]: Price[];
+  [interval in string]: PriceVM[];
 };
 type ProductProps = {
   currentPrice: number;

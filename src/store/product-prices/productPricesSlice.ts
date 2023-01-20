@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { City } from '../../models/city';
-import { Price } from '../../models/price';
 import { ProductType } from '../../models/product-type';
 import { ProductPricesApi } from './productPricesApi';
 import { ProductPricesState } from './productPricesState';
@@ -10,6 +9,8 @@ import { ChartSlot } from '../../models/chart-slot';
 import { fetchPrices } from '../prices/pricesSlice';
 import { IntervalType } from '../../models/interval-type';
 import { trMoment } from '../../utils/timezone';
+import { PriceVM } from '@halapp/common';
+import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
 
 const initialState = {
   data: {},
@@ -37,14 +38,14 @@ const initialState = {
 } as ProductPricesState;
 
 export const fetchProductPrices = createAsyncThunk<
-  Price[],
+  PriceVM[],
   {
     productId: string;
     location: City;
     type: ProductType;
     slot: ChartSlot;
   }
->('product-prices/fetch', async ({ productId, location, type, slot }): Promise<Price[]> => {
+>('product-prices/fetch', async ({ productId, location, type, slot }): Promise<PriceVM[]> => {
   const response = await new ProductPricesApi().fetchProductPrices(
     productId,
     slot.interval,
@@ -111,11 +112,12 @@ export const selectProductPrices = createSelector(
     (state: RootState, productId: string, slot: ChartSlot): [string, ChartSlot] => [productId, slot]
   ],
   (prices, [productId, slot]) => {
+    const mapper = new PriceToPriceDTOMapper();
     const tempPrice = prices[productId]?.intervalPrices?.[slot.key];
     if (!tempPrice) {
       return tempPrice;
     } else {
-      return [...tempPrice].sort(getComparator('asc', 'TS'));
+      return mapper.toListModel([...tempPrice].sort(getComparator('asc', 'TS')));
     }
   }
 );
