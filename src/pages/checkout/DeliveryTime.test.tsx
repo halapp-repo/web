@@ -2,6 +2,7 @@ import { trMoment } from '../../utils/timezone';
 import moment from 'moment';
 import { getDeliveryTime } from './DeliveryTime';
 
+moment.tz.setDefault('Europe/Istanbul'); // Whatever timezone you want
 it('Delivery Time between 7 - 24  8AM Monday', () => {
   const currentTime = trMoment('2023.01.16 08:00', 'YYYY.MM.DD HH:mm'); // Monday
   const deliveryTime = getDeliveryTime(currentTime);
