@@ -9,7 +9,7 @@ const ShoppingCartItemCounter = ({ ShoppingCart }: ShoppingCartItemCounterProps)
   return (
     <Stack direction={'row'} spacing={2} sx={{ padding: '8px 16px 8px 16px', color: '#ffc423' }}>
       <Box>🧺</Box>
-      <Box>{`Ürün sayısı ${ShoppingCart.Items.length}`}</Box>
+      <Box>{`Ürün çeşiti ${ShoppingCart.Items.length}`}</Box>
     </Stack>
   );
 };
