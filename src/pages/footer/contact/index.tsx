@@ -1,9 +1,9 @@
 import { WhatsAppOutlined } from '@ant-design/icons';
 import { Box, Typography, Stack, Button, Link } from '@mui/material';
 import Logo from '../../../components/logo/Logo';
-
 import MainCard from '../../../components/MainCard';
 import PageWrapper from '../../../components/PageWrapper';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Contact = () => {
   return (
@@ -37,9 +37,13 @@ const Contact = () => {
               <Typography color="primary" variant="h5">{`info@halapp.io`}</Typography>
             </Button>
             {' adresine email gönderebilir veya HalApp hakkında merak ettikleriniz için '}
-            <Link href="https://halapp.io/about" target="_blank" sx={{ display: 'inline-block' }}>
-              {'halapp.io/about'}
-            </Link>
+            <Button
+              color="primary"
+              sx={{ textTransform: 'none' }}
+              to="/about"
+              component={RouterLink}>
+              <Typography color="primary" variant="h5">{`halapp.io/about`}</Typography>
+            </Button>
             {' adresini ziyaret edebilirsiniz.'}
           </Typography>
         </Stack>

@@ -4,7 +4,7 @@ import PageWrapper from '../../../components/PageWrapper';
 const About = () => {
   return (
     <PageWrapper md={6} lg={4}>
-      <MainCard>{'XXX'}</MainCard>
+      <MainCard>{'Hakkinda'}</MainCard>
     </PageWrapper>
   );
 };

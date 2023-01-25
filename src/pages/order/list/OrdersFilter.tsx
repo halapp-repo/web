@@ -1,24 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  useMediaQuery,
-  Theme,
-  Card,
-  CardActions,
-  IconButton,
-  styled,
-  IconButtonProps,
-  Collapse,
-  CardContent,
-  TextField,
-  Divider,
-  Stack,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Button
-} from '@mui/material';
+import React from 'react';
+import { useMediaQuery, Theme, Divider, Stack, Button } from '@mui/material';
 import { Organization } from '../../../models/organization';
 import OrganizationSelect from './OrganizationSelect';
 import MonthFilter from './MonthFilter';

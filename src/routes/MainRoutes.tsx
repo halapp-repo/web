@@ -50,6 +50,10 @@ const MainRoutes = {
     {
       path: '/contact',
       element: <Contact />
+    },
+    {
+      path: '/about',
+      element: <About />
     }
   ]
 };
