@@ -10,6 +10,11 @@ const Dashboard = Loadable(lazy(() => import('../pages/dashboard')));
 const ShoppingCart = Loadable(lazy(() => import('../pages/shopping-cart')));
 const Checkout = Loadable(lazy(() => import('../pages/checkout')));
 const Orders = Loadable(lazy(() => import('../pages/order/list')));
+const About = Loadable(lazy(() => import('../pages/footer/about')));
+const BilgiToplumuHizmetleri = Loadable(
+  lazy(() => import('../pages/footer/bilgi-toplumu-hizmetleri'))
+);
+const Contact = Loadable(lazy(() => import('../pages/footer/contact')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -37,6 +42,14 @@ const MainRoutes = {
     {
       path: '/orders',
       element: <Orders />
+    },
+    {
+      path: '/bilgi-toplumu-hizmetleri',
+      element: <BilgiToplumuHizmetleri />
+    },
+    {
+      path: '/contact',
+      element: <Contact />
     }
   ]
 };

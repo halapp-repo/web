@@ -1,7 +1,8 @@
 import { InstagramOutlined } from '@ant-design/icons';
-import { Box, Grid, Typography, IconButton, Stack, Button, Link } from '@mui/material';
+import { Box, Grid, Typography, IconButton, Stack, Button, Link, Divider } from '@mui/material';
 import { useMemo } from 'react';
 import moment from 'moment';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Footer = () => {
   const year = useMemo(() => moment().format('YYYY'), []);
@@ -32,18 +33,37 @@ const Footer = () => {
             justifyContent: 'center',
             alignItems: 'center'
           }}>
-          <Box>
-            <Typography variant="body1" color="text.secondary">
-              {`Esentepe, Kolektif House, Talatpaşa Cd. No: 5/1, 34394 Şişli/İstanbul`}
-            </Typography>
-          </Box>
-          <Box>
-            <Button color="primary" href="mailto: info@halapp.io" component={Link}>
-              <Typography variant="body1" color="text.secondary">
-                {`info@halapp.io`}
+          <Stack direction="row" justifyContent={'center'} alignItems="center">
+            <Button
+              color="primary"
+              sx={{ textTransform: 'none' }}
+              to={'/bilgi-toplumu-hizmetleri'}
+              component={RouterLink}>
+              <Typography variant="body2" color="text.secondary">
+                {`bilgi toplumu hizmetleri`}
               </Typography>
             </Button>
-          </Box>
+            <Divider sx={{ color: 'text.secondary' }}>{'•'}</Divider>
+            <Button
+              color="primary"
+              to={'/locations'}
+              component={RouterLink}
+              sx={{ textTransform: 'none' }}>
+              <Typography variant="body2" color="text.secondary">
+                {`lokasyon`}
+              </Typography>
+            </Button>
+            <Divider sx={{ color: 'text.secondary' }}>{'•'}</Divider>
+            <Button
+              color="primary"
+              to={'/contact'}
+              component={RouterLink}
+              sx={{ textTransform: 'none' }}>
+              <Typography variant="body2" color="text.secondary">
+                {`iletişim`}
+              </Typography>
+            </Button>
+          </Stack>
         </Grid>
         <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'center' }}>
           <IconButton
