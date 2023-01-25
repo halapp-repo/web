@@ -1,8 +1,6 @@
-import { Box, List, ListItem, ListItemText, Typography, Stack, Grid } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { Stack, Grid } from '@mui/material';
 import { Order } from '../../../models/order';
 import { OrderStatus } from './OrderStatus';
-import { OrderAddress } from './OrderAddress';
 import { OrderCalendar } from './OrderCalendar';
 import { OrderTotalPrice } from './OrderTotalPrice';
 
