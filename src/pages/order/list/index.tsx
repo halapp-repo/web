@@ -1,24 +1,24 @@
 import { Grid } from '@mui/material';
-import MainCard from '../../components/MainCard';
+import MainCard from '../../../components/MainCard';
 import OrdersContent from './OrdersContent';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { useEffect, useState } from 'react';
-import { selectUserAuth } from '../../store/auth/authSlice';
+import { selectUserAuth } from '../../../store/auth/authSlice';
 import {
   fetchOrganizations,
   selectOrganizations
-} from '../../store/organizations/organizationsSlice';
+} from '../../../store/organizations/organizationsSlice';
 import { useNavigate } from 'react-router-dom';
-import { Overlay } from '../../components/Overlay';
+import { Overlay } from '../../../components/Overlay';
 import OrdersFilters from './OrdersFilter';
 import {
   fetchOrdersByMonth,
   selectOrderIsLoading,
   selectOrdersByMonth
-} from '../../store/orders/ordersSlice';
-import { trMoment } from '../../utils/timezone';
+} from '../../../store/orders/ordersSlice';
+import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
-import { OrderStatus } from '../../models/order-status';
+import { OrderStatus } from '../../../models/order-status';
 
 const ShoppingCart = () => {
   const [filter, setFilter] = useState<moment.Moment | OrderStatus | null>(null);
@@ -86,7 +86,7 @@ const ShoppingCart = () => {
             </MainCard>
           </Grid>
           <Grid item xs={12} sm={6} md={5}>
-            <OrdersContent Orders={orders} IsLoading={ordersAreLoading} />
+            <OrdersContent Orders={orders} IsLoading={ordersAreLoading} Filter={filter} />
           </Grid>
         </Grid>
       )}
