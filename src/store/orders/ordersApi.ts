@@ -69,4 +69,26 @@ export class OrderApi {
         return data;
       });
   }
+  async fetchOrderById({
+    token,
+    orderId
+  }: {
+    token: string;
+    orderId: string;
+  }): Promise<OrderVM | null> {
+    return await axios
+      .get<OrderVM>(`/orders/${orderId}`, {
+        baseURL: this.baseUrl,
+        headers: {
+          Accept: 'application/json',
+          'content-type': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then((response) => {
+        const { data } = response;
+        return data;
+      });
+  }
 }

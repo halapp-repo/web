@@ -40,10 +40,6 @@ const MainRoutes = {
       element: <Checkout />
     },
     {
-      path: '/orders',
-      element: <Orders />
-    },
-    {
       path: '/bilgi-toplumu-hizmetleri',
       element: <BilgiToplumuHizmetleri />
     },

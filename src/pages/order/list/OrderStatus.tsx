@@ -2,8 +2,8 @@ import { Order } from '../../../models/order';
 import { Box, Stack, Typography } from '@mui/material';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import { translateOrderStatus } from '../../../utils/english-turkish-translator';
-import { OrderStatus as Status } from '../../../models/order-status';
-import { red, grey, yellow } from '@mui/material/colors';
+import { OrderStatusType as Status } from '@halapp/common';
+import { red, grey, green } from '@mui/material/colors';
 
 interface OrderStatusProps {
   Order: Order;
@@ -11,7 +11,7 @@ interface OrderStatusProps {
 
 const getColor = (status: Status): string => {
   if (status === Status.Created) {
-    return yellow['800'];
+    return green['800'];
   } else if (status === Status.Canceled) {
     return red['500'];
   } else {

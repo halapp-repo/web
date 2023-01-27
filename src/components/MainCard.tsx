@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 interface Props {
   children: ReactNode;
   sx?: object;
-  title?: string;
+  title?: ReactNode;
 }
 
 export type Ref = HTMLDivElement;

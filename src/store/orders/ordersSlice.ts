@@ -10,7 +10,8 @@ import { signOut } from '../auth/authSlice';
 
 const initialState = {
   IsLoading: false,
-  List: {}
+  List: {},
+  Edit: {}
 } as OrdersState;
 
 export const createOrder = createAsyncThunk<OrderVM, OrderVM, { state: RootState }>(
@@ -47,6 +48,20 @@ export const fetchOrdersByMonth = createAsyncThunk<
     toDate: Month.endOf('month')
   });
 });
+
+export const fetchOrderById = createAsyncThunk<OrderVM | null, string, { state: RootState }>(
+  'order/fetchById',
+  async (orderId, { getState }): Promise<OrderVM | null> => {
+    const { userAuth } = getState().auth;
+    if (!userAuth.authenticated || !userAuth.idToken) {
+      throw new Error('Unauthenticated');
+    }
+    return await new OrderApi().fetchOrderById({
+      token: userAuth.idToken,
+      orderId: orderId
+    });
+  }
+);
 
 const OrderSlice = createSlice({
   name: 'orders',
@@ -86,6 +101,25 @@ const OrderSlice = createSlice({
     builder.addCase(fetchOrdersByMonth.pending, (state) => {
       state.IsLoading = true;
     });
+    builder.addCase(fetchOrderById.fulfilled, (state, action) => {
+      const orderId = action.meta.arg;
+      state.Edit = {
+        ...state.Edit,
+        [orderId]: action.payload
+      };
+      state.IsLoading = false;
+    });
+    builder.addCase(fetchOrderById.rejected, (state, action) => {
+      const orderId = action.meta.arg;
+      state.Edit = {
+        ...state.Edit,
+        [orderId]: null
+      };
+      state.IsLoading = false;
+    });
+    builder.addCase(fetchOrderById.pending, (state) => {
+      state.IsLoading = true;
+    });
   }
 });
 
@@ -120,6 +154,30 @@ export const selectOrdersByMonth = createSelector(
 export const selectOrderIsLoading = createSelector(
   [(state: RootState) => state.orders],
   (ord: OrdersState) => ord.IsLoading
+);
+
+export const selectOrder = createSelector(
+  [
+    (state: RootState) => state.orders,
+    (state: RootState) => state.inventories.inventories,
+    (state: RootState, orderId?: string): string | undefined => orderId
+  ],
+  (ord: OrdersState, inventories, orderId) => {
+    const mapper = new OrderToOrderVMMapper();
+    if (!orderId) {
+      return null;
+    }
+    const orderVM = ord.Edit[orderId];
+    if (!orderVM) {
+      return null;
+    }
+    const order = mapper.toModel(orderVM);
+    order.Items.forEach((i) => {
+      i.ProductName =
+        inventories?.find((inv) => inv.ProductId === i.ProductId)?.Name || i.ProductId;
+    });
+    return order;
+  }
 );
 
 export default OrderSlice.reducer;

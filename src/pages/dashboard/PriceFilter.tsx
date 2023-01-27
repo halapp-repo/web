@@ -8,9 +8,6 @@ import {
   Theme,
   Card,
   CardActions,
-  IconButton,
-  styled,
-  IconButtonProps,
   Collapse,
   CardContent,
   TextField,
@@ -33,24 +30,7 @@ import {
   selectUIListingSelectedCity,
   selectUIListingProductNameFilter
 } from '../../store/ui/uiSlice';
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => {
-  return {
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest
-    })
-  };
-});
+import { ExpandMore } from '../../components/ExpandMoreButton';
 
 const PriceFilter = () => {
   const dispatch = useAppDispatch();

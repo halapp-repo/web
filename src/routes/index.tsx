@@ -6,9 +6,17 @@ import AuthRoutes from './AuthRoutes';
 import NotFoundRoutes from './NotFoundRoutes';
 import OrganizationRoutes from './OrganizationRoutes';
 import LocationsRoutes from './LocationRoutes';
+import OrdersRoutes from './OrdersRouter';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function Routes() {
-  return useRoutes([MainRoutes, AuthRoutes, OrganizationRoutes, LocationsRoutes, NotFoundRoutes]);
+  return useRoutes([
+    MainRoutes,
+    AuthRoutes,
+    OrganizationRoutes,
+    LocationsRoutes,
+    OrdersRoutes,
+    NotFoundRoutes
+  ]);
 }

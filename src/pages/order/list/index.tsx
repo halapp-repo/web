@@ -18,10 +18,10 @@ import {
 } from '../../../store/orders/ordersSlice';
 import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
-import { OrderStatus } from '../../../models/order-status';
+import { OrderStatusType } from '@halapp/common';
 
 const ShoppingCart = () => {
-  const [filter, setFilter] = useState<moment.Moment | OrderStatus | null>(null);
+  const [filter, setFilter] = useState<moment.Moment | OrderStatusType | null>(null);
   const [selectedOrganization, setSelectedOrganization] = useState<string | null>(null);
   const navigate = useNavigate();
   const userAuth = useAppSelector(selectUserAuth);
@@ -57,7 +57,7 @@ const ShoppingCart = () => {
     }
   }, [filter, selectedOrganization]);
 
-  const handleSetFilter = (filter: OrderStatus | moment.Moment): void => {
+  const handleSetFilter = (filter: OrderStatusType | moment.Moment): void => {
     setFilter(filter);
   };
   const handleSetOrganization = (organizationId: string): void => {

@@ -5,12 +5,13 @@ import moment from 'moment';
 import MainCard from '../../../components/MainCard';
 import OrderListItem from './OrderListItem';
 import { getComparator } from '../../../utils/sort';
-import { OrderStatus } from '../../../models/order-status';
+import { OrderStatusType } from '@halapp/common';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface OrdersContentProps {
   Orders: Order[] | null;
   IsLoading: boolean;
-  Filter?: OrderStatus | moment.Moment | null;
+  Filter?: OrderStatusType | moment.Moment | null;
 }
 
 const createOrderListItem = (orders: Order[] | null, isLoading: boolean) => {
@@ -32,7 +33,7 @@ const createOrderListItem = (orders: Order[] | null, isLoading: boolean) => {
   } else {
     const itemsData = orders.sort(getComparator('desc', 'CreatedDate'));
     return itemsData.map((i) => (
-      <ListItemButton key={`item-${i.Id}`}>
+      <ListItemButton key={`item-${i.Id}`} component={RouterLink} to={`/orders/${i.Id}`}>
         <MainCard sx={{ width: '100%', minHeight: '100px' }}>
           <OrderListItem Order={i} />
         </MainCard>
