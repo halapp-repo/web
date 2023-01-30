@@ -43,6 +43,22 @@ export const fetchAllOrganizations = createAsyncThunk<Organization[], void, { st
     return response;
   }
 );
+export const fetchIndividualOrganization = createAsyncThunk<
+  Organization,
+  string,
+  { state: RootState }
+>('organization/fetch', async (orgId, { getState }): Promise<Organization> => {
+  const { userAuth } = getState().auth;
+  if (!userAuth.authenticated || !userAuth.idToken) {
+    throw new Error('Unauthenticated');
+  }
+
+  const response = await new OrganizationsApi().fetchIndividualOrganization({
+    token: userAuth.idToken,
+    organizationId: orgId
+  });
+  return response;
+});
 export const updateOrganization = createAsyncThunk<
   Organization,
   Organization,
@@ -267,6 +283,29 @@ const OrganizationsSlice = createSlice({
         Error: new Error(message.message || 'Bilinmeyen hata olustu')
       };
     });
+    /**
+     * CREATE INDIVIDUAL ORGANIZATION
+     */
+    builder.addCase(fetchIndividualOrganization.fulfilled, (state, action) => {
+      const data = action.payload;
+      state.Organizations = {
+        ...state.Organizations,
+        List: [...(state.Organizations?.List || []), data],
+        IsLoading: false
+      };
+    });
+    builder.addCase(fetchIndividualOrganization.rejected, (state) => {
+      state.Organizations = {
+        ...state.Organizations,
+        IsLoading: false
+      };
+    });
+    builder.addCase(fetchIndividualOrganization.pending, (state, action) => {
+      state.Organizations = {
+        ...state.Organizations,
+        IsLoading: true
+      };
+    });
   }
 });
 
@@ -295,6 +334,10 @@ export const selectIndividualOrganization = createSelector(
 export const selectOrganizationEnrollment = createSelector(
   [(state: RootState) => state.organizations],
   (org: OrganizationsState) => org.Enrollment
+);
+export const selectOrganizationIsLoading = createSelector(
+  [(state: RootState) => state.organizations],
+  (org: OrganizationsState) => org.Organizations?.IsLoading
 );
 
 export default OrganizationsSlice.reducer;

@@ -1,8 +1,9 @@
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { OrderEvent } from '../../../models/order';
 import { OrderEventType } from '@halapp/common';
-import { red, grey, green } from '@mui/material/colors';
+import { red, green } from '@mui/material/colors';
 import { OrderTimelineItemContent } from './OrderTimelineItemContent';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
 interface OrderTimelineItemProps {
   Event: OrderEvent;
@@ -26,7 +27,9 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
                 <Typography variant="h5">{'Sipariş Verildi'}</Typography>
               </Box>
             </OrderTimelineItemContent>
-            <span className="circle created" />
+            <Box className="circle created">
+              <ShoppingCartOutlined width={'20px'} height={'20px'} />
+            </Box>
           </>
         );
       }
@@ -73,14 +76,19 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
             border: '3px solid #e17b77',
             borderRadius: '50%',
             position: 'absolute',
-            top: 'calc(50% - 10px)',
-            left: '-9px',
-            width: '20px',
-            height: '20px',
-            zIndex: '100'
+            top: 'calc(50% - 14px)',
+            left: '-14px',
+            width: '30px',
+            height: '30px',
+            zIndex: '100',
+            display: 'flex',
+            alignContent: 'center',
+            alignItems: 'center',
+            justifyContent: 'center'
           },
           '& .created': {
-            border: `3px solid ${green[500]}`
+            border: `3px solid ${green['A400']}`,
+            color: '#ffc423'
           },
           '& .canceled': {
             border: `3px solid ${red[500]}`

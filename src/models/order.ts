@@ -84,6 +84,10 @@ class Order {
       return acc + curr.totalPrice();
     }, 0);
   }
+
+  canCancel(): boolean {
+    return this.Status === OrderStatusType.Created;
+  }
 }
 
 export { Order, OrderItem, OrderEvent };

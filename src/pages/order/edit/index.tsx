@@ -4,18 +4,36 @@ import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { selectUserAuth } from '../../../store/auth/authSlice';
-import { fetchOrderById, selectOrder } from '../../../store/orders/ordersSlice';
+import {
+  fetchOrderById,
+  selectOrder,
+  selectOrderIsLoading
+} from '../../../store/orders/ordersSlice';
 import MainCard from '../../../components/MainCard';
 import { ExpandMore } from '../../../components/ExpandMoreButton';
 import { OrderTimeline } from './OrderTimeline';
+import {
+  fetchIndividualOrganization,
+  selectIndividualOrganization,
+  selectOrganizationIsLoading
+} from '../../../store/organizations/organizationsSlice';
+import { Overlay } from '../../../components/Overlay';
+import { OrderInfo } from './OrderInfo';
+import { OrderButtons } from './OrderButtons';
+
 const OrderEdit = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userAuth = useAppSelector(selectUserAuth);
   const order = useAppSelector((state) => selectOrder(state, orderId));
+  const organization = useAppSelector((state) =>
+    selectIndividualOrganization(state, order?.OrganizationId)
+  );
   const matchesXS = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [expanded, setExpanded] = useState(false);
+  const orderIsLoading = useAppSelector(selectOrderIsLoading);
+  const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
 
   useEffect(() => {
     if (!userAuth.authenticated) {
@@ -27,12 +45,21 @@ const OrderEdit = () => {
     }
   }, [userAuth, orderId]);
 
+  useEffect(() => {
+    if (order) {
+      if (!organization) {
+        dispatch(fetchIndividualOrganization(order.OrganizationId));
+      }
+    }
+  }, [order]);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   return (
     <>
+      {(orderIsLoading || organizationIsLoading) && <Overlay />}
       <Grid container rowSpacing={4.5} justifyContent="left" columnSpacing={2.75} alignItems="left">
         <Grid item xs={12} sm={4} md={3}>
           <MainCard
@@ -67,7 +94,10 @@ const OrderEdit = () => {
           </MainCard>
         </Grid>
         <Grid item xs={12} sm={5}>
-          <MainCard sx={{ mt: 2 }}> {'YYYYYY'}</MainCard>
+          <MainCard sx={{ mt: 2, p: '10px' }}>
+            {order && organization && <OrderInfo Order={order} Organization={organization} />}
+          </MainCard>
+          <MainCard sx={{ mt: 2, p: '10px' }}>{order && <OrderButtons Order={order} />}</MainCard>
         </Grid>
       </Grid>
     </>

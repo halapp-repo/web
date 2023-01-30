@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Card, CardHeader, Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { OrderEvent } from '../../../models/order';
 import { trMoment } from '../../../utils/timezone';
 
@@ -10,12 +10,12 @@ interface OrderTimelineItemContentProps {
 }
 
 const OrderTimelineItemContent = ({ children, Event, sx }: OrderTimelineItemContentProps) => {
-  const hourDuration = trMoment().diff(Event.TS, 'hours', true);
+  const hourDuration = trMoment().diff(Event.TS, 'hours');
   return (
     <Box sx={{ ...sx, minHeight: '100px', paddingTop: '5px', paddingRight: '5px' }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Typography variant="body2" fontWeight="bold">
-          {hourDuration > 24 ? Event.TS.format('DD.MM.YYYY HH:mm') : `${hourDuration} saat önce`}
+        <Typography variant="body2" fontWeight="bold" color="secondary">
+          {hourDuration > 24 ? Event.TS.format('MMM DD,YYYY HH:mm') : Event.TS.fromNow()}
         </Typography>
       </Box>
       {children}

@@ -26,7 +26,6 @@ export class OrganizationsApi {
       }
     });
   }
-
   async fetchOrganizations({ token }: { token: string }): Promise<Organization[]> {
     return await axios
       .get<OrganizationDTO[]>('/organizations', {
@@ -117,6 +116,26 @@ export class OrganizationsApi {
           }
         }
       )
+      .then((response) => {
+        const { data } = response;
+        return this.mapper.toModel(data);
+      });
+  }
+  async fetchIndividualOrganization({
+    token,
+    organizationId
+  }: {
+    token: string;
+    organizationId: string;
+  }) {
+    return await axios
+      .get<OrganizationDTO>(`/organization/${organizationId}`, {
+        baseURL: this.baseUrl,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then((response) => {
         const { data } = response;
         return this.mapper.toModel(data);
