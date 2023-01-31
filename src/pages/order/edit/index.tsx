@@ -4,11 +4,7 @@ import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { selectUserAuth } from '../../../store/auth/authSlice';
-import {
-  fetchOrderById,
-  selectOrder,
-  selectOrderIsLoading
-} from '../../../store/orders/ordersSlice';
+import { fetchOrder, selectOrder, selectOrderIsLoading } from '../../../store/orders/ordersSlice';
 import MainCard from '../../../components/MainCard';
 import { ExpandMore } from '../../../components/ExpandMoreButton';
 import { OrderTimeline } from './OrderTimeline';
@@ -20,6 +16,7 @@ import {
 import { Overlay } from '../../../components/Overlay';
 import { OrderInfo } from './OrderInfo';
 import { OrderButtons } from './OrderButtons';
+import { DialogCancelOrder } from './DialogCancelOrder';
 
 const OrderEdit = () => {
   const { orderId } = useParams();
@@ -34,13 +31,14 @@ const OrderEdit = () => {
   const [expanded, setExpanded] = useState(false);
   const orderIsLoading = useAppSelector(selectOrderIsLoading);
   const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
+  const [isDialogCancelOrderOpen, setIsDialogCancelOrderOpen] = useState(false);
 
   useEffect(() => {
     if (!userAuth.authenticated) {
       navigate('/auth/signin');
     } else {
       if (orderId && !order) {
-        dispatch(fetchOrderById(orderId));
+        dispatch(fetchOrder(orderId));
       }
     }
   }, [userAuth, orderId]);
@@ -55,6 +53,10 @@ const OrderEdit = () => {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleToggleDialogCancelOrder = (toggle: boolean): void => {
+    setIsDialogCancelOrderOpen(toggle);
   };
 
   return (
@@ -97,9 +99,23 @@ const OrderEdit = () => {
           <MainCard sx={{ mt: 2, p: '10px' }}>
             {order && organization && <OrderInfo Order={order} Organization={organization} />}
           </MainCard>
-          <MainCard sx={{ mt: 2, p: '10px' }}>{order && <OrderButtons Order={order} />}</MainCard>
+          <MainCard sx={{ mt: 2, p: '10px' }}>
+            {order && (
+              <OrderButtons
+                Order={order}
+                HandleOpenDialogCancelOrder={() => handleToggleDialogCancelOrder(true)}
+              />
+            )}
+          </MainCard>
         </Grid>
       </Grid>
+      {order && (
+        <DialogCancelOrder
+          Order={order}
+          Open={isDialogCancelOrderOpen}
+          HandleClose={() => handleToggleDialogCancelOrder(false)}
+        />
+      )}
     </>
   );
 };

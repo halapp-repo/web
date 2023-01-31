@@ -6,6 +6,7 @@ interface OrderDatesProps {
 }
 
 const OrderDates = ({ Order }: OrderDatesProps) => {
+  const deliveryTime = Order.DeliveryTime.clone();
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
@@ -21,9 +22,10 @@ const OrderDates = ({ Order }: OrderDatesProps) => {
           <Typography variant="body1" fontWeight={'bold'} color="secondary">
             {'Teslimat Tarihi'}
           </Typography>
-          <Typography variant="body1">{`${Order.DeliveryTime.format(
-            'DD.MM.YY ( HH:mm'
-          )} - ${Order.DeliveryTime.add(1, 'h').format('HH:mm )')}`}</Typography>
+          <Typography variant="body1">{`${deliveryTime.format('DD.MM.YY (HH:mm')} - ${deliveryTime
+            .clone()
+            .add(1, 'h')
+            .format('HH:mm)')}`}</Typography>
         </Stack>
       </Grid>
     </Grid>

@@ -49,14 +49,27 @@ export const fetchOrdersByMonth = createAsyncThunk<
   });
 });
 
-export const fetchOrderById = createAsyncThunk<OrderVM | null, string, { state: RootState }>(
+export const fetchOrder = createAsyncThunk<OrderVM | null, string, { state: RootState }>(
   'order/fetchById',
   async (orderId, { getState }): Promise<OrderVM | null> => {
     const { userAuth } = getState().auth;
     if (!userAuth.authenticated || !userAuth.idToken) {
       throw new Error('Unauthenticated');
     }
-    return await new OrderApi().fetchOrderById({
+    return await new OrderApi().fetchOrder({
+      token: userAuth.idToken,
+      orderId: orderId
+    });
+  }
+);
+export const deleteOrder = createAsyncThunk<OrderVM, string, { state: RootState }>(
+  'order/delete',
+  async (orderId, { getState }): Promise<OrderVM> => {
+    const { userAuth } = getState().auth;
+    if (!userAuth.authenticated || !userAuth.idToken) {
+      throw new Error('Unauthenticated');
+    }
+    return await new OrderApi().deleteOrder({
       token: userAuth.idToken,
       orderId: orderId
     });
@@ -101,7 +114,7 @@ const OrderSlice = createSlice({
     builder.addCase(fetchOrdersByMonth.pending, (state) => {
       state.IsLoading = true;
     });
-    builder.addCase(fetchOrderById.fulfilled, (state, action) => {
+    builder.addCase(fetchOrder.fulfilled, (state, action) => {
       const orderId = action.meta.arg;
       state.Edit = {
         ...state.Edit,
@@ -109,7 +122,7 @@ const OrderSlice = createSlice({
       };
       state.IsLoading = false;
     });
-    builder.addCase(fetchOrderById.rejected, (state, action) => {
+    builder.addCase(fetchOrder.rejected, (state, action) => {
       const orderId = action.meta.arg;
       state.Edit = {
         ...state.Edit,
@@ -117,8 +130,23 @@ const OrderSlice = createSlice({
       };
       state.IsLoading = false;
     });
-    builder.addCase(fetchOrderById.pending, (state) => {
+    builder.addCase(fetchOrder.pending, (state) => {
       state.IsLoading = true;
+    });
+    // Delete Order
+    builder.addCase(deleteOrder.fulfilled, (state, action) => {
+      const orderId = action.meta.arg;
+      state.Edit = {
+        ...state.Edit,
+        [orderId]: action.payload
+      };
+      state.IsLoading = false;
+    });
+    builder.addCase(deleteOrder.rejected, (state) => {
+      state.IsLoading = false;
+    });
+    builder.addCase(deleteOrder.pending, () => {
+      // state.IsLoading = true;
     });
   }
 });
@@ -155,7 +183,6 @@ export const selectOrderIsLoading = createSelector(
   [(state: RootState) => state.orders],
   (ord: OrdersState) => ord.IsLoading
 );
-
 export const selectOrder = createSelector(
   [
     (state: RootState) => state.orders,

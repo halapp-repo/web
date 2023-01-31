@@ -18,7 +18,7 @@ interface SummaryNPlaceOrderProps {
 const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
   const dispatch = useAppDispatch();
   const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
-  const deliveryTime = trMoment(DeliveryTime);
+  const deliveryTime = trMoment(DeliveryTime).clone();
 
   useEffect(() => {
     dispatch(
@@ -83,7 +83,10 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
         <Stack direction={'row'} justifyContent="space-between">
           <Typography variant="body2">{`Teslimat zamanı:`}</Typography>
           <Typography variant="body2" fontWeight={'bold'}>
-            {`${deliveryTime.format('HH:mm')}-${deliveryTime.add(1, 'h').format('HH:mm')}`}
+            {`${deliveryTime.format('DD MMM (HH:mm')}-${deliveryTime
+              .clone()
+              .add(1, 'h')
+              .format('HH:mm)')}`}
           </Typography>
         </Stack>
       </Box>

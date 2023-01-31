@@ -1,5 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { ButtonGroup, Button } from '@mui/material';
+import useLongPress from '../../hooks/useLongPress';
 
 interface NumberInputProps {
   MinNumber: number;
@@ -44,15 +45,18 @@ const NumberInput = ({
     });
   };
 
+  const longDecreasePressEvent = useLongPress(handleDecrement, handleDecrement);
+  const longIncreasePressEvent = useLongPress(handleIncrement, handleIncrement);
+
   return (
     <ButtonGroup disableElevation size="small" aria-label="small outlined button group">
-      <Button disabled={Disabled} onClick={handleDecrement} color="blackNWhite">
+      <Button disabled={Disabled} {...longDecreasePressEvent} color="blackNWhite">
         -
       </Button>
       <Button disabled={Disabled} variant="contained">
         {CounterText ? CounterText(counter) : counter}
       </Button>
-      <Button disabled={Disabled} onClick={handleIncrement} color="blackNWhite">
+      <Button disabled={Disabled} {...longIncreasePressEvent} color="blackNWhite">
         +
       </Button>
     </ButtonGroup>

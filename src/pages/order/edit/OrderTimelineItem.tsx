@@ -3,7 +3,7 @@ import { OrderEvent } from '../../../models/order';
 import { OrderEventType } from '@halapp/common';
 import { red, green } from '@mui/material/colors';
 import { OrderTimelineItemContent } from './OrderTimelineItemContent';
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
 interface OrderTimelineItemProps {
   Event: OrderEvent;
@@ -41,9 +41,21 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
               sx={{
                 minHeight: '100px',
                 paddingRight: '5px'
-              }}
-            />
-            <span className="circle canceled" />
+              }}>
+              <Box
+                sx={{
+                  height: '70px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  justifyItems: 'center'
+                }}>
+                <Typography variant="h5">{'Sipariş Iptal Edildi'}</Typography>
+              </Box>
+            </OrderTimelineItemContent>
+            <Box className="circle canceled">
+              <DeleteOutlined width={'20px'} height={'20px'} />
+            </Box>
           </>
         );
       }
@@ -87,8 +99,7 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
             justifyContent: 'center'
           },
           '& .created': {
-            border: `3px solid ${green['A400']}`,
-            color: '#ffc423'
+            border: `3px solid ${green['A400']}`
           },
           '& .canceled': {
             border: `3px solid ${red[500]}`
