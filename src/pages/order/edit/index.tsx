@@ -17,6 +17,8 @@ import { Overlay } from '../../../components/Overlay';
 import { OrderInfo } from './OrderInfo';
 import { OrderButtons } from './OrderButtons';
 import { DialogCancelOrder } from './DialogCancelOrder';
+import { DialogOrderDelivered } from './DialogOrderDelivered';
+import { OrderItemList } from './OrderItemList';
 
 const OrderEdit = () => {
   const { orderId } = useParams();
@@ -32,6 +34,7 @@ const OrderEdit = () => {
   const orderIsLoading = useAppSelector(selectOrderIsLoading);
   const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
   const [isDialogCancelOrderOpen, setIsDialogCancelOrderOpen] = useState(false);
+  const [isDialogOrderDeliveredOpen, setIsDialogOrderDeliveredOpen] = useState(false);
 
   useEffect(() => {
     if (!userAuth.authenticated) {
@@ -58,12 +61,15 @@ const OrderEdit = () => {
   const handleToggleDialogCancelOrder = (toggle: boolean): void => {
     setIsDialogCancelOrderOpen(toggle);
   };
+  const handleToggleDialogOrderDelivered = (toggle: boolean): void => {
+    setIsDialogOrderDeliveredOpen(toggle);
+  };
 
   return (
     <>
       {(orderIsLoading || organizationIsLoading) && <Overlay />}
       <Grid container rowSpacing={4.5} justifyContent="left" columnSpacing={2.75} alignItems="left">
-        <Grid item xs={12} sm={4} md={3}>
+        <Grid item xs={12} md={3}>
           <MainCard
             sx={{
               backgroundColor: matchesXS && !expanded ? 'background.paper' : '#fafafb',
@@ -95,18 +101,24 @@ const OrderEdit = () => {
             </Collapse>
           </MainCard>
         </Grid>
-        <Grid item xs={12} sm={5}>
+        <Grid item xs={12} md={5}>
           <MainCard sx={{ mt: 2, p: '10px' }}>
             {order && organization && <OrderInfo Order={order} Organization={organization} />}
           </MainCard>
-          <MainCard sx={{ mt: 2, p: '10px' }}>
-            {order && (
-              <OrderButtons
-                Order={order}
-                HandleOpenDialogCancelOrder={() => handleToggleDialogCancelOrder(true)}
-              />
-            )}
-          </MainCard>
+          {order && (
+            <OrderButtons
+              Order={order}
+              HandleOpenDialogCancelOrder={() => handleToggleDialogCancelOrder(true)}
+              HandleOpenDialogOrderDelivered={() => handleToggleDialogOrderDelivered(true)}
+            />
+          )}
+        </Grid>
+        <Grid item xs={12} md={4}>
+          {order && (
+            <MainCard sx={{ mt: 2, p: '10px' }}>
+              <OrderItemList Order={order} />
+            </MainCard>
+          )}
         </Grid>
       </Grid>
       {order && (
@@ -114,6 +126,14 @@ const OrderEdit = () => {
           Order={order}
           Open={isDialogCancelOrderOpen}
           HandleClose={() => handleToggleDialogCancelOrder(false)}
+        />
+      )}
+      {order && organization && (
+        <DialogOrderDelivered
+          Open={isDialogOrderDeliveredOpen}
+          HandleClose={() => handleToggleDialogOrderDelivered(false)}
+          Order={order}
+          Organization={organization}
         />
       )}
     </>

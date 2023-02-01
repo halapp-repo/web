@@ -88,6 +88,9 @@ class Order {
   canCancel(): boolean {
     return this.Status === OrderStatusType.Created;
   }
+  canBeDelivered(): boolean {
+    return this.Status === OrderStatusType.Created;
+  }
 }
 
 export { Order, OrderItem, OrderEvent };
