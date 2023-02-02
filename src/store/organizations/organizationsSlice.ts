@@ -300,7 +300,7 @@ const OrganizationsSlice = createSlice({
         IsLoading: false
       };
     });
-    builder.addCase(fetchIndividualOrganization.pending, (state, action) => {
+    builder.addCase(fetchIndividualOrganization.pending, (state) => {
       state.Organizations = {
         ...state.Organizations,
         IsLoading: true
