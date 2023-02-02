@@ -1,9 +1,9 @@
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { OrderEvent } from '../../../models/order';
 import { OrderEventType } from '@halapp/common';
-import { red, green } from '@mui/material/colors';
+import { red, green, blue } from '@mui/material/colors';
 import { OrderTimelineItemContent } from './OrderTimelineItemContent';
-import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ShoppingCartOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 interface OrderTimelineItemProps {
   Event: OrderEvent;
@@ -59,6 +59,32 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
           </>
         );
       }
+      case OrderEventType.OrderDeliveredV1: {
+        return (
+          <>
+            <OrderTimelineItemContent
+              Event={Event}
+              sx={{
+                minHeight: '100px',
+                paddingRight: '5px'
+              }}>
+              <Box
+                sx={{
+                  height: '70px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  justifyItems: 'center'
+                }}>
+                <Typography variant="h5">{'Sipariş Teslim Edildi'}</Typography>
+              </Box>
+            </OrderTimelineItemContent>
+            <Box className="circle delivered">
+              <EnvironmentOutlined width={'20px'} height={'20px'} />
+            </Box>
+          </>
+        );
+      }
     }
   };
   return (
@@ -102,7 +128,10 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
             border: `3px solid ${green['A400']}`
           },
           '& .canceled': {
-            border: `3px solid ${red[500]}`
+            border: `3px solid ${red['A400']}`
+          },
+          '& .delivered': {
+            border: `3px solid ${blue['A400']}`
           }
         }}>
         {getContent()}

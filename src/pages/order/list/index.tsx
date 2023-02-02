@@ -20,7 +20,6 @@ import {
 import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
 import { selectOrdersFilter, setOrdersFilter } from '../../../store/ui/uiSlice';
-import { Organization } from '../../../models/organization';
 
 const ShoppingCart = () => {
   const filter = useAppSelector(selectOrdersFilter);

@@ -1,3 +1,4 @@
+import { OrderStatusType } from '@halapp/common';
 import {
   Dialog,
   DialogTitle,
@@ -31,7 +32,7 @@ const DialogOrderDelivered = ({
   const dispatch = useAppDispatch();
 
   const handleOrderDelivered = (orderId: string) => {
-    // dispatch(deleteOrder(orderId));
+    dispatch(updateOrderStatus({ OrderId: orderId, Status: OrderStatusType.Delivered }));
   };
   return (
     <Dialog onClose={HandleClose} open={Open} fullWidth>
