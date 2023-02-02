@@ -28,7 +28,8 @@ export class OrderToOrderVMMapper extends IMapper<Order, OrderVM> {
       Note: arg.Note,
       CreatedDate: arg.CreatedDate!,
       Status: arg.Status,
-      DeliveryTime: arg.DeliveryTime
+      DeliveryTime: arg.DeliveryTime,
+      Events: arg.Events
     } as OrderVM);
   }
 }

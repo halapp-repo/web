@@ -7,4 +7,7 @@ export interface OrdersState {
     };
   };
   IsLoading: boolean;
+  Edit: {
+    [orderId: string]: OrderVM | null;
+  };
 }

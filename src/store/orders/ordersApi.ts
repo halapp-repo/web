@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
-import { OrderVM } from '@halapp/common';
+import { OrderStatusType, OrderVM } from '@halapp/common';
 
 export class OrderApi {
   baseUrl: string;
@@ -64,6 +64,56 @@ export class OrderApi {
             : null)
         }
       })
+      .then((response) => {
+        const { data } = response;
+        return data;
+      });
+  }
+  async fetchOrder({
+    token,
+    orderId
+  }: {
+    token: string;
+    orderId: string;
+  }): Promise<OrderVM | null> {
+    return await axios
+      .get<OrderVM>(`/orders/${orderId}`, {
+        baseURL: this.baseUrl,
+        headers: {
+          Accept: 'application/json',
+          'content-type': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then((response) => {
+        const { data } = response;
+        return data;
+      });
+  }
+  async updateOrderStatus({
+    token,
+    orderId,
+    newOrderStatus
+  }: {
+    token: string;
+    orderId: string;
+    newOrderStatus: OrderStatusType;
+  }): Promise<OrderVM> {
+    return await axios
+      .put<OrderVM>(
+        `/orders/${orderId}/status`,
+        { Status: newOrderStatus },
+        {
+          baseURL: this.baseUrl,
+          headers: {
+            Accept: 'application/json',
+            'content-type': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
       .then((response) => {
         const { data } = response;
         return data;

@@ -3,13 +3,13 @@ import { useMediaQuery, Theme, Divider, Stack, Button } from '@mui/material';
 import { Organization } from '../../../models/organization';
 import OrganizationSelect from './OrganizationSelect';
 import MonthFilter from './MonthFilter';
-import { OrderStatus } from '../../../models/order-status';
+import { OrderStatusType } from '@halapp/common';
 import moment from 'moment';
 
 interface OrdersFiltersProps {
   Organizations: Organization[];
-  Filter: OrderStatus | moment.Moment | null;
-  SetFilter: (filter: OrderStatus | moment.Moment) => void;
+  Filter: OrderStatusType | moment.Moment | undefined;
+  SetFilter: (filter: OrderStatusType | moment.Moment) => void;
   SetOrganization: (organizationId: string) => void;
   SelectedOrganization: string | null;
 }
