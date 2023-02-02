@@ -37,10 +37,10 @@ const OrderItemList = ({ Order }: OrderItemListProps) => {
           justifyContent: 'space-between',
           marginBottom: '10px'
         }}>
-        <Typography variant="h4">
+        <Typography variant="h5">
           <strong>{'Toplam :'}</strong>
         </Typography>
-        <Typography variant="h4" color="primary">
+        <Typography variant="h5" color="primary">
           <strong>
             {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
               Order.totalPrice()

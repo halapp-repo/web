@@ -1,3 +1,4 @@
+import { OrderStatusType } from '@halapp/common';
 import {
   Dialog,
   DialogTitle,
@@ -9,7 +10,7 @@ import {
 } from '@mui/material';
 import { Order } from '../../../models/order';
 import { useAppDispatch } from '../../../store/hooks';
-import { deleteOrder } from '../../../store/orders/ordersSlice';
+import { updateOrderStatus } from '../../../store/orders/ordersSlice';
 
 interface DialogCancelOrderProps {
   Order: Order;
@@ -20,7 +21,7 @@ interface DialogCancelOrderProps {
 const DialogCancelOrder = ({ Order, HandleClose, Open }: DialogCancelOrderProps) => {
   const dispatch = useAppDispatch();
   const handleCancelOrder = (orderId: string) => {
-    dispatch(deleteOrder(orderId));
+    dispatch(updateOrderStatus({ OrderId: orderId, Status: OrderStatusType.Canceled }));
   };
   return (
     <Dialog onClose={HandleClose} open={Open} fullWidth>

@@ -1,3 +1,5 @@
+import { OrderStatusType } from '@halapp/common';
+
 export interface UIState {
   listing: {
     selectedDate: string;
@@ -20,5 +22,8 @@ export interface UIState {
   };
   checkout: {
     orderNote: string;
+  };
+  orders: {
+    filter: OrderStatusType | moment.Moment | undefined;
   };
 }

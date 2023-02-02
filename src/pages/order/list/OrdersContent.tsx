@@ -7,14 +7,16 @@ import OrderListItem from './OrderListItem';
 import { getComparator } from '../../../utils/sort';
 import { OrderStatusType } from '@halapp/common';
 import { Link as RouterLink } from 'react-router-dom';
+import { Organization } from '../../../models/organization';
 
 interface OrdersContentProps {
-  Orders: Order[] | null;
+  SelectedOrganization?: Organization;
+  Orders?: Order[] | null;
   IsLoading: boolean;
   Filter?: OrderStatusType | moment.Moment | null;
 }
 
-const createOrderListItem = (orders: Order[] | null, isLoading: boolean) => {
+const createOrderListItem = (isLoading: boolean, orders?: Order[] | null) => {
   if (isLoading) {
     return (
       <ListItem sx={{ height: '200px', display: 'flex', justifyContent: 'center' }}>
@@ -42,7 +44,7 @@ const createOrderListItem = (orders: Order[] | null, isLoading: boolean) => {
   }
 };
 
-const OrdersContent = ({ Orders, IsLoading, Filter }: OrdersContentProps) => {
+const OrdersContent = ({ Orders, IsLoading, Filter, SelectedOrganization }: OrdersContentProps) => {
   return (
     <Box sx={{ display: 'flex', height: '100%', backgroundColor: '#fafafb' }}>
       <List
@@ -60,15 +62,22 @@ const OrdersContent = ({ Orders, IsLoading, Filter }: OrdersContentProps) => {
             sx={{
               backgroundColor: '#fafafb',
               display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              fontSize: '18px'
+              justifyContent: 'left',
+              alignItems: 'center'
             }}
             id="nested-list-subheader">
-            {Filter && moment.isMoment(Filter) && Filter.format('MMMM YYYY')}
+            <Typography variant="h5" color="primary">
+              {SelectedOrganization && `${SelectedOrganization.Name}`}
+            </Typography>
+            <Typography variant="h5" color="primary" sx={{ padding: '0px 5px' }}>
+              {'|'}
+            </Typography>
+            <Typography variant="h5">
+              {Filter && moment.isMoment(Filter) && Filter.format(' MMMM YYYY')}
+            </Typography>
           </ListSubheader>
         }>
-        {createOrderListItem(Orders, IsLoading)}
+        {createOrderListItem(IsLoading, Orders)}
       </List>
     </Box>
   );

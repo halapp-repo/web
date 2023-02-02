@@ -23,7 +23,7 @@ const OrderItem = ({ Item }: OrderItemProps) => {
                 </Typography>
                 <Typography variant="body2">{'x'}</Typography>
                 <Typography variant="body2" fontWeight={'bold'}>
-                  {Item.Count}
+                  {`(${Item.Count})${Item.Unit}`}
                 </Typography>
               </Stack>
               <Typography variant="body2">

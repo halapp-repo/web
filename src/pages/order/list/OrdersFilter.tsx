@@ -8,7 +8,7 @@ import moment from 'moment';
 
 interface OrdersFiltersProps {
   Organizations: Organization[];
-  Filter: OrderStatusType | moment.Moment | null;
+  Filter: OrderStatusType | moment.Moment | undefined;
   SetFilter: (filter: OrderStatusType | moment.Moment) => void;
   SetOrganization: (organizationId: string) => void;
   SelectedOrganization: string | null;

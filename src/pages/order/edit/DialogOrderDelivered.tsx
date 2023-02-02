@@ -13,7 +13,7 @@ import {
 import { Order } from '../../../models/order';
 import { Organization } from '../../../models/organization';
 import { useAppDispatch } from '../../../store/hooks';
-import { deleteOrder } from '../../../store/orders/ordersSlice';
+import { updateOrderStatus } from '../../../store/orders/ordersSlice';
 
 interface DialogOrderDeliveredProps {
   Order: Order;

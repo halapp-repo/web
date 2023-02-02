@@ -1,4 +1,5 @@
 import moment from 'moment';
+import 'moment-timezone';
 import 'moment/locale/tr';
 import('moment-timezone');
 

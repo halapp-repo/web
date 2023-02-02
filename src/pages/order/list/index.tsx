@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import { OrderStatusType } from '@halapp/common';
 import MainCard from '../../../components/MainCard';
 import OrdersContent from './OrdersContent';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks';
@@ -18,22 +19,29 @@ import {
 } from '../../../store/orders/ordersSlice';
 import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
-import { OrderStatusType } from '@halapp/common';
+import { selectOrdersFilter, setOrdersFilter } from '../../../store/ui/uiSlice';
+import { Organization } from '../../../models/organization';
 
 const ShoppingCart = () => {
-  const [filter, setFilter] = useState<moment.Moment | OrderStatusType | null>(null);
-  const [selectedOrganization, setSelectedOrganization] = useState<string | null>(null);
+  const filter = useAppSelector(selectOrdersFilter);
+  const [selectedOrganizationId, setSelectedOrganizationId] = useState<string | null>(null);
   const navigate = useNavigate();
   const userAuth = useAppSelector(selectUserAuth);
   const dispatch = useAppDispatch();
   const organizations = useAppSelector(selectOrganizations);
-  const orders = useAppSelector((state) =>
-    selectOrdersByMonth(state, selectedOrganization || '', trMoment())
+  const ordersByMonth = useAppSelector((state) =>
+    selectOrdersByMonth(
+      state,
+      selectedOrganizationId || '',
+      moment.isMoment(filter) ? filter : undefined
+    )
   );
   const ordersAreLoading = useAppSelector(selectOrderIsLoading);
 
   useEffect(() => {
-    setFilter(trMoment());
+    if (!filter) {
+      dispatch(setOrdersFilter(trMoment()));
+    }
   }, []);
 
   useEffect(() => {
@@ -47,22 +55,22 @@ const ShoppingCart = () => {
   }, [userAuth]);
 
   useEffect(() => {
-    if (!selectedOrganization) {
+    if (!selectedOrganizationId) {
       return;
     }
-    if (!filter) {
-      return;
-    } else if (moment.isMoment(filter)) {
-      dispatch(fetchOrdersByMonth({ Month: filter, OrganizationId: selectedOrganization }));
+    if (moment.isMoment(filter) && !ordersByMonth) {
+      dispatch(fetchOrdersByMonth({ Month: filter, OrganizationId: selectedOrganizationId }));
     }
-  }, [filter, selectedOrganization]);
+  }, [filter, selectedOrganizationId]);
 
   const handleSetFilter = (filter: OrderStatusType | moment.Moment): void => {
-    setFilter(filter);
+    dispatch(setOrdersFilter(filter));
   };
   const handleSetOrganization = (organizationId: string): void => {
-    setSelectedOrganization(organizationId);
+    setSelectedOrganizationId(organizationId);
   };
+
+  const selectedOrganization = organizations?.List?.find((o) => o.ID === selectedOrganizationId);
 
   return (
     <>
@@ -81,12 +89,17 @@ const ShoppingCart = () => {
                 Filter={filter}
                 SetFilter={handleSetFilter}
                 SetOrganization={handleSetOrganization}
-                SelectedOrganization={selectedOrganization}
+                SelectedOrganization={selectedOrganizationId}
               />
             </MainCard>
           </Grid>
           <Grid item xs={12} sm={6} md={5}>
-            <OrdersContent Orders={orders} IsLoading={ordersAreLoading} Filter={filter} />
+            <OrdersContent
+              Orders={ordersByMonth}
+              IsLoading={ordersAreLoading}
+              Filter={filter}
+              SelectedOrganization={selectedOrganization}
+            />
           </Grid>
         </Grid>
       )}

@@ -1,5 +1,4 @@
 import moment from 'moment';
-import 'moment-timezone';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import { UIState } from './uiState';
@@ -10,6 +9,7 @@ import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
 import { createOrder } from '../orders/ordersSlice';
+import { OrderStatusType } from '@halapp/common';
 
 const initialState = {
   listing: {
@@ -33,6 +33,9 @@ const initialState = {
   },
   checkout: {
     orderNote: ''
+  },
+  orders: {
+    filter: undefined
   }
 } as UIState;
 
@@ -90,6 +93,12 @@ const UISlice = createSlice({
     },
     toggleGlobalIsLoading: (state: UIState, action: PayloadAction<boolean>) => {
       state.global.isLoading = action.payload;
+    },
+    setOrdersFilter: (
+      state: UIState,
+      action: PayloadAction<moment.Moment | OrderStatusType | undefined>
+    ) => {
+      state.orders.filter = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -143,7 +152,8 @@ export const {
   toggleShoppingCart,
   updateOrganization,
   updateCheckoutOrderNote,
-  toggleGlobalIsLoading
+  toggleGlobalIsLoading,
+  setOrdersFilter
 } = UISlice.actions;
 
 export const selectUIListingSelectedDate = createSelector(
@@ -181,6 +191,10 @@ export const selectUIOrganization = createSelector(
 export const selectUICheckoutOrderNote = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.checkout.orderNote
+);
+export const selectOrdersFilter = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.orders.filter
 );
 
 export default UISlice.reducer;
