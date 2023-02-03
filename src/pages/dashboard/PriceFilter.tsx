@@ -121,7 +121,7 @@ const PriceFilter = () => {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 id="outlined-basic"
-                label="Urun adi"
+                label="Ürün adı"
                 variant="outlined"
               />
               <ExpandMore
