@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-
 import {
   Box,
   useMediaQuery,
@@ -22,7 +21,6 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-//import { selectCategories } from '../../store/inventories/inventoriesSlice';
 import { selectUIListingSelectedDate } from '../../store/ui/uiSlice';
 import {
   updateListingSelectedDate,
@@ -121,7 +119,7 @@ const PriceFilter = () => {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 id="outlined-basic"
-                label="Urun adi"
+                label="Ürün adı"
                 variant="outlined"
               />
               <ExpandMore
