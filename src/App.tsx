@@ -1,7 +1,7 @@
 import ThemeCustomization from './themes';
 import Routes from './routes';
 import ScrollTop from './components/ScrollTop';
-import { CookiePolicy } from './components/CookiePolicy';
+import { CookiePolicy } from './components/cookie-policy/CookiePolicy';
 
 function App() {
   return (

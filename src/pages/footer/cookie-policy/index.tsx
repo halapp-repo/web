@@ -109,32 +109,6 @@ const Contact = () => {
             {`alınması suretiyle işlenmektedir. İnternet sitemizde yer alan
             çerezlere ilişkin bilgiler aşağıdaki tablolarda yer almaktadır:`}
           </Typography>
-          <Typography variant="h6" fontWeight={'bold'}>{`Elementor Çerezleri`}</Typography>
-          <Typography>
-            {`Web sitesinde yer alan içeriklerin üretiminde Elementor kullanıyoruz.`}
-          </Typography>
-          <table
-            border={1}
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              borderCollapse: 'collapse'
-            }}>
-            <tbody>
-              <tr>
-                <th>Çerez İsmi</th>
-                <th>Çerezin Amacı</th>
-                <th>Çerez Tipi</th>
-                <th>Çerezin Saklama Süreci</th>
-              </tr>
-              <tr>
-                <td>elementor</td>
-                <td> İnternet sitesinde yapılan eylem ve işleri saklar</td>
-                <td>Birinci taraf çerez</td>
-                <td>Kalıcı</td>
-              </tr>
-            </tbody>
-          </table>
           <Typography variant="h6" fontWeight={'bold'}>{`Google Analytics Çerezleri`}</Typography>
           <Typography>
             Bu internet sitesi, Google Inc.&#39;in (&quot;Google&quot;) bir web analiz hizmeti olan
@@ -170,6 +144,16 @@ const Contact = () => {
                 <td>
                   Ziyaretçinin internet sitesini nasıl kullandığına ilişkin istatistiksel veriler
                   oluşturmak için kullanılan benzersiz bir kimlik kaydeder
+                </td>
+                <td>Üçüncü taraf çerez</td>
+                <td>2 yıl</td>
+              </tr>
+              <tr>
+                <td>_ga_#</td>
+                <td>
+                  Google Analytics tarafından, bir kullanıcının web sitesini kaç kez ziyaret
+                  ettiğinin yanı sıra ilk ve en son ziyaretin tarihlerine ilişkin verileri toplamak
+                  için kullanılır.
                 </td>
                 <td>Üçüncü taraf çerez</td>
                 <td>2 yıl</td>

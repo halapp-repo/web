@@ -8,7 +8,6 @@ import {
   selectUISessionLoading,
   updateListingSelectedDate
 } from '../store/ui/uiSlice';
-import { CookiePolicy } from './CookiePolicy';
 import { Cover } from './Cover';
 
 type Props = {
