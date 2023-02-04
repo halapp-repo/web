@@ -14,6 +14,7 @@ const BilgiToplumuHizmetleri = Loadable(
   lazy(() => import('../pages/footer/bilgi-toplumu-hizmetleri'))
 );
 const Contact = Loadable(lazy(() => import('../pages/footer/contact')));
+const CookiePolicy = Loadable(lazy(() => import('../pages/footer/cookie-policy')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -49,6 +50,10 @@ const MainRoutes = {
     {
       path: '/about',
       element: <About />
+    },
+    {
+      path: '/cerez-politikasi',
+      element: <CookiePolicy />
     }
   ]
 };

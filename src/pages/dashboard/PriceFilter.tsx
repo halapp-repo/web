@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-
 import {
   Box,
   useMediaQuery,
@@ -22,7 +21,6 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-//import { selectCategories } from '../../store/inventories/inventoriesSlice';
 import { selectUIListingSelectedDate } from '../../store/ui/uiSlice';
 import {
   updateListingSelectedDate,
