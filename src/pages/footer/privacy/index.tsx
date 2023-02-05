@@ -7,6 +7,7 @@ import { AydinlatmaMetni } from './AydinlatmaMetni';
 import { AcikRizaMetni } from './AcikRizaMetni';
 import { KisiselVerilerinKorunmaPolitikasi } from './KisiselVerilerinKorunmaPolitikasi';
 import { KullanimSartlari } from './KullanimSartlari';
+import { CerezPolitikasi } from './CerezPolitikasi';
 
 const Privacy = () => {
   const tabs = {
@@ -29,6 +30,10 @@ const Privacy = () => {
     '#kisisel-verilerin-korunmasi-politikasi': {
       to: '/privacy#kisisel-verilerin-korunmasi-politikasi',
       title: 'Kişisel Verilerin Korunması Politikası'
+    },
+    '#cerez-politikasi': {
+      to: '/privacy#cerez-politikasi',
+      title: 'Çerez Politikası'
     }
   };
   const { hash } = useLocation();
@@ -63,6 +68,9 @@ const Privacy = () => {
       }
       case '#kullanim-sartlari': {
         return <KullanimSartlari />;
+      }
+      case '#cerez-politikasi': {
+        return <CerezPolitikasi />;
       }
       default: {
         return null;

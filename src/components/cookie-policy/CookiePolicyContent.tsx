@@ -102,7 +102,7 @@ const CookiePolicyContent = ({ SetConsent }: CookiePolicyContentProps) => {
                     istatistik analizi yapılması, sitemizin daha işlevsel kılınması ve
                     kişiselleştirilmesi (tercih ayarlarınızın hatırlanması gibi) amaçlarıyla sınırlı
                     olarak kullanılacaktır.`}{' '}
-                <Link to={'/cerez-politikasi'} color={blue[500]}>
+                <Link to={'/privacy#cerez-politikasi'} color={blue[500]}>
                   {`Çerez Politikası Aydınlatma Metni`}
                 </Link>{' '}
                 {`için tıklayınız.`}

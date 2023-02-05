@@ -23,7 +23,8 @@ const CookiePolicy = () => {
   }, [consent]);
 
   const getContent = () => {
-    const canNotBeSeen = pathname === '/cerez-politikasi' || consent !== '';
+    const canNotBeSeen =
+      pathname === '/cerez-politikasi' || pathname === '/privacy' || consent !== '';
     if (canNotBeSeen) {
       return null;
     }
