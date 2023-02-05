@@ -47,8 +47,10 @@ const GizlilikPolitikasi = () => {
             İşlenen verilerinizin işleme amaçları ile kişisel verilerinizin işlenmesi süreçleri
             kapsamında detaylı bilgi almak için “
             <Link to="/privacy#aydinlatma-metni">Aydınlatma Metni</Link>” ve “
-            <Link to="/privacy#kvk">Kişisel Verilerin Korunması Politikası</Link>” nı
-            inceleyebilirsiniz.
+            <Link to="/privacy#kisisel-verilerin-korunmasi-politikasi">
+              Kişisel Verilerin Korunması Politikası
+            </Link>
+            ” nı inceleyebilirsiniz.
           </li>
           <li>
             İşlenen verilerinizin aktarılması hususunda alıcı gruplar ile gizlilik şartımız
