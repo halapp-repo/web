@@ -3,7 +3,7 @@ import Logo from '../../../components/logo/Logo';
 import MainCard from '../../../components/MainCard';
 import PageWrapper from '../../../components/PageWrapper';
 
-const Contact = () => {
+const CookiePolicy = () => {
   return (
     <PageWrapper md={6}>
       <MainCard>
@@ -222,4 +222,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default CookiePolicy;
