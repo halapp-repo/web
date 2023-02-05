@@ -63,6 +63,16 @@ const Footer = () => {
                 {`iletişim`}
               </Typography>
             </Button>
+            <Divider sx={{ color: 'text.secondary' }}>{'•'}</Divider>
+            <Button
+              color="primary"
+              to={'/privacy#gizlilik-politikasi'}
+              component={RouterLink}
+              sx={{ textTransform: 'none' }}>
+              <Typography variant="body2" color="text.secondary">
+                {`gizlilik`}
+              </Typography>
+            </Button>
           </Stack>
         </Grid>
         <Grid item xs={12} sm={3} sx={{ display: 'flex', justifyContent: 'center' }}>
