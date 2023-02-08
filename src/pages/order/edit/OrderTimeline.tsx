@@ -33,7 +33,7 @@ const OrderTimeline = ({ Events }: OrderTimelineProps) => {
         position: 'relative',
         margin: '40px 0',
         '&:after': {
-          backgroundColor: '#e17b77',
+          backgroundColor: '#ffc423',
           content: "''",
           position: 'absolute',
           left: '0',

@@ -110,7 +110,7 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
         sx={{
           p: '0px !important',
           '& .circle': {
-            backgroundColor: '#fff',
+            backgroundColor: '#fafafb',
             border: '3px solid #e17b77',
             borderRadius: '50%',
             position: 'absolute',
