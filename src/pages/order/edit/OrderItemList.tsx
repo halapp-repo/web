@@ -55,11 +55,23 @@ const OrderItemList = ({ Order }: OrderItemListProps) => {
           <List>
             {items.map((i, index, arr) => {
               if (arr.length === index + 1) {
-                return <OrderListItem key={i.ProductId} Item={i} OnDeleteItem={handleDeleteItem} />;
+                return (
+                  <OrderListItem
+                    key={i.ProductId}
+                    Item={i}
+                    CanBeDeleted={Order.canBeUpdated()}
+                    OnDeleteItem={handleDeleteItem}
+                  />
+                );
               } else {
                 return (
                   <>
-                    <OrderListItem key={i.ProductId} Item={i} OnDeleteItem={handleDeleteItem} />
+                    <OrderListItem
+                      key={i.ProductId}
+                      Item={i}
+                      CanBeDeleted={Order.canBeUpdated()}
+                      OnDeleteItem={handleDeleteItem}
+                    />
                     <Divider />
                   </>
                 );
@@ -67,7 +79,7 @@ const OrderItemList = ({ Order }: OrderItemListProps) => {
             })}
           </List>
         </Box>
-        {isAdmin && !compareItems() && (
+        {isAdmin && Order.canBeUpdated() && !compareItems() && (
           <Stack direction={'row'} justifyContent="space-around" spacing={1}>
             <Button fullWidth color="admin" variant="outlined" onClick={handleRevertBack}>
               {'Geri Dön'}

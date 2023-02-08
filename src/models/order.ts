@@ -85,10 +85,13 @@ class Order {
     }, 0);
   }
 
-  canCancel(): boolean {
+  canBeCanceled(): boolean {
     return this.Status === OrderStatusType.Created;
   }
   canBeDelivered(): boolean {
+    return this.Status === OrderStatusType.Created;
+  }
+  canBeUpdated(): boolean {
     return this.Status === OrderStatusType.Created;
   }
 }

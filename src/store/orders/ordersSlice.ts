@@ -173,8 +173,8 @@ const OrderSlice = createSlice({
     builder.addCase(updateOrderStatus.rejected, (state) => {
       state.IsLoading = false;
     });
-    builder.addCase(updateOrderStatus.pending, () => {
-      // state.IsLoading = true;
+    builder.addCase(updateOrderStatus.pending, (state) => {
+      state.IsLoading = true;
     });
     // Update Order Items
     builder.addCase(updateOrderItems.fulfilled, (state, action) => {
@@ -188,8 +188,8 @@ const OrderSlice = createSlice({
     builder.addCase(updateOrderItems.rejected, (state) => {
       state.IsLoading = false;
     });
-    builder.addCase(updateOrderItems.pending, () => {
-      // state.IsLoading = true;
+    builder.addCase(updateOrderItems.pending, (state) => {
+      state.IsLoading = true;
     });
   }
 });

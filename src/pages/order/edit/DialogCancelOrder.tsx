@@ -40,14 +40,16 @@ const DialogCancelOrder = ({ Order, HandleClose, Open }: DialogCancelOrderProps)
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'space-around' }}>
-        <Button onClick={HandleClose} autoFocus color={'blackNWhite'}>
+        <Button onClick={HandleClose} variant="outlined" autoFocus color={'blackNWhite'}>
           {'Hayir'}
         </Button>
         <Button
+          sx={{ color: '#ffff' }}
           onClick={() => {
             handleCancelOrder(Order.Id);
             HandleClose();
           }}
+          variant="contained"
           color={'error'}>
           {'Evet, Siparişi Iptal Et'}
         </Button>

@@ -19,7 +19,7 @@ const OrderButtons = ({
   const userAuth = useAppSelector(selectUserAuth);
   const getButtons = (): ReactElement[] => {
     const buttons: ReactElement[] = [];
-    if (Order.canCancel()) {
+    if (Order.canBeCanceled()) {
       buttons.push(
         <Button
           variant="contained"

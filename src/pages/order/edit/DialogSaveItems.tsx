@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Order, OrderItem } from '../../../models/order';
 import { useAppDispatch } from '../../../store/hooks';
-import { updateOrderStatus } from '../../../store/orders/ordersSlice';
+import { updateOrderItems } from '../../../store/orders/ordersSlice';
 import { green } from '@mui/material/colors';
 
 interface DialogSaveItemsProps {
@@ -25,7 +25,7 @@ const DialogSaveItems = ({ Order, NewItems, HandleClose, Open }: DialogSaveItems
   const dispatch = useAppDispatch();
 
   const handleOrderDelivered = (orderId: string) => {
-    dispatch(updateOrderStatus({ OrderId: orderId, Status: OrderStatusType.Delivered }));
+    dispatch(updateOrderItems({ OrderId: orderId, Items: NewItems }));
   };
 
   const insertedItems = NewItems.filter(
@@ -76,7 +76,7 @@ const DialogSaveItems = ({ Order, NewItems, HandleClose, Open }: DialogSaveItems
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'space-around' }}>
-        <Button onClick={HandleClose} autoFocus color={'blackNWhite'}>
+        <Button onClick={HandleClose} variant="outlined" autoFocus color={'blackNWhite'}>
           {'Hayir'}
         </Button>
         <Button
@@ -84,6 +84,7 @@ const DialogSaveItems = ({ Order, NewItems, HandleClose, Open }: DialogSaveItems
             handleOrderDelivered(Order.Id);
             HandleClose();
           }}
+          variant="contained"
           color={'admin'}>
           {'Evet, Ürünleri Güncelle'}
         </Button>

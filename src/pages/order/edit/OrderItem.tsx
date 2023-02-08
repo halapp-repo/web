@@ -14,15 +14,16 @@ import { useAppSelector } from '../../../store/hooks';
 
 interface OrderItemProps {
   Item: Item;
+  CanBeDeleted: boolean;
   OnDeleteItem: (productId: string) => void;
 }
 
-const OrderItem = ({ Item, OnDeleteItem }: OrderItemProps) => {
+const OrderItem = ({ Item, CanBeDeleted, OnDeleteItem }: OrderItemProps) => {
   const { isAdmin } = useAppSelector(selectUserAuth);
 
   return (
     <ListItem key={Item.ProductId} alignItems="flex-start">
-      {isAdmin && (
+      {isAdmin && CanBeDeleted && (
         <ListItemSecondaryAction sx={{ height: '100%' }}>
           <IconButton
             edge="end"
