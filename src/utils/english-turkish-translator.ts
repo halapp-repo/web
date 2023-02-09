@@ -7,6 +7,8 @@ const translateOrderStatus = (status: OrderStatusType): string => {
     return 'Iptal edildi';
   } else if (status === OrderStatusType.Delivered) {
     return 'Siparis teslim edildi';
+  } else if (status === OrderStatusType.Paid) {
+    return 'Sipariş ödendi';
   } else {
     throw new Error('Bilinmeyen durum');
   }

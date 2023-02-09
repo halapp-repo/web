@@ -1,4 +1,3 @@
-import { OrderStatusType } from '@halapp/common';
 import {
   Dialog,
   DialogTitle,

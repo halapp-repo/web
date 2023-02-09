@@ -94,6 +94,9 @@ class Order {
   canBeUpdated(): boolean {
     return this.Status === OrderStatusType.Created;
   }
+  canBePaid(): boolean {
+    return this.Status === OrderStatusType.Delivered;
+  }
 }
 
 export { Order, OrderItem, OrderEvent };
