@@ -3,8 +3,7 @@ import { CircularProgress, Box } from '@mui/material';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { IntervalType } from '../../models/interval-type';
-import { City } from '../../models/city';
-import { ProductType } from '../../models/product-type';
+import { CityType, ProductType } from '@halapp/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   fetchProductPrices,
@@ -17,7 +16,7 @@ import { Price } from '../../models/price';
 interface PriceChartProps {
   ProductId: string;
   Slot: ChartSlot;
-  Location: City;
+  Location: CityType;
   Type: ProductType;
 }
 

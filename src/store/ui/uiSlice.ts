@@ -3,8 +3,7 @@ import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import { UIState } from './uiState';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { City } from '../../models/city';
-import { ProductType } from '../../models/product-type';
+import { CityType, ProductType } from '@halapp/common';
 import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
@@ -14,7 +13,7 @@ import { OrderStatusType } from '@halapp/common';
 const initialState = {
   listing: {
     filteredProductName: '',
-    selectedCity: City.istanbul,
+    selectedCity: CityType.istanbul,
     selectedDate: trMoment().format('YYYY-MM-DD'),
     selectedCategory: ProductType.produce
   },

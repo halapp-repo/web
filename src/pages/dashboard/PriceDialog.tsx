@@ -14,8 +14,7 @@ import {
 } from '@mui/material';
 import { CloseOutlined } from '@ant-design/icons';
 import PriceChart from './PriceChart';
-import { City } from '../../models/city';
-import { ProductType } from '../../models/product-type';
+import { CityType, ProductType } from '@halapp/common';
 import { useAppSelector } from '../../store/hooks';
 import { selectProductByProductId } from '../../store/inventories/inventoriesSlice';
 import {
@@ -26,7 +25,7 @@ import {
 
 interface PriceDialogProps {
   ProductId: string;
-  Location: City;
+  Location: CityType;
   Type: ProductType;
   CloseAnalyticsPanel: (event: React.MouseEvent<unknown>) => void;
 }

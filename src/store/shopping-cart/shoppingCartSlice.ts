@@ -12,6 +12,7 @@ import { selectPricesOfToday } from '../prices/pricesSlice';
 import { ShoppingCartState } from './shoppingCartState';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { UserSessionLS } from '../auth/authSlice';
+import { createOrder } from '../orders/ordersSlice';
 
 const initialState = {
   cart: {
@@ -110,6 +111,14 @@ const ShoppingCartSlice = createSlice({
         };
       }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(createOrder.fulfilled, (state) => {
+      state.cart = {
+        Items: []
+      };
+      saveToLC(state.cart);
+    });
   }
 });
 

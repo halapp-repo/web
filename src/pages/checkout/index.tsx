@@ -9,7 +9,6 @@ import {
   fetchOrganizations,
   selectOrganizations
 } from '../../store/organizations/organizationsSlice';
-import { removeAllItems } from '../../store/shopping-cart/shoppingCartSlice';
 import { Overlay } from '../../components/Overlay';
 import { useNavigate } from 'react-router-dom';
 import { OrderItemVM, OrderVM } from '@halapp/common';
@@ -50,7 +49,7 @@ const Checkout = () => {
         DeliveryTime: deliveryTime
       } as OrderVM)
     );
-    dispatch(removeAllItems());
+
     navigate('/orders');
   };
 

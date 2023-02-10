@@ -31,7 +31,7 @@ const LayoutInitializer = ({ children }: Props) => {
     dispatch(fetchCartItem());
     const timer = setInterval(() => {
       dispatch(getSession());
-    }, 1200000);
+    }, 600000);
     return () => clearTimeout(timer);
   }, []);
 
