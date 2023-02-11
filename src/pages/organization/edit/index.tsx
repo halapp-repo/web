@@ -17,6 +17,7 @@ import {
 } from '../../../store/ui/uiSlice';
 import { DeliveryAddresses } from './DeliveryAddresses';
 import Information from './Information';
+import { Users } from './Users';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -131,6 +132,14 @@ const OrganizationEdit = () => {
           </TabPanel>
         </PageWrapper>
       );
+    } else if (tab === 2) {
+      return (
+        <PageWrapper md={6} lg={5}>
+          <TabPanel value={2} index={2}>
+            <Users Organization={organization} />
+          </TabPanel>
+        </PageWrapper>
+      );
     }
     throw new Error('Not Found Tab error');
   };
@@ -147,6 +156,7 @@ const OrganizationEdit = () => {
             allowScrollButtonsMobile>
             <Tab label="Şirket Bilgisi" value={0} />
             <Tab label="Teslimat Adresleri" value={1} />
+            <Tab label="Kullanıcılar" value={2} />
           </Tabs>
         </MainCard>
       </PageWrapper>
