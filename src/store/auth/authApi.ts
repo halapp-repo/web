@@ -6,7 +6,10 @@ import {
   AuthenticationDetails,
   IAuthenticationDetailsData,
   ICognitoUserData,
-  CognitoUserSession
+  CognitoUserSession,
+  CognitoAccessToken,
+  CognitoIdToken,
+  CognitoRefreshToken
 } from 'amazon-cognito-identity-js';
 import cognitoUserPool from '../../aws/CognitoUserPool';
 import { SignupCode } from '../../models/signup-code';
@@ -117,6 +120,7 @@ const signIn = (
         return resolve({
           idToken: session.getIdToken().getJwtToken(),
           accessToken: session.getAccessToken().getJwtToken(),
+          refreshToken: session.getRefreshToken().getToken(),
           session,
           user: cognitoUser
         });
@@ -141,6 +145,7 @@ const signOut = () => {
 interface ISessionResponse {
   idToken: string;
   accessToken: string;
+  refreshToken: string;
   session: CognitoUserSession;
 }
 const getSession = (): Promise<ISessionResponse> => {
@@ -157,6 +162,7 @@ const getSession = (): Promise<ISessionResponse> => {
           return resolve({
             idToken: session.getIdToken().getJwtToken(),
             accessToken: session.getAccessToken().getJwtToken(),
+            refreshToken: session.getRefreshToken().getToken(),
             session
           });
         }
@@ -198,6 +204,50 @@ const confirmPassword = (email: string, otp: string, newPassword: string): Promi
       },
       onSuccess() {
         return resolve();
+      }
+    });
+  });
+};
+
+const checkTokenExpiration = (): Promise<ISessionResponse> => {
+  return new Promise((resolve, reject) => {
+    getSession().then((s) => {
+      // token
+      const AccessToken = new CognitoAccessToken({ AccessToken: s.accessToken });
+      const IdToken = new CognitoIdToken({ IdToken: s.idToken });
+      const RefreshToken = new CognitoRefreshToken({
+        RefreshToken: s.refreshToken
+      });
+      // session
+      const sessionData = {
+        IdToken: IdToken,
+        AccessToken: AccessToken,
+        RefreshToken: RefreshToken
+      };
+      const cachedSession = new CognitoUserSession(sessionData);
+      if (cachedSession.isValid()) {
+        return resolve({
+          accessToken: cachedSession.getAccessToken().getJwtToken(),
+          idToken: cachedSession.getIdToken().getJwtToken(),
+          refreshToken: cachedSession.getRefreshToken().getToken(),
+          session: cachedSession
+        });
+      } else {
+        const user = cognitoUserPool.getCurrentUser();
+        if (!user) {
+          return reject('user session is not set');
+        }
+        user.refreshSession(RefreshToken, (err, session) => {
+          if (err) {
+            return reject(err);
+          }
+          return resolve({
+            accessToken: session.getAccessToken().getJwtToken(),
+            idToken: session.getIdToken().getJwtToken(),
+            refreshToken: session.getRefreshToken().getToken(),
+            session: session
+          });
+        });
       }
     });
   });
@@ -267,5 +317,6 @@ export {
   confirmPassword,
   getUserAttributes,
   AuthApi,
-  getCurrentUser
+  getCurrentUser,
+  checkTokenExpiration
 };
