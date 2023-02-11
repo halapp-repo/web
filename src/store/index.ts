@@ -7,6 +7,7 @@ import organizationsReducer from './organizations/organizationsSlice';
 import authReducer from './auth/authSlice';
 import shoppingCartReducer from './shopping-cart/shoppingCartSlice';
 import ordersReducer from './orders/ordersSlice';
+import usersReducer from './users/usersSlice';
 
 const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
     organizations: organizationsReducer,
     auth: authReducer,
     shoppingCart: shoppingCartReducer,
-    orders: ordersReducer
+    orders: ordersReducer,
+    users: usersReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

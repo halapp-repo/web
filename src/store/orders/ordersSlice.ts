@@ -4,7 +4,7 @@ import { OrderApi } from './ordersApi';
 import { OrdersState } from './ordersState';
 import moment from 'moment';
 import { trMoment } from '../../utils/timezone';
-import { OrderStatusType, OrderVM } from '@halapp/common';
+import { OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
 import { signOut } from '../auth/authSlice';
 
@@ -63,13 +63,9 @@ export const fetchOrder = createAsyncThunk<OrderVM | null, string, { state: Root
   }
 );
 
-interface UpdateOrdersStatusRequest {
-  OrderId: string;
-  Status: OrderStatusType;
-}
 export const updateOrderStatus = createAsyncThunk<
   OrderVM,
-  UpdateOrdersStatusRequest,
+  { OrderId: string; Status: OrderStatusType },
   { state: RootState }
 >('order/updateStatus', async ({ OrderId, Status }, { getState }): Promise<OrderVM> => {
   const { userAuth } = getState().auth;
@@ -80,6 +76,22 @@ export const updateOrderStatus = createAsyncThunk<
     token: userAuth.idToken,
     orderId: OrderId,
     newOrderStatus: Status
+  });
+});
+
+export const updateOrderItems = createAsyncThunk<
+  OrderVM,
+  { OrderId: string; Items: OrderItemVM[] },
+  { state: RootState }
+>('order/updateItems', async ({ OrderId, Items }, { getState }): Promise<OrderVM> => {
+  const { userAuth } = getState().auth;
+  if (!userAuth.authenticated || !userAuth.idToken) {
+    throw new Error('Unauthenticated');
+  }
+  return await new OrderApi().updateOrderItems({
+    token: userAuth.idToken,
+    orderId: OrderId,
+    items: Items
   });
 });
 
@@ -149,7 +161,7 @@ const OrderSlice = createSlice({
     builder.addCase(fetchOrder.pending, (state) => {
       state.IsLoading = true;
     });
-    // Delete Order
+    // Update Order Status
     builder.addCase(updateOrderStatus.fulfilled, (state, action) => {
       const { OrderId } = action.meta.arg;
       state.Edit = {
@@ -161,8 +173,23 @@ const OrderSlice = createSlice({
     builder.addCase(updateOrderStatus.rejected, (state) => {
       state.IsLoading = false;
     });
-    builder.addCase(updateOrderStatus.pending, () => {
-      // state.IsLoading = true;
+    builder.addCase(updateOrderStatus.pending, (state) => {
+      state.IsLoading = true;
+    });
+    // Update Order Items
+    builder.addCase(updateOrderItems.fulfilled, (state, action) => {
+      const { OrderId } = action.meta.arg;
+      state.Edit = {
+        ...state.Edit,
+        [OrderId]: action.payload
+      };
+      state.IsLoading = false;
+    });
+    builder.addCase(updateOrderItems.rejected, (state) => {
+      state.IsLoading = false;
+    });
+    builder.addCase(updateOrderItems.pending, (state) => {
+      state.IsLoading = true;
     });
   }
 });

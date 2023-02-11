@@ -295,7 +295,7 @@ const KisiselVerilerinKorunmaPolitikasi = () => {
           içerisinde değerlendirilerek sonuçlandırılacaktır.
         </Typography>
         <Typography fontWeight={'bold'} variant="h6">
-          {'Politika güncelleme tarihi:02/02/2023'}
+          {'Politika güncelleme tarihi: 02/02/2023'}
         </Typography>
       </Stack>
     </MainCard>

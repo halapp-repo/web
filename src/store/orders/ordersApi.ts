@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
-import { OrderStatusType, OrderVM } from '@halapp/common';
+import { OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
 
 export class OrderApi {
   baseUrl: string;
@@ -104,6 +104,34 @@ export class OrderApi {
       .put<OrderVM>(
         `/orders/${orderId}/status`,
         { Status: newOrderStatus },
+        {
+          baseURL: this.baseUrl,
+          headers: {
+            Accept: 'application/json',
+            'content-type': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then((response) => {
+        const { data } = response;
+        return data;
+      });
+  }
+  async updateOrderItems({
+    token,
+    orderId,
+    items
+  }: {
+    token: string;
+    orderId: string;
+    items: OrderItemVM[];
+  }): Promise<OrderVM> {
+    return await axios
+      .put<OrderVM>(
+        `/orders/${orderId}/items`,
+        { Items: items },
         {
           baseURL: this.baseUrl,
           headers: {

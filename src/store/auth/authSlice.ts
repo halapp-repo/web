@@ -11,7 +11,8 @@ import {
   forgotPassword as forgotPasswordFunc,
   confirmPassword as confirmPasswordFunc,
   AuthApi,
-  getUserAttributes as getUserAttributesFunc
+  getUserAttributes as getUserAttributesFunc,
+  checkTokenExpiration
 } from './authApi';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
@@ -118,6 +119,14 @@ export const getSession = createAsyncThunk<AuthResponseDTO>(
     };
   }
 );
+
+export const refreshSession = createAsyncThunk<AuthResponseDTO>('auth/refreshSession', async () => {
+  const session = await checkTokenExpiration();
+  return {
+    IdToken: session.idToken,
+    AccessToken: session.accessToken
+  };
+});
 
 export const getCognitoUser = createAsyncThunk<AuthResponseDTO | null>(
   'auth/getCognitoUser',
@@ -338,6 +347,20 @@ const AuthSlice = createSlice({
         ...defaultUserAuth
       };
     });
+    // refresh session
+    builder.addCase(refreshSession.fulfilled, (state, action) => {
+      const { IdToken, AccessToken } = action.payload;
+      state.userAuth = {
+        ...state.userAuth,
+        confirmed: true,
+        authenticated: true,
+        needConfirmation: false,
+        error: null,
+        idToken: IdToken,
+        accessToken: AccessToken
+      };
+    });
+    // confirm password
     builder.addCase(confirmPassword.fulfilled, (state) => {
       state.userAuth = {
         ...state.userAuth,

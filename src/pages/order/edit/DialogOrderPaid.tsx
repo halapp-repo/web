@@ -9,25 +9,27 @@ import {
   Typography
 } from '@mui/material';
 import { Order } from '../../../models/order';
+import { Organization } from '../../../models/organization';
 import { useAppDispatch } from '../../../store/hooks';
 import { updateOrderStatus } from '../../../store/orders/ordersSlice';
 
-interface DialogCancelOrderProps {
+interface DialogOrderPaidProps {
   Order: Order;
   HandleClose: () => void;
   Open: boolean;
+  Organization: Organization;
 }
 
-const DialogCancelOrder = ({ Order, HandleClose, Open }: DialogCancelOrderProps) => {
+const DialogOrderPaid = ({ Order, HandleClose, Open, Organization }: DialogOrderPaidProps) => {
   const dispatch = useAppDispatch();
-  const handleCancelOrder = (orderId: string) => {
-    dispatch(updateOrderStatus({ OrderId: orderId, Status: OrderStatusType.Canceled }));
+  const handleOrderPaid = (orderId: string) => {
+    dispatch(updateOrderStatus({ OrderId: orderId, Status: OrderStatusType.Paid }));
   };
   return (
     <Dialog onClose={HandleClose} open={Open} fullWidth>
       <DialogTitle sx={{ textAlign: 'center' }}>
-        <Typography variant="h5" color={'error'}>
-          {'Siparişi Iptal Et ?'}
+        <Typography variant="h5" color={'#8753de'}>
+          {'Sipariş Ödendi Mi ?'}
         </Typography>
       </DialogTitle>
       <DialogContent>
@@ -35,8 +37,10 @@ const DialogCancelOrder = ({ Order, HandleClose, Open }: DialogCancelOrderProps)
           sx={{
             textAlign: 'center'
           }}>
+          <b>{Organization.Name}</b>
+          <i>{' tarafından '}</i>
           <b>{Order.CreatedDate.format('MMMM DD YYYY')}</b>
-          <i>{`'da verilen siparisi iptal etmek istediğinizden emin misiniz?`}</i>
+          <i>{`'da verilen siparis ödendi mi ?`}</i>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -46,16 +50,16 @@ const DialogCancelOrder = ({ Order, HandleClose, Open }: DialogCancelOrderProps)
         <Button
           sx={{ color: '#ffff' }}
           onClick={() => {
-            handleCancelOrder(Order.Id);
+            handleOrderPaid(Order.Id);
             HandleClose();
           }}
           variant="contained"
-          color={'error'}>
-          {'Evet, Siparişi Iptal Et'}
+          color={'admin'}>
+          {'Evet, Sipariş Ödendi'}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export { DialogCancelOrder };
+export { DialogOrderPaid };

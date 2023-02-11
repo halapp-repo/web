@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { OrderEvent } from '../../../models/order';
 import { OrderEventType } from '@halapp/common';
-import { red, green, blue } from '@mui/material/colors';
+import { red, green, blue, purple } from '@mui/material/colors';
 import { OrderTimelineItemContent } from './OrderTimelineItemContent';
 import { DeleteOutlined, ShoppingCartOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
@@ -85,6 +85,32 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
           </>
         );
       }
+      case OrderEventType.OrderPaidV1: {
+        return (
+          <>
+            <OrderTimelineItemContent
+              Event={Event}
+              sx={{
+                minHeight: '100px',
+                paddingRight: '5px'
+              }}>
+              <Box
+                sx={{
+                  height: '70px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  justifyItems: 'center'
+                }}>
+                <Typography variant="h5">{'Sipariş Ödendi'}</Typography>
+              </Box>
+            </OrderTimelineItemContent>
+            <Box className="circle paid">
+              <Typography fontSize={'20px'}>{'₺'}</Typography>
+            </Box>
+          </>
+        );
+      }
     }
   };
   return (
@@ -110,7 +136,7 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
         sx={{
           p: '0px !important',
           '& .circle': {
-            backgroundColor: '#fff',
+            backgroundColor: '#fafafb',
             border: '3px solid #e17b77',
             borderRadius: '50%',
             position: 'absolute',
@@ -132,6 +158,9 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
           },
           '& .delivered': {
             border: `3px solid ${blue['A400']}`
+          },
+          '& .paid': {
+            border: `3px solid ${purple['A400']}`
           }
         }}>
         {getContent()}

@@ -19,6 +19,7 @@ import { OrderButtons } from './OrderButtons';
 import { DialogCancelOrder } from './DialogCancelOrder';
 import { DialogOrderDelivered } from './DialogOrderDelivered';
 import { OrderItemList } from './OrderItemList';
+import { DialogOrderPaid } from './DialogOrderPaid';
 
 const OrderEdit = () => {
   const { orderId } = useParams();
@@ -35,6 +36,7 @@ const OrderEdit = () => {
   const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
   const [isDialogCancelOrderOpen, setIsDialogCancelOrderOpen] = useState(false);
   const [isDialogOrderDeliveredOpen, setIsDialogOrderDeliveredOpen] = useState(false);
+  const [isDialogOrderPaidOpen, setIsDialogOrderPaidOpen] = useState(false);
 
   useEffect(() => {
     if (!userAuth.authenticated) {
@@ -63,6 +65,9 @@ const OrderEdit = () => {
   };
   const handleToggleDialogOrderDelivered = (toggle: boolean): void => {
     setIsDialogOrderDeliveredOpen(toggle);
+  };
+  const handleToggleDialogOrderPaid = (toggle: boolean): void => {
+    setIsDialogOrderPaidOpen(toggle);
   };
 
   return (
@@ -110,6 +115,7 @@ const OrderEdit = () => {
               Order={order}
               HandleOpenDialogCancelOrder={() => handleToggleDialogCancelOrder(true)}
               HandleOpenDialogOrderDelivered={() => handleToggleDialogOrderDelivered(true)}
+              HandleOpenDialogOrderPaid={() => handleToggleDialogOrderPaid(true)}
             />
           )}
         </Grid>
@@ -132,6 +138,14 @@ const OrderEdit = () => {
         <DialogOrderDelivered
           Open={isDialogOrderDeliveredOpen}
           HandleClose={() => handleToggleDialogOrderDelivered(false)}
+          Order={order}
+          Organization={organization}
+        />
+      )}
+      {order && organization && (
+        <DialogOrderPaid
+          Open={isDialogOrderPaidOpen}
+          HandleClose={() => handleToggleDialogOrderPaid(false)}
           Order={order}
           Organization={organization}
         />

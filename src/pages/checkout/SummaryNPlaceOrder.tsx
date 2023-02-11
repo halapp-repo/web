@@ -1,8 +1,7 @@
 import { Stack, Box, Button, Typography, Divider } from '@mui/material';
 import { useEffect } from 'react';
-import { City } from '../../models/city';
+import { CityType, ProductType } from '@halapp/common';
 import { OrderItemVM } from '@halapp/common';
-import { ProductType } from '../../models/product-type';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
@@ -23,12 +22,12 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
   useEffect(() => {
     dispatch(
       fetchTodaysPrices({
-        location: City.istanbul,
+        location: CityType.istanbul,
         type: ProductType.produce
       })
     );
     const timer = setInterval(() => {
-      dispatch(fetchTodaysPrices({ location: City.istanbul, type: ProductType.produce }));
+      dispatch(fetchTodaysPrices({ location: CityType.istanbul, type: ProductType.produce }));
     }, 300000);
 
     return () => {

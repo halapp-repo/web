@@ -6,8 +6,7 @@ import ShoppingCartItemCounter from './SCItemCounter';
 import SummaryNCheckout from './SummaryNCheckout';
 import { useEffect } from 'react';
 import { fetchTodaysPrices, selectPricesOfToday } from '../../store/prices/pricesSlice';
-import { City } from '../../models/city';
-import { ProductType } from '../../models/product-type';
+import { CityType, ProductType } from '@halapp/common';
 import ShoppingCartEmptyListContent from './SCEmptyListContent';
 
 const ShoppingCartContent = () => {
@@ -19,7 +18,7 @@ const ShoppingCartContent = () => {
     if (!todaysPrices) {
       dispatch(
         fetchTodaysPrices({
-          location: City.istanbul,
+          location: CityType.istanbul,
           type: ProductType.produce
         })
       );

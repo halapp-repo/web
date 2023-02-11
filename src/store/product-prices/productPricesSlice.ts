@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { City } from '../../models/city';
-import { ProductType } from '../../models/product-type';
+import { CityType, ProductType } from '@halapp/common';
 import { ProductPricesApi } from './productPricesApi';
 import { ProductPricesState } from './productPricesState';
 import { getComparator } from '../../utils/sort';
@@ -41,7 +40,7 @@ export const fetchProductPrices = createAsyncThunk<
   PriceVM[],
   {
     productId: string;
-    location: City;
+    location: CityType;
     type: ProductType;
     slot: ChartSlot;
   }

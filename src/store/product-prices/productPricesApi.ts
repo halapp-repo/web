@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { City } from '../../models/city';
+import { CityType, ProductType } from '@halapp/common';
 import { PriceVM } from '@halapp/common';
 import { IntervalType } from '../../models/interval-type';
-import { ProductType } from '../../models/product-type';
 
 export class ProductPricesApi {
   baseUrl: string;
@@ -17,7 +16,7 @@ export class ProductPricesApi {
   async fetchProductPrices(
     productId: string,
     duration: IntervalType,
-    location: City,
+    location: CityType,
     type: ProductType,
     fromDate: string,
     toDate?: string

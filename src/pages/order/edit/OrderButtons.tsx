@@ -9,17 +9,19 @@ interface OrderButtonsProps {
   Order: Order;
   HandleOpenDialogCancelOrder: () => void;
   HandleOpenDialogOrderDelivered: () => void;
+  HandleOpenDialogOrderPaid: () => void;
 }
 
 const OrderButtons = ({
   Order,
   HandleOpenDialogCancelOrder,
-  HandleOpenDialogOrderDelivered
+  HandleOpenDialogOrderDelivered,
+  HandleOpenDialogOrderPaid
 }: OrderButtonsProps) => {
   const userAuth = useAppSelector(selectUserAuth);
   const getButtons = (): ReactElement[] => {
     const buttons: ReactElement[] = [];
-    if (Order.canCancel()) {
+    if (Order.canBeCanceled()) {
       buttons.push(
         <Button
           variant="contained"
@@ -38,6 +40,17 @@ const OrderButtons = ({
           sx={{ width: '100%', color: '#fff' }}
           color="admin">
           {'Sipariş Teslim Edildi'}
+        </Button>
+      );
+    }
+    if (userAuth.isAdmin && Order.canBePaid()) {
+      buttons.push(
+        <Button
+          variant="contained"
+          onClick={HandleOpenDialogOrderPaid}
+          sx={{ width: '100%', color: '#fff' }}
+          color="admin">
+          {'Sipariş Ödendi'}
         </Button>
       );
     }

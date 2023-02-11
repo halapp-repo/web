@@ -23,8 +23,7 @@ import {
   Toolbar,
   TableSortLabel
 } from '@mui/material';
-import { City } from '../../models/city';
-import { ProductType } from '../../models/product-type';
+import { CityType, ProductType } from '@halapp/common';
 import moment from 'moment';
 import { selectUIListingSelectedCity } from '../../store/ui/uiSlice';
 import { Order } from '../../utils/order';
@@ -71,7 +70,7 @@ const PriceTable = () => {
     if (!selectedDatePrices) {
       dispatch(
         fetchPrices({
-          location: City.istanbul,
+          location: CityType.istanbul,
           type: ProductType.produce,
           date: selectedDate
         })
@@ -160,7 +159,7 @@ const PriceTable = () => {
         </Table>
       </TableContainer>
       <PriceDialog
-        Location={City.istanbul}
+        Location={CityType.istanbul}
         Type={ProductType.produce}
         CloseAnalyticsPanel={handleCloseAnalyticsPanel}
         ProductId={open}

@@ -1,13 +1,38 @@
-import { Stack, Box, ListItem, ListItemText, Typography } from '@mui/material';
+import {
+  Stack,
+  Box,
+  ListItem,
+  ListItemText,
+  Typography,
+  ListItemSecondaryAction,
+  IconButton
+} from '@mui/material';
 import { OrderItem as Item } from '../../../models/order';
+import { DeleteFilled } from '@ant-design/icons';
+import { selectUserAuth } from '../../../store/auth/authSlice';
+import { useAppSelector } from '../../../store/hooks';
 
 interface OrderItemProps {
   Item: Item;
+  CanBeDeleted: boolean;
+  OnDeleteItem: (productId: string) => void;
 }
 
-const OrderItem = ({ Item }: OrderItemProps) => {
+const OrderItem = ({ Item, CanBeDeleted, OnDeleteItem }: OrderItemProps) => {
+  const { isAdmin } = useAppSelector(selectUserAuth);
+
   return (
     <ListItem key={Item.ProductId} alignItems="flex-start">
+      {isAdmin && CanBeDeleted && (
+        <ListItemSecondaryAction sx={{ height: '100%' }}>
+          <IconButton
+            edge="end"
+            sx={{ color: '#8753de' }}
+            onClick={() => OnDeleteItem(Item.ProductId)}>
+            <DeleteFilled />
+          </IconButton>
+        </ListItemSecondaryAction>
+      )}
       <ListItemText
         primary={Item.ProductName}
         primaryTypographyProps={{ fontWeight: 'bold' }}
