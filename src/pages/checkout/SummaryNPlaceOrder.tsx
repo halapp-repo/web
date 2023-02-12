@@ -7,6 +7,7 @@ import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../store/ui/uiSlice';
 import { trMoment } from '../../utils/timezone';
+import { Link } from 'react-router-dom';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
@@ -63,7 +64,19 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
           {'Ürünleri gönder'}
         </Button>
         <Typography variant="body2" color="secondary">
-          {"By placing your order, you agree to HalApp's privacy notice and condition of use"}
+          Ürünleri Gönder tuşuna tıklayarak , HalApp{"'"}in{' '}
+          <Button
+            size="small"
+            color="secondary"
+            component={Link}
+            to={'/privacy#gizlilik-politikasi'}>
+            gizlilik politikası
+          </Button>
+          ve{' '}
+          <Button size="small" color="secondary" component={Link} to={'/privacy#kullanim-sartlari'}>
+            kullanım şartlarını
+          </Button>{' '}
+          kabul etmektesin.
         </Typography>
       </Box>
       <Divider />
