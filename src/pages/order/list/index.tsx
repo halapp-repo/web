@@ -13,9 +13,9 @@ import { useNavigate } from 'react-router-dom';
 import { Overlay } from '../../../components/Overlay';
 import OrdersFilters from './OrdersFilter';
 import {
-  fetchOrdersByMonth,
+  fetchOrdersByOrgId,
   selectOrderIsLoading,
-  selectOrdersByMonth
+  selectOrdersWithFilter
 } from '../../../store/orders/ordersSlice';
 import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
@@ -28,12 +28,8 @@ const ShoppingCart = () => {
   const userAuth = useAppSelector(selectUserAuth);
   const dispatch = useAppDispatch();
   const organizations = useAppSelector(selectOrganizations);
-  const ordersByMonth = useAppSelector((state) =>
-    selectOrdersByMonth(
-      state,
-      selectedOrganizationId || '',
-      moment.isMoment(filter) ? filter : undefined
-    )
+  const ordersWithFilter = useAppSelector((state) =>
+    selectOrdersWithFilter(state, selectedOrganizationId || '', filter)
   );
   const ordersAreLoading = useAppSelector(selectOrderIsLoading);
 
@@ -57,8 +53,15 @@ const ShoppingCart = () => {
     if (!selectedOrganizationId) {
       return;
     }
-    if (moment.isMoment(filter) && !ordersByMonth) {
-      dispatch(fetchOrdersByMonth({ Month: filter, OrganizationId: selectedOrganizationId }));
+    if (moment.isMoment(filter) && !ordersWithFilter) {
+      dispatch(fetchOrdersByOrgId({ Filter: filter, OrganizationId: selectedOrganizationId }));
+    } else if (OrderStatusType[filter as keyof typeof OrderStatusType] && !ordersWithFilter) {
+      dispatch(
+        fetchOrdersByOrgId({
+          Filter: filter as OrderStatusType,
+          OrganizationId: selectedOrganizationId
+        })
+      );
     }
   }, [filter, selectedOrganizationId]);
 
@@ -94,7 +97,7 @@ const ShoppingCart = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={5}>
             <OrdersContent
-              Orders={ordersByMonth}
+              Orders={ordersWithFilter}
               IsLoading={ordersAreLoading}
               Filter={filter}
               SelectedOrganization={selectedOrganization}

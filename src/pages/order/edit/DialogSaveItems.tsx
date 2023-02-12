@@ -12,19 +12,29 @@ import { Order, OrderItem } from '../../../models/order';
 import { useAppDispatch } from '../../../store/hooks';
 import { updateOrderItems } from '../../../store/orders/ordersSlice';
 import { green } from '@mui/material/colors';
+import { Organization } from '../../../models/organization';
 
 interface DialogSaveItemsProps {
   HandleClose: () => void;
   Open: boolean;
   Order: Order;
   NewItems: OrderItem[];
+  Organization: Organization;
 }
 
-const DialogSaveItems = ({ Order, NewItems, HandleClose, Open }: DialogSaveItemsProps) => {
+const DialogSaveItems = ({
+  Order,
+  NewItems,
+  HandleClose,
+  Open,
+  Organization
+}: DialogSaveItemsProps) => {
   const dispatch = useAppDispatch();
 
   const handleOrderDelivered = (orderId: string) => {
-    dispatch(updateOrderItems({ OrderId: orderId, Items: NewItems }));
+    dispatch(
+      updateOrderItems({ OrderId: orderId, Items: NewItems, OrganizationId: Organization.ID! })
+    );
   };
 
   const insertedItems = NewItems.filter(

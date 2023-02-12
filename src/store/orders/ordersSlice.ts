@@ -28,26 +28,30 @@ export const createOrder = createAsyncThunk<OrderVM, OrderVM, { state: RootState
   }
 );
 
-interface FetchOrdersByMonthRequest {
+interface FetchOrdersByOrgId {
   OrganizationId: string;
-  Month: moment.Moment;
+  Filter: moment.Moment | OrderStatusType;
 }
-export const fetchOrdersByMonth = createAsyncThunk<
+export const fetchOrdersByOrgId = createAsyncThunk<
   OrderVM[] | null,
-  FetchOrdersByMonthRequest,
+  FetchOrdersByOrgId,
   { state: RootState }
->('orders/fetchAll', async ({ OrganizationId, Month }, { getState }): Promise<OrderVM[] | null> => {
-  const { userAuth } = getState().auth;
-  if (!userAuth.authenticated || !userAuth.idToken) {
-    throw new Error('Unauthenticated');
+>(
+  'orders/fetchAll',
+  async ({ OrganizationId, Filter }, { getState }): Promise<OrderVM[] | null> => {
+    const { userAuth } = getState().auth;
+    if (!userAuth.authenticated || !userAuth.idToken) {
+      throw new Error('Unauthenticated');
+    }
+    return await new OrderApi().fetchOrders({
+      token: userAuth.idToken,
+      organizationId: OrganizationId,
+      fromDate: moment.isMoment(Filter) ? Filter.clone().startOf('month') : undefined,
+      toDate: moment.isMoment(Filter) ? Filter.clone().endOf('month') : undefined,
+      status: OrderStatusType[Filter as keyof typeof OrderStatusType]
+    });
   }
-  return await new OrderApi().fetchOrders({
-    token: userAuth.idToken,
-    organizationId: OrganizationId,
-    fromDate: Month.clone().startOf('month'),
-    toDate: Month.clone().endOf('month')
-  });
-});
+);
 
 export const fetchOrder = createAsyncThunk<OrderVM | null, string, { state: RootState }>(
   'order/fetchById',
@@ -65,7 +69,7 @@ export const fetchOrder = createAsyncThunk<OrderVM | null, string, { state: Root
 
 export const updateOrderStatus = createAsyncThunk<
   OrderVM,
-  { OrderId: string; Status: OrderStatusType },
+  { OrderId: string; Status: OrderStatusType; OrganizationId: string },
   { state: RootState }
 >('order/updateStatus', async ({ OrderId, Status }, { getState }): Promise<OrderVM> => {
   const { userAuth } = getState().auth;
@@ -81,7 +85,7 @@ export const updateOrderStatus = createAsyncThunk<
 
 export const updateOrderItems = createAsyncThunk<
   OrderVM,
-  { OrderId: string; Items: OrderItemVM[] },
+  { OrderId: string; Items: OrderItemVM[]; OrganizationId: string },
   { state: RootState }
 >('order/updateItems', async ({ OrderId, Items }, { getState }): Promise<OrderVM> => {
   const { userAuth } = getState().auth;
@@ -119,26 +123,26 @@ const OrderSlice = createSlice({
       state.IsLoading = false;
     });
     // Fetch Orders By Month
-    builder.addCase(fetchOrdersByMonth.fulfilled, (state, action) => {
-      const month = action.meta.arg.Month;
+    builder.addCase(fetchOrdersByOrgId.fulfilled, (state, action) => {
+      const filter = action.meta.arg.Filter;
       const { OrganizationId } = action.meta.arg;
       const data = action.payload || [];
       state.List[OrganizationId] = {
         ...state.List[OrganizationId],
-        [month.format('MMYYYY')]: data
+        [moment.isMoment(filter) ? filter.format('MMYYYY') : filter]: data
       };
       state.IsLoading = false;
     });
-    builder.addCase(fetchOrdersByMonth.rejected, (state, action) => {
-      const month = action.meta.arg.Month;
+    builder.addCase(fetchOrdersByOrgId.rejected, (state, action) => {
+      const filter = action.meta.arg.Filter;
       const { OrganizationId } = action.meta.arg;
       state.List[OrganizationId] = {
         ...state.List[OrganizationId],
-        [month.format('MMYYYY')]: undefined
+        [moment.isMoment(filter) ? filter.format('MMYYYY') : filter]: undefined
       };
       state.IsLoading = false;
     });
-    builder.addCase(fetchOrdersByMonth.pending, (state) => {
+    builder.addCase(fetchOrdersByOrgId.pending, (state) => {
       state.IsLoading = true;
     });
     // Fetch Individual Order
@@ -163,10 +167,14 @@ const OrderSlice = createSlice({
     });
     // Update Order Status
     builder.addCase(updateOrderStatus.fulfilled, (state, action) => {
-      const { OrderId } = action.meta.arg;
+      const { OrderId, OrganizationId } = action.meta.arg;
       state.Edit = {
         ...state.Edit,
         [OrderId]: action.payload
+      };
+      state.List = {
+        ...state.List,
+        [OrganizationId]: {}
       };
       state.IsLoading = false;
     });
@@ -178,10 +186,14 @@ const OrderSlice = createSlice({
     });
     // Update Order Items
     builder.addCase(updateOrderItems.fulfilled, (state, action) => {
-      const { OrderId } = action.meta.arg;
+      const { OrderId, OrganizationId } = action.meta.arg;
       state.Edit = {
         ...state.Edit,
         [OrderId]: action.payload
+      };
+      state.List = {
+        ...state.List,
+        [OrganizationId]: {}
       };
       state.IsLoading = false;
     });
@@ -194,22 +206,27 @@ const OrderSlice = createSlice({
   }
 });
 
-export const selectOrdersByMonth = createSelector(
+export const selectOrdersWithFilter = createSelector(
   [
     (state: RootState) => state.orders,
     (state: RootState) => state.inventories.inventories,
     (
       state: RootState,
       orgId: string,
-      month?: moment.Moment
-    ): [string, moment.Moment | undefined] => [orgId, month]
+      filter?: moment.Moment | OrderStatusType
+    ): [string, moment.Moment | OrderStatusType | undefined] => [orgId, filter]
   ],
-  (ord: OrdersState, inventories, [orgId, month]) => {
+  (ord: OrdersState, inventories, [orgId, filter]) => {
     const mapper = new OrderToOrderVMMapper();
-    if (!orgId || !month) {
+    if (!orgId || !filter) {
       return null;
     }
-    const list = ord.List[orgId]?.[month.format('MMYYYY')];
+    let list;
+    if (moment.isMoment(filter)) {
+      list = ord.List[orgId]?.[filter.format('MMYYYY')];
+    } else if (OrderStatusType[filter as keyof typeof OrderStatusType]) {
+      list = ord.List[orgId]?.[filter];
+    }
     if (!list || list.length === 0) {
       return undefined;
     }

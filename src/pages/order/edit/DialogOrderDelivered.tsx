@@ -32,7 +32,13 @@ const DialogOrderDelivered = ({
   const dispatch = useAppDispatch();
 
   const handleOrderDelivered = (orderId: string) => {
-    dispatch(updateOrderStatus({ OrderId: orderId, Status: OrderStatusType.Delivered }));
+    dispatch(
+      updateOrderStatus({
+        OrderId: orderId,
+        Status: OrderStatusType.Delivered,
+        OrganizationId: Organization.ID!
+      })
+    );
   };
   return (
     <Dialog onClose={HandleClose} open={Open} fullWidth>

@@ -1,10 +1,11 @@
 import React from 'react';
-import { useMediaQuery, Theme, Divider, Stack, Button } from '@mui/material';
+import { useMediaQuery, Theme, Divider, Stack, Button, Typography } from '@mui/material';
 import { Organization } from '../../../models/organization';
 import OrganizationSelect from './OrganizationSelect';
 import MonthFilter from './MonthFilter';
 import { OrderStatusType } from '@halapp/common';
 import moment from 'moment';
+import { TypeFilter } from './TypeFilter';
 
 interface OrdersFiltersProps {
   Organizations: Organization[];
@@ -45,6 +46,17 @@ const OrdersFilters = ({
         <>
           <Divider variant="middle" />
           <MonthFilter SetMonth={SetFilter} Filter={moment.isMoment(Filter) ? Filter : null} />
+          <Divider>
+            <Typography variant="body2">{'veya'}</Typography>
+          </Divider>
+          <TypeFilter
+            SetType={SetFilter}
+            Filter={
+              Filter && Object.keys(OrderStatusType).includes(Filter as OrderStatusType)
+                ? (Filter as OrderStatusType)
+                : null
+            }
+          />
         </>
       )}
       {expanded && matchesSM && (

@@ -6,12 +6,14 @@ import { useAppSelector } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { DialogSaveItems } from './DialogSaveItems';
 import { useEffect } from 'react';
+import { Organization } from '../../../models/organization';
 
 interface OrderItemListProps {
   Order: Order;
+  Organization: Organization | null;
 }
 
-const OrderItemList = ({ Order }: OrderItemListProps) => {
+const OrderItemList = ({ Order, Organization }: OrderItemListProps) => {
   const { isAdmin } = useAppSelector(selectUserAuth);
   const [items, setItems] = useState<OrderItem[]>(Order.Items);
   const [isDialogSaveItemsOpen, setIsDialogSaveItemsOpen] = useState(false);
@@ -115,12 +117,13 @@ const OrderItemList = ({ Order }: OrderItemListProps) => {
           </Typography>
         </Box>
       </Stack>
-      {Order && (
+      {Order && Organization && (
         <DialogSaveItems
           Open={isDialogSaveItemsOpen}
           HandleClose={() => handleToggleDialogSaveItems(false)}
           Order={Order}
           NewItems={items}
+          Organization={Organization}
         />
       )}
     </>

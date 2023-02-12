@@ -13,12 +13,11 @@ const OrderCalendar = ({ Order }: OrderCalendarProps) => {
         <Box
           sx={{
             height: '30%',
-            backgroundColor: '#f72222',
             zIndex: 1,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            color: '#ffff'
+            color: '#f72222'
           }}>
           {Order.CreatedDate.format('MMMM')}
         </Box>
@@ -42,7 +41,7 @@ const OrderCalendar = ({ Order }: OrderCalendarProps) => {
         <Box
           sx={{
             width: '100%',
-            height: '100px',
+            height: '100%',
             overflow: 'hidden',
             border: '1px solid #d9d9d9'
           }}>
@@ -54,7 +53,7 @@ const OrderCalendar = ({ Order }: OrderCalendarProps) => {
           sx={{
             margin: '10px',
             width: '100px',
-            height: '100px',
+            minHeight: '100px',
             border: '1px solid #d9d9d9',
             borderRadius: '16px',
             overflow: 'hidden'

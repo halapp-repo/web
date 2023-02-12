@@ -23,7 +23,13 @@ interface DialogOrderPaidProps {
 const DialogOrderPaid = ({ Order, HandleClose, Open, Organization }: DialogOrderPaidProps) => {
   const dispatch = useAppDispatch();
   const handleOrderPaid = (orderId: string) => {
-    dispatch(updateOrderStatus({ OrderId: orderId, Status: OrderStatusType.Paid }));
+    dispatch(
+      updateOrderStatus({
+        OrderId: orderId,
+        Status: OrderStatusType.Paid,
+        OrganizationId: Organization.ID!
+      })
+    );
   };
   return (
     <Dialog onClose={HandleClose} open={Open} fullWidth>
