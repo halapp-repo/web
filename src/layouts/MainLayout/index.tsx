@@ -1,8 +1,9 @@
-import { Box, Toolbar } from '@mui/material';
+import { Box, Toolbar, Grid } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Header from './header';
 import LayoutInitializer from '../../components/LayoutInitializer';
 import Footer from './footer';
+import { ModalCitySelect } from './header/content/city/ModalCitySelect';
 
 const MainLayout = () => {
   return (
@@ -29,6 +30,13 @@ const MainLayout = () => {
           </Box>
         </Box>
         <Footer />
+        <Grid container>
+          <Grid item>
+            <Grid item xs={12} sm={3} md={3} lg={3}>
+              <ModalCitySelect />
+            </Grid>
+          </Grid>
+        </Grid>
       </LayoutInitializer>
     </Box>
   );

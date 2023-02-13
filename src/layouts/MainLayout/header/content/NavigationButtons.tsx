@@ -4,6 +4,7 @@ import Profile from './profile';
 import { useAppSelector } from '../../../../store/hooks';
 import { selectUserAuth } from '../../../../store/auth/authSlice';
 import { ShoppingCartNavButton } from './shopping-cart';
+import { CityNavButton } from './city';
 
 const defaultStyle = {
   textDecoration: 'none'
@@ -60,6 +61,7 @@ const NavigationButtons = () => {
       )}
       {userAuth.authenticated && (
         <>
+          <CityNavButton />
           <ShoppingCartNavButton />
           <Profile email={userAuth.email} />
         </>

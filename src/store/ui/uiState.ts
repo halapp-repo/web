@@ -26,4 +26,7 @@ export interface UIState {
   orders: {
     filter: OrderStatusType | moment.Moment | undefined;
   };
+  city: {
+    isOpen: boolean;
+  };
 }

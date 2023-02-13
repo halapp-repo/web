@@ -35,6 +35,9 @@ const initialState = {
   },
   orders: {
     filter: undefined
+  },
+  city: {
+    isOpen: false
   }
 } as UIState;
 
@@ -98,6 +101,13 @@ const UISlice = createSlice({
       action: PayloadAction<moment.Moment | OrderStatusType | undefined>
     ) => {
       state.orders.filter = action.payload;
+    },
+    toggleCity: (state: UIState, action: PayloadAction<boolean | undefined>) => {
+      if (typeof action.payload === 'undefined') {
+        state.city.isOpen = !state.city.isOpen;
+      } else {
+        state.city.isOpen = action.payload;
+      }
     }
   },
   extraReducers: (builder) => {
@@ -152,7 +162,8 @@ export const {
   updateOrganization,
   updateCheckoutOrderNote,
   toggleGlobalIsLoading,
-  setOrdersFilter
+  setOrdersFilter,
+  toggleCity
 } = UISlice.actions;
 
 export const selectUIListingSelectedDate = createSelector(
@@ -194,6 +205,10 @@ export const selectUICheckoutOrderNote = createSelector(
 export const selectOrdersFilter = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.orders.filter
+);
+export const selectUICityIsOpen = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.city.isOpen
 );
 
 export default UISlice.reducer;
