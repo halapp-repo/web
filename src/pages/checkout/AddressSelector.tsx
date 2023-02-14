@@ -118,7 +118,8 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                 </Typography>
                 {areStringsEqual(deliveryAddress?.City, selectedCity) || (
                   <Alert severity="warning">
-                    Teslimat adresi ile seçilen adres uyuşmamaktadır!
+                    Teslimat şehri (<b>{`${deliveryAddress?.City.toLowerCase()}`}</b>) ile seçilen
+                    şehir (<b>{`${selectedCity}`}</b>) uyuşmamaktadır!
                   </Alert>
                 )}
                 <Typography variant="body2" fontWeight={'bold'}>

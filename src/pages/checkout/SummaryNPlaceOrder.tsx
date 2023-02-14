@@ -99,6 +99,11 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
           Ürünler, <b>{`${selectedCity}`}</b>
           {`'a göre fiyatlandirilmistir.`}
         </Typography>
+        <Stack direction={'row'} justifyContent="flex-start">
+          <Typography variant="body2" color="secondary">
+            <b>Fiyatlara KDV dahildir</b>
+          </Typography>
+        </Stack>
         <Stack direction={'row'} justifyContent="space-between">
           <Typography variant="h4" color="primary">{`Toplam ücret:`}</Typography>
           <Typography variant="h4" color="primary">{`${ShoppingCart.TotalAmount}`}</Typography>
