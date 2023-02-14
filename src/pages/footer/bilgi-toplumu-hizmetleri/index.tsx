@@ -25,7 +25,7 @@ const BilgiToplumuHizmetleri = () => {
             href="https://e-sirket.mkk.com.tr/esir/Dashboard.jsp#/sirketbilgileri/"
             target="_blank"
             sx={{ display: 'inline-block' }}>
-            {'Sirket bilgisi'}
+            {'Şirket bilgisi'}
           </Link>
         </Stack>
       </MainCard>

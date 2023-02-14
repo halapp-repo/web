@@ -34,12 +34,14 @@ export class OrderApi {
     token,
     organizationId,
     fromDate,
-    toDate
+    toDate,
+    status
   }: {
     token: string;
     organizationId: string;
     fromDate?: moment.Moment;
     toDate?: moment.Moment;
+    status?: OrderStatusType;
   }): Promise<OrderVM[] | null> {
     return await axios
       .get<OrderVM[]>('/orders', {
@@ -60,6 +62,11 @@ export class OrderApi {
           ...(toDate
             ? {
                 ToDate: toDate.format()
+              }
+            : null),
+          ...(status
+            ? {
+                Status: status
               }
             : null)
         }

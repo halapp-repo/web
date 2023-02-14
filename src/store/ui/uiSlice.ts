@@ -3,7 +3,7 @@ import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import { UIState } from './uiState';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { CityType, ProductType } from '@halapp/common';
+import { ProductType } from '@halapp/common';
 import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
@@ -13,7 +13,6 @@ import { OrderStatusType } from '@halapp/common';
 const initialState = {
   listing: {
     filteredProductName: '',
-    selectedCity: CityType.istanbul,
     selectedDate: trMoment().format('YYYY-MM-DD'),
     selectedCategory: ProductType.produce
   },
@@ -35,6 +34,9 @@ const initialState = {
   },
   orders: {
     filter: undefined
+  },
+  city: {
+    isOpen: false
   }
 } as UIState;
 
@@ -98,6 +100,13 @@ const UISlice = createSlice({
       action: PayloadAction<moment.Moment | OrderStatusType | undefined>
     ) => {
       state.orders.filter = action.payload;
+    },
+    toggleCity: (state: UIState, action: PayloadAction<boolean | undefined>) => {
+      if (typeof action.payload === 'undefined') {
+        state.city.isOpen = !state.city.isOpen;
+      } else {
+        state.city.isOpen = action.payload;
+      }
     }
   },
   extraReducers: (builder) => {
@@ -152,7 +161,8 @@ export const {
   updateOrganization,
   updateCheckoutOrderNote,
   toggleGlobalIsLoading,
-  setOrdersFilter
+  setOrdersFilter,
+  toggleCity
 } = UISlice.actions;
 
 export const selectUIListingSelectedDate = createSelector(
@@ -166,10 +176,6 @@ export const selectUIListingSelectedCategory = createSelector(
 export const selectUIListingProductNameFilter = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.listing.filteredProductName
-);
-export const selectUIListingSelectedCity = createSelector(
-  (state: RootState) => state.ui,
-  (state: UIState) => state.listing.selectedCity
 );
 export const selectUISessionLoading = createSelector(
   (state: RootState) => state.ui,
@@ -194,6 +200,10 @@ export const selectUICheckoutOrderNote = createSelector(
 export const selectOrdersFilter = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.orders.filter
+);
+export const selectUICityIsOpen = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.city.isOpen
 );
 
 export default UISlice.reducer;

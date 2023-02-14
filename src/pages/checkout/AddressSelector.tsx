@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { red } from '@mui/material/colors';
+import { red, grey } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -10,14 +10,17 @@ import {
   ListItemText,
   Typography,
   Stack,
-  Button
+  Button,
+  Alert
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization, OrganizationAddress } from '../../models/organization';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { updateOrganization } from '../../store/ui/uiSlice';
 import { instanceToInstance } from 'class-transformer';
 import { OrganizationsContext } from './OrganizationsContext';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import { areStringsEqual } from '../../utils/filter';
 
 interface AddressSelectorProps {
   SetAddress: (orgId: string, deliveryAddress: OrganizationAddress) => Promise<void>;
@@ -28,13 +31,22 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const selectedCity = useAppSelector(selectSelectedCity);
   const [selectedOrganizationID, setSelectedOrganizationID] = useState<string | null>(null);
+
+  const updateSelectedOrganizationId = (organization: Organization) => {
+    const cityOfOrganization = organization.getDeliveryAddress()?.City;
+
+    if (areStringsEqual(cityOfOrganization, selectedCity)) {
+      setSelectedOrganizationID(organization.ID!);
+    }
+  };
 
   useEffect(() => {
     if (organizations) {
       const activeOrg = organizations?.filter((o) => o.Active === true);
       if (activeOrg?.length === 1) {
-        setSelectedOrganizationID(activeOrg[0].ID!);
+        updateSelectedOrganizationId(activeOrg[0]);
       }
     }
   }, [organizations]);
@@ -59,7 +71,7 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
     return (
       <ListItem
         onClick={() => {
-          setSelectedOrganizationID(org.ID!);
+          updateSelectedOrganizationId(org);
         }}
         selected={org.ID === selectedOrganizationID}
         button
@@ -92,17 +104,31 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
         }>
         <ListItemText
           primary={
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }} color={red[900]}>
-                {org.Name}
-              </Typography>
-              <Typography variant="body2" fontWeight={'bold'}>
-                {deliveryAddress?.AddressLine}
-              </Typography>
-              <Typography variant="body2" fontWeight={'bold'}>
-                {`${deliveryAddress?.County} ${deliveryAddress?.City} ${deliveryAddress?.ZipCode} ${deliveryAddress?.Country}`}
-              </Typography>
-            </Box>
+            <>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  color: areStringsEqual(deliveryAddress?.City, selectedCity)
+                    ? 'inherit'
+                    : grey['A400']
+                }}>
+                <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }} color={red[900]}>
+                  {org.Name}
+                </Typography>
+                {areStringsEqual(deliveryAddress?.City, selectedCity) || (
+                  <Alert severity="warning">
+                    Teslimat adresi ile seçilen adres uyuşmamaktadır!
+                  </Alert>
+                )}
+                <Typography variant="body2" fontWeight={'bold'}>
+                  {deliveryAddress?.AddressLine}
+                </Typography>
+                <Typography variant="body2" fontWeight={'bold'}>
+                  {`${deliveryAddress?.County} ${deliveryAddress?.City} ${deliveryAddress?.ZipCode} ${deliveryAddress?.Country}`}
+                </Typography>
+              </Box>
+            </>
           }
           primaryTypographyProps={{ fontWeight: 'bold' }}
         />

@@ -6,19 +6,21 @@ import ShoppingCartItemCounter from './SCItemCounter';
 import SummaryNCheckout from './SummaryNCheckout';
 import { useEffect } from 'react';
 import { fetchTodaysPrices, selectPricesOfToday } from '../../store/prices/pricesSlice';
-import { CityType, ProductType } from '@halapp/common';
+import { ProductType } from '@halapp/common';
 import ShoppingCartEmptyListContent from './SCEmptyListContent';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
 
 const ShoppingCartContent = () => {
   const shoppingCart = useAppSelector(selectEnhancedShoppingCart);
   const todaysPrices = useAppSelector(selectPricesOfToday);
+  const selectedCity = useAppSelector(selectSelectedCity);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!todaysPrices) {
       dispatch(
         fetchTodaysPrices({
-          location: CityType.istanbul,
+          location: selectedCity,
           type: ProductType.produce
         })
       );

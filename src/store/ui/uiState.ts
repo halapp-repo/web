@@ -5,7 +5,6 @@ export interface UIState {
     selectedDate: string;
     selectedCategory: string;
     filteredProductName: string;
-    selectedCity: string;
   };
   auth: {
     sessionLoading: boolean;
@@ -25,5 +24,8 @@ export interface UIState {
   };
   orders: {
     filter: OrderStatusType | moment.Moment | undefined;
+  };
+  city: {
+    isOpen: boolean;
   };
 }

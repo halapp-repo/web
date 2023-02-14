@@ -9,19 +9,27 @@ import {
   Typography
 } from '@mui/material';
 import { Order } from '../../../models/order';
+import { Organization } from '../../../models/organization';
 import { useAppDispatch } from '../../../store/hooks';
 import { updateOrderStatus } from '../../../store/orders/ordersSlice';
 
 interface DialogCancelOrderProps {
+  Organization: Organization;
   Order: Order;
   HandleClose: () => void;
   Open: boolean;
 }
 
-const DialogCancelOrder = ({ Order, HandleClose, Open }: DialogCancelOrderProps) => {
+const DialogCancelOrder = ({ Order, HandleClose, Open, Organization }: DialogCancelOrderProps) => {
   const dispatch = useAppDispatch();
   const handleCancelOrder = (orderId: string) => {
-    dispatch(updateOrderStatus({ OrderId: orderId, Status: OrderStatusType.Canceled }));
+    dispatch(
+      updateOrderStatus({
+        OrderId: orderId,
+        Status: OrderStatusType.Canceled,
+        OrganizationId: Organization.ID!
+      })
+    );
   };
   return (
     <Dialog onClose={HandleClose} open={Open} fullWidth>

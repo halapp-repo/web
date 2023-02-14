@@ -122,13 +122,14 @@ const OrderEdit = () => {
         <Grid item xs={12} md={4}>
           {order && (
             <MainCard sx={{ mt: 2, p: '10px' }}>
-              <OrderItemList Order={order} />
+              <OrderItemList Order={order} Organization={organization} />
             </MainCard>
           )}
         </Grid>
       </Grid>
-      {order && (
+      {order && organization && (
         <DialogCancelOrder
+          Organization={organization}
           Order={order}
           Open={isDialogCancelOrderOpen}
           HandleClose={() => handleToggleDialogCancelOrder(false)}

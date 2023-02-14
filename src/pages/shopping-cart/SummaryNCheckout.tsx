@@ -1,6 +1,8 @@
-import { Button, Divider, Box, Typography } from '@mui/material';
+import { Button, Divider, Box, Typography, Chip } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import { useAppSelector } from '../../store/hooks';
 
 interface SummaryNCheckoutProps {
   ShoppingCart: ShoppingCartList;
@@ -9,6 +11,7 @@ interface SummaryNCheckoutProps {
 const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const selectedCity = useAppSelector(selectSelectedCity);
 
   const checkout = () => {
     navigate('/checkout');
@@ -17,6 +20,10 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
   return (
     <>
       <Divider sx={{ marginBottom: '10px' }} />
+      <Typography variant="body2" color="secondary">
+        Ürünler, <b>{`${selectedCity}`}</b>
+        {`'a göre fiyatlandirilmistir.`}
+      </Typography>
       <Box
         sx={{
           display: 'flex',

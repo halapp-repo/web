@@ -1,4 +1,5 @@
-import TextField from '@mui/material/TextField';
+import { CalendarOutlined } from '@ant-design/icons';
+import { TextField, Typography, Box } from '@mui/material';
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import { trMoment } from '../../../utils/timezone';
 
@@ -13,23 +14,30 @@ const MonthFilter = ({ SetMonth, Filter }: MonthFilterProps) => {
   };
 
   return (
-    <MobileDatePicker
-      value={Filter?.toDate()}
-      onChange={(date) => {
-        console.log(trMoment(date).format());
-      }}
-      renderInput={(params) => (
-        <TextField sx={{ p: '0px 10px' }} onKeyDown={onKeyDown} {...params} />
-      )}
-      views={['year', 'month']}
-      openTo="month"
-      minDate={new Date(2022, 12, 1)}
-      maxDate={trMoment().endOf('M').toDate()}
-      showToolbar={false}
-      onMonthChange={(month) => {
-        SetMonth(trMoment(month));
-      }}
-    />
+    <>
+      <Box sx={{ padding: '0px 10px' }}>
+        <Typography variant="body2" fontWeight={'bold'}>
+          <CalendarOutlined /> {'Tarihe göre'}
+        </Typography>
+      </Box>
+      <MobileDatePicker
+        value={Filter ? Filter.toDate() : null}
+        onChange={(date) => {
+          console.log(trMoment(date).format());
+        }}
+        renderInput={(params) => (
+          <TextField sx={{ p: '0px 10px' }} onKeyDown={onKeyDown} {...params} />
+        )}
+        views={['year', 'month']}
+        openTo="month"
+        minDate={new Date(2022, 12, 1)}
+        maxDate={trMoment().endOf('M').toDate()}
+        showToolbar={false}
+        onMonthChange={(month) => {
+          SetMonth(trMoment(month));
+        }}
+      />
+    </>
   );
 };
 

@@ -1,12 +1,13 @@
 import { Stack, Box, Button, Typography, Divider } from '@mui/material';
 import { useEffect } from 'react';
-import { CityType, ProductType } from '@halapp/common';
-import { OrderItemVM } from '@halapp/common';
+import { ProductType, OrderItemVM } from '@halapp/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../store/ui/uiSlice';
 import { trMoment } from '../../utils/timezone';
+import { Link } from 'react-router-dom';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
@@ -17,17 +18,18 @@ interface SummaryNPlaceOrderProps {
 const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
   const dispatch = useAppDispatch();
   const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
+  const selectedCity = useAppSelector(selectSelectedCity);
   const deliveryTime = trMoment(DeliveryTime).clone();
 
   useEffect(() => {
     dispatch(
       fetchTodaysPrices({
-        location: CityType.istanbul,
+        location: selectedCity,
         type: ProductType.produce
       })
     );
     const timer = setInterval(() => {
-      dispatch(fetchTodaysPrices({ location: CityType.istanbul, type: ProductType.produce }));
+      dispatch(fetchTodaysPrices({ location: selectedCity, type: ProductType.produce }));
     }, 300000);
 
     return () => {
@@ -63,7 +65,9 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
           {'Ürünleri gönder'}
         </Button>
         <Typography variant="body2" color="secondary">
-          {"By placing your order, you agree to HalApp's privacy notice and condition of use"}
+          Ürünleri Gönder tuşuna tıklayarak , HalApp{"'"}in{' '}
+          <Link to={'/privacy#gizlilik-politikasi'}>gizlilik politikası</Link> ve{' '}
+          <Link to={'/privacy#kullanim-sartlari'}>kullanım şartlarını</Link> kabul etmektesin.
         </Typography>
       </Box>
       <Divider />
@@ -91,6 +95,10 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
       </Box>
       <Divider />
       <Box>
+        <Typography variant="body2" color="secondary">
+          Ürünler, <b>{`${selectedCity}`}</b>
+          {`'a göre fiyatlandirilmistir.`}
+        </Typography>
         <Stack direction={'row'} justifyContent="space-between">
           <Typography variant="h4" color="primary">{`Toplam ücret:`}</Typography>
           <Typography variant="h4" color="primary">{`${ShoppingCart.TotalAmount}`}</Typography>

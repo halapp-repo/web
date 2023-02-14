@@ -8,6 +8,7 @@ import { getComparator } from '../../../utils/sort';
 import { OrderStatusType } from '@halapp/common';
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization } from '../../../models/organization';
+import { translateOrderStatus } from '../../../utils/english-turkish-translator';
 
 interface OrdersContentProps {
   SelectedOrganization?: Organization;
@@ -74,6 +75,9 @@ const OrdersContent = ({ Orders, IsLoading, Filter, SelectedOrganization }: Orde
             </Typography>
             <Typography variant="h5">
               {Filter && moment.isMoment(Filter) && Filter.format(' MMMM YYYY')}
+              {Filter &&
+                OrderStatusType[Filter as keyof typeof OrderStatusType] &&
+                translateOrderStatus(Filter as OrderStatusType)}
             </Typography>
           </ListSubheader>
         }>
