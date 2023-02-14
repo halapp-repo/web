@@ -1,27 +1,9 @@
 import { Transform, Type } from 'class-transformer';
 import moment from 'moment';
 import { trMoment } from '../utils/timezone';
-import { OrderEventType, OrderStatusType } from '@halapp/common';
+import { OrderStatusType } from '@halapp/common';
 import { OrganizationAddress } from './organization';
-
-class OrderEvent {
-  @Type(() => String)
-  @Transform(({ value }: { value: string }) => trMoment(value), {
-    toClassOnly: true
-  })
-  TS: moment.Moment;
-
-  @Type(() => String)
-  @Transform(
-    ({ value }: { value: string }) => OrderEventType[value as keyof typeof OrderEventType],
-    {
-      toClassOnly: true
-    }
-  )
-  EventType: OrderEventType;
-
-  Payload: string;
-}
+import { OrderEvent } from './events/order-event';
 
 class OrderItem {
   ProductId: string;
@@ -99,4 +81,4 @@ class Order {
   }
 }
 
-export { Order, OrderItem, OrderEvent };
+export { Order, OrderItem };

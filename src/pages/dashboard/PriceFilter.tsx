@@ -68,6 +68,11 @@ const PriceFilter = () => {
               id="outlined-basic"
               label="Ürün adı"
               variant="outlined"
+              InputLabelProps={{
+                sx: {
+                  overflow: 'visible'
+                }
+              }}
             />
             <Divider variant="middle" />
           </>
@@ -103,6 +108,11 @@ const PriceFilter = () => {
                 id="outlined-basic"
                 label="Ürün adı"
                 variant="outlined"
+                InputLabelProps={{
+                  sx: {
+                    overflow: 'visible'
+                  }
+                }}
               />
               <ExpandMore
                 expand={expanded}

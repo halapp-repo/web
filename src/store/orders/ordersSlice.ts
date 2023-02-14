@@ -4,9 +4,10 @@ import { OrderApi } from './ordersApi';
 import { OrdersState } from './ordersState';
 import moment from 'moment';
 import { trMoment } from '../../utils/timezone';
-import { OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
+import { OrderEventType, OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
 import { signOut } from '../auth/authSlice';
+import { OrderItemsUpdatedV1Payload } from '../../models/events/payloads/order-items-updated-v1.payload';
 
 const initialState = {
   IsLoading: false,
@@ -263,6 +264,14 @@ export const selectOrder = createSelector(
     order.Items.forEach((i) => {
       i.ProductName =
         inventories?.find((inv) => inv.ProductId === i.ProductId)?.Name || i.ProductId;
+    });
+    order.Events?.forEach((i) => {
+      if (i.EventType === OrderEventType.OrderItemsUpdatedV1) {
+        (i.Payload as OrderItemsUpdatedV1Payload).DeletedItems.forEach((ii) => {
+          ii.ProductName =
+            inventories?.find((inv) => inv.ProductId === ii.ProductId)?.Name || ii.ProductId;
+        });
+      }
     });
     return order;
   }
