@@ -1,9 +1,25 @@
-import { Box, Card, CardContent, Typography } from '@mui/material';
-import { OrderEvent } from '../../../models/order';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from '@mui/material';
+import { OrderEvent } from '../../../models/events/order-event';
 import { OrderEventType } from '@halapp/common';
-import { red, green, blue, purple } from '@mui/material/colors';
+import { red, green, blue, purple, blueGrey } from '@mui/material/colors';
 import { OrderTimelineItemContent } from './OrderTimelineItemContent';
-import { DeleteOutlined, ShoppingCartOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  ShoppingCartOutlined,
+  EnvironmentOutlined,
+  EditOutlined,
+  MinusCircleOutlined
+} from '@ant-design/icons';
+import { OrderItemsUpdatedV1Payload } from '../../../models/events/payloads/order-items-updated-v1.payload';
 
 interface OrderTimelineItemProps {
   Event: OrderEvent;
@@ -111,6 +127,44 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
           </>
         );
       }
+      case OrderEventType.OrderItemsUpdatedV1: {
+        const payload = Event.Payload as OrderItemsUpdatedV1Payload;
+        return (
+          <>
+            <OrderTimelineItemContent
+              Event={Event}
+              sx={{
+                minHeight: '100px',
+                paddingRight: '5px'
+              }}>
+              <Box
+                sx={{
+                  minHeight: '70px'
+                }}>
+                <Typography variant="h5" textAlign={'center'}>
+                  {'Sipariş Düzenlendi'}
+                </Typography>
+                <List>
+                  {payload.DeletedItems.map((i) => (
+                    <ListItem key={`deleted-${i.ProductId}`}>
+                      <ListItemIcon>
+                        <MinusCircleOutlined />
+                      </ListItemIcon>
+                      <ListItemText
+                        primaryTypographyProps={{ fontSize: '10px' }}
+                        primary={i.ProductName || i.ProductId}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </OrderTimelineItemContent>
+            <Box className="circle itemsUpdated">
+              <EditOutlined width={'20px'} height={'20px'} />
+            </Box>
+          </>
+        );
+      }
     }
   };
   return (
@@ -161,6 +215,9 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
           },
           '& .paid': {
             border: `3px solid ${purple['A400']}`
+          },
+          '& .itemsUpdated': {
+            border: `3px solid ${blueGrey['A400']}`
           }
         }}>
         {getContent()}
