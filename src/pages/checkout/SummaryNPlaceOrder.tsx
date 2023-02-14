@@ -101,7 +101,7 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
         </Typography>
         <Stack direction={'row'} justifyContent="flex-start">
           <Typography variant="body2" color="secondary">
-            <b>Fiyatlara KDV dahildir</b>
+            <b>Fiyatlara KDV dahildir.</b>
           </Typography>
         </Stack>
         <Stack direction={'row'} justifyContent="space-between">
