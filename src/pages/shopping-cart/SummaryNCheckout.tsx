@@ -1,4 +1,4 @@
-import { Button, Divider, Box, Typography, Chip } from '@mui/material';
+import { Button, Divider, Box, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
