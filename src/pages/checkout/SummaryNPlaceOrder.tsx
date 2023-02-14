@@ -66,18 +66,8 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
         </Button>
         <Typography variant="body2" color="secondary">
           Ürünleri Gönder tuşuna tıklayarak , HalApp{"'"}in{' '}
-          <Button
-            size="small"
-            color="secondary"
-            component={Link}
-            to={'/privacy#gizlilik-politikasi'}>
-            gizlilik politikası
-          </Button>
-          ve{' '}
-          <Button size="small" color="secondary" component={Link} to={'/privacy#kullanim-sartlari'}>
-            kullanım şartlarını
-          </Button>{' '}
-          kabul etmektesin.
+          <Link to={'/privacy#gizlilik-politikasi'}>gizlilik politikası</Link> ve{' '}
+          <Link to={'/privacy#kullanim-sartlari'}>kullanım şartlarını</Link> kabul etmektesin.
         </Typography>
       </Box>
       <Divider />
@@ -105,6 +95,10 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
       </Box>
       <Divider />
       <Box>
+        <Typography variant="body2" color="secondary">
+          Ürünler, <b>{`${selectedCity}`}</b>
+          {`'a göre fiyatlandirilmistir.`}
+        </Typography>
         <Stack direction={'row'} justifyContent="space-between">
           <Typography variant="h4" color="primary">{`Toplam ücret:`}</Typography>
           <Typography variant="h4" color="primary">{`${ShoppingCart.TotalAmount}`}</Typography>

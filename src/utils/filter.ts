@@ -11,4 +11,25 @@ function contains(str: string, sub: string) {
   return ascii(str).includes(ascii(sub));
 }
 
-export { contains };
+function areStringsEqual(str1: string | undefined, str2: string | undefined): boolean {
+  if (!str1 || !str2) {
+    return false;
+  }
+  if (
+    str1
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') ===
+    str2
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+  ) {
+    return true;
+  }
+  return false;
+}
+
+export { contains, areStringsEqual };
