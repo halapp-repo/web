@@ -21,17 +21,18 @@ import {
   Typography,
   CircularProgress,
   Toolbar,
-  TableSortLabel
+  TableSortLabel,
+  Chip
 } from '@mui/material';
-import { CityType, ProductType } from '@halapp/common';
+import { ProductType } from '@halapp/common';
 import moment from 'moment';
-import { selectUIListingSelectedCity } from '../../store/ui/uiSlice';
 import { Order } from '../../utils/order';
 import { getComparator } from '../../utils/sort';
 import PriceTableRow from './PriceTableRow';
 import PriceDialog from './PriceDialog';
 import { contains } from '../../utils/filter';
 import { Price } from '../../models/price';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
 
 type SortablePriceListItem = Pick<Price, 'Price' | 'ProductName'>;
 
@@ -46,7 +47,7 @@ const PriceTable = () => {
   const selectedDatePrices = useAppSelector(selectPriceListItemsOfSelectedDate);
   const isLoading = useAppSelector(selectPriceIsLoading);
   const filteringProductName = useAppSelector(selectUIListingProductNameFilter);
-  const selectedCity = useAppSelector(selectUIListingSelectedCity);
+  const selectedCity = useAppSelector(selectSelectedCity);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -70,7 +71,7 @@ const PriceTable = () => {
     if (!selectedDatePrices) {
       dispatch(
         fetchPrices({
-          location: CityType.istanbul,
+          location: selectedCity,
           type: ProductType.produce,
           date: selectedDate
         })
@@ -120,7 +121,8 @@ const PriceTable = () => {
           <Typography variant="h3" color="inherit">
             {selectedDate && moment(selectedDate).format('DD.MM.YYYY')}
             <Typography color="text.secondary" variant="body2">
-              {`Meyve/Sebze > ${selectedCity && selectedCity.toUpperCase()}`}
+              {`Meyve/Sebze `}
+              <Chip color="default" size="small" label={selectedCity} variant="outlined" />
             </Typography>
           </Typography>
         </Toolbar>
@@ -159,7 +161,7 @@ const PriceTable = () => {
         </Table>
       </TableContainer>
       <PriceDialog
-        Location={CityType.istanbul}
+        Location={selectedCity}
         Type={ProductType.produce}
         CloseAnalyticsPanel={handleCloseAnalyticsPanel}
         ProductId={open}

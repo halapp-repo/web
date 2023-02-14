@@ -2,7 +2,9 @@ import { PriceVM } from '@halapp/common';
 
 export interface PricesState {
   data: {
-    [date: string]: PriceVM[];
+    [date: string]: {
+      [city: string]: PriceVM[];
+    };
   };
   isLoading: boolean;
 }

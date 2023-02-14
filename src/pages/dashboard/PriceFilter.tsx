@@ -12,10 +12,6 @@ import {
   TextField,
   Divider,
   Stack,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Button
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -25,16 +21,13 @@ import { selectUIListingSelectedDate } from '../../store/ui/uiSlice';
 import {
   updateListingSelectedDate,
   updateListingProductNameFilter,
-  selectUIListingSelectedCity,
   selectUIListingProductNameFilter
 } from '../../store/ui/uiSlice';
 import { ExpandMore } from '../../components/ExpandMoreButton';
 
 const PriceFilter = () => {
   const dispatch = useAppDispatch();
-  // const categories = useAppSelector(selectCategories);
   const selectedDate = useAppSelector(selectUIListingSelectedDate);
-  const selectedCity = useAppSelector(selectUIListingSelectedCity);
   const filteringProductName = useAppSelector(selectUIListingProductNameFilter);
 
   const matchesSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -90,17 +83,6 @@ const PriceFilter = () => {
           maxDate={moment().format('YYYY-MM-DD')}
           renderInput={(params) => <TextField {...params} />}
         />
-        <Divider variant="middle" />
-        <FormControl>
-          <InputLabel id="demo-simple-select-label">Şehir</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedCity}
-            label="Şehir">
-            <MenuItem value={'istanbul'}>Istanbul</MenuItem>
-          </Select>
-        </FormControl>
         <Divider variant="middle" />
         <Button variant="outlined" onClick={handleClearFilter} color="blackNWhite">
           Temizle

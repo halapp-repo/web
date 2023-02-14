@@ -1,13 +1,13 @@
 import { Stack, Box, Button, Typography, Divider } from '@mui/material';
 import { useEffect } from 'react';
-import { CityType, ProductType } from '@halapp/common';
-import { OrderItemVM } from '@halapp/common';
+import { ProductType, OrderItemVM } from '@halapp/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../store/ui/uiSlice';
 import { trMoment } from '../../utils/timezone';
 import { Link } from 'react-router-dom';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
@@ -18,17 +18,18 @@ interface SummaryNPlaceOrderProps {
 const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
   const dispatch = useAppDispatch();
   const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
+  const selectedCity = useAppSelector(selectSelectedCity);
   const deliveryTime = trMoment(DeliveryTime).clone();
 
   useEffect(() => {
     dispatch(
       fetchTodaysPrices({
-        location: CityType.istanbul,
+        location: selectedCity,
         type: ProductType.produce
       })
     );
     const timer = setInterval(() => {
-      dispatch(fetchTodaysPrices({ location: CityType.istanbul, type: ProductType.produce }));
+      dispatch(fetchTodaysPrices({ location: selectedCity, type: ProductType.produce }));
     }, 300000);
 
     return () => {

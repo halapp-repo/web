@@ -37,14 +37,20 @@ const PricesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchPrices.fulfilled, (state, action) => {
+      const { location, date } = action.meta.arg;
       const data = action.payload;
-      const date = action.meta.arg.date;
-      state.data[date] = data;
+      state.data[date] = {
+        ...state.data[date],
+        [location]: data
+      };
       state.isLoading = false;
     });
     builder.addCase(fetchPrices.rejected, (state, action) => {
-      const date = action.meta.arg.date;
-      state.data[date] = [];
+      const { date, location } = action.meta.arg;
+      state.data[date] = {
+        ...state.data[date],
+        [location]: []
+      };
       state.isLoading = false;
     });
     builder.addCase(fetchPrices.pending, (state) => {
@@ -53,11 +59,19 @@ const PricesSlice = createSlice({
     builder.addCase(fetchTodaysPrices.fulfilled, (state, action) => {
       const data = action.payload;
       const date = trMoment().format('YYYY-MM-DD');
-      state.data[date] = data;
+      const { location } = action.meta.arg;
+      state.data[date] = {
+        ...state.data[date],
+        [location]: data
+      };
     });
-    builder.addCase(fetchTodaysPrices.rejected, (state) => {
+    builder.addCase(fetchTodaysPrices.rejected, (state, action) => {
       const date = trMoment().format('YYYY-MM-DD');
-      state.data[date] = [];
+      const { location } = action.meta.arg;
+      state.data[date] = {
+        ...state.data[date],
+        [location]: []
+      };
     });
   }
 });
@@ -66,10 +80,11 @@ export const selectPricesOfSelectedDate = createSelector(
   [
     (state: RootState) => state.prices.data,
     (state: RootState) => state.inventories.inventories,
-    (state: RootState) => state.ui.listing.selectedDate
+    (state: RootState) => state.ui.listing.selectedDate,
+    (state: RootState) => state.cities.selectedCity
   ],
-  (prices, inventories, selectedDate) => {
-    const list = prices[selectedDate];
+  (prices, inventories, selectedDate, selectedCity) => {
+    const list = prices[selectedDate]?.[selectedCity] || undefined;
     const mapper = new PriceToPriceDTOMapper(inventories);
     return list && mapper.toListModel(list);
   }
@@ -79,9 +94,13 @@ export const selectPriceIsLoading = createSelector(
   (isLoading) => isLoading
 );
 export const selectPricesOfToday = createSelector(
-  [(state: RootState) => state.prices.data, (state: RootState) => state.inventories.inventories],
-  (prices, inventories) => {
-    const list = prices[trMoment().format('YYYY-MM-DD')];
+  [
+    (state: RootState) => state.prices.data,
+    (state: RootState) => state.inventories.inventories,
+    (state: RootState) => state.cities.selectedCity
+  ],
+  (prices, inventories, selectedCity) => {
+    const list = prices[trMoment().format('YYYY-MM-DD')]?.[selectedCity] || undefined;
     const mapper = new PriceToPriceDTOMapper(inventories);
     return list && mapper.toListModel(list);
   }
@@ -90,10 +109,11 @@ export const selectPriceListItemsOfSelectedDate = createSelector(
   [
     (state: RootState) => state.prices.data,
     (state: RootState) => state.inventories.inventories,
-    (state: RootState) => state.ui.listing.selectedDate
+    (state: RootState) => state.ui.listing.selectedDate,
+    (state: RootState) => state.cities.selectedCity
   ],
-  (prices, inventories, selectedDate) => {
-    const list = prices[selectedDate];
+  (prices, inventories, selectedDate, selectedCity) => {
+    const list = prices[selectedDate]?.[selectedCity] || undefined;
     const mapper = new PriceToPriceDTOMapper(inventories);
     return list && mapper.toListModel(list);
   }

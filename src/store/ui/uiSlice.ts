@@ -3,7 +3,7 @@ import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import { UIState } from './uiState';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { CityType, ProductType } from '@halapp/common';
+import { ProductType } from '@halapp/common';
 import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
@@ -13,7 +13,6 @@ import { OrderStatusType } from '@halapp/common';
 const initialState = {
   listing: {
     filteredProductName: '',
-    selectedCity: CityType.istanbul,
     selectedDate: trMoment().format('YYYY-MM-DD'),
     selectedCategory: ProductType.produce
   },
@@ -177,10 +176,6 @@ export const selectUIListingSelectedCategory = createSelector(
 export const selectUIListingProductNameFilter = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.listing.filteredProductName
-);
-export const selectUIListingSelectedCity = createSelector(
-  (state: RootState) => state.ui,
-  (state: UIState) => state.listing.selectedCity
 );
 export const selectUISessionLoading = createSelector(
   (state: RootState) => state.ui,
