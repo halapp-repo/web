@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Stack, LinearProgress } from '@mui/material';
 import Logo from '../components/logo/Logo';
 
 const Overlay = () => {
@@ -17,7 +17,10 @@ const Overlay = () => {
         display: 'flex',
         backgroundColor: '#fafafb'
       }}>
-      <Logo Size="large" />
+      <Stack spacing={2}>
+        <Logo Size="large" />
+        <LinearProgress />
+      </Stack>
     </Box>
   );
 };

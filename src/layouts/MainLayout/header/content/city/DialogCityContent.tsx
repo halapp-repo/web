@@ -49,7 +49,6 @@ const DialogCityContent = () => {
             {'Ürünler ve ürün fiyatları her şehir için farklı olabilir.'}
           </Typography>
           <Select
-            autoFocus={true}
             value={selectedCity}
             onChange={(e) => {
               const newCity = CityType[e.target.value as keyof typeof CityType];

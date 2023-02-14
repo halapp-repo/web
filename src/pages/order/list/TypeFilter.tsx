@@ -26,15 +26,13 @@ const TypeFilter = ({ Filter, SetType }: TypeFilterProps) => {
               SetType(type);
             }
           }}>
-          <MenuItem value={OrderStatusType.Created}>
-            {translateOrderStatus(OrderStatusType.Created)}
-          </MenuItem>
-          <MenuItem value={OrderStatusType.Delivered}>
-            {translateOrderStatus(OrderStatusType.Delivered)}
-          </MenuItem>
-          <MenuItem value={OrderStatusType.Paid}>
-            {translateOrderStatus(OrderStatusType.Paid)}
-          </MenuItem>
+          {Object.entries(OrderStatusType).map(([k, v]) => {
+            return (
+              <MenuItem key={k} value={k}>
+                {translateOrderStatus(v)}
+              </MenuItem>
+            );
+          })}
         </Select>
       </Box>
     </>
