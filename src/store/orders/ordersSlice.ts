@@ -253,7 +253,7 @@ const OrderSlice = createSlice({
   }
 });
 
-export const selectOrdersWithFilter = createSelector(
+export const selectOrdersByOrgId = createSelector(
   [
     (state: RootState) => state.orders,
     (state: RootState) => state.inventories.inventories,
@@ -320,6 +320,35 @@ export const selectOrder = createSelector(
       }
     });
     return order;
+  }
+);
+export const selectOrders = createSelector(
+  [
+    (state: RootState) => state.orders,
+    (state: RootState) => state.inventories.inventories,
+    (
+      state: RootState,
+      dateRange: DateRangeType,
+      Status: OrderStatusType | OrderStatusExtendedType
+    ): [DateRangeType, OrderStatusType | OrderStatusExtendedType] => [dateRange, Status]
+  ],
+  (ord: OrdersState, inventories, [dateRange, Status]) => {
+    const mapper = new OrderToOrderVMMapper();
+    if (!dateRange || !Status) {
+      return null;
+    }
+    const list = ord.AdminList[dateRange]?.[Status];
+    if (!list || list.length === 0) {
+      return undefined;
+    }
+    const orderList = mapper.toListModel(list);
+    orderList.forEach((o) => {
+      o.Items.forEach((i) => {
+        i.ProductName =
+          inventories?.find((inv) => inv.ProductId === i.ProductId)?.Name || i.ProductId;
+      });
+    });
+    return orderList;
   }
 );
 

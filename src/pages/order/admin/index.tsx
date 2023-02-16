@@ -5,13 +5,18 @@ import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { useEffect, useMemo } from 'react';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
-import { fetchAllOrders } from '../../../store/orders/ordersSlice';
+import {
+  fetchAllOrders,
+  selectOrderIsLoading,
+  selectOrders
+} from '../../../store/orders/ordersSlice';
 import { trMoment } from '../../../utils/timezone';
 import { selectOrdersAdminFilter, setOrdersAdminFilter } from '../../../store/ui/uiSlice';
 import { AdminOrderFilter } from './AdminOrdersFilter';
 import { DateRangeType } from '../../../models/types/date-range.type';
 import { OrderStatusExtendedType } from '../../../models/types/order-status-extended.type';
 import { DateRange } from './date-range.type';
+import { AdminOrdersContent } from './AdminOrdersContent';
 
 const AdminOrderList = () => {
   const navigate = useNavigate();
@@ -64,6 +69,10 @@ const AdminOrderList = () => {
       } as DateRange),
     []
   );
+  const orders = useAppSelector((state) =>
+    selectOrders(state, adminFilter.date, adminFilter.status)
+  );
+  const ordersAreLoading = useAppSelector(selectOrderIsLoading);
 
   useEffect(() => {
     if (adminFilter) {
@@ -119,7 +128,14 @@ const AdminOrderList = () => {
           />
         </MainCard>
       </Grid>
-      <Grid item xs={12} sm={6} md={5}></Grid>
+      <Grid item xs={12} sm={6} md={5}>
+        <AdminOrdersContent
+          Orders={orders}
+          IsLoading={ordersAreLoading}
+          DateFilter={adminFilter.date}
+          StatusFilter={adminFilter.status}
+        />
+      </Grid>
     </Grid>
   );
 };

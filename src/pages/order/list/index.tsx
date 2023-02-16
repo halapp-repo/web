@@ -15,7 +15,7 @@ import OrdersFilters from './OrdersFilter';
 import {
   fetchOrdersByOrgId,
   selectOrderIsLoading,
-  selectOrdersWithFilter
+  selectOrdersByOrgId
 } from '../../../store/orders/ordersSlice';
 import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
@@ -29,7 +29,7 @@ const OrderList = () => {
   const dispatch = useAppDispatch();
   const organizations = useAppSelector(selectOrganizations);
   const ordersWithFilter = useAppSelector((state) =>
-    selectOrdersWithFilter(state, selectedOrganizationId || '', filter)
+    selectOrdersByOrgId(state, selectedOrganizationId || '', filter)
   );
   const ordersAreLoading = useAppSelector(selectOrderIsLoading);
 

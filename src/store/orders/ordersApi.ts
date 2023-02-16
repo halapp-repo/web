@@ -184,14 +184,14 @@ export class OrderApi {
         params: {
           ...(range !== DateRangeType['All Time']
             ? {
-                fromDate: fromDate.format(),
-                toDate: toDate.format()
+                FromDate: fromDate.format(),
+                ToDate: toDate.format()
               }
             : null),
           ...(status === OrderStatusExtendedType.AllStatus
             ? null
             : {
-                status: status
+                Status: status
               })
         }
       })

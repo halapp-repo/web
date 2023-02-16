@@ -91,7 +91,6 @@ export const selectOrganizationUsers = createSelector(
     }
     const mapper = new UserToUserDTOMapper();
     const rawUsers = users.organizations[orgId];
-    console.log(rawUsers);
     return rawUsers && mapper.toListModel(rawUsers);
   }
 );
