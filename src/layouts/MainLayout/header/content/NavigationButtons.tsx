@@ -21,6 +21,7 @@ const NavigationButtons = () => {
   const userAuth = useAppSelector(selectUserAuth);
   return (
     <Stack direction="row" spacing={2}>
+      <CityNavButton />
       {!userAuth.authenticated && (
         <>
           <NavLink
@@ -61,7 +62,6 @@ const NavigationButtons = () => {
       )}
       {userAuth.authenticated && (
         <>
-          <CityNavButton />
           <ShoppingCartNavButton />
           <Profile email={userAuth.email} />
         </>

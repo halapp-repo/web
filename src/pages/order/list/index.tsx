@@ -21,7 +21,7 @@ import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
 import { selectOrdersFilter, setOrdersFilter } from '../../../store/ui/uiSlice';
 
-const ShoppingCart = () => {
+const OrderList = () => {
   const filter = useAppSelector(selectOrdersFilter);
   const [selectedOrganizationId, setSelectedOrganizationId] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -109,4 +109,4 @@ const ShoppingCart = () => {
   );
 };
 
-export default ShoppingCart;
+export default OrderList;

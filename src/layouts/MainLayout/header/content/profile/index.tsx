@@ -17,11 +17,11 @@ import { ScheduleOutlined, ShopOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import Transitions from '../../../../../components/Transitions';
 import { LogoutOutlined } from '@ant-design/icons';
-import { useAppDispatch } from '../../../../../store/hooks';
-import { signOut } from '../../../../../store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
+import { selectUserAuth, signOut } from '../../../../../store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { stringToHslColor } from '../../../../../utils/avatar';
-
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 const iconBackColorOpen = 'grey.300';
 
 interface ProfileProps {
@@ -33,6 +33,7 @@ const Profile = (props: ProfileProps) => {
   const dispatch = useAppDispatch();
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
+  const { isAdmin } = useAppSelector(selectUserAuth);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -56,6 +57,10 @@ const Profile = (props: ProfileProps) => {
   };
   const handleOpenOrderList = () => {
     navigate('/orders');
+    setOpen(false);
+  };
+  const handleOpenAdminOrderList = () => {
+    navigate('/admin/orders');
     setOpen(false);
   };
 
@@ -120,6 +125,25 @@ const Profile = (props: ProfileProps) => {
                         </ListItemButton>
                       </ListItem>
                       <Divider component="li" />
+                      {isAdmin && (
+                        <>
+                          <ListItem disablePadding sx={{ color: '#8753de' }}>
+                            <ListItemButton onClick={handleOpenAdminOrderList}>
+                              <ListItemIcon>
+                                <AdminPanelSettingsOutlinedIcon
+                                  fontSize="small"
+                                  sx={{ color: '#8753de' }}
+                                />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={'Siparişler (admin)'}
+                                primaryTypographyProps={{ fontSize: '15px' }}
+                              />
+                            </ListItemButton>
+                          </ListItem>
+                          <Divider component="li" />
+                        </>
+                      )}
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleOpenOrderList}>
                           <ListItemIcon>

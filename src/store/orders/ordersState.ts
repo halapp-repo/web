@@ -1,4 +1,6 @@
-import { OrderVM } from '@halapp/common';
+import { OrderStatusType, OrderVM } from '@halapp/common';
+import { DateRangeType } from '../../models/types/date-range.type';
+import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
 
 export interface OrdersState {
   List: {
@@ -9,5 +11,10 @@ export interface OrdersState {
   IsLoading: boolean;
   Edit: {
     [orderId: string]: OrderVM | null;
+  };
+  AdminList: {
+    [range in DateRangeType]: {
+      [status in OrderStatusType | OrderStatusExtendedType]: OrderVM[] | undefined;
+    };
   };
 }

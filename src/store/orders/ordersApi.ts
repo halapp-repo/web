@@ -2,6 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
 import { OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
+import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
+import { DateRangeType } from '../../models/types/date-range.type';
 
 export class OrderApi {
   baseUrl: string;
@@ -30,7 +32,7 @@ export class OrderApi {
         return data;
       });
   }
-  async fetchOrders({
+  async fetchOrdersByOrganizationId({
     token,
     organizationId,
     fromDate,
@@ -149,6 +151,50 @@ export class OrderApi {
           }
         }
       )
+      .then((response) => {
+        const { data } = response;
+        return data;
+      });
+  }
+  async fetchAllOrders({
+    token,
+    range,
+    fromDate,
+    toDate,
+    status
+  }: {
+    token: string;
+    range: DateRangeType;
+    fromDate: moment.Moment;
+    toDate: moment.Moment;
+    status: OrderStatusType | OrderStatusExtendedType;
+  }): Promise<OrderVM[]> {
+    if (range === DateRangeType['All Time'] && status === OrderStatusExtendedType.AllStatus) {
+      throw new Error('Unsupported Operation');
+    }
+    return await axios
+      .get<OrderVM[]>('/admin/orders', {
+        baseURL: this.baseUrl,
+        headers: {
+          Accept: 'application/json',
+          'content-type': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          Authorization: `Bearer ${token}`
+        },
+        params: {
+          ...(range !== DateRangeType['All Time']
+            ? {
+                fromDate: fromDate.format(),
+                toDate: toDate.format()
+              }
+            : null),
+          ...(status === OrderStatusExtendedType.AllStatus
+            ? null
+            : {
+                status: status
+              })
+        }
+      })
       .then((response) => {
         const { data } = response;
         return data;
