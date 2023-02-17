@@ -1,4 +1,7 @@
 import { OrderStatusType } from '@halapp/common';
+import moment from 'moment';
+import { DateRangeType } from '../../models/types/date-range.type';
+import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
 
 export interface UIState {
   listing: {
@@ -24,6 +27,10 @@ export interface UIState {
   };
   orders: {
     filter: OrderStatusType | moment.Moment | undefined;
+    adminFilter: {
+      date: DateRangeType;
+      status: OrderStatusType | OrderStatusExtendedType;
+    };
   };
   city: {
     isOpen: boolean;

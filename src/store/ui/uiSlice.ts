@@ -9,6 +9,8 @@ import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
 import { createOrder } from '../orders/ordersSlice';
 import { OrderStatusType } from '@halapp/common';
+import { DateRangeType } from '../../models/types/date-range.type';
+import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
 
 const initialState = {
   listing: {
@@ -33,7 +35,11 @@ const initialState = {
     orderNote: ''
   },
   orders: {
-    filter: undefined
+    filter: undefined,
+    adminFilter: {
+      date: DateRangeType['Last 3 Days'],
+      status: OrderStatusExtendedType.AllStatus
+    }
   },
   city: {
     isOpen: false
@@ -101,6 +107,27 @@ const UISlice = createSlice({
     ) => {
       state.orders.filter = action.payload;
     },
+    setOrdersAdminFilter: (
+      state: UIState,
+      action: PayloadAction<
+        [DateRangeType | undefined, OrderStatusType | OrderStatusExtendedType | undefined]
+      >
+    ) => {
+      const [range, status] = action.payload;
+      state.orders.adminFilter = {
+        ...state.orders.adminFilter,
+        ...(range
+          ? {
+              date: range
+            }
+          : null),
+        ...(status
+          ? {
+              status: status
+            }
+          : null)
+      };
+    },
     toggleCity: (state: UIState, action: PayloadAction<boolean | undefined>) => {
       if (typeof action.payload === 'undefined') {
         state.city.isOpen = !state.city.isOpen;
@@ -162,7 +189,8 @@ export const {
   updateCheckoutOrderNote,
   toggleGlobalIsLoading,
   setOrdersFilter,
-  toggleCity
+  toggleCity,
+  setOrdersAdminFilter
 } = UISlice.actions;
 
 export const selectUIListingSelectedDate = createSelector(
@@ -204,6 +232,10 @@ export const selectOrdersFilter = createSelector(
 export const selectUICityIsOpen = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.city.isOpen
+);
+export const selectOrdersAdminFilter = createSelector(
+  (state: RootState) => state.ui,
+  (state: UIState) => state.orders.adminFilter
 );
 
 export default UISlice.reducer;

@@ -15,13 +15,13 @@ import OrdersFilters from './OrdersFilter';
 import {
   fetchOrdersByOrgId,
   selectOrderIsLoading,
-  selectOrdersWithFilter
+  selectOrdersByOrgId
 } from '../../../store/orders/ordersSlice';
 import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
 import { selectOrdersFilter, setOrdersFilter } from '../../../store/ui/uiSlice';
 
-const ShoppingCart = () => {
+const OrderList = () => {
   const filter = useAppSelector(selectOrdersFilter);
   const [selectedOrganizationId, setSelectedOrganizationId] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const ShoppingCart = () => {
   const dispatch = useAppDispatch();
   const organizations = useAppSelector(selectOrganizations);
   const ordersWithFilter = useAppSelector((state) =>
-    selectOrdersWithFilter(state, selectedOrganizationId || '', filter)
+    selectOrdersByOrgId(state, selectedOrganizationId || '', filter)
   );
   const ordersAreLoading = useAppSelector(selectOrderIsLoading);
 
@@ -109,4 +109,4 @@ const ShoppingCart = () => {
   );
 };
 
-export default ShoppingCart;
+export default OrderList;

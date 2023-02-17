@@ -8,11 +8,14 @@ import { OrderEventType, OrderItemVM, OrderStatusType, OrderVM } from '@halapp/c
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
 import { signOut } from '../auth/authSlice';
 import { OrderItemsUpdatedV1Payload } from '../../models/events/payloads/order-items-updated-v1.payload';
+import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
+import { DateRangeType } from '../../models/types/date-range.type';
 
 const initialState = {
   IsLoading: false,
   List: {},
-  Edit: {}
+  Edit: {},
+  AdminList: {}
 } as OrdersState;
 
 export const createOrder = createAsyncThunk<OrderVM, OrderVM, { state: RootState }>(
@@ -29,27 +32,49 @@ export const createOrder = createAsyncThunk<OrderVM, OrderVM, { state: RootState
   }
 );
 
-interface FetchOrdersByOrgId {
-  OrganizationId: string;
-  Filter: moment.Moment | OrderStatusType;
-}
 export const fetchOrdersByOrgId = createAsyncThunk<
   OrderVM[] | null,
-  FetchOrdersByOrgId,
+  { OrganizationId: string; Filter: moment.Moment | OrderStatusType },
   { state: RootState }
 >(
-  'orders/fetchAll',
+  'orders/fetchOrdersByOrgId',
   async ({ OrganizationId, Filter }, { getState }): Promise<OrderVM[] | null> => {
     const { userAuth } = getState().auth;
     if (!userAuth.authenticated || !userAuth.idToken) {
       throw new Error('Unauthenticated');
     }
-    return await new OrderApi().fetchOrders({
+    return await new OrderApi().fetchOrdersByOrganizationId({
       token: userAuth.idToken,
       organizationId: OrganizationId,
       fromDate: moment.isMoment(Filter) ? Filter.clone().startOf('month') : undefined,
       toDate: moment.isMoment(Filter) ? Filter.clone().endOf('month') : undefined,
       status: OrderStatusType[Filter as keyof typeof OrderStatusType]
+    });
+  }
+);
+
+export const fetchAllOrders = createAsyncThunk<
+  OrderVM[] | null,
+  {
+    RangeType: DateRangeType;
+    FromDate: moment.Moment;
+    ToDate: moment.Moment;
+    Status: OrderStatusType | OrderStatusExtendedType;
+  },
+  { state: RootState }
+>(
+  'orders/fetchAll',
+  async ({ RangeType, FromDate, ToDate, Status }, { getState }): Promise<OrderVM[] | null> => {
+    const { userAuth } = getState().auth;
+    if (!userAuth.authenticated || !userAuth.idToken) {
+      throw new Error('Unauthenticated');
+    }
+    return await new OrderApi().fetchAllOrders({
+      token: userAuth.idToken,
+      fromDate: FromDate,
+      toDate: ToDate,
+      status: Status,
+      range: RangeType
     });
   }
 );
@@ -123,7 +148,7 @@ const OrderSlice = createSlice({
     builder.addCase(createOrder.rejected, (state) => {
       state.IsLoading = false;
     });
-    // Fetch Orders By Month
+    // Fetch Orders By OrgId
     builder.addCase(fetchOrdersByOrgId.fulfilled, (state, action) => {
       const filter = action.meta.arg.Filter;
       const { OrganizationId } = action.meta.arg;
@@ -144,6 +169,27 @@ const OrderSlice = createSlice({
       state.IsLoading = false;
     });
     builder.addCase(fetchOrdersByOrgId.pending, (state) => {
+      state.IsLoading = true;
+    });
+    //Fetch All Order
+    builder.addCase(fetchAllOrders.fulfilled, (state, action) => {
+      const { RangeType, Status } = action.meta.arg;
+      const data = action.payload || [];
+      state.AdminList[RangeType] = {
+        ...state.AdminList[RangeType],
+        [Status]: data
+      };
+      state.IsLoading = false;
+    });
+    builder.addCase(fetchAllOrders.rejected, (state, action) => {
+      const { RangeType, Status } = action.meta.arg;
+      state.AdminList[RangeType] = {
+        ...state.AdminList[RangeType],
+        [Status]: null
+      };
+      state.IsLoading = false;
+    });
+    builder.addCase(fetchAllOrders.pending, (state) => {
       state.IsLoading = true;
     });
     // Fetch Individual Order
@@ -207,7 +253,7 @@ const OrderSlice = createSlice({
   }
 });
 
-export const selectOrdersWithFilter = createSelector(
+export const selectOrdersByOrgId = createSelector(
   [
     (state: RootState) => state.orders,
     (state: RootState) => state.inventories.inventories,
@@ -274,6 +320,35 @@ export const selectOrder = createSelector(
       }
     });
     return order;
+  }
+);
+export const selectOrders = createSelector(
+  [
+    (state: RootState) => state.orders,
+    (state: RootState) => state.inventories.inventories,
+    (
+      state: RootState,
+      dateRange: DateRangeType,
+      Status: OrderStatusType | OrderStatusExtendedType
+    ): [DateRangeType, OrderStatusType | OrderStatusExtendedType] => [dateRange, Status]
+  ],
+  (ord: OrdersState, inventories, [dateRange, Status]) => {
+    const mapper = new OrderToOrderVMMapper();
+    if (!dateRange || !Status) {
+      return null;
+    }
+    const list = ord.AdminList[dateRange]?.[Status];
+    if (!list || list.length === 0) {
+      return undefined;
+    }
+    const orderList = mapper.toListModel(list);
+    orderList.forEach((o) => {
+      o.Items.forEach((i) => {
+        i.ProductName =
+          inventories?.find((inv) => inv.ProductId === i.ProductId)?.Name || i.ProductId;
+      });
+    });
+    return orderList;
   }
 );
 

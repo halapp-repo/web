@@ -123,7 +123,6 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
         }}
         onChange={(newValue) => {
           if (newValue) {
-            console.log(newValue);
             handleChangeDeliveryDate(newValue);
           }
         }}
