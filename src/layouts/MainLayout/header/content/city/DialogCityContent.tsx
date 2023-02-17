@@ -64,7 +64,13 @@ const DialogCityContent = () => {
           </Select>
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ justifyContent: 'space-around' }}>
+      <DialogActions
+        sx={{
+          paddingLeft: '24px',
+          paddingRight: '24px',
+          justifyContent: 'space-between',
+          marginBottom: '10px'
+        }}>
         <Button variant="outlined" color="blackNWhite" onClick={() => dispatch(toggleCity(false))}>
           {'Kapat'}
         </Button>
