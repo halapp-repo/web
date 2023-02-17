@@ -13,15 +13,16 @@ import {
   ListItemButton,
   ListItemIcon
 } from '@mui/material';
-import { ScheduleOutlined, ShopOutlined } from '@ant-design/icons';
+import { ScheduleFilled, ScheduleOutlined, ShopFilled, ShopOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import Transitions from '../../../../../components/Transitions';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 import { selectUserAuth, signOut } from '../../../../../store/auth/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { stringToHslColor } from '../../../../../utils/avatar';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 const iconBackColorOpen = 'grey.300';
 
 interface ProfileProps {
@@ -34,6 +35,7 @@ const Profile = (props: ProfileProps) => {
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const { isAdmin } = useAppSelector(selectUserAuth);
+  const location = useLocation();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -115,12 +117,21 @@ const Profile = (props: ProfileProps) => {
                     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleOpenOrganizationList}>
-                          <ListItemIcon>
-                            <ShopOutlined />
+                          <ListItemIcon sx={{ fontSize: '24px' }}>
+                            {location.pathname === '/organization/list' ? (
+                              <ShopFilled />
+                            ) : (
+                              <ShopOutlined />
+                            )}
                           </ListItemIcon>
                           <ListItemText
                             primary={'Şirketlerim'}
-                            primaryTypographyProps={{ fontSize: '15px' }}
+                            primaryTypographyProps={{
+                              fontSize: '15px',
+                              paddingLeft: '20px',
+                              fontWeight:
+                                location.pathname === '/organization/list' ? 'bold' : 'inherit'
+                            }}
                           />
                         </ListItemButton>
                       </ListItem>
@@ -129,15 +140,21 @@ const Profile = (props: ProfileProps) => {
                         <>
                           <ListItem disablePadding sx={{ color: '#8753de' }}>
                             <ListItemButton onClick={handleOpenAdminOrderList}>
-                              <ListItemIcon>
-                                <AdminPanelSettingsOutlinedIcon
-                                  fontSize="small"
-                                  sx={{ color: '#8753de' }}
-                                />
+                              <ListItemIcon sx={{ fontSize: '24px' }}>
+                                {location.pathname === '/admin/orders' ? (
+                                  <AdminPanelSettingsIcon sx={{ color: '#8753de' }} />
+                                ) : (
+                                  <AdminPanelSettingsOutlinedIcon sx={{ color: '#8753de' }} />
+                                )}
                               </ListItemIcon>
                               <ListItemText
                                 primary={'Siparişler (admin)'}
-                                primaryTypographyProps={{ fontSize: '15px' }}
+                                primaryTypographyProps={{
+                                  paddingLeft: '20px',
+                                  fontSize: '15px',
+                                  fontWeight:
+                                    location.pathname === '/admin/orders' ? 'bold' : 'inherit'
+                                }}
                               />
                             </ListItemButton>
                           </ListItem>
@@ -146,24 +163,32 @@ const Profile = (props: ProfileProps) => {
                       )}
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleOpenOrderList}>
-                          <ListItemIcon>
-                            <ScheduleOutlined />
+                          <ListItemIcon sx={{ fontSize: '24px' }}>
+                            {location.pathname === '/orders' ? (
+                              <ScheduleFilled />
+                            ) : (
+                              <ScheduleOutlined />
+                            )}
                           </ListItemIcon>
                           <ListItemText
                             primary={'Siparişlerim'}
-                            primaryTypographyProps={{ fontSize: '15px' }}
+                            primaryTypographyProps={{
+                              paddingLeft: '20px',
+                              fontSize: '15px',
+                              fontWeight: location.pathname === '/orders' ? 'bold' : 'inherit'
+                            }}
                           />
                         </ListItemButton>
                       </ListItem>
                       <Divider component="li" />
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleSignOut}>
-                          <ListItemIcon>
+                          <ListItemIcon sx={{ fontSize: '24px' }}>
                             <LogoutOutlined />
                           </ListItemIcon>
                           <ListItemText
                             primary="Çıkış yap"
-                            primaryTypographyProps={{ fontSize: '15px' }}
+                            primaryTypographyProps={{ fontSize: '15px', paddingLeft: '20px' }}
                           />
                         </ListItemButton>
                       </ListItem>
