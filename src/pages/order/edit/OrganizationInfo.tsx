@@ -1,7 +1,6 @@
 import { Typography, Stack, Grid } from '@mui/material';
 import { Organization } from '../../../models/organization';
-import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
-
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 interface OrganizationInfoProps {
   Organization: Organization;
 }
@@ -10,7 +9,7 @@ const OrganizationInfo = ({ Organization }: OrganizationInfoProps) => {
   return (
     <Grid container>
       <Grid item xs={2} sm={1}>
-        <StoreOutlinedIcon />
+        <StorefrontOutlinedIcon />
       </Grid>
       <Grid item xs={10} sm={11}>
         <Stack spacing={1}>
