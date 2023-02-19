@@ -1,19 +1,11 @@
-import { IconButton, Badge, BadgeProps } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
+import { IconButton } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useAppSelector, useAppDispatch } from '../../../../../store/hooks';
 import { selectShoppingCart } from '../../../../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../../../../store/ui/uiSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px'
-  }
-}));
+import { StyledBadge } from '../../../../../components/StyledBadge';
 
 const ShoppingCartNavButton = () => {
   const dispatch = useAppDispatch();

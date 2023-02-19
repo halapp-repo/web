@@ -131,7 +131,7 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
       <ul>
         <li>
           <Typography variant="body2" fontWeight={'bold'} color="secondary">
-            {'Cumartesi günü veriginiz siparişler , pazartesi teslim edilir.'}
+            {'Cumartesi günü veriginiz siparişler, pazartesi teslim edilir.'}
           </Typography>
         </li>
         <li>

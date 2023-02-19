@@ -1,6 +1,7 @@
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Grid } from '@mui/material';
 import { Order } from '../../../models/order';
 import { StatusChip } from '../StatusChip';
+import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 
 interface OrderStatusProps {
   Order: Order;
@@ -8,16 +9,25 @@ interface OrderStatusProps {
 
 const OrderStatus = ({ Order }: OrderStatusProps) => {
   return (
-    <Stack spacing={1} direction="row" alignContent={'center'} alignItems="center">
-      <Typography
-        variant="body1"
-        fontWeight={'bold'}
-        color="secondary"
-        sx={{ flexGrow: '0', flexShrink: '0', flexBasis: '20%' }}>
-        {'Sipariş Durumu'}
-      </Typography>
-      <StatusChip Order={Order} />
-    </Stack>
+    <Grid container>
+      <Grid item xs={2} sm={1}>
+        <UpdateOutlinedIcon />
+      </Grid>
+      <Grid item xs={10} sm={11}>
+        <Stack spacing={1}>
+          <Grid container>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body1" fontWeight={'bold'} color="secondary">
+                {'Sipariş Durumu'}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <StatusChip Order={Order} />
+            </Grid>
+          </Grid>
+        </Stack>
+      </Grid>
+    </Grid>
   );
 };
 

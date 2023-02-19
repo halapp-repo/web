@@ -1,5 +1,6 @@
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Grid } from '@mui/material';
 import { Organization } from '../../../models/organization';
+import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 
 interface OrganizationInfoProps {
   Organization: Organization;
@@ -7,36 +8,43 @@ interface OrganizationInfoProps {
 
 const OrganizationInfo = ({ Organization }: OrganizationInfoProps) => {
   return (
-    <Stack spacing={2}>
-      <Stack spacing={1} direction="row">
-        <Typography
-          variant="body1"
-          fontWeight={'bold'}
-          color="secondary"
-          sx={{ flexGrow: '0', flexShrink: '0', flexBasis: '20%' }}>
-          {'Şirket Adı'}
-        </Typography>
-        <Typography
-          variant="body1"
-          color="primary"
-          fontWeight={'bold'}
-          sx={{ flexGrow: '0', flexShrink: '0', flexBasis: '80%' }}>
-          {Organization.Name}
-        </Typography>
-      </Stack>
-      <Stack spacing={1} direction="row">
-        <Typography
-          variant="body1"
-          fontWeight={'bold'}
-          color="secondary"
-          sx={{ flexGrow: '0', flexShrink: '0', flexBasis: '20%' }}>
-          {'Kontak'}
-        </Typography>
-        <Typography variant="body1" sx={{ flexGrow: '0', flexShrink: '0', flexBasis: '80%' }}>
-          {Organization.Email}
-        </Typography>
-      </Stack>
-    </Stack>
+    <Grid container>
+      <Grid item xs={2} sm={1}>
+        <StoreOutlinedIcon />
+      </Grid>
+      <Grid item xs={10} sm={11}>
+        <Stack spacing={1}>
+          <Grid container>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body1" fontWeight={'bold'} color="secondary">
+                {'Şirket Adı'}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <Typography
+                variant="body1"
+                color="primary"
+                fontWeight={'bold'}
+                sx={{ flexGrow: '0', flexShrink: '0', flexBasis: '80%' }}>
+                {Organization.Name}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body1" fontWeight={'bold'} color="secondary">
+                {'Kontak'}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <Typography variant="body1" sx={{ flexGrow: '0', flexShrink: '0', flexBasis: '80%' }}>
+                {Organization.Email}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Stack>
+      </Grid>
+    </Grid>
   );
 };
 

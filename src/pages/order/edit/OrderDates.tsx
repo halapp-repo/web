@@ -1,4 +1,5 @@
-import { Typography, Stack, Grid } from '@mui/material';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import { Typography, Grid, Stack } from '@mui/material';
 import { Order } from '../../../models/order';
 
 interface OrderDatesProps {
@@ -8,24 +9,36 @@ interface OrderDatesProps {
 const OrderDates = ({ Order }: OrderDatesProps) => {
   const deliveryTime = Order.DeliveryTime.clone();
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} sm={6}>
-        <Stack spacing={1}>
-          <Typography variant="body1" fontWeight={'bold'} color="secondary">
-            {'Sipariş Tarihi'}
-          </Typography>
-          <Typography variant="body1">{Order.CreatedDate.format('DD.MM.YY HH:mm')}</Typography>
-        </Stack>
+    <Grid container>
+      <Grid item xs={2} sm={1}>
+        <AccessTimeOutlinedIcon />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={10} sm={11}>
         <Stack spacing={1}>
-          <Typography variant="body1" fontWeight={'bold'} color="secondary">
-            {'Teslimat Tarihi'}
-          </Typography>
-          <Typography variant="body1">{`${deliveryTime.format('DD.MM.YY (HH:mm')} - ${deliveryTime
-            .clone()
-            .add(1, 'h')
-            .format('HH:mm)')}`}</Typography>
+          <Grid container>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body1" fontWeight={'bold'} color="secondary">
+                {'Sipariş Tarihi'}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <Typography variant="body1">
+                {Order.CreatedDate.format('MMM DD,YYYY HH:mm')}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body1" fontWeight={'bold'} color="secondary">
+                {'Teslimat Tarihi'}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <Typography variant="body1">{`${deliveryTime.format(
+                'MMM DD,YYYY (HH:mm'
+              )} - ${deliveryTime.clone().add(1, 'h').format('HH:mm)')}`}</Typography>
+            </Grid>
+          </Grid>
         </Stack>
       </Grid>
     </Grid>
