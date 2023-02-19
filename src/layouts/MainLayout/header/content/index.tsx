@@ -1,6 +1,5 @@
 import { Box, Stack, useMediaQuery, Theme } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-import IconBlackRibbon from '../../../../components/icons/IconBlackRibbon';
 import Logo from '../../../../components/logo/Logo';
 import LogoText from '../../../../components/logo/LogoText';
 import { useAppDispatch } from '../../../../store/hooks';

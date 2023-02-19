@@ -12,7 +12,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React, { useEffect, useState } from 'react';
 import { selectUICheckoutOrderNote, updateCheckoutOrderNote } from '../../store/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import SpeakerNotesOutlinedIcon from '@mui/icons-material/SpeakerNotesOutlined';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
