@@ -51,7 +51,7 @@ const OrderItemList = ({ Order, Organization }: OrderItemListProps) => {
           spacing={2}
           sx={{ padding: '8px 16px 8px 16px', color: '#ffc423' }}>
           <Box>🧺</Box>
-          <Box>{`Ürün çeşiti ${Order.Items.length}`}</Box>
+          <Box>{`Ürün çeşidi ${Order.Items.length}`}</Box>
         </Stack>
         <Box sx={{ flexGrow: '1', p: '2px', overflowY: 'auto' }}>
           <List>

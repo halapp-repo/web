@@ -26,9 +26,6 @@ const HeaderContent = () => {
                   <LogoText Size="medium" />
                 </Box>
               )}
-              <Box>
-                <IconBlackRibbon />
-              </Box>
             </Stack>
           );
         }}

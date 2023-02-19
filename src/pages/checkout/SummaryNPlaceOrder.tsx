@@ -97,7 +97,7 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
       <Box>
         <Typography variant="body2" color="secondary">
           Ürünler, <b>{`${selectedCity}`}</b>
-          {`'a göre fiyatlandirilmistir.`}
+          {`'a göre fiyatlandırılmıştır.`}
         </Typography>
         <Stack direction={'row'} justifyContent="flex-start">
           <Typography variant="body2" color="secondary">
