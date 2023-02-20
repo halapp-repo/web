@@ -74,7 +74,27 @@ const OrderEdit = () => {
     <>
       {(orderIsLoading || organizationIsLoading) && <Overlay />}
       <Grid container rowSpacing={4.5} justifyContent="left" columnSpacing={2.75} alignItems="left">
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={4}>
+          <MainCard sx={{ mt: 2, p: '10px' }}>
+            {order && organization && <OrderInfo Order={order} Organization={organization} />}
+          </MainCard>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          {order && (
+            <MainCard sx={{ mt: 2, p: '10px' }}>
+              <OrderItemList Order={order} Organization={organization} />
+            </MainCard>
+          )}
+        </Grid>
+        <Grid item xs={12} md={4}>
+          {order && (
+            <OrderButtons
+              Order={order}
+              HandleOpenDialogCancelOrder={() => handleToggleDialogCancelOrder(true)}
+              HandleOpenDialogOrderDelivered={() => handleToggleDialogOrderDelivered(true)}
+              HandleOpenDialogOrderPaid={() => handleToggleDialogOrderPaid(true)}
+            />
+          )}
           <MainCard
             sx={{
               backgroundColor: matchesXS && !expanded ? 'background.paper' : '#fafafb',
@@ -105,26 +125,6 @@ const OrderEdit = () => {
               </CardContent>
             </Collapse>
           </MainCard>
-        </Grid>
-        <Grid item xs={12} md={5}>
-          <MainCard sx={{ mt: 2, p: '10px' }}>
-            {order && organization && <OrderInfo Order={order} Organization={organization} />}
-          </MainCard>
-          {order && (
-            <OrderButtons
-              Order={order}
-              HandleOpenDialogCancelOrder={() => handleToggleDialogCancelOrder(true)}
-              HandleOpenDialogOrderDelivered={() => handleToggleDialogOrderDelivered(true)}
-              HandleOpenDialogOrderPaid={() => handleToggleDialogOrderPaid(true)}
-            />
-          )}
-        </Grid>
-        <Grid item xs={12} md={4}>
-          {order && (
-            <MainCard sx={{ mt: 2, p: '10px' }}>
-              <OrderItemList Order={order} Organization={organization} />
-            </MainCard>
-          )}
         </Grid>
       </Grid>
       {order && organization && (
