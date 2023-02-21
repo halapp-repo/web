@@ -1,6 +1,14 @@
-import { Typography, Stack, Button, Box, ListItem, ListItemText, Chip } from '@mui/material';
+import {
+  Typography,
+  Stack,
+  Button,
+  Box,
+  ListItem,
+  ListItemText,
+  Chip,
+  useTheme
+} from '@mui/material';
 import { OrganizationAddress } from '../../../models/organization';
-import { red } from '@mui/material/colors';
 
 interface CompanyAddressListItemProps {
   Address: OrganizationAddress;
@@ -13,6 +21,7 @@ const CompanyAddressListItem = ({
   OnSetDefault,
   IsDefault
 }: CompanyAddressListItemProps) => {
+  const theme = useTheme();
   return (
     <ListItem>
       <ListItemText
@@ -20,7 +29,7 @@ const CompanyAddressListItem = ({
           <Stack direction={'row'} gap={2} sx={{ pb: '10px' }}>
             <Box>
               <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-start' }}>
-                <Typography fontWeight={'bold'} variant="h5" color={red[900]}>
+                <Typography fontWeight={'bold'} variant="h5" color={theme.palette.primary.main}>
                   {`İşletme Adresi`}
                 </Typography>
                 {IsDefault && (
@@ -33,8 +42,8 @@ const CompanyAddressListItem = ({
                   />
                 )}
               </Box>
-              <Typography fontWeight={'bold'}>{Address.AddressLine}</Typography>
-              <Typography fontWeight={'bold'}>
+              <Typography>{Address.AddressLine}</Typography>
+              <Typography>
                 {`${Address.County} ${Address.City} ${Address.ZipCode} ${Address.Country}`}
               </Typography>
             </Box>

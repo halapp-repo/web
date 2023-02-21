@@ -185,7 +185,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 onChange={(value: string) => setFieldValue('phoneNumber', value)}
               />
               <Box sx={{ height: '20px' }} />
-              <Stack direction={'row'} justifyContent="space-evenly">
+              <Stack direction={'row'} justifyContent="space-between">
                 <Button
                   type="submit"
                   variant="outlined"

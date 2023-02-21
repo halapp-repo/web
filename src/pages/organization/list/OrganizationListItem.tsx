@@ -1,7 +1,5 @@
 import { Box, Stack, Typography, Chip, ListItemButton, ListItemText } from '@mui/material';
 import { Organization } from '../../../models/organization';
-import { useAppDispatch } from '../../../store/hooks';
-import { toggleOrganizationActivation } from '../../../store/organizations/organizationsSlice';
 import { useNavigate } from 'react-router-dom';
 
 interface OrganizationListItemProps {
@@ -9,13 +7,7 @@ interface OrganizationListItemProps {
 }
 
 const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const toggleOrganizatinActivation = () => {
-    Organization.Active = !Organization.Active;
-    dispatch(toggleOrganizationActivation(Organization));
-  };
 
   return (
     <ListItemButton
@@ -28,21 +20,9 @@ const OrganizationListItem = ({ Organization }: OrganizationListItemProps) => {
           <Stack direction={'row'} spacing={2}>
             <Typography variant="h4">{Organization.Name}</Typography>
             {Organization.Active ? (
-              <Chip
-                sx={{ borderRadius: '2em' }}
-                label="Aktif"
-                size="small"
-                color="success"
-                variant="outlined"
-              />
+              <Chip label="Etkin" size="small" color="success" variant="outlined" />
             ) : (
-              <Chip
-                sx={{ borderRadius: '2em' }}
-                label="Etkin değil"
-                size="small"
-                color="error"
-                variant="outlined"
-              />
+              <Chip label="Kısıtlı" size="small" color="error" variant="outlined" />
             )}
           </Stack>
         }

@@ -43,22 +43,10 @@ const Users = ({ Organization }: UsersProps) => {
                     {u.Email}
                   </Typography>
                   {u.Active && (
-                    <Chip
-                      color={'success'}
-                      sx={{ borderRadius: '2em' }}
-                      size="small"
-                      variant="outlined"
-                      label={'Aktif'}
-                    />
+                    <Chip color={'success'} size="small" variant="outlined" label={'Etkin'} />
                   )}
                   {!u.Active && (
-                    <Chip
-                      color={'error'}
-                      sx={{ borderRadius: '2em' }}
-                      size="small"
-                      variant="outlined"
-                      label={'Etkin Degil'}
-                    />
+                    <Chip color={'error'} size="small" variant="outlined" label={'Etkin Degil'} />
                   )}
                 </Stack>
               </Stack>

@@ -45,8 +45,7 @@ const AdminOrganizationList = () => {
                 color: '#ffc423',
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: '20px'
+                alignItems: 'center'
               }}>
               <TextField
                 fullWidth

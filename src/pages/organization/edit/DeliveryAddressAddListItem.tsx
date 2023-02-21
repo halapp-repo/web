@@ -1,7 +1,7 @@
-import { Stack, ListItem, ListItemText } from '@mui/material';
+import { Stack, ListItem, ListItemText, IconButton } from '@mui/material';
 import { useState } from 'react';
 import { DeliveryAddressListItemForm } from './DeliveryAddressListItemForm';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import { OrganizationAddress } from '../../../models/organization';
 
 interface DeliveryAddressAddListItemProps {
@@ -27,8 +27,14 @@ const DeliveryAddressAddListItem = ({ OnAddAddress }: DeliveryAddressAddListItem
       <ListItem>
         <ListItemText
           primary={
-            <Stack direction={'row'} gap={2} sx={{ pb: '10px' }} justifyContent="center">
-              <PlusCircleOutlined style={{ fontSize: '32px' }} onClick={() => setEditMode(true)} />
+            <Stack direction={'row'} justifyContent="center">
+              <IconButton>
+                <ControlPointOutlinedIcon
+                  color="info"
+                  style={{ fontSize: '32px' }}
+                  onClick={() => setEditMode(true)}
+                />
+              </IconButton>
             </Stack>
           }
         />

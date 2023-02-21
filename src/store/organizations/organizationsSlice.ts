@@ -150,7 +150,11 @@ export const toggleOrganizationActivation = createAsyncThunk<
 const OrganizationsSlice = createSlice({
   name: 'organizations',
   initialState,
-  reducers: {},
+  reducers: {
+    destroyOrganizationList: (state: OrganizationsState) => {
+      state.Organizations = {};
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(signOut.fulfilled, (state) => {
       state.Organizations = undefined;
@@ -165,12 +169,29 @@ const OrganizationsSlice = createSlice({
 
       state.Organizations = {
         ...state.Organizations,
-        List: [...(state.Organizations?.List || [])].map((l) => {
-          if (l.ID === organizationId) {
-            return organization;
-          }
-          return l;
-        })
+        ...(state.Organizations?.List
+          ? {
+              List: [...(state.Organizations?.List || [])].map((l) => {
+                if (l.ID === organizationId) {
+                  return organization;
+                }
+                return l;
+              })
+            }
+          : null)
+      };
+      state.AdminList = {
+        ...state.AdminList,
+        ...(state.AdminList?.List
+          ? {
+              List: [...(state.AdminList?.List || [])].map((l) => {
+                if (l.ID === organizationId) {
+                  return organization;
+                }
+                return l;
+              })
+            }
+          : null)
       };
       state.IsLoading = false;
     });
@@ -182,12 +203,29 @@ const OrganizationsSlice = createSlice({
       const organization = action.payload;
       state.Organizations = {
         ...state.Organizations,
-        List: [...(state.Organizations?.List || [])].map((l) => {
-          if (l.ID === organization.ID) {
-            return organization;
-          }
-          return l;
-        })
+        ...(state.Organizations?.List
+          ? {
+              List: [...(state.Organizations?.List || [])].map((l) => {
+                if (l.ID === organization.ID) {
+                  return organization;
+                }
+                return l;
+              })
+            }
+          : null)
+      };
+      state.AdminList = {
+        ...state.AdminList,
+        ...(state.AdminList?.List
+          ? {
+              List: [...(state.AdminList?.List || [])].map((l) => {
+                if (l.ID === organization.ID) {
+                  return organization;
+                }
+                return l;
+              })
+            }
+          : null)
       };
       state.IsLoading = false;
     });
@@ -198,12 +236,29 @@ const OrganizationsSlice = createSlice({
       const { ID, Active } = action.meta.arg;
       state.Organizations = {
         ...state.Organizations,
-        List: [...(state.Organizations?.List || [])].map((l) => {
-          if (l.ID === ID) {
-            l.Active = Active;
-          }
-          return l;
-        })
+        ...(state.Organizations?.List
+          ? {
+              List: [...(state.Organizations?.List || [])].map((l) => {
+                if (l.ID === ID) {
+                  l.Active = Active;
+                }
+                return l;
+              })
+            }
+          : null)
+      };
+      state.AdminList = {
+        ...state.AdminList,
+        ...(state.AdminList?.List
+          ? {
+              List: [...(state.AdminList?.List || [])].map((l) => {
+                if (l.ID === ID) {
+                  l.Active = Active;
+                }
+                return l;
+              })
+            }
+          : null)
       };
       state.IsLoading = false;
     });
@@ -308,6 +363,7 @@ const OrganizationsSlice = createSlice({
     });
   }
 });
+export const { destroyOrganizationList } = OrganizationsSlice.actions;
 
 export const selectOrganizations = createSelector(
   [(state: RootState) => state.organizations],
@@ -320,7 +376,10 @@ export const selectIndividualOrganization = createSelector(
   ],
   (org: OrganizationsState, orgId?: string) => {
     if (orgId) {
-      const organization = org.Organizations?.List?.find((o) => o.ID === orgId);
+      const organization = [
+        ...(org.Organizations?.List || []),
+        ...(org.AdminList?.List || [])
+      ].find((o) => o.ID === orgId);
       if (!organization) {
         return null;
       }

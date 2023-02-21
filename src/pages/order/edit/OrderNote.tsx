@@ -10,7 +10,7 @@ const OrderNote = ({ Order }: OrderNoteProps) => {
   return (
     <Grid container>
       <Grid item xs={2} sm={1}>
-        <CommentOutlinedIcon />
+        <CommentOutlinedIcon color="info" />
       </Grid>
       <Grid item xs={10} sm={11}>
         <Stack spacing={1}>
