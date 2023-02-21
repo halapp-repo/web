@@ -11,6 +11,12 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     const bValStr = (bVal as string).toLocaleUpperCase('tr-TR');
     return bValStr.localeCompare(aValStr, 'en');
   }
+  if (typeof aVal === 'undefined') {
+    return -1;
+  }
+  if (typeof bVal === 'undefined') {
+    return -1;
+  }
   if (bVal < aVal) {
     return -1;
   }
@@ -25,8 +31,8 @@ function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key
 ): (
-  a: { [key in Key]: number | string | moment.Moment },
-  b: { [key in Key]: number | string | moment.Moment }
+  a: { [key in Key]?: number | string | moment.Moment },
+  b: { [key in Key]?: number | string | moment.Moment }
 ) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)

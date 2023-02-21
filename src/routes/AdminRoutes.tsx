@@ -6,6 +6,7 @@ import MainLayout from '../layouts/MainLayout';
 
 // render - login
 const AdminOrderList = Loadable(lazy(() => import('../pages/order/admin')));
+const AdminOrganizationList = Loadable(lazy(() => import('../pages/organization/admin')));
 
 // ==============================|| AUTH ROUTING ||============================== //
 
@@ -16,6 +17,10 @@ const AdminRoutes = {
     {
       path: '/admin/orders',
       element: <AdminOrderList />
+    },
+    {
+      path: '/admin/organizations',
+      element: <AdminOrganizationList />
     }
   ]
 };

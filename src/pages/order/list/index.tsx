@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import {
   fetchOrganizations,
+  selectOrganizationIsLoading,
   selectOrganizations
 } from '../../../store/organizations/organizationsSlice';
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +33,7 @@ const OrderList = () => {
     selectOrdersByOrgId(state, selectedOrganizationId || '', filter)
   );
   const ordersAreLoading = useAppSelector(selectOrderIsLoading);
+  const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
 
   useEffect(() => {
     if (!filter) {
@@ -76,7 +78,7 @@ const OrderList = () => {
 
   return (
     <>
-      {organizations?.IsLoading && <Overlay />}
+      {organizationIsLoading && <Overlay />}
       {organizations?.List && organizations?.List.length > 0 && (
         <Grid
           container

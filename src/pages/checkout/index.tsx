@@ -7,6 +7,7 @@ import { OrganizationsContext } from './OrganizationsContext';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   fetchOrganizations,
+  selectOrganizationIsLoading,
   selectOrganizations
 } from '../../store/organizations/organizationsSlice';
 import { Overlay } from '../../components/Overlay';
@@ -15,6 +16,7 @@ import { OrderItemVM, OrderVM } from '@halapp/common';
 
 const Checkout = () => {
   const organizations = useAppSelector(selectOrganizations);
+  const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -55,7 +57,7 @@ const Checkout = () => {
 
   return (
     <OrganizationsContext.Provider value={organizations?.List || []}>
-      {organizations?.IsLoading && <Overlay />}
+      {organizationIsLoading && <Overlay />}
       <CheckoutForm onSubmit={handleOnsubmit} />
     </OrganizationsContext.Provider>
   );
