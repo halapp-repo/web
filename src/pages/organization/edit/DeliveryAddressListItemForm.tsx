@@ -78,7 +78,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                         </Box>
                       </Stack>
                     </Box>
-                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}>
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                       <Button color="blackNWhite" variant="outlined" onClick={values.OnCancel}>
                         {'Iptal'}
                       </Button>

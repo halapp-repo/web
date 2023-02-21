@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { List, CircularProgress, Box, Typography, Divider, Button } from '@mui/material';
+import { List, CircularProgress, Box, Typography, Divider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import {
-  fetchAllOrganizations,
   fetchOrganizations,
+  selectOrganizationIsLoading,
   selectOrganizations
 } from '../../../store/organizations/organizationsSlice';
 import PageWrapper from '../../../components/PageWrapper';
@@ -16,6 +16,7 @@ const OrganizationList = () => {
   const navigate = useNavigate();
   const userAuth = useAppSelector(selectUserAuth);
   const organizations = useAppSelector(selectOrganizations);
+  const isLoading = useAppSelector(selectOrganizationIsLoading);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (!userAuth.authenticated) {
@@ -27,10 +28,6 @@ const OrganizationList = () => {
     }
   }, [userAuth]);
 
-  const handleFetchAllOrganizations = () => {
-    dispatch(fetchAllOrganizations());
-  };
-
   return (
     <PageWrapper md={6} lg={4}>
       <MainCard>
@@ -39,37 +36,27 @@ const OrganizationList = () => {
             <Box
               sx={{
                 padding: '8px 16px 8px 16px',
-                color: '#ffc423',
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: '20px'
+                alignItems: 'center'
               }}>
-              {userAuth.isAdmin ? (
-                <Button
-                  variant="contained"
-                  size="small"
-                  color="admin"
-                  onClick={handleFetchAllOrganizations}>
-                  {'Fetch all organizations'}
-                </Button>
-              ) : (
-                <Typography>{'🏪 Şirketlerim'}</Typography>
-              )}
+              <Typography variant="h5" fontWeight="bold">
+                {'Şirketlerim'}
+              </Typography>
             </Box>
           }>
-          {organizations?.IsLoading && (
+          {isLoading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <CircularProgress />
             </Box>
-          )}
-          {organizations?.IsLoading ||
+          ) : (
             organizations?.List?.map((i) => (
               <>
                 <Divider />
                 <OrganizationListItem Organization={i} key={i.ID} />
               </>
-            ))}
+            ))
+          )}
         </List>
       </MainCard>
     </PageWrapper>

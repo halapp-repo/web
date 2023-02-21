@@ -9,6 +9,7 @@ import MainCard from '../../../components/MainCard';
 import { ExpandMore } from '../../../components/ExpandMoreButton';
 import { OrderTimeline } from './OrderTimeline';
 import {
+  destroyOrganizationList,
   fetchIndividualOrganization,
   selectIndividualOrganization,
   selectOrganizationIsLoading
@@ -49,11 +50,18 @@ const OrderEdit = () => {
   }, [userAuth, orderId]);
 
   useEffect(() => {
+    let destroyList = false;
     if (order) {
       if (!organization) {
+        destroyList = true;
         dispatch(fetchIndividualOrganization(order.OrganizationId));
       }
     }
+    return () => {
+      if (destroyList) {
+        dispatch(destroyOrganizationList());
+      }
+    };
   }, [order]);
 
   const handleExpandClick = () => {

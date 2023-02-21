@@ -1,4 +1,13 @@
-import { Typography, Stack, Button, Box, ListItem, ListItemText, Chip } from '@mui/material';
+import {
+  Typography,
+  Stack,
+  Button,
+  Box,
+  ListItem,
+  ListItemText,
+  Chip,
+  useTheme
+} from '@mui/material';
 import { useState } from 'react';
 import { OrganizationAddress } from '../../../models/organization';
 import { DeliveryAddressListItemForm } from './DeliveryAddressListItemForm';
@@ -9,14 +18,17 @@ interface DeliveryAddressListItemProps {
   OnEditAddress: (address: OrganizationAddress) => void;
   OnDeleteAddress: (address: OrganizationAddress) => void;
   OnSetDefault: () => void;
+  Key: number;
 }
 
 const DeliveryAddressListItem = ({
   Address,
   OnEditAddress,
   OnDeleteAddress,
-  OnSetDefault
+  OnSetDefault,
+  Key
 }: DeliveryAddressListItemProps) => {
+  const theme = useTheme();
   const [editMode, setEditMode] = useState(false);
 
   const generateListItem = (): JSX.Element => {
@@ -40,17 +52,16 @@ const DeliveryAddressListItem = ({
           primary={
             <Stack direction={'row'} gap={2} sx={{ pb: '10px' }}>
               <Box>
-                {Address.Active && (
-                  <Chip
-                    label="Varsayılan"
-                    color="success"
-                    variant="outlined"
-                    sx={{ borderRadius: '2em' }}
-                    size="small"
-                  />
-                )}
-                <Typography fontWeight={'bold'}>{Address.AddressLine}</Typography>
-                <Typography fontWeight={'bold'}>
+                <Stack direction={'row'} spacing={1}>
+                  <Typography fontWeight={'bold'} variant="h5" color={theme.palette.primary.main}>
+                    {`#${Key}`}
+                  </Typography>
+                  {Address.Active && (
+                    <Chip label="Varsayılan" color="success" variant="outlined" size="small" />
+                  )}
+                </Stack>
+                <Typography>{Address.AddressLine}</Typography>
+                <Typography>
                   {`${Address.County} ${Address.City} ${Address.ZipCode} ${Address.Country}`}
                 </Typography>
               </Box>

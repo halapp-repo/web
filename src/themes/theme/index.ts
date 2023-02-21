@@ -3,7 +3,7 @@ import { PalettesProps } from '@ant-design/colors';
 // ==============================|| PRESET THEME - THEME SELECTOR ||============================== //
 
 const Theme = (colors: PalettesProps) => {
-  const { red, gold, cyan, green, grey } = colors;
+  const { red, gold, blue, green, grey } = colors;
   const greyColors = {
     0: grey[0],
     50: grey[1],
@@ -80,11 +80,11 @@ const Theme = (colors: PalettesProps) => {
       contrastText: greyColors[100]
     },
     info: {
-      lighter: cyan[0],
-      light: cyan[3],
-      main: cyan[5],
-      dark: cyan[7],
-      darker: cyan[9],
+      lighter: blue[0],
+      light: blue[3],
+      main: blue[5],
+      dark: blue[7],
+      darker: blue[9],
       contrastText
     },
     success: {

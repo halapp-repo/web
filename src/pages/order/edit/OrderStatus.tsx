@@ -11,7 +11,7 @@ const OrderStatus = ({ Order }: OrderStatusProps) => {
   return (
     <Grid container>
       <Grid item xs={2} sm={1}>
-        <UpdateOutlinedIcon />
+        <UpdateOutlinedIcon color="info" />
       </Grid>
       <Grid item xs={10} sm={11}>
         <Stack spacing={1}>

@@ -1,11 +1,20 @@
-import { Stack, ListItem, ListItemText, Typography, Divider, Button } from '@mui/material';
+import {
+  Stack,
+  ListItem,
+  ListItemText,
+  Typography,
+  Divider,
+  Button,
+  IconButton
+} from '@mui/material';
 import { useState } from 'react';
-import { CheckCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined } from '@ant-design/icons';
 import { UserListItemForm } from './UserListItemForm';
 import { useAppDispatch } from '../../../store/hooks';
 import { Organization } from '../../../models/organization';
 import { postOrganizationUser } from '../../../store/users/usersSlice';
 import { green } from '@mui/material/colors';
+import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 
 interface UserAddListItemProps {
   Organization: Organization;
@@ -63,7 +72,13 @@ const UserAddListItem = ({ Organization }: UserAddListItemProps) => {
     } else {
       return (
         <Stack direction={'row'} gap={2} sx={{ pb: '10px' }} justifyContent="center">
-          <PlusCircleOutlined style={{ fontSize: '32px' }} onClick={() => setEditMode(true)} />
+          <IconButton>
+            <ControlPointOutlinedIcon
+              color="info"
+              style={{ fontSize: '32px' }}
+              onClick={() => setEditMode(true)}
+            />
+          </IconButton>
         </Stack>
       );
     }

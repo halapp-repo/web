@@ -11,6 +11,7 @@ import { createOrder } from '../orders/ordersSlice';
 import { OrderStatusType } from '@halapp/common';
 import { DateRangeType } from '../../models/types/date-range.type';
 import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
+import { updateOrganization as organizationUpdateOrganization } from '../organizations/organizationsSlice';
 
 const initialState = {
   listing: {
@@ -176,6 +177,12 @@ const UISlice = createSlice({
     builder.addCase(createOrder.fulfilled, (state) => {
       state.checkout = {
         orderNote: ''
+      };
+    });
+    builder.addCase(organizationUpdateOrganization.fulfilled, (state) => {
+      state.organization = {
+        ...state.organization,
+        generalInfoEditMode: false
       };
     });
   }

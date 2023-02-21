@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { Box, Tabs, Tab, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  fetchOrganizations,
+  destroyOrganizationList,
+  fetchIndividualOrganization,
   selectIndividualOrganization,
   updateOrganization
 } from '../../../store/organizations/organizationsSlice';
@@ -44,14 +45,15 @@ const OrganizationEdit = () => {
   const { organizationId } = useParams();
   const dispatch = useAppDispatch();
   const { currentTab, generalInfoEditMode } = useAppSelector(selectUIOrganization);
-
   const organization = useAppSelector((state) =>
     selectIndividualOrganization(state, organizationId)
   );
 
   useEffect(() => {
-    if (!organization) {
-      dispatch(fetchOrganizations());
+    let destroyList = false;
+    if (!organization && organizationId) {
+      destroyList = true;
+      dispatch(fetchIndividualOrganization(organizationId));
     }
 
     return () => {
@@ -61,6 +63,9 @@ const OrganizationEdit = () => {
           generalInfoEditMode: false
         })
       );
+      if (destroyList) {
+        dispatch(destroyOrganizationList());
+      }
     };
   }, []);
 

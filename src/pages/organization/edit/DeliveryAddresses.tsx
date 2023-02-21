@@ -78,6 +78,7 @@ const DeliveryAddresses = ({ Organization }: DeliveryAddressesProps) => {
           <Divider />
           <DeliveryAddressListItem
             key={index}
+            Key={index + 1}
             Address={d}
             OnEditAddress={editAddress(index)}
             OnDeleteAddress={deleteAddress(index)}

@@ -9,10 +9,10 @@ import { AxiosError } from 'axios';
 import { signOut } from '../auth/authSlice';
 
 const initialState = {
-  Organizations: {
-    IsLoading: false
-  },
-  Enrollment: undefined
+  Organizations: {},
+  IsLoading: false,
+  Enrollment: undefined,
+  AdminList: {}
 } as OrganizationsState;
 
 export const fetchOrganizations = createAsyncThunk<Organization[], void, { state: RootState }>(
@@ -150,7 +150,11 @@ export const toggleOrganizationActivation = createAsyncThunk<
 const OrganizationsSlice = createSlice({
   name: 'organizations',
   initialState,
-  reducers: {},
+  reducers: {
+    destroyOrganizationList: (state: OrganizationsState) => {
+      state.Organizations = {};
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(signOut.fulfilled, (state) => {
       state.Organizations = undefined;
@@ -165,14 +169,31 @@ const OrganizationsSlice = createSlice({
 
       state.Organizations = {
         ...state.Organizations,
-        IsLoading: false,
-        List: [...(state.Organizations?.List || [])].map((l) => {
-          if (l.ID === organizationId) {
-            return organization;
-          }
-          return l;
-        })
+        ...(state.Organizations?.List
+          ? {
+              List: [...(state.Organizations?.List || [])].map((l) => {
+                if (l.ID === organizationId) {
+                  return organization;
+                }
+                return l;
+              })
+            }
+          : null)
       };
+      state.AdminList = {
+        ...state.AdminList,
+        ...(state.AdminList?.List
+          ? {
+              List: [...(state.AdminList?.List || [])].map((l) => {
+                if (l.ID === organizationId) {
+                  return organization;
+                }
+                return l;
+              })
+            }
+          : null)
+      };
+      state.IsLoading = false;
     });
 
     /**
@@ -182,14 +203,31 @@ const OrganizationsSlice = createSlice({
       const organization = action.payload;
       state.Organizations = {
         ...state.Organizations,
-        IsLoading: false,
-        List: [...(state.Organizations?.List || [])].map((l) => {
-          if (l.ID === organization.ID) {
-            return organization;
-          }
-          return l;
-        })
+        ...(state.Organizations?.List
+          ? {
+              List: [...(state.Organizations?.List || [])].map((l) => {
+                if (l.ID === organization.ID) {
+                  return organization;
+                }
+                return l;
+              })
+            }
+          : null)
       };
+      state.AdminList = {
+        ...state.AdminList,
+        ...(state.AdminList?.List
+          ? {
+              List: [...(state.AdminList?.List || [])].map((l) => {
+                if (l.ID === organization.ID) {
+                  return organization;
+                }
+                return l;
+              })
+            }
+          : null)
+      };
+      state.IsLoading = false;
     });
     /*
      * ADMIN / TOGGLE ACTIVATION
@@ -198,14 +236,31 @@ const OrganizationsSlice = createSlice({
       const { ID, Active } = action.meta.arg;
       state.Organizations = {
         ...state.Organizations,
-        IsLoading: false,
-        List: [...(state.Organizations?.List || [])].map((l) => {
-          if (l.ID === ID) {
-            l.Active = Active;
-          }
-          return l;
-        })
+        ...(state.Organizations?.List
+          ? {
+              List: [...(state.Organizations?.List || [])].map((l) => {
+                if (l.ID === ID) {
+                  l.Active = Active;
+                }
+                return l;
+              })
+            }
+          : null)
       };
+      state.AdminList = {
+        ...state.AdminList,
+        ...(state.AdminList?.List
+          ? {
+              List: [...(state.AdminList?.List || [])].map((l) => {
+                if (l.ID === ID) {
+                  l.Active = Active;
+                }
+                return l;
+              })
+            }
+          : null)
+      };
+      state.IsLoading = false;
     });
     /*
      *  FETCH ORGANIZATIONS
@@ -216,9 +271,9 @@ const OrganizationsSlice = createSlice({
         ...state,
         Organizations: {
           ...state.Organizations,
-          List: [...(data || [])],
-          IsLoading: false
-        }
+          List: [...(data || [])]
+        },
+        IsLoading: false
       };
       return state;
     });
@@ -226,42 +281,42 @@ const OrganizationsSlice = createSlice({
       state = {
         ...state,
         Organizations: {
-          ...state.Organizations,
-          IsLoading: true
-        }
+          ...state.Organizations
+        },
+        IsLoading: true
       };
       return state;
     });
     builder.addCase(fetchOrganizations.rejected, (state) => {
       state.Organizations = {
         ...state.Organizations,
-        List: [],
-        IsLoading: false
+        List: []
       };
+      state.IsLoading = false;
     });
     /*
      * ADMIN / FETCH ALL ORGANIZATIONS
      */
     builder.addCase(fetchAllOrganizations.fulfilled, (state, action) => {
       const data = action.payload;
-      state.Organizations = {
-        ...state.Organizations,
-        List: [...(data || [])],
-        IsLoading: false
+      state.AdminList = {
+        ...state.AdminList,
+        List: [...(data || [])]
       };
+      state.IsLoading = false;
     });
     builder.addCase(fetchAllOrganizations.pending, (state) => {
-      state.Organizations = {
-        ...state.Organizations,
-        IsLoading: true
+      state.AdminList = {
+        ...state.AdminList
       };
+      state.IsLoading = true;
     });
     builder.addCase(fetchAllOrganizations.rejected, (state) => {
-      state.Organizations = {
-        ...state.Organizations,
-        List: [],
-        IsLoading: false
+      state.AdminList = {
+        ...state.AdminList,
+        List: []
       };
+      state.IsLoading = false;
     });
     /*
      *  CREATE ENROLLMENT
@@ -290,30 +345,30 @@ const OrganizationsSlice = createSlice({
       const data = action.payload;
       state.Organizations = {
         ...state.Organizations,
-        List: [...(state.Organizations?.List || []), data],
-        IsLoading: false
+        List: [...(state.Organizations?.List || []), data]
       };
+      state.IsLoading = false;
     });
     builder.addCase(fetchIndividualOrganization.rejected, (state) => {
       state.Organizations = {
-        ...state.Organizations,
-        IsLoading: false
+        ...state.Organizations
       };
+      state.IsLoading = false;
     });
     builder.addCase(fetchIndividualOrganization.pending, (state) => {
       state.Organizations = {
-        ...state.Organizations,
-        IsLoading: true
+        ...state.Organizations
       };
+      state.IsLoading = true;
     });
   }
 });
+export const { destroyOrganizationList } = OrganizationsSlice.actions;
 
 export const selectOrganizations = createSelector(
   [(state: RootState) => state.organizations],
   (org: OrganizationsState) => org.Organizations
 );
-
 export const selectIndividualOrganization = createSelector(
   [
     (state: RootState) => state.organizations,
@@ -321,7 +376,10 @@ export const selectIndividualOrganization = createSelector(
   ],
   (org: OrganizationsState, orgId?: string) => {
     if (orgId) {
-      const organization = org.Organizations?.List?.find((o) => o.ID === orgId);
+      const organization = [
+        ...(org.Organizations?.List || []),
+        ...(org.AdminList?.List || [])
+      ].find((o) => o.ID === orgId);
       if (!organization) {
         return null;
       }
@@ -330,14 +388,17 @@ export const selectIndividualOrganization = createSelector(
     return null;
   }
 );
-
 export const selectOrganizationEnrollment = createSelector(
   [(state: RootState) => state.organizations],
   (org: OrganizationsState) => org.Enrollment
 );
 export const selectOrganizationIsLoading = createSelector(
   [(state: RootState) => state.organizations],
-  (org: OrganizationsState) => org.Organizations?.IsLoading
+  (org: OrganizationsState) => org.IsLoading
+);
+export const selectAdminList = createSelector(
+  [(state: RootState) => state.organizations],
+  (org: OrganizationsState) => org.AdminList.List
 );
 
 export default OrganizationsSlice.reducer;

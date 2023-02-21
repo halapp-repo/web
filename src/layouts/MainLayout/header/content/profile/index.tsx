@@ -65,6 +65,10 @@ const Profile = (props: ProfileProps) => {
     navigate('/admin/orders');
     setOpen(false);
   };
+  const handleOpenAdminOrganizationList = () => {
+    navigate('/admin/organizations');
+    setOpen(false);
+  };
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -136,31 +140,7 @@ const Profile = (props: ProfileProps) => {
                         </ListItemButton>
                       </ListItem>
                       <Divider component="li" />
-                      {isAdmin && (
-                        <>
-                          <ListItem disablePadding sx={{ color: '#8753de' }}>
-                            <ListItemButton onClick={handleOpenAdminOrderList}>
-                              <ListItemIcon sx={{ fontSize: '24px' }}>
-                                {location.pathname === '/admin/orders' ? (
-                                  <AdminPanelSettingsIcon sx={{ color: '#8753de' }} />
-                                ) : (
-                                  <AdminPanelSettingsOutlinedIcon sx={{ color: '#8753de' }} />
-                                )}
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={'Siparişler (admin)'}
-                                primaryTypographyProps={{
-                                  paddingLeft: '20px',
-                                  fontSize: '15px',
-                                  fontWeight:
-                                    location.pathname === '/admin/orders' ? 'bold' : 'inherit'
-                                }}
-                              />
-                            </ListItemButton>
-                          </ListItem>
-                          <Divider component="li" />
-                        </>
-                      )}
+
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleOpenOrderList}>
                           <ListItemIcon sx={{ fontSize: '24px' }}>
@@ -181,6 +161,54 @@ const Profile = (props: ProfileProps) => {
                         </ListItemButton>
                       </ListItem>
                       <Divider component="li" />
+                      {isAdmin && (
+                        <>
+                          <ListItem disablePadding sx={{ color: '#8753de' }}>
+                            <ListItemButton onClick={handleOpenAdminOrderList}>
+                              <ListItemIcon sx={{ fontSize: '24px' }}>
+                                {location.pathname === '/admin/orders' ? (
+                                  <AdminPanelSettingsIcon sx={{ color: '#8753de' }} />
+                                ) : (
+                                  <AdminPanelSettingsOutlinedIcon sx={{ color: '#8753de' }} />
+                                )}
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={'Orders (admin)'}
+                                primaryTypographyProps={{
+                                  paddingLeft: '20px',
+                                  fontSize: '15px',
+                                  fontWeight:
+                                    location.pathname === '/admin/orders' ? 'bold' : 'inherit'
+                                }}
+                              />
+                            </ListItemButton>
+                          </ListItem>
+                          <Divider component="li" />
+                          <ListItem disablePadding sx={{ color: '#8753de' }}>
+                            <ListItemButton onClick={handleOpenAdminOrganizationList}>
+                              <ListItemIcon sx={{ fontSize: '24px' }}>
+                                {location.pathname === '/admin/organizations' ? (
+                                  <AdminPanelSettingsIcon sx={{ color: '#8753de' }} />
+                                ) : (
+                                  <AdminPanelSettingsOutlinedIcon sx={{ color: '#8753de' }} />
+                                )}
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={'Organizations (admin)'}
+                                primaryTypographyProps={{
+                                  paddingLeft: '20px',
+                                  fontSize: '15px',
+                                  fontWeight:
+                                    location.pathname === '/admin/organizations'
+                                      ? 'bold'
+                                      : 'inherit'
+                                }}
+                              />
+                            </ListItemButton>
+                          </ListItem>
+                          <Divider component="li" />
+                        </>
+                      )}
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleSignOut}>
                           <ListItemIcon sx={{ fontSize: '24px' }}>

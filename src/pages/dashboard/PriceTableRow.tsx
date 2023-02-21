@@ -49,6 +49,7 @@ const PriceTableRow = ({ PriceListItem, OpenAnalyticsPanel }: PriceTableRowProps
         {PriceListItem.IsToday || PriceListItem.IsActive ? (
           <Button
             variant="text"
+            color="info"
             onClick={(e) => {
               e.stopPropagation();
               OpenAnalyticsPanel(e, PriceListItem.ProductId);
