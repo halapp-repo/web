@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import Logo from '../../../../components/logo/Logo';
 import LogoText from '../../../../components/logo/LogoText';
 import { useAppDispatch } from '../../../../store/hooks';
-import { updateListingSelectedDate, refreshPage } from '../../../../store/ui/uiSlice';
+import { refreshPage } from '../../../../store/ui/uiSlice';
 import NavigationButtons from './NavigationButtons';
 
 const HeaderContent = () => {
