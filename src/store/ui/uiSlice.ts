@@ -51,11 +51,6 @@ const UISlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    refreshPage: () => {
-      const url = new URL('/');
-      window.history.pushState({}, '', url);
-      window.location.reload();
-    },
     updateListingSelectedDate: (
       state: UIState,
       action: PayloadAction<string | undefined | null>
@@ -202,8 +197,7 @@ export const {
   toggleGlobalIsLoading,
   setOrdersFilter,
   toggleCity,
-  setOrdersAdminFilter,
-  refreshPage
+  setOrdersAdminFilter
 } = UISlice.actions;
 
 export const selectUIListingSelectedDate = createSelector(

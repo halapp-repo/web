@@ -1,19 +1,20 @@
 import { Box, Stack, useMediaQuery, Theme } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../../../components/logo/Logo';
 import LogoText from '../../../../components/logo/LogoText';
-import { useAppDispatch } from '../../../../store/hooks';
-import { refreshPage } from '../../../../store/ui/uiSlice';
 import NavigationButtons from './NavigationButtons';
 
 const HeaderContent = () => {
   const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   return (
     <>
       <NavLink
-        onClick={() => dispatch(refreshPage())}
+        onClick={() => {
+          navigate('/dashboard');
+          navigate(0);
+        }}
         to="/"
         // eslint-disable-next-line react/no-children-prop
         children={() => {
