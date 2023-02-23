@@ -19,6 +19,8 @@ import {
 import { DeliveryAddresses } from './DeliveryAddresses';
 import Information from './Information';
 import { Users } from './Users';
+import { selectUserAuth } from '../../../store/auth/authSlice';
+import { OrganizationAdminPanel } from './AdminPanel';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,6 +44,7 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const OrganizationEdit = () => {
+  const { isAdmin } = useAppSelector(selectUserAuth);
   const { organizationId } = useParams();
   const dispatch = useAppDispatch();
   const { currentTab, generalInfoEditMode } = useAppSelector(selectUIOrganization);
@@ -145,6 +148,14 @@ const OrganizationEdit = () => {
           </TabPanel>
         </PageWrapper>
       );
+    } else if (tab === 3) {
+      return (
+        <PageWrapper md={6} lg={5}>
+          <TabPanel value={2} index={2}>
+            <OrganizationAdminPanel Organization={organization} />
+          </TabPanel>
+        </PageWrapper>
+      );
     }
     throw new Error('Not Found Tab error');
   };
@@ -162,6 +173,7 @@ const OrganizationEdit = () => {
             <Tab label="Şirket Bilgisi" value={0} />
             <Tab label="Teslimat Adresleri" value={1} />
             <Tab label="Kullanıcılar" value={2} />
+            {isAdmin && <Tab label="Admin" value={3} />}
           </Tabs>
         </MainCard>
       </PageWrapper>

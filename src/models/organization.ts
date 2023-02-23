@@ -28,6 +28,9 @@ class Organization {
   Email?: string;
   PhoneNumber?: string;
   Active?: boolean;
+  // Balance section
+  Balance?: number;
+  UsedBalance?: number;
 
   @Type(() => OrganizationAddress)
   CompanyAddress?: OrganizationAddress;
@@ -55,7 +58,16 @@ class Organization {
     }
     return deliveryAddress;
   }
-
+  getBalanceAmount() {
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
+      this.Balance || 0
+    );
+  }
+  getRemainingBalanceAmount() {
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
+      (this.Balance || 0) - (this.UsedBalance || 0)
+    );
+  }
   setInvoiceAddress(addr?: OrganizationAddress): void {
     if (!addr) {
       return;
