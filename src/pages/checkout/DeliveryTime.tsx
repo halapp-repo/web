@@ -117,7 +117,7 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
         showToolbar={false}
         openTo="hours"
         views={['hours']}
-        inputFormat="dd.MM.yyyy ( HH:mm  + 1 )"
+        inputFormat="dd.MM.yyyy ( HH:mm )"
         value={shiftTimezoneDateToPickerDate(deliveryTime, 'Europe/Istanbul')}
         components={{
           OpenPickerIcon: ClockCircleOutlined

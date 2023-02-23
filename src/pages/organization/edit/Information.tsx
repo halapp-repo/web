@@ -97,7 +97,7 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
               </Grid>
               <Grid item xs={10}>
                 {Organization.areInvoiceAndCompanyAddressesSame() || (
-                  <Grid container>
+                  <Grid container spacing={2}>
                     <Grid item md={6}>
                       <Typography variant="body1" color="secondary" fontWeight={'bold'}>
                         {'Fatura Adresi'}
