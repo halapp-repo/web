@@ -8,7 +8,6 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useTheme } from '@mui/system';
-import { green } from '@mui/material/colors';
 
 interface InformationProps {
   Organization: Organization;
