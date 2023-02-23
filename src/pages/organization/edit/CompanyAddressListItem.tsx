@@ -33,13 +33,7 @@ const CompanyAddressListItem = ({
                   {`İşletme Adresi`}
                 </Typography>
                 {IsDefault && (
-                  <Chip
-                    label="Varsayılan"
-                    color="success"
-                    variant="outlined"
-                    sx={{ borderRadius: '2em' }}
-                    size="small"
-                  />
+                  <Chip label="Varsayılan" color="success" variant="outlined" size="small" />
                 )}
               </Box>
               <Typography>{Address.AddressLine}</Typography>

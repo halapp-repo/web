@@ -54,16 +54,18 @@ export class OrganizationsApi {
   }
   async toggleOrganizationActivation({
     isActive,
+    balance,
     organizationId,
     token
   }: {
     isActive: boolean;
+    balance: number;
     organizationId: string;
     token: string;
   }): Promise<void> {
     return await axios.put(
-      `/admin/organization/${organizationId}`,
-      { IsActive: isActive },
+      `/admin/organizations/${organizationId}/activation`,
+      { Activation: isActive, Balance: balance },
       {
         baseURL: this.baseUrl,
         headers: {
@@ -81,7 +83,7 @@ export class OrganizationsApi {
     organization: OrganizationDTO;
   }): Promise<Organization> {
     return await axios
-      .put<OrganizationDTO>(`/organization/${organization.ID}`, JSON.stringify(organization), {
+      .put<OrganizationDTO>(`/organizations/${organization.ID}`, JSON.stringify(organization), {
         baseURL: this.baseUrl,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -104,7 +106,7 @@ export class OrganizationsApi {
   }): Promise<Organization> {
     return await axios
       .post<OrganizationDTO>(
-        `/organization/${organizationId}/deliveryaddresses`,
+        `/organizations/${organizationId}/deliveryaddresses`,
         JSON.stringify({
           DeliveryAddresses: deliveryAddresses
         }),
@@ -129,7 +131,7 @@ export class OrganizationsApi {
     organizationId: string;
   }) {
     return await axios
-      .get<OrganizationDTO>(`/organization/${organizationId}`, {
+      .get<OrganizationDTO>(`/organizations/${organizationId}`, {
         baseURL: this.baseUrl,
         headers: {
           Authorization: `Bearer ${token}`,

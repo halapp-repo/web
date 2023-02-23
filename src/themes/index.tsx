@@ -55,6 +55,10 @@ export default function ThemeCustomization({ children }: Props) {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes}>
         <LocalizationProvider
+          localeText={{
+            cancelButtonLabel: 'iptal',
+            okButtonLabel: 'onay'
+          }}
           dateAdapter={AdapterDateFns}
           locale={trLocale}
           adapterLocale={trLocale}>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" style="enable-background:new 0 0 45 45;" xml:space="preserve" viewBox="2 9.4 39.6 29.6">
+<style type="text/css">
+	.st0-time6{fill:none;stroke:#4D79C8;stroke-width:4;stroke-miterlimit:10;}
+	.st1-time6{fill:#B0B4BA;stroke:#B0B4BA;stroke-width:3;stroke-miterlimit:10;}
+</style>
+<g id="Layer_8">
+	<path class="st0-time6" d="M39.6,25.7c0,6.2-5.1,11.3-11.3,11.3c-3.1,0-5.9-1.3-8-3.3c3.5-1.4,6.8-2.6,9.9-7.1c2.5-4.9,2.4-7.6,2.5-11.3   C36.8,17,39.6,21,39.6,25.7z"/>
+	<g>
+		<g>
+			<circle class="st1-time6" cx="8" cy="18.7" r="4.5"/>
+			<circle class="st1-time6" cx="19.9" cy="20.3" r="3"/>
+			<circle class="st1-time6" cx="13.2" cy="16.1" r="5.2"/>
+			<path class="st1-time6" d="M19.9,23.4H7.5c-1.3,0-2.4-1.1-2.4-2.4l0,0c0-1.3,1.1-2.4,2.4-2.4h12.4c1.3,0,2.4,1.1,2.4,2.4l0,0     C22.4,22.3,21.3,23.4,19.9,23.4z"/>
+		</g>
+	</g>
+</g>
+</svg>

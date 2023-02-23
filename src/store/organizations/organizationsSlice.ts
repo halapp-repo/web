@@ -4,7 +4,7 @@ import type { RootState } from '../index';
 import { Organization, OrganizationAddress } from '../../models/organization';
 import { OrganizationsApi } from './organizationsApi';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
-import { plainToClass } from 'class-transformer';
+import { instanceToInstance, plainToClass } from 'class-transformer';
 import { AxiosError } from 'axios';
 import { signOut } from '../auth/authSlice';
 
@@ -125,27 +125,33 @@ export const createOrganizationEnrollmentRequest = createAsyncThunk<void, Organi
 );
 export const toggleOrganizationActivation = createAsyncThunk<
   void,
-  Organization,
+  { OrganizationId: string; Activation: boolean; Balance: number },
   { state: RootState }
->('organization/toggleActivation', async (arg, { getState }): Promise<void> => {
-  const { userAuth } = getState().auth;
-  if (!userAuth.authenticated || !userAuth.idToken) {
-    throw new Error('Unauthenticated');
-  }
-  try {
-    return await new OrganizationsApi().toggleOrganizationActivation({
-      isActive: arg.Active!,
-      organizationId: arg.ID!,
-      token: userAuth.idToken
-    });
-  } catch (err) {
-    if (err instanceof AxiosError) {
-      throw new Error(JSON.stringify(err.response?.data || { message: 'Bilinmeyen hata olustu' }));
-    } else {
-      throw err;
+>(
+  'organization/toggleActivation',
+  async ({ OrganizationId, Activation, Balance }, { getState }): Promise<void> => {
+    const { userAuth } = getState().auth;
+    if (!userAuth.authenticated || !userAuth.idToken) {
+      throw new Error('Unauthenticated');
+    }
+    try {
+      return await new OrganizationsApi().toggleOrganizationActivation({
+        isActive: Activation,
+        balance: Balance,
+        organizationId: OrganizationId,
+        token: userAuth.idToken
+      });
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        throw new Error(
+          JSON.stringify(err.response?.data || { message: 'Bilinmeyen hata olustu' })
+        );
+      } else {
+        throw err;
+      }
     }
   }
-});
+);
 
 const OrganizationsSlice = createSlice({
   name: 'organizations',
@@ -233,16 +239,17 @@ const OrganizationsSlice = createSlice({
      * ADMIN / TOGGLE ACTIVATION
      */
     builder.addCase(toggleOrganizationActivation.fulfilled, (state, action) => {
-      const { ID, Active } = action.meta.arg;
+      const { Activation, Balance, OrganizationId } = action.meta.arg;
       state.Organizations = {
         ...state.Organizations,
         ...(state.Organizations?.List
           ? {
               List: [...(state.Organizations?.List || [])].map((l) => {
-                if (l.ID === ID) {
-                  l.Active = Active;
+                if (l.ID === OrganizationId) {
+                  l.Active = Activation;
+                  l.Balance = Balance;
                 }
-                return l;
+                return instanceToInstance(l);
               })
             }
           : null)
@@ -252,10 +259,11 @@ const OrganizationsSlice = createSlice({
         ...(state.AdminList?.List
           ? {
               List: [...(state.AdminList?.List || [])].map((l) => {
-                if (l.ID === ID) {
-                  l.Active = Active;
+                if (l.ID === OrganizationId) {
+                  l.Active = Activation;
+                  l.Balance = Balance;
                 }
-                return l;
+                return instanceToInstance(l);
               })
             }
           : null)

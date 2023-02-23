@@ -5,6 +5,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useTheme } from '@mui/system';
 
@@ -37,6 +38,28 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
                 )}
               </Grid>
             </Grid>
+            {Organization.Active && (
+              <Grid container>
+                <Grid item xs={2}>
+                  <AccountBalanceIcon color={'info'} />
+                </Grid>
+                <Grid item xs={10}>
+                  <Grid container>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="body1" color="secondary" fontWeight={'bold'}>
+                        {'Bakiye'}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        fontWeight={'bold'}
+                        color={theme.palette.info.main}>
+                        {Organization.getRemainingBalanceAmount()}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            )}
             <Grid container>
               <Grid item xs={2}>
                 <PhoneIcon color={'info'} />
@@ -60,7 +83,7 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
               <Grid item xs={10}>
                 <Stack direction={'row'} spacing={1}>
                   <Typography variant="body1" fontWeight={'bold'}>
-                    {Organization.JoinedUsers?.length}
+                    {Organization.JoinedUsers?.length || 0}
                   </Typography>
                   <Typography variant="body1" color="secondary" fontWeight={'bold'}>
                     {'Kullanıcı'}

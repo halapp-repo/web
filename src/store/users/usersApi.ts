@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance as axios } from '../../utils/axios';
 import { UserVM } from '@halapp/common';
 
 export class UsersApi {
@@ -20,7 +20,7 @@ export class UsersApi {
     organizationId: string;
   }): Promise<UserVM[]> {
     return await axios
-      .get<UserVM[]>(`/organization/${organizationId}/users`, {
+      .get<UserVM[]>(`/organizations/${organizationId}/users`, {
         baseURL: this.baseUrl,
         headers: {
           Authorization: `Bearer ${token}`
@@ -42,7 +42,7 @@ export class UsersApi {
   }): Promise<void> {
     return await axios
       .post(
-        `/organization/${organizationId}/users`,
+        `/organizations/${organizationId}/users`,
         { Email: email },
         {
           baseURL: this.baseUrl,

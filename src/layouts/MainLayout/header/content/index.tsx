@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import Logo from '../../../../components/logo/Logo';
 import LogoText from '../../../../components/logo/LogoText';
 import { useAppDispatch } from '../../../../store/hooks';
-import { updateListingSelectedDate } from '../../../../store/ui/uiSlice';
+import { updateListingSelectedDate, refreshPage } from '../../../../store/ui/uiSlice';
 import NavigationButtons from './NavigationButtons';
 
 const HeaderContent = () => {
@@ -13,7 +13,7 @@ const HeaderContent = () => {
   return (
     <>
       <NavLink
-        onClick={() => dispatch(updateListingSelectedDate())}
+        onClick={() => dispatch(refreshPage())}
         to="/"
         // eslint-disable-next-line react/no-children-prop
         children={() => {
