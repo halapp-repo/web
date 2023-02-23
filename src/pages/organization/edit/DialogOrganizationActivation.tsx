@@ -41,7 +41,6 @@ const DialogOrganizationActivation = ({
         OrganizationId: Organization.ID!
       })
     );
-    OnClose();
   };
 
   return (

@@ -69,7 +69,7 @@ const OrganizationAdminPanel = ({ Organization }: OrganizationAdminPanelProps) =
           setDialogOpen(false);
           setTimeout(() => {
             setActive(Organization.Active === true);
-          }, 500);
+          }, 100);
         }}
       />
     </>
