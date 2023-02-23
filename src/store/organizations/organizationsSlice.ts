@@ -263,7 +263,7 @@ const OrganizationsSlice = createSlice({
                   l.Active = Activation;
                   l.Balance = Balance;
                 }
-                return l;
+                return instanceToInstance(l);
               })
             }
           : null)
