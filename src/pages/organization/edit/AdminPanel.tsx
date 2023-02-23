@@ -1,9 +1,10 @@
-import { Stack, Grid, Switch, TextField, OutlinedInput, InputAdornment } from '@mui/material';
+import { Stack, Grid, Switch, OutlinedInput, InputAdornment } from '@mui/material';
 import { Organization } from '../../../models/organization';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { useState, useEffect } from 'react';
 import { DialogOrganizationActivation } from './DialogOrganizationActivation';
+import { blue } from '@mui/material/colors';
 
 interface OrganizationAdminPanelProps {
   Organization: Organization;
@@ -43,6 +44,12 @@ const OrganizationAdminPanel = ({ Organization }: OrganizationAdminPanelProps) =
               <OutlinedInput
                 type="number"
                 fullWidth
+                sx={{
+                  color: `${blue['A400']}!important`,
+                  '& .MuiInputBase-input.Mui-disabled': {
+                    WebkitTextFillColor: blue['A400']
+                  }
+                }}
                 startAdornment={<InputAdornment position="start">₺</InputAdornment>}
                 value={Organization.Balance || 0}
                 disabled
