@@ -1,6 +1,7 @@
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import { Typography, Grid, Stack } from '@mui/material';
 import { Order } from '../../../models/order';
+import { TimeOfDayIcon } from '../../../components/TimeOfDayIcon';
 
 interface OrderDatesProps {
   Order: Order;
@@ -11,7 +12,10 @@ const OrderDates = ({ Order }: OrderDatesProps) => {
   return (
     <Grid container>
       <Grid item xs={2} sm={1}>
-        <AccessTimeOutlinedIcon color="info" />
+        <Stack spacing={1}>
+          <AccessTimeOutlinedIcon color="info" />
+          <TimeOfDayIcon Time={Order.DeliveryTime} />
+        </Stack>
       </Grid>
       <Grid item xs={10} sm={11}>
         <Stack spacing={1}>

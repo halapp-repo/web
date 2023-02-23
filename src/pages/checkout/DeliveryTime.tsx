@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import moment from 'moment';
-import { Box, List, TextField, Typography } from '@mui/material';
+import { Box, List, TextField, Typography, InputAdornment } from '@mui/material';
 import { trMoment } from '../../utils/timezone';
 import { MobileTimePicker } from '@mui/x-date-pickers';
 import { ClockCircleOutlined } from '@ant-design/icons';
+import { TimeOfDayIcon } from '../../components/TimeOfDayIcon';
 
 const getDeliveryTime = (
   currentTime: moment.Moment,
@@ -116,7 +117,7 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
         showToolbar={false}
         openTo="hours"
         views={['hours']}
-        inputFormat="dd.MM.yyyy HH:mm"
+        inputFormat="dd.MM.yyyy ( HH:mm  + 1 )"
         value={shiftTimezoneDateToPickerDate(deliveryTime, 'Europe/Istanbul')}
         components={{
           OpenPickerIcon: ClockCircleOutlined
@@ -126,7 +127,21 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
             handleChangeDeliveryDate(newValue);
           }
         }}
-        renderInput={(params) => <TextField {...params} fullWidth />}
+        renderInput={(params) => {
+          return (
+            <TextField
+              {...params}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <TimeOfDayIcon Time={moment(params?.inputProps?.value, 'dd.MM.yyyy HH:mm')} />
+                  </InputAdornment>
+                )
+              }}
+              fullWidth
+            />
+          );
+        }}
       />
       <ul>
         <li>
