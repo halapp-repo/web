@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React, { useEffect, useState } from 'react';
-import { selectUICheckoutOrderNote, updateCheckoutOrderNote } from '../../store/ui/uiSlice';
+import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -37,13 +37,14 @@ interface OrderNoteProps {
 
 const OrderNote = ({ SetNote }: OrderNoteProps) => {
   const dispatch = useAppDispatch();
-  const [expanded, setExpanded] = React.useState(false);
-  const [orderNote, setOrderNote] = useState(useAppSelector(selectUICheckoutOrderNote) || '');
+  const { orderNote: note } = useAppSelector(selectUICheckout);
+  const [expanded, setExpanded] = React.useState(note ? true : false);
+  const [orderNote, setOrderNote] = useState(note);
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {
-      dispatch(updateCheckoutOrderNote(orderNote));
-      SetNote(orderNote);
+      dispatch(updateCheckout({ note: orderNote }));
+      SetNote(orderNote || '');
     }, 1000);
     return () => {
       clearTimeout(timeOutId);

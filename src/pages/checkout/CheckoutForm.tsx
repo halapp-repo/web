@@ -25,21 +25,21 @@ const InnerForm = (props: FormikProps<FormValues>) => {
     deliveryAddress: OrganizationAddress
   ): Promise<void> => {
     setFieldValue('organizationId', orgId, true);
-    setTimeout(() => setFieldTouched('organizationId', true), 500);
+    setTimeout(() => setFieldTouched('organizationId', true), 100);
     setFieldValue('deliveryAddress', deliveryAddress, true);
-    setTimeout(() => setFieldTouched('deliveryAddress', true), 500);
+    setTimeout(() => setFieldTouched('deliveryAddress', true), 100);
   };
   const handleSetNote = async (note: string): Promise<void> => {
     setFieldValue('orderNote', note);
-    setTimeout(() => setFieldTouched('orderNote', true), 500);
+    setTimeout(() => setFieldTouched('orderNote', true), 100);
   };
   const handleSetOrderItems = async (orderItems: OrderItemVM[]) => {
     setFieldValue('orderItems', orderItems, true);
-    setTimeout(() => setFieldTouched('orderItems', true), 500);
+    setTimeout(() => setFieldTouched('orderItems', true), 100);
   };
   const handleSetDeliveryTime = async (deliveryTime: string) => {
     setFieldValue('deliveryTime', deliveryTime);
-    setTimeout(() => setFieldTouched('deliveryTime', true), 500);
+    setTimeout(() => setFieldTouched('deliveryTime', true), 100);
   };
 
   return (

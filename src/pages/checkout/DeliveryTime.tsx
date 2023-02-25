@@ -5,6 +5,8 @@ import { trMoment } from '../../utils/timezone';
 import { MobileTimePicker } from '@mui/x-date-pickers';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { TimeOfDayIcon } from '../../components/TimeOfDayIcon';
+import { useAppDispatch } from '../../store/hooks';
+import { updateCheckout } from '../../store/ui/uiSlice';
 
 const getDeliveryTime = (
   currentTime: moment.Moment,
@@ -78,6 +80,7 @@ interface DeliveryTimeProps {
 }
 
 const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
+  const dispatch = useAppDispatch();
   const [deliveryTime, setDeliveryTime] = useState<string>(
     skipSunday(getDeliveryTime(trMoment())).format()
   );
@@ -85,6 +88,7 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
   useEffect(() => {
     if (deliveryTime) {
       SetDeliveryTime(deliveryTime);
+      dispatch(updateCheckout({ deliveryTime: deliveryTime }));
     }
   }, [deliveryTime]);
 
@@ -117,7 +121,7 @@ const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
         showToolbar={false}
         openTo="hours"
         views={['hours']}
-        inputFormat="dd.MM.yyyy ( HH:mm )"
+        inputFormat="dd.MM.yyyy (HH:mm)"
         value={shiftTimezoneDateToPickerDate(deliveryTime, 'Europe/Istanbul')}
         components={{
           OpenPickerIcon: ClockCircleOutlined

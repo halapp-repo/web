@@ -16,7 +16,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization, OrganizationAddress } from '../../models/organization';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { updateOrganization } from '../../store/ui/uiSlice';
+import { updateCheckout, updateOrganization } from '../../store/ui/uiSlice';
 import { instanceToInstance } from 'class-transformer';
 import { OrganizationsContext } from './OrganizationsContext';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
@@ -38,6 +38,7 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
     const cityOfOrganization = organization.getDeliveryAddress()?.City;
 
     if (areStringsEqual(cityOfOrganization, selectedCity)) {
+      dispatch(updateCheckout({ organizationId: organization.ID }));
       setSelectedOrganizationID(organization.ID!);
     }
   };

@@ -61,11 +61,11 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
           type="submit"
           variant="contained"
           disabled={IsValid}
-          sx={{ width: '100%', fontWeight: 'bold' }}>
-          {'Ürünleri gönder'}
+          sx={{ width: '100%', fontWeight: 'bold', textTransform: 'none' }}>
+          {'Kaydet ve Devam Et'}
         </Button>
         <Typography variant="body2" color="secondary">
-          Ürünleri Gönder tuşuna tıklayarak , HalApp{"'"}in{' '}
+          Kaydet ve Devam Et tuşuna tıklayarak , HalApp{"'"}in{' '}
           <Link to={'/privacy#gizlilik-politikasi'}>gizlilik politikası</Link> ve{' '}
           <Link to={'/privacy#kullanim-sartlari'}>kullanım şartlarını</Link> kabul etmektesin.
         </Typography>

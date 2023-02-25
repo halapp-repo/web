@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Stepper, Step, StepLabel, Grid, StepButton } from '@mui/material';
 import { OrganizationAddress } from '../../models/organization';
 import { CheckoutForm } from './CheckoutForm';
 import { createOrder } from '../../store/orders/ordersSlice';
@@ -15,6 +16,11 @@ import { useNavigate } from 'react-router-dom';
 import { OrderItemVM, OrderVM } from '@halapp/common';
 
 const Checkout = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [completed, setCompleted] = useState<{
+    [k: number]: boolean;
+  }>({});
+  const [creatingOrder, setCreatingOrder] = useState<OrderVM | null>(null);
   const organizations = useAppSelector(selectOrganizations);
   const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
   const dispatch = useAppDispatch();
@@ -30,35 +36,54 @@ const Checkout = () => {
     }
   }, []);
 
-  const handleOnsubmit = async (
+  const handleMoveToPayment = async (
     orderNote: string,
     organizationId: string,
     deliveryAddress: OrganizationAddress,
     orderItems: OrderItemVM[],
     deliveryTime: string
   ): Promise<void> => {
-    await dispatch(
-      createOrder({
-        Id: '0',
-        Status: '',
-        CreatedBy: '',
-        CreatedDate: '',
-        DeliveryAddress: deliveryAddress,
-        Items: orderItems,
-        OrganizationId: organizationId,
-        Note: orderNote,
-        TS: trMoment().format(),
-        DeliveryTime: deliveryTime
-      } as OrderVM)
-    );
-
-    navigate('/orders');
+    setCreatingOrder({
+      Id: '0',
+      Status: '',
+      CreatedBy: '',
+      CreatedDate: '',
+      DeliveryAddress: deliveryAddress,
+      Items: orderItems,
+      OrganizationId: organizationId,
+      Note: orderNote,
+      TS: trMoment().format(),
+      DeliveryTime: deliveryTime
+    } as OrderVM);
+    setCompleted({
+      0: true,
+      1: false
+    });
+    setActiveStep(1);
   };
 
   return (
     <OrganizationsContext.Provider value={organizations?.List || []}>
       {organizationIsLoading && <Overlay />}
-      <CheckoutForm onSubmit={handleOnsubmit} />
+      <Grid container rowSpacing={4.5} justifyContent="left" columnSpacing={2.75} alignItems="left">
+        <Grid item xs={12} sm={12} md={6}>
+          <Stepper activeStep={activeStep} alternativeLabel>
+            <Step key={'shipping'} completed={completed[0]}>
+              <StepButton
+                onClick={() => {
+                  setActiveStep(0);
+                }}>
+                {'Teslimat'}
+              </StepButton>
+            </Step>
+            <Step key={'payment'} completed={completed[1]}>
+              <StepLabel>{'Ödeme'}</StepLabel>
+            </Step>
+          </Stepper>
+        </Grid>
+      </Grid>
+
+      <CheckoutForm onSubmit={handleMoveToPayment} />
     </OrganizationsContext.Provider>
   );
 };
