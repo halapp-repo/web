@@ -5,8 +5,8 @@ import { trMoment } from '../../utils/timezone';
 import { MobileTimePicker } from '@mui/x-date-pickers';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { TimeOfDayIcon } from '../../components/TimeOfDayIcon';
-import { useAppDispatch } from '../../store/hooks';
-import { updateCheckout } from '../../store/ui/uiSlice';
+import { selectUICheckout } from '../../store/ui/uiSlice';
+import { useAppSelector } from '../../store/hooks';
 
 const getDeliveryTime = (
   currentTime: moment.Moment,
@@ -80,15 +80,30 @@ interface DeliveryTimeProps {
 }
 
 const DeliveryTime = ({ SetDeliveryTime }: DeliveryTimeProps) => {
-  const dispatch = useAppDispatch();
-  const [deliveryTime, setDeliveryTime] = useState<string>(
-    skipSunday(getDeliveryTime(trMoment())).format()
-  );
+  const initializeTime = (savedDeliveryTime: string | undefined): string => {
+    if (savedDeliveryTime) {
+      const savedMoment = trMoment(savedDeliveryTime);
+      if (savedMoment.add(-3, 'hours').isAfter(trMoment())) {
+        return savedDeliveryTime;
+      }
+    }
+    return skipSunday(getDeliveryTime(trMoment())).format();
+  };
+  const { deliveryTime: savedDeliveryTime } = useAppSelector(selectUICheckout);
+  const [deliveryTime, setDeliveryTime] = useState<string>(initializeTime(savedDeliveryTime));
+
+  useEffect(() => {
+    if (savedDeliveryTime) {
+      const savedMoment = trMoment(savedDeliveryTime);
+      if (savedMoment.add(-3, 'hours').isAfter(trMoment())) {
+        SetDeliveryTime(savedDeliveryTime);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (deliveryTime) {
       SetDeliveryTime(deliveryTime);
-      dispatch(updateCheckout({ deliveryTime: deliveryTime }));
     }
   }, [deliveryTime]);
 

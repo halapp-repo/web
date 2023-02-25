@@ -14,6 +14,8 @@ import {
 import { Overlay } from '../../components/Overlay';
 import { useNavigate } from 'react-router-dom';
 import { OrderItemVM, OrderVM } from '@halapp/common';
+import { updateCheckout } from '../../store/ui/uiSlice';
+import { PaymentForm } from './PaymentForm';
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -59,7 +61,17 @@ const Checkout = () => {
       0: true,
       1: false
     });
+    dispatch(
+      updateCheckout({
+        deliveryTime: deliveryTime,
+        note: orderNote,
+        organizationId: organizationId
+      })
+    );
     setActiveStep(1);
+  };
+  const handlePayment = async (): Promise<void> => {
+    //
   };
 
   return (
@@ -82,8 +94,8 @@ const Checkout = () => {
           </Stepper>
         </Grid>
       </Grid>
-
-      <CheckoutForm onSubmit={handleMoveToPayment} />
+      {activeStep === 0 && <CheckoutForm onSubmit={handleMoveToPayment} />}
+      {activeStep === 1 && <PaymentForm onSubmit={handlePayment} />}
     </OrganizationsContext.Provider>
   );
 };
