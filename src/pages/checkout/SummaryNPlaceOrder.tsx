@@ -1,5 +1,15 @@
-import { Stack, Box, Button, Typography, Divider } from '@mui/material';
-import { useEffect } from 'react';
+import {
+  Stack,
+  Box,
+  Button,
+  Typography,
+  Divider,
+  ButtonBase,
+  List,
+  ListItem,
+  ListItemText
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 import { ProductType, OrderItemVM } from '@halapp/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
@@ -8,6 +18,8 @@ import { toggleShoppingCart } from '../../store/ui/uiSlice';
 import { trMoment } from '../../utils/timezone';
 import { Link } from 'react-router-dom';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
@@ -17,6 +29,7 @@ interface SummaryNPlaceOrderProps {
 
 const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
   const dispatch = useAppDispatch();
+  const [showAllItems, setShowAllItems] = useState<boolean>(false);
   const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
   const selectedCity = useAppSelector(selectSelectedCity);
   const deliveryTime = trMoment(DeliveryTime).clone();
@@ -75,10 +88,44 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
         <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }}>
           {'Teslimat özeti'}
         </Typography>
-        <Stack direction={'row'} justifyContent="space-between">
-          <Typography variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
-          <Typography variant="body2">{`${ShoppingCart.TotalAmount}`}</Typography>
-        </Stack>
+        <ButtonBase
+          sx={{ width: '100%', display: 'block' }}
+          onClick={() => {
+            setShowAllItems(!showAllItems);
+          }}>
+          <Stack direction={'row'} justifyContent="space-between">
+            <Stack direction={'row'}>
+              <Typography variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
+              {showAllItems ? (
+                <ArrowDropDownIcon fontSize="small" />
+              ) : (
+                <ArrowDropUpIcon fontSize="small" />
+              )}
+            </Stack>
+            <Typography variant="body2">{`${ShoppingCart.TotalAmount}`}</Typography>
+          </Stack>
+          {showAllItems && (
+            <List>
+              {ShoppingCart.Items.map((i) => (
+                <ListItem key={i.ProductId}>
+                  <ListItemText
+                    primary={
+                      <Stack direction={'row'} justifyContent="space-between">
+                        <Typography variant="body2">{i.Name}</Typography>
+                        <Typography variant="body2">{i.TotalAmount}</Typography>
+                      </Stack>
+                    }
+                    secondary={
+                      <Typography
+                        color="secondary"
+                        variant="body2">{`${i.UnitAmount} x ${i.Count}`}</Typography>
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </ButtonBase>
         <Stack direction={'row'} justifyContent="space-between">
           <Typography variant="body2">{`Taşıma ve nakliye:`}</Typography>
           <Typography variant="body2" color="primary">{`Ücretsiz`}</Typography>
