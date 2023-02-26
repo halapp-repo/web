@@ -51,7 +51,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
       <Grid item xs={12}>
         <Stack spacing={2}>
           <Typography variant="h4" color="text.primary" fontWeight="bold">
-            {`Şirketinizi HalApp'e Ekleyin`}
+            {`Şirketinizi halapp'e Ekleyin`}
           </Typography>
           <Form
             onKeyPress={(e) => {
@@ -135,7 +135,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               </Button>
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Typography variant="body1">{"HalApp'e üyeyseniz"}</Typography>
+                <Typography variant="body1">{"halapp'e üyeyseniz"}</Typography>
                 <Button variant="text" component={RouterLink} to="/auth/signin">
                   {'Giris yap'}
                 </Button>

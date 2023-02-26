@@ -1,27 +1,35 @@
-import { Box, Grid, Stack, Typography, useMediaQuery, Theme } from '@mui/material';
+import { Box, Grid, Stack, Typography, Button } from '@mui/material';
 import Icon404 from '../../components/icons/Icon404';
+import { Link } from 'react-router-dom';
+import MainCard from '../../components/MainCard';
 
 const NotFound = () => {
-  const matchesSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   return (
-    <Grid
-      container
-      rowSpacing={4.5}
-      justifyContent="center"
-      columnSpacing={2.75}
-      alignItems="center">
-      <Grid item xs={12} sm={6} md={4}>
-        <Stack direction={'column'} spacing={2} justifyContent="center" alignItems={'center'}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Typography
-              variant="h3"
-              color="text.secondary"
-              sx={{ fontSize: matchesSM ? '8em' : '12em' }}>
-              {'404'}
+    <Grid container justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
+      <Grid item xs={12} sm={6} md={4} justifyContent="center">
+        <MainCard>
+          <Stack
+            direction={'column'}
+            spacing={2}
+            justifyContent="center"
+            alignItems={'center'}
+            sx={{ padding: '10px 20px' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Typography variant="h3" color="text.secondary" sx={{ fontSize: '8em' }}>
+                {'404'}
+              </Typography>
+            </Box>
+            <Button component={Link} to={`/dashboard`}>
+              <Icon404 Size={'x-large'} />
+            </Button>
+            <Typography variant="h4">{'Hay aksi, burada görülecek bir şey yok. 😔'}</Typography>
+            <Typography variant="body1">
+              {
+                'Üzgünüz, aradığınız sayfayı bulamadık ya da sayfa artık mevcut değil. Kırık kasanın üstüne basarak tamir edebilir ve ana sayfaya geri dönebilirsin.'
+              }
             </Typography>
-          </Box>
-          <Icon404 Size={matchesSM ? 'large' : 'xx-large'} />
-        </Stack>
+          </Stack>
+        </MainCard>
       </Grid>
     </Grid>
   );

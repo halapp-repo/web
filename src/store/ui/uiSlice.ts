@@ -96,8 +96,22 @@ const UISlice = createSlice({
           : null)
       };
     },
-    updateCheckoutOrderNote: (state: UIState, action: PayloadAction<string>) => {
-      state.checkout.orderNote = action.payload;
+    updateCheckout: (
+      state: UIState,
+      action: PayloadAction<{ note?: string; organizationId?: string; deliveryTime?: string }>
+    ) => {
+      state.checkout = {
+        ...state.checkout,
+        ...(typeof action.payload.note !== 'undefined' ? { orderNote: action.payload.note } : null),
+        ...(typeof action.payload.organizationId !== 'undefined'
+          ? {
+              organizationId: action.payload.organizationId
+            }
+          : null),
+        ...(typeof action.payload.deliveryTime !== 'undefined'
+          ? { deliveryTime: action.payload.deliveryTime }
+          : null)
+      };
     },
     toggleGlobalIsLoading: (state: UIState, action: PayloadAction<boolean>) => {
       state.global.isLoading = action.payload;
@@ -193,7 +207,7 @@ export const {
   updateListingProductNameFilter,
   toggleShoppingCart,
   updateOrganization,
-  updateCheckoutOrderNote,
+  updateCheckout,
   toggleGlobalIsLoading,
   setOrdersFilter,
   toggleCity,
@@ -228,9 +242,9 @@ export const selectUIOrganization = createSelector(
   (state: RootState) => state.ui,
   (state: UIState) => state.organization
 );
-export const selectUICheckoutOrderNote = createSelector(
+export const selectUICheckout = createSelector(
   (state: RootState) => state.ui,
-  (state: UIState) => state.checkout.orderNote
+  (state: UIState) => state.checkout
 );
 export const selectOrdersFilter = createSelector(
   (state: RootState) => state.ui,

@@ -23,7 +23,9 @@ export interface UIState {
     generalInfoEditMode: boolean;
   };
   checkout: {
-    orderNote: string;
+    organizationId?: string;
+    deliveryTime?: string;
+    orderNote?: string;
   };
   orders: {
     filter: OrderStatusType | moment.Moment | undefined;

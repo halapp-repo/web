@@ -18,7 +18,7 @@ const SignUpWithoutCompanyCode = () => {
 
       <Box sx={{ p: { xs: 2, sm: 2, md: 3, xl: 5 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Typography variant="body1">{"HalApp'e üyeyseniz"}</Typography>
+          <Typography variant="body1">{"halapp'e üyeyseniz"}</Typography>
           <Button variant="text" component={RouterLink} to="/auth/signin">
             {'Giris yap'}
           </Button>

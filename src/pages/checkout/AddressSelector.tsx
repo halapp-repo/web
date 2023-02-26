@@ -16,7 +16,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization, OrganizationAddress } from '../../models/organization';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { updateOrganization } from '../../store/ui/uiSlice';
+import { selectUICheckout, updateOrganization } from '../../store/ui/uiSlice';
 import { instanceToInstance } from 'class-transformer';
 import { OrganizationsContext } from './OrganizationsContext';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
@@ -31,6 +31,7 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { organizationId: savedOrganizationId } = useAppSelector(selectUICheckout);
   const selectedCity = useAppSelector(selectSelectedCity);
   const [selectedOrganizationID, setSelectedOrganizationID] = useState<string | null>(null);
 
@@ -47,6 +48,10 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
       const activeOrg = organizations?.filter((o) => o.Active === true);
       if (activeOrg?.length === 1) {
         updateSelectedOrganizationId(activeOrg[0]);
+      }
+      if (savedOrganizationId && organizations.map((o) => o.ID).includes(savedOrganizationId)) {
+        const selectedOrg = organizations.find((o) => o.ID == savedOrganizationId);
+        selectedOrg && updateSelectedOrganizationId(selectedOrg);
       }
     }
   }, [organizations]);

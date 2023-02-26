@@ -54,7 +54,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               </Button>
               <Box sx={{ height: '50px' }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Typography variant="body1">{"HalApp'e üyeyseniz"}</Typography>
+                <Typography variant="body1">{"halapp'e üyeyseniz"}</Typography>
                 <Button variant="text" component={RouterLink} to="/auth/signin">
                   {'Giris yap'}
                 </Button>
