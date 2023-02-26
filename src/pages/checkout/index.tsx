@@ -26,7 +26,7 @@ const Checkout = () => {
   const organizations = useAppSelector(selectOrganizations);
   const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     if (

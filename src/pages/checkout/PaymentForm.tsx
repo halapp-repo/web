@@ -1,4 +1,4 @@
-import { Grid, RadioGroup, Typography, FormControlLabel, Radio, Box, List } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { withFormik, FormikProps, Form } from 'formik';
 import * as Yup from 'yup';
 import MainCard from '../../components/MainCard';
@@ -16,25 +16,13 @@ const InnerForm = (props: FormikProps<FormValues>) => {
       <Grid container rowSpacing={4.5} justifyContent="left" columnSpacing={2.75} alignItems="left">
         <Grid item xs={12} sm={12} md={6}>
           <MainCard sx={{ mt: 2, p: 2 }}>
-            <RadioGroup
-              aria-labelledby="demo-controlled-radio-buttons-group"
-              name="controlled-radio-buttons-group"
-              value={'female'}
-              onChange={() => {
-                //
-              }}>
-              <FormControlLabel
-                checked={true}
-                value="female"
-                control={<Radio />}
-                label={<Box>{'XXX'}</Box>}
-              />
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
-            </RadioGroup>
+            <Box></Box>
           </MainCard>
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3}>
-          {'YYY'}
+          <MainCard sx={{ mt: 2, p: 2 }}>
+            <Box></Box>
+          </MainCard>
         </Grid>
       </Grid>
     </Form>

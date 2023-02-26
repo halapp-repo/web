@@ -22,7 +22,7 @@ const HeaderContent = () => {
               <Logo />
               {matchesSm || (
                 <Box sx={{ mt: '15px' }}>
-                  <LogoText Size="medium" />
+                  <LogoText />
                 </Box>
               )}
             </Stack>
