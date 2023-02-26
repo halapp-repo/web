@@ -1,14 +1,13 @@
-import { Box, Grid, Stack, Typography, Button, useMediaQuery, Theme } from '@mui/material';
+import { Box, Grid, Stack, Typography, Button } from '@mui/material';
 import Icon404 from '../../components/icons/Icon404';
 import { Link } from 'react-router-dom';
 import MainCard from '../../components/MainCard';
 
 const NotFound = () => {
-  const matchesSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   return (
-    <Grid container justifyContent="center" alignItems="center">
+    <Grid container justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
       <Grid item xs={12} sm={6} md={4} justifyContent="center">
-        <MainCard sx={{ marginTop: !matchesSM ? '20px' : '0px' }}>
+        <MainCard>
           <Stack
             direction={'column'}
             spacing={2}

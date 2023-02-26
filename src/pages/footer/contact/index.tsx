@@ -18,7 +18,7 @@ const Contact = () => {
             <Logo Size="large" />
           </Box>
           <Typography color="primary" variant="h3">
-            {'HalApp İletişim Merkezi'}
+            {'halapp İletişim Merkezi'}
           </Typography>
           <Typography sx={{ display: 'inline' }} variant="h5">
             {'7/24 '}
@@ -36,7 +36,7 @@ const Contact = () => {
               component={Link}>
               <Typography color="primary" variant="h5">{`info@halapp.io`}</Typography>
             </Button>
-            {' adresine email gönderebilir veya HalApp hakkında merak ettikleriniz için '}
+            {' adresine email gönderebilir veya halapp hakkında merak ettikleriniz için '}
             <Button
               color="primary"
               sx={{ textTransform: 'none' }}

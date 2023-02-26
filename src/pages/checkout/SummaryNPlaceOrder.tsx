@@ -78,7 +78,7 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
           {'Kaydet ve Devam Et'}
         </Button>
         <Typography variant="body2" color="secondary">
-          Kaydet ve Devam Et tuşuna tıklayarak , HalApp{"'"}in{' '}
+          Kaydet ve Devam Et tuşuna tıklayarak , halapp{"'"}in{' '}
           <Link to={'/privacy#gizlilik-politikasi'}>gizlilik politikası</Link> ve{' '}
           <Link to={'/privacy#kullanim-sartlari'}>kullanım şartlarını</Link> kabul etmektesin.
         </Typography>

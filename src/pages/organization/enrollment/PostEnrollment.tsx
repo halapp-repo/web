@@ -33,7 +33,7 @@ const PostEnrollment = () => {
  
         Teşekkürler 
  
-        HalApp`}
+        halapp`}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Typography variant="body1">{'Bu arada fiyatlarımıza bakabilirsiniz '}</Typography>

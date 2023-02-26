@@ -17,7 +17,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
       <Grid item xs={12}>
         <Stack spacing={2}>
           <Typography variant="h4" color="text.primary" fontWeight="bold">
-            {`Şirketinizi HalApp'e Ekleyin`}
+            {`Şirketinizi halapp'e Ekleyin`}
           </Typography>
           <Form
             onKeyPress={(e) => {

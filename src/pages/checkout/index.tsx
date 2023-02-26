@@ -82,6 +82,7 @@ const Checkout = () => {
           <Stepper activeStep={activeStep} alternativeLabel>
             <Step key={'shipping'} completed={completed[0]}>
               <StepButton
+                sx={{ padding: '0', margin: '0' }}
                 onClick={() => {
                   setActiveStep(0);
                 }}>
