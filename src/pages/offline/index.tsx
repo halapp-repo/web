@@ -29,7 +29,6 @@ const Offline = () => {
               <ul>
                 <li>{'Uçak modunu kapat.'}</li>
                 <li>{'Wi-Fi veya Mobil verini aç.'}</li>
-                <li>{'Sinyalleri gözden geçir.'}</li>
               </ul>
             </Stack>
           </Stack>
