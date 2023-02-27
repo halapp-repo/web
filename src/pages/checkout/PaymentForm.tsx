@@ -61,7 +61,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               />
             </Tabs>
             <TabPanel value={activeStep} index={PaymentType.card}>
-              <Box>
+              <Box sx={{ p: 1 }}>
                 <CardInformation />
               </Box>
             </TabPanel>
