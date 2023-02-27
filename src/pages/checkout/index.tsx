@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { Stepper, Step, StepLabel, Grid, StepButton } from '@mui/material';
 import { OrganizationAddress } from '../../models/organization';

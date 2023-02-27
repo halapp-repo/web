@@ -3,7 +3,7 @@ import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import { UIState } from './uiState';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { ProductType } from '@halapp/common';
+import { PaymentType, ProductType } from '@halapp/common';
 import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
@@ -33,7 +33,8 @@ const initialState = {
     generalInfoEditMode: false
   },
   checkout: {
-    orderNote: ''
+    orderNote: '',
+    paymentMethod: PaymentType.card
   },
   orders: {
     filter: undefined,
@@ -98,7 +99,12 @@ const UISlice = createSlice({
     },
     updateCheckout: (
       state: UIState,
-      action: PayloadAction<{ note?: string; organizationId?: string; deliveryTime?: string }>
+      action: PayloadAction<{
+        note?: string;
+        organizationId?: string;
+        deliveryTime?: string;
+        paymentMethod?: PaymentType;
+      }>
     ) => {
       state.checkout = {
         ...state.checkout,
@@ -110,6 +116,11 @@ const UISlice = createSlice({
           : null),
         ...(typeof action.payload.deliveryTime !== 'undefined'
           ? { deliveryTime: action.payload.deliveryTime }
+          : null),
+        ...(typeof action.payload.paymentMethod !== 'undefined'
+          ? {
+              paymentMethod: action.payload.paymentMethod
+            }
           : null)
       };
     },
@@ -190,7 +201,10 @@ const UISlice = createSlice({
     });
     builder.addCase(createOrder.fulfilled, (state) => {
       state.checkout = {
-        orderNote: ''
+        orderNote: '',
+        organizationId: undefined,
+        paymentMethod: PaymentType.card,
+        deliveryTime: undefined
       };
     });
     builder.addCase(organizationUpdateOrganization.fulfilled, (state) => {
