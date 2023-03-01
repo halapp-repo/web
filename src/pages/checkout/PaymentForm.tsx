@@ -16,6 +16,7 @@ import { cardValidationSchema } from './PaymentFormValidation';
 interface FormValues {
   step: PaymentType;
   cardNumber: string;
+  approvedContract: boolean;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -31,6 +32,10 @@ const InnerForm = (props: FormikProps<FormValues>) => {
   const handleSetCardNumberField = async (cardNumber: string): Promise<void> => {
     setFieldValue('cardNumber', cardNumber.replace(/\s/g, ''));
     setTimeout(() => setFieldTouched('cardNumber', true), 100);
+  };
+  const handleSetApprovedContract = async (value: boolean): Promise<void> => {
+    setFieldValue('approvedContract', value);
+    setTimeout(() => setFieldTouched('approvedContract', true), 100);
   };
   useEffect(() => {
     setFieldValue('step', activeStep, true);
@@ -82,7 +87,10 @@ const InnerForm = (props: FormikProps<FormValues>) => {
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <MainCard sx={{ mt: 2, p: 2 }}>
-            <SummaryNPay IsDisable={isSubmitting || !isValid} />
+            <SummaryNPay
+              IsDisable={isSubmitting || !isValid}
+              SetChangeApprovedContractField={handleSetApprovedContract}
+            />
           </MainCard>
         </Grid>
       </Grid>

@@ -70,7 +70,13 @@ const DialogOrganizationActivation = ({
             {'You are about to change of activation and balance of organization.'}
           </Typography>
           <Typography variant="body2" color="primary">
-            {`Min balance is ₺${MIN_BALANCE}, and  Max Balance ₺${MAX_BALANCE}`}
+            {`Min balance is ${new Intl.NumberFormat('tr-TR', {
+              style: 'currency',
+              currency: 'TRY'
+            }).format(MIN_BALANCE)}, and  Max Balance ${new Intl.NumberFormat('tr-TR', {
+              style: 'currency',
+              currency: 'TRY'
+            }).format(MAX_BALANCE)}`}
           </Typography>
           <OutlinedInput
             type="number"

@@ -11,10 +11,10 @@ import {
   Tooltip,
   Box,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
+  SelectChangeEvent
 } from '@mui/material';
-import { IMaskInput } from 'react-imask';
-import { useState, forwardRef, ReactElement } from 'react';
+import { useState } from 'react';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { creditCardType } from '../../utils/credit-card';
 import Visa from '../../components/icons/credit-cards/Visa';
@@ -24,36 +24,11 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import { debounce } from '@mui/material/utils';
 import { ErrorMessage } from 'formik';
+import { CreditCardMask } from '../../components/form/CreditCardMask';
+import { useAppDispatch } from '../../store/hooks';
 
 const YEAR = new Date().getFullYear();
-interface CustomProps {
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-  value: string;
-}
 
-const TextMaskCustom = forwardRef<ReactElement, CustomProps>(function TextMaskCustom(props, ref) {
-  const { onChange, value, ...other } = props;
-  const type = creditCardType(value.replace(/\s/g, ''));
-  return (
-    <IMaskInput
-      {...other}
-      mask={
-        typeof type === 'undefined' || type === 'VISA' || type === 'MASTERCARD'
-          ? '0000 0000 0000 0000'
-          : '0000 000000 00000'
-      }
-      definitions={{
-        '#': /[1-9]/
-      }}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      inputRef={ref as any}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
-      overwrite
-    />
-  );
-});
 const getCreditCardIcon = (cardNumber: string) => {
   const str = creditCardType(cardNumber.replace(/\s/g, ''));
   if (str === 'VISA') {
@@ -71,12 +46,34 @@ interface CardInformationProps {
 }
 
 const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
+  const dispatch = useAppDispatch();
   const [cardNumber, setCardNumber] = useState<string>('');
+  const [month, setMonth] = useState<string>('');
+  const [year, setYear] = useState<string>('');
+  const [cvv, setCvv] = useState<string>('');
+  const [paySecure, setPaySecure] = useState<boolean>(false);
   const debouncedSetCardNumberField = debounce(SetCardNumberField, 300);
+  const debouncedDispatch = debounce(dispatch, 300);
+
   const handleChangeCardNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setCardNumber(value);
     debouncedSetCardNumberField(value);
+  };
+  const handleChangeCVV = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCvv(value);
+  };
+  const handleChangeMonth = (e: SelectChangeEvent) => {
+    const value = e.target.value;
+    setMonth(value);
+  };
+  const handleChangeYear = (e: SelectChangeEvent) => {
+    const value = e.target.value;
+    setYear(value);
+  };
+  const handleChangePaySecure = (e: React.SyntheticEvent<Element, Event>, checked: boolean) => {
+    setPaySecure(checked);
   };
   return (
     <Grid container spacing={1}>
@@ -92,7 +89,7 @@ const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
             onChange={handleChangeCardNumber}
             InputProps={{
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              inputComponent: TextMaskCustom as any,
+              inputComponent: CreditCardMask as any,
               startAdornment: (
                 <InputAdornment position="start">{getCreditCardIcon(cardNumber)}</InputAdornment>
               )
@@ -120,14 +117,14 @@ const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
                   <Select
                     labelId="month-helper-label"
                     id="month-select"
-                    onChange={() => {
-                      //
-                    }}>
+                    value={month}
+                    onChange={handleChangeMonth}>
                     {[...Array(12).keys()].map((n) => {
                       const val = n + 1;
+                      const valKey = `${val}`.padStart(2, '0');
                       return (
-                        <MenuItem key={n} value={val}>
-                          {`${val}`.padStart(2, '0')}
+                        <MenuItem key={n} value={valKey}>
+                          {valKey}
                         </MenuItem>
                       );
                     })}
@@ -144,14 +141,13 @@ const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
                   <Select
                     labelId="year-helper-label"
                     id="year-select"
-                    onChange={() => {
-                      //
-                    }}>
+                    value={year}
+                    onChange={handleChangeYear}>
                     {[...Array(60).keys()].map((n) => {
-                      const val = n + YEAR;
+                      const valStr = `${n + YEAR}`;
                       return (
-                        <MenuItem key={n} value={val}>
-                          {`${val}`}
+                        <MenuItem key={n} value={valStr}>
+                          {valStr}
                         </MenuItem>
                       );
                     })}
@@ -184,10 +180,12 @@ const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
                 </Tooltip>
               </Stack>
               <TextField
+                value={cvv}
                 inputProps={{
                   maxLength: creditCardType(cardNumber.replace(/\s/g, '')) === 'AMEX' ? 4 : 3
                 }}
                 sx={{ width: '80px' }}
+                onChange={handleChangeCVV}
               />
             </Stack>
           </Grid>
@@ -196,6 +194,8 @@ const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
       <Grid item xs={12}>
         <Stack spacing={1} direction="row" textAlign={'center'} alignItems="center">
           <FormControlLabel
+            value={paySecure}
+            onChange={handleChangePaySecure}
             label={
               <Stack spacing={1} direction="row">
                 <SecurityOutlinedIcon />
