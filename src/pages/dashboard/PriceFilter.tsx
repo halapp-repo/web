@@ -24,19 +24,25 @@ import {
   selectUIListingProductNameFilter
 } from '../../store/ui/uiSlice';
 import { ExpandMore } from '../../components/ExpandMoreButton';
+import { debounce } from '@mui/material/utils';
 
 const PriceFilter = () => {
   const dispatch = useAppDispatch();
   const selectedDate = useAppSelector(selectUIListingSelectedDate);
   const filteringProductName = useAppSelector(selectUIListingProductNameFilter);
+  const debouncedDispatch = debounce(dispatch, 300);
 
   const matchesSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [expanded, setExpanded] = React.useState(false);
 
-  const [query, setQuery] = useState(filteringProductName || '');
+  const [query, setQuery] = useState('');
   useEffect(() => {
-    const timeOutId = setTimeout(() => dispatch(updateListingProductNameFilter(query)), 500);
-    return () => clearTimeout(timeOutId);
+    if (filteringProductName) {
+      setQuery(filteringProductName);
+    }
+  }, []);
+  useEffect(() => {
+    debouncedDispatch(updateListingProductNameFilter(query));
   }, [query]);
 
   const handleExpandClick = () => {

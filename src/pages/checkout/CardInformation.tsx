@@ -22,7 +22,7 @@ import MasterCard from '../../components/icons/credit-cards/MasterCard';
 import AmEx from '../../components/icons/credit-cards/AmEx';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
-import { debounce } from '../../utils/form';
+import { debounce } from '@mui/material/utils';
 import { ErrorMessage } from 'formik';
 
 const YEAR = new Date().getFullYear();

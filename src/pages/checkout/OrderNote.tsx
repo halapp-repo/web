@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React, { useEffect, useState } from 'react';
 import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { debounce } from 'lodash';
+import { debounce } from '@mui/material/utils';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
