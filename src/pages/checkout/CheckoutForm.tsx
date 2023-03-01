@@ -6,7 +6,7 @@ import { OrderItemVM } from '@halapp/common';
 import { OrganizationAddress } from '../../models/organization';
 import { AddressSelector } from './AddressSelector';
 import { OrderNote } from './OrderNote';
-import { SummaryNPlaceOrder } from './SummaryNPlaceOrder';
+import { SummaryNContinue } from './SummaryNContinue';
 import { DeliveryTime } from './DeliveryTime';
 
 interface FormValues {
@@ -29,7 +29,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
     setFieldValue('deliveryAddress', deliveryAddress, true);
     setTimeout(() => setFieldTouched('deliveryAddress', true), 100);
   };
-  const handleSetNote = async (note: string): Promise<void> => {
+  const handleSetNoteField = async (note: string): Promise<void> => {
     setFieldValue('orderNote', note);
     setTimeout(() => setFieldTouched('orderNote', true), 100);
   };
@@ -61,13 +61,13 @@ const InnerForm = (props: FormikProps<FormValues>) => {
           </Grid>
           <Grid item xs={12}>
             <MainCard sx={{ mt: 2, p: 2 }}>
-              <OrderNote SetNote={handleSetNote} />
+              <OrderNote SetNoteField={handleSetNoteField} />
             </MainCard>
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <MainCard sx={{ mt: 2, p: 2 }}>
-            <SummaryNPlaceOrder
+            <SummaryNContinue
               IsValid={isSubmitting || !isValid}
               SetOrderItems={handleSetOrderItems}
               DeliveryTime={values.deliveryTime}
@@ -125,7 +125,7 @@ const CheckoutForm = withFormik<MyFormProps, FormValues>({
       .min(1)
       .required()
   }),
-  validateOnMount: false,
+  validateOnMount: true,
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
     await props.onSubmit(

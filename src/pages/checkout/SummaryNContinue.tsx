@@ -27,7 +27,7 @@ interface SummaryNPlaceOrderProps {
   DeliveryTime: string;
 }
 
-const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
+const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
   const dispatch = useAppDispatch();
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
   const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
@@ -118,7 +118,7 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
                     secondary={
                       <Typography
                         color="secondary"
-                        variant="body2">{`${i.UnitAmount} x ${i.Count}`}</Typography>
+                        variant="body2">{`${i.UnitAmount} x ${i.Count} ${i.Unit}`}</Typography>
                     }
                   />
                 </ListItem>
@@ -160,4 +160,4 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
   );
 };
 
-export { SummaryNPlaceOrder };
+export { SummaryNContinue };

@@ -10,7 +10,8 @@ import {
   MenuItem,
   Tooltip,
   Box,
-  Checkbox
+  Checkbox,
+  FormControlLabel
 } from '@mui/material';
 import { IMaskInput } from 'react-imask';
 import { useState, forwardRef, ReactElement } from 'react';
@@ -21,13 +22,16 @@ import MasterCard from '../../components/icons/credit-cards/MasterCard';
 import AmEx from '../../components/icons/credit-cards/AmEx';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
+import { debounce } from '../../utils/form';
+import { ErrorMessage } from 'formik';
 
+const YEAR = new Date().getFullYear();
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
   name: string;
   value: string;
 }
-const YEAR = new Date().getFullYear();
+
 const TextMaskCustom = forwardRef<ReactElement, CustomProps>(function TextMaskCustom(props, ref) {
   const { onChange, value, ...other } = props;
   const type = creditCardType(value.replace(/\s/g, ''));
@@ -62,10 +66,17 @@ const getCreditCardIcon = (cardNumber: string) => {
   return <CreditCardIcon sx={{ display: 'flex', width: '1em', height: '1em', mr: 1 }} />;
 };
 
-const CardInformation = () => {
+interface CardInformationProps {
+  SetCardNumberField: (cardNumber: string) => Promise<void>;
+}
+
+const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
   const [cardNumber, setCardNumber] = useState<string>('');
+  const debouncedSetCardNumberField = debounce(SetCardNumberField, 300);
   const handleChangeCardNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardNumber(e.target.value);
+    const value = e.target.value;
+    setCardNumber(value);
+    debouncedSetCardNumberField(value);
   };
   return (
     <Grid container spacing={1}>
@@ -75,6 +86,7 @@ const CardInformation = () => {
             {'Kart Numarası'}
           </Typography>
           <TextField
+            name="cardNumber"
             fullWidth
             value={cardNumber}
             onChange={handleChangeCardNumber}
@@ -86,6 +98,7 @@ const CardInformation = () => {
               )
             }}
           />
+          <ErrorMessage name="cardNumber" />
         </Stack>
       </Grid>
       <Grid item xs={12}>
@@ -149,7 +162,7 @@ const CardInformation = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Stack spacing={1}>
-              <Stack spacing={1} direction="row">
+              <Stack spacing={1} direction="row" textAlign={'center'} alignItems="center">
                 <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
                   {'CVV'}
                 </Typography>
@@ -162,26 +175,37 @@ const CardInformation = () => {
                       </Typography>
                       <Typography variant="body2">
                         {
-                          ' Kartınızın arka yüzündeki son 3 rakam Amex için kartınızın ön yüzündeki 4 rakam'
+                          'Kartınızın arka yüzündeki son 3 rakam Amex için kartınızın ön yüzündeki 4 rakam'
                         }
                       </Typography>
                     </Box>
                   }>
-                  <InfoOutlinedIcon color="info" />
+                  <InfoOutlinedIcon color="info" sx={{ fontSize: '1em' }} />
                 </Tooltip>
               </Stack>
-              <TextField inputProps={{ maxLength: 3 }} sx={{ width: '80px' }} />
+              <TextField
+                inputProps={{
+                  maxLength: creditCardType(cardNumber.replace(/\s/g, '')) === 'AMEX' ? 4 : 3
+                }}
+                sx={{ width: '80px' }}
+              />
             </Stack>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
         <Stack spacing={1} direction="row" textAlign={'center'} alignItems="center">
-          <Checkbox />
-          <SecurityOutlinedIcon />
-          <Typography variant="body1" color="text.secondary">
-            <b>3D Secure</b> ile ödemek istiyorum.
-          </Typography>
+          <FormControlLabel
+            label={
+              <Stack spacing={1} direction="row">
+                <SecurityOutlinedIcon />
+                <Typography variant="body1" color="text.secondary">
+                  <b>3D Secure</b> ile ödemek istiyorum.
+                </Typography>
+              </Stack>
+            }
+            control={<Checkbox />}
+          />
         </Stack>
       </Grid>
     </Grid>

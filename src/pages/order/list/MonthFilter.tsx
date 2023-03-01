@@ -22,8 +22,8 @@ const MonthFilter = ({ SetMonth, Filter }: MonthFilterProps) => {
       </Box>
       <MobileDatePicker
         value={Filter ? Filter.toDate() : null}
-        onChange={(date) => {
-          console.log(trMoment(date).format());
+        onChange={() => {
+          //
         }}
         renderInput={(params) => (
           <TextField sx={{ p: '0px 10px' }} onKeyDown={onKeyDown} {...params} />

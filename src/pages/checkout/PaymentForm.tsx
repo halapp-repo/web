@@ -1,5 +1,5 @@
 import { Grid, Box, Tabs, Tab, useMediaQuery, Theme } from '@mui/material';
-import { withFormik, FormikProps, Form } from 'formik';
+import { withFormik, FormikProps, Form, yupToFormErrors } from 'formik';
 import * as Yup from 'yup';
 import MainCard from '../../components/MainCard';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
@@ -10,9 +10,13 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 import { PaymentType } from '@halapp/common';
 import { CardInformation } from './CardInformation';
+import { SummaryNPay } from './SummaryNPay';
+import { cardValidationSchema } from './PaymentFormValidation';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface FormValues {}
+interface FormValues {
+  step: PaymentType;
+  cardNumber: string;
+}
 
 const InnerForm = (props: FormikProps<FormValues>) => {
   const dispatch = useAppDispatch();
@@ -24,7 +28,13 @@ const InnerForm = (props: FormikProps<FormValues>) => {
   const handleChangePaymentMethod = (event: React.SyntheticEvent, newValue: PaymentType) => {
     setActiveStep(newValue);
   };
+  const handleSetCardNumberField = async (cardNumber: string): Promise<void> => {
+    setFieldValue('cardNumber', cardNumber.replace(/\s/g, ''));
+    setTimeout(() => setFieldTouched('cardNumber', true), 100);
+  };
   useEffect(() => {
+    setFieldValue('step', activeStep, true);
+    setTimeout(() => setFieldTouched('step', true), 100);
     return () => {
       dispatch(
         updateCheckout({
@@ -62,17 +72,17 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             </Tabs>
             <TabPanel value={activeStep} index={PaymentType.card}>
               <Box sx={{ p: 1 }}>
-                <CardInformation />
+                <CardInformation SetCardNumberField={handleSetCardNumberField} />
               </Box>
             </TabPanel>
-            <TabPanel value={0} index={PaymentType.balance}>
-              <div>uuu</div>
+            <TabPanel value={activeStep} index={PaymentType.balance}>
+              <Box sx={{ p: 1 }}>uuu </Box>
             </TabPanel>
           </MainCard>
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <MainCard sx={{ mt: 2, p: 2 }}>
-            <Box></Box>
+            <SummaryNPay IsDisable={isSubmitting || !isValid} />
           </MainCard>
         </Grid>
       </Grid>
@@ -86,8 +96,24 @@ interface MyFormProps {
 const PaymentForm = withFormik<MyFormProps, FormValues>({
   // Transform outer props into form values
   // Add a custom validation function (this can be async too!)
-  validationSchema: Yup.object().shape({}),
-  validateOnMount: false,
+  validate: async (values) => {
+    let schema;
+    if (values.step === PaymentType.card) {
+      schema = cardValidationSchema;
+    } else {
+      schema = Yup.object().shape({});
+    }
+
+    try {
+      await schema.validate(values, { abortEarly: true, strict: false });
+      return Promise.resolve({});
+    } catch (yupErr) {
+      if (yupErr instanceof Yup.ValidationError) {
+        return yupToFormErrors(yupErr);
+      }
+    }
+  },
+  validateOnMount: true,
   handleSubmit: async (values, { props, setSubmitting }) => {
     // do submitting things
     setSubmitting(false);
