@@ -16,8 +16,10 @@ import { useNavigate } from 'react-router-dom';
 import { OrderItemVM, OrderVM } from '@halapp/common';
 import { updateCheckout } from '../../store/ui/uiSlice';
 import { PaymentForm } from './PaymentForm';
+import { selectUserAuth } from '../../store/auth/authSlice';
 
 const Checkout = () => {
+  const userAuth = useAppSelector(selectUserAuth);
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState<{
     [k: number]: boolean;
@@ -30,9 +32,10 @@ const Checkout = () => {
 
   useEffect(() => {
     if (
-      typeof organizations === 'undefined' ||
-      typeof organizations.List === 'undefined' ||
-      organizations.List.length === 0
+      userAuth.authenticated == true &&
+      (typeof organizations === 'undefined' ||
+        typeof organizations.List === 'undefined' ||
+        organizations.List.length === 0)
     ) {
       dispatch(fetchOrganizations());
     }
