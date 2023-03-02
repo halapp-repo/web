@@ -14,7 +14,7 @@ import {
   FormControlLabel,
   SelectChangeEvent
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { creditCardType } from '../../utils/credit-card';
 import Visa from '../../components/icons/credit-cards/Visa';
@@ -25,7 +25,8 @@ import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import { debounce } from '@mui/material/utils';
 import { ErrorMessage } from 'formik';
 import { CreditCardMask } from '../../components/form/CreditCardMask';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 
 const YEAR = new Date().getFullYear();
 
@@ -43,17 +44,47 @@ const getCreditCardIcon = (cardNumber: string) => {
 
 interface CardInformationProps {
   SetCardNumberField: (cardNumber: string) => Promise<void>;
+  SetMonthField: (month: string) => Promise<void>;
+  SetYearField: (year: string) => Promise<void>;
+  SetCVVField: (cvv: string) => Promise<void>;
+  SetSecurePaymentEnabledField: (securePayment: boolean) => Promise<void>;
 }
 
-const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
+const CardInformation = ({
+  SetCardNumberField,
+  SetMonthField,
+  SetYearField,
+  SetCVVField,
+  SetSecurePaymentEnabledField
+}: CardInformationProps) => {
   const dispatch = useAppDispatch();
-  const [cardNumber, setCardNumber] = useState<string>('');
-  const [month, setMonth] = useState<string>('');
-  const [year, setYear] = useState<string>('');
-  const [cvv, setCvv] = useState<string>('');
-  const [paySecure, setPaySecure] = useState<boolean>(false);
+  const {
+    cardNumber: savedCardNumber,
+    monthExpiry: savedMonthExpiry,
+    yearExpiry: savedYearExpiry,
+    securePaymentEnable: savedSecurePaymentEnable
+  } = useAppSelector(selectUICheckout);
+  const [cardNumber, setCardNumber] = useState<string>(savedCardNumber || '');
+  const [month, setMonth] = useState<string>(savedMonthExpiry || '');
+  const [year, setYear] = useState<string>(savedYearExpiry || '');
+  const [cvv, setCVV] = useState<string>('');
+  const [paySecure, setPaySecure] = useState<boolean>(savedSecurePaymentEnable === true);
   const debouncedSetCardNumberField = debounce(SetCardNumberField, 300);
   const debouncedDispatch = debounce(dispatch, 300);
+
+  useEffect(() => {
+    console.log('pay secure', paySecure);
+    return () => {
+      debouncedDispatch(
+        updateCheckout({
+          cardNumber: cardNumber,
+          yearExpiry: year,
+          monthExpiry: month,
+          securePaymentEnable: paySecure
+        })
+      );
+    };
+  }, [cardNumber, month, year, paySecure]);
 
   const handleChangeCardNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -62,18 +93,22 @@ const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
   };
   const handleChangeCVV = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setCvv(value);
+    setCVV(value);
+    SetCVVField(value);
   };
   const handleChangeMonth = (e: SelectChangeEvent) => {
     const value = e.target.value;
     setMonth(value);
+    SetMonthField(value);
   };
   const handleChangeYear = (e: SelectChangeEvent) => {
     const value = e.target.value;
     setYear(value);
+    SetYearField(value);
   };
   const handleChangePaySecure = (e: React.SyntheticEvent<Element, Event>, checked: boolean) => {
     setPaySecure(checked);
+    SetSecurePaymentEnabledField(checked);
   };
   return (
     <Grid container spacing={1}>
@@ -194,6 +229,7 @@ const CardInformation = ({ SetCardNumberField }: CardInformationProps) => {
       <Grid item xs={12}>
         <Stack spacing={1} direction="row" textAlign={'center'} alignItems="center">
           <FormControlLabel
+            checked={paySecure}
             value={paySecure}
             onChange={handleChangePaySecure}
             label={

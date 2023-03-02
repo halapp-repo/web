@@ -14,6 +14,7 @@ const CreditCardMask = forwardRef<ReactElement, CustomProps>(function TextMaskCu
   return (
     <IMaskInput
       {...other}
+      value={value}
       mask={
         typeof type === 'undefined' || type === 'VISA' || type === 'MASTERCARD'
           ? '0000 0000 0000 0000'

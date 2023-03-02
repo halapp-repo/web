@@ -104,6 +104,10 @@ const UISlice = createSlice({
         organizationId?: string;
         deliveryTime?: string;
         paymentMethod?: PaymentType;
+        cardNumber?: string;
+        monthExpiry?: string;
+        yearExpiry?: string;
+        securePaymentEnable?: boolean;
       }>
     ) => {
       state.checkout = {
@@ -120,6 +124,26 @@ const UISlice = createSlice({
         ...(typeof action.payload.paymentMethod !== 'undefined'
           ? {
               paymentMethod: action.payload.paymentMethod
+            }
+          : null),
+        ...(typeof action.payload.cardNumber !== 'undefined'
+          ? {
+              cardNumber: action.payload.cardNumber
+            }
+          : null),
+        ...(typeof action.payload.monthExpiry !== 'undefined'
+          ? {
+              monthExpiry: action.payload.monthExpiry
+            }
+          : null),
+        ...(typeof action.payload.yearExpiry !== 'undefined'
+          ? {
+              yearExpiry: action.payload.yearExpiry
+            }
+          : null),
+        ...(typeof action.payload.securePaymentEnable !== 'undefined'
+          ? {
+              securePaymentEnable: action.payload.securePaymentEnable
             }
           : null)
       };
@@ -204,7 +228,11 @@ const UISlice = createSlice({
         orderNote: '',
         organizationId: undefined,
         paymentMethod: PaymentType.card,
-        deliveryTime: undefined
+        deliveryTime: undefined,
+        cardNumber: undefined,
+        monthExpiry: undefined,
+        yearExpiry: undefined,
+        securePaymentEnable: undefined
       };
     });
     builder.addCase(organizationUpdateOrganization.fulfilled, (state) => {

@@ -17,6 +17,10 @@ interface FormValues {
   step: PaymentType;
   cardNumber: string;
   approvedContract: boolean;
+  monthExpiry: string;
+  yearExpiry: string;
+  cvv: string;
+  securePaymentEnabled: boolean;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -36,6 +40,22 @@ const InnerForm = (props: FormikProps<FormValues>) => {
   const handleSetApprovedContract = async (value: boolean): Promise<void> => {
     setFieldValue('approvedContract', value);
     setTimeout(() => setFieldTouched('approvedContract', true), 100);
+  };
+  const handleSetMonthExpiry = async (value: string): Promise<void> => {
+    setFieldValue('monthExpiry', value);
+    setTimeout(() => setFieldTouched('monthExpiry', true), 100);
+  };
+  const handleSetYearExpiry = async (value: string): Promise<void> => {
+    setFieldValue('yearExpiry', value);
+    setTimeout(() => setFieldTouched('yearExpiry', true), 100);
+  };
+  const handleSetCVV = async (value: string): Promise<void> => {
+    setFieldValue('cvv', value);
+    setTimeout(() => setFieldTouched('cvv', true), 100);
+  };
+  const handleSetSecurePaymentEnabled = async (value: boolean): Promise<void> => {
+    setFieldValue('securePaymentEnabled', value);
+    setTimeout(() => setFieldTouched('securePaymentEnabled', true), 100);
   };
   useEffect(() => {
     setFieldValue('step', activeStep, true);
@@ -77,7 +97,13 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             </Tabs>
             <TabPanel value={activeStep} index={PaymentType.card}>
               <Box sx={{ p: 1 }}>
-                <CardInformation SetCardNumberField={handleSetCardNumberField} />
+                <CardInformation
+                  SetCardNumberField={handleSetCardNumberField}
+                  SetMonthField={handleSetMonthExpiry}
+                  SetYearField={handleSetYearExpiry}
+                  SetCVVField={handleSetCVV}
+                  SetSecurePaymentEnabledField={handleSetSecurePaymentEnabled}
+                />
               </Box>
             </TabPanel>
             <TabPanel value={activeStep} index={PaymentType.balance}>
