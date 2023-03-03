@@ -12,6 +12,8 @@ import { PaymentType } from '@halapp/common';
 import { CardInformation } from './CardInformation';
 import { SummaryNPay } from './SummaryNPay';
 import { cardValidationSchema } from './PaymentFormValidation';
+import { Contracts } from './Contracts';
+import { DialogContracts } from './DialogContracts';
 
 interface FormValues {
   step: PaymentType;
@@ -27,6 +29,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
   const dispatch = useAppDispatch();
   const { paymentMethod } = useAppSelector(selectUICheckout);
   const [activeStep, setActiveStep] = useState<PaymentType>(paymentMethod);
+  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { isSubmitting, isValid, setFieldValue, setFieldTouched, values } = props;
 
@@ -110,16 +113,26 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               <Box sx={{ p: 1 }}>uuu </Box>
             </TabPanel>
           </MainCard>
+          {activeStep === PaymentType.card && (
+            <MainCard sx={{ mt: 2, p: 2 }}>
+              <Contracts />
+            </MainCard>
+          )}
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <MainCard sx={{ mt: 2, p: 2 }}>
             <SummaryNPay
               IsDisable={isSubmitting || !isValid}
               SetChangeApprovedContractField={handleSetApprovedContract}
+              OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
             />
           </MainCard>
         </Grid>
       </Grid>
+      <DialogContracts
+        IsDialogOpen={isDialogOpen}
+        OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
+      />
     </Form>
   );
 };

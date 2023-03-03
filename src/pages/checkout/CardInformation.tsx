@@ -73,7 +73,28 @@ const CardInformation = ({
   const debouncedDispatch = debounce(dispatch, 300);
 
   useEffect(() => {
-    console.log('pay secure', paySecure);
+    debouncedSetCardNumberField('');
+    SetMonthField('');
+    SetYearField('');
+    SetSecurePaymentEnabledField(false);
+    SetCVVField('');
+  }, []);
+  useEffect(() => {
+    if (cardNumber) {
+      debouncedSetCardNumberField(cardNumber);
+    }
+    if (month) {
+      SetMonthField(month);
+    }
+    if (year) {
+      SetYearField(year);
+    }
+    if (paySecure) {
+      SetSecurePaymentEnabledField(paySecure);
+    }
+    if (cvv) {
+      SetCVVField(cvv);
+    }
     return () => {
       debouncedDispatch(
         updateCheckout({
@@ -84,35 +105,35 @@ const CardInformation = ({
         })
       );
     };
-  }, [cardNumber, month, year, paySecure]);
+  }, [cardNumber, month, year, paySecure, cvv]);
 
   const handleChangeCardNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setCardNumber(value);
-    debouncedSetCardNumberField(value);
   };
   const handleChangeCVV = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setCVV(value);
-    SetCVVField(value);
   };
   const handleChangeMonth = (e: SelectChangeEvent) => {
     const value = e.target.value;
     setMonth(value);
-    SetMonthField(value);
   };
   const handleChangeYear = (e: SelectChangeEvent) => {
     const value = e.target.value;
     setYear(value);
-    SetYearField(value);
   };
   const handleChangePaySecure = (e: React.SyntheticEvent<Element, Event>, checked: boolean) => {
     setPaySecure(checked);
-    SetSecurePaymentEnabledField(checked);
   };
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
+        <Box sx={{ m: '20px 0px' }}>
+          <Typography variant="h5" fontWeight={'bold'} color="text.secondary">
+            {'Kart Bilgileri'}
+          </Typography>
+        </Box>
         <Stack spacing={1}>
           <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
             {'Kart Numarası'}
@@ -135,7 +156,7 @@ const CardInformation = ({
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={1}>
-          <Grid item xs={12} sm={8}>
+          <Grid item xs={8}>
             <Stack spacing={1}>
               <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
                 {'Son Kullanma Tarihi'}
@@ -191,7 +212,7 @@ const CardInformation = ({
               </Stack>
             </Stack>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={4}>
             <Stack spacing={1}>
               <Stack spacing={1} direction="row" textAlign={'center'} alignItems="center">
                 <Typography variant="body2" fontWeight={'bold'} color="text.secondary">

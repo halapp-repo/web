@@ -4,8 +4,8 @@ import '../../utils/yup';
 
 const cardValidationSchema = Yup.object().shape({
   cardNumber: Yup.string()
-    .creditCardType('Kart tipi uymuyor')
-    .creditCardLength('Kart karakteri uymuyor')
+    .creditCardType('Bilinmeyen kart tipi')
+    .creditCardLength('Karakter sayısı yanlış')
     .required(),
   approvedContract: Yup.bool().oneOf([true], `Sözleşme onaylanmalı`).required(),
   monthExpiry: Yup.string().required(),
