@@ -56,7 +56,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
     setFieldValue('cvv', value);
     setTimeout(() => setFieldTouched('cvv', true), 100);
   };
-  const handleSetSecurePaymentEnabled = async (value: boolean): Promise<void> => {
+  const handleSetSecurePaymentEnabled = async (value?: boolean): Promise<void> => {
     setFieldValue('securePaymentEnabled', value);
     setTimeout(() => setFieldTouched('securePaymentEnabled', true), 100);
   };

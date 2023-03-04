@@ -1,5 +1,7 @@
 import { Stack, Button, Typography, Checkbox } from '@mui/material';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 
 interface SummaryNPayProps {
   IsDisable: boolean;
@@ -12,10 +14,23 @@ const SummaryNPay = ({
   SetChangeApprovedContractField,
   OnChangeDialogOpen
 }: SummaryNPayProps) => {
-  const [approvedContract, setApprovedContract] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const { approvedContract } = useAppSelector(selectUICheckout);
+
+  useEffect(() => {
+    SetChangeApprovedContractField(false);
+  }, []);
+
+  useEffect(() => {
+    SetChangeApprovedContractField(approvedContract);
+  }, [approvedContract]);
+
   const handleChangeApproval = (e: React.SyntheticEvent<Element, Event>, checked: boolean) => {
-    setApprovedContract(checked);
-    SetChangeApprovedContractField(checked);
+    dispatch(
+      updateCheckout({
+        approvedContract: checked
+      })
+    );
   };
 
   return (
@@ -29,28 +44,28 @@ const SummaryNPay = ({
           {'Ödeme Yap'}
         </Button>
         <Stack spacing={1} direction="row">
-          <Checkbox value={approvedContract} onChange={handleChangeApproval} />
+          <Checkbox checked={approvedContract} onChange={handleChangeApproval} />
           <Typography variant="body2" color="text.secondary">
-            <Button
-              size="small"
-              color="blackNWhite"
-              sx={{ textTransform: 'none', fontSize: 'inherit' }}
+            <u
+              style={{
+                cursor: 'pointer'
+              }}
               onClick={() => {
                 OnChangeDialogOpen(true);
               }}>
-              Ön Bilgilendirme Koşulları{"'"}nı
-            </Button>
-            ve{' '}
-            <Button
-              size="small"
-              color="blackNWhite"
-              sx={{ textTransform: 'none', fontSize: 'inherit' }}
+              <b>Ön Bilgilendirme Koşulları</b>
+            </u>
+            {"'"}nı ve{' '}
+            <u
+              style={{
+                cursor: 'pointer'
+              }}
               onClick={() => {
                 OnChangeDialogOpen(true);
               }}>
-              Mesafeli Satış Sözleşmesi{"'"}ni
-            </Button>
-            okudum, onaylıyorum.
+              <b>Mesafeli Satış Sözleşmesi</b>
+            </u>
+            {"'"}ni okudum, onaylıyorum.
           </Typography>
         </Stack>
       </Stack>

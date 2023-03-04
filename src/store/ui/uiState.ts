@@ -27,10 +27,11 @@ export interface UIState {
     deliveryTime?: string;
     orderNote?: string;
     paymentMethod: PaymentType;
-    cardNumber?: string;
-    monthExpiry?: string;
-    yearExpiry?: string;
+    cardNumber: string;
+    monthExpiry: string;
+    yearExpiry: string;
     securePaymentEnable?: boolean;
+    approvedContract: boolean;
   };
   orders: {
     filter: OrderStatusType | moment.Moment | undefined;

@@ -15,6 +15,8 @@ import { useState } from 'react';
 import { DistantSaleContract } from './DistantSaleContract';
 import { ForeknowledgeContract } from './ForeknowledgeContract';
 import CloseIcon from '@mui/icons-material/Close';
+import { useAppDispatch } from '../../store/hooks';
+import { updateCheckout } from '../../store/ui/uiSlice';
 
 interface DialogContractsProps {
   IsDialogOpen: boolean;
@@ -22,8 +24,18 @@ interface DialogContractsProps {
 }
 
 const DialogContracts = ({ IsDialogOpen, OnChangeDialogOpen }: DialogContractsProps) => {
+  const dispatch = useAppDispatch();
   const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [maxWidth] = useState<DialogProps['maxWidth']>('xs');
+
+  const handleOnApprove = () => {
+    dispatch(
+      updateCheckout({
+        approvedContract: true
+      })
+    );
+    OnChangeDialogOpen(false);
+  };
 
   return (
     <Dialog
@@ -65,7 +77,7 @@ const DialogContracts = ({ IsDialogOpen, OnChangeDialogOpen }: DialogContractsPr
         sx={{
           justifyContent: 'center'
         }}>
-        <Button fullWidth variant="contained" size={'large'}>
+        <Button fullWidth variant="contained" size={'large'} onClick={handleOnApprove}>
           {'Onaylıyorum'}
         </Button>
       </DialogActions>

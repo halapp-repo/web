@@ -23,7 +23,6 @@ import AmEx from '../../components/icons/credit-cards/AmEx';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import { debounce } from '@mui/material/utils';
-import { ErrorMessage } from 'formik';
 import { CreditCardMask } from '../../components/form/CreditCardMask';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
@@ -47,7 +46,7 @@ interface CardInformationProps {
   SetMonthField: (month: string) => Promise<void>;
   SetYearField: (year: string) => Promise<void>;
   SetCVVField: (cvv: string) => Promise<void>;
-  SetSecurePaymentEnabledField: (securePayment: boolean) => Promise<void>;
+  SetSecurePaymentEnabledField: (securePayment?: boolean) => Promise<void>;
 }
 
 const CardInformation = ({
@@ -58,19 +57,12 @@ const CardInformation = ({
   SetSecurePaymentEnabledField
 }: CardInformationProps) => {
   const dispatch = useAppDispatch();
-  const {
-    cardNumber: savedCardNumber,
-    monthExpiry: savedMonthExpiry,
-    yearExpiry: savedYearExpiry,
-    securePaymentEnable: savedSecurePaymentEnable
-  } = useAppSelector(selectUICheckout);
-  const [cardNumber, setCardNumber] = useState<string>(savedCardNumber || '');
-  const [month, setMonth] = useState<string>(savedMonthExpiry || '');
-  const [year, setYear] = useState<string>(savedYearExpiry || '');
+  const { cardNumber, monthExpiry, yearExpiry, securePaymentEnable } =
+    useAppSelector(selectUICheckout);
+
   const [cvv, setCVV] = useState<string>('');
-  const [paySecure, setPaySecure] = useState<boolean>(savedSecurePaymentEnable === true);
   const debouncedSetCardNumberField = debounce(SetCardNumberField, 300);
-  const debouncedDispatch = debounce(dispatch, 300);
+  const debouncedCVVField = debounce(SetCVVField, 300);
 
   useEffect(() => {
     debouncedSetCardNumberField('');
@@ -79,37 +71,30 @@ const CardInformation = ({
     SetSecurePaymentEnabledField(false);
     SetCVVField('');
   }, []);
+
   useEffect(() => {
-    if (cardNumber) {
-      debouncedSetCardNumberField(cardNumber);
-    }
-    if (month) {
-      SetMonthField(month);
-    }
-    if (year) {
-      SetYearField(year);
-    }
-    if (paySecure) {
-      SetSecurePaymentEnabledField(paySecure);
-    }
-    if (cvv) {
-      SetCVVField(cvv);
-    }
-    return () => {
-      debouncedDispatch(
-        updateCheckout({
-          cardNumber: cardNumber,
-          yearExpiry: year,
-          monthExpiry: month,
-          securePaymentEnable: paySecure
-        })
-      );
-    };
-  }, [cardNumber, month, year, paySecure, cvv]);
+    debouncedSetCardNumberField(cardNumber);
+  }, [cardNumber]);
+  useEffect(() => {
+    SetMonthField(monthExpiry);
+  }, [monthExpiry]);
+  useEffect(() => {
+    SetYearField(yearExpiry);
+  }, [yearExpiry]);
+  useEffect(() => {
+    SetSecurePaymentEnabledField(securePaymentEnable);
+  }, [securePaymentEnable]);
+  useEffect(() => {
+    debouncedCVVField(cvv);
+  }, [cvv]);
 
   const handleChangeCardNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setCardNumber(value);
+    dispatch(
+      updateCheckout({
+        cardNumber: value
+      })
+    );
   };
   const handleChangeCVV = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -117,14 +102,26 @@ const CardInformation = ({
   };
   const handleChangeMonth = (e: SelectChangeEvent) => {
     const value = e.target.value;
-    setMonth(value);
+    dispatch(
+      updateCheckout({
+        monthExpiry: value
+      })
+    );
   };
   const handleChangeYear = (e: SelectChangeEvent) => {
     const value = e.target.value;
-    setYear(value);
+    dispatch(
+      updateCheckout({
+        yearExpiry: value
+      })
+    );
   };
   const handleChangePaySecure = (e: React.SyntheticEvent<Element, Event>, checked: boolean) => {
-    setPaySecure(checked);
+    dispatch(
+      updateCheckout({
+        securePaymentEnable: checked
+      })
+    );
   };
   return (
     <Grid container spacing={1}>
@@ -144,6 +141,7 @@ const CardInformation = ({
             value={cardNumber}
             onChange={handleChangeCardNumber}
             InputProps={{
+              autoComplete: 'cc-number',
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               inputComponent: CreditCardMask as any,
               startAdornment: (
@@ -151,7 +149,6 @@ const CardInformation = ({
               )
             }}
           />
-          <ErrorMessage name="cardNumber" />
         </Stack>
       </Grid>
       <Grid item xs={12}>
@@ -173,7 +170,10 @@ const CardInformation = ({
                   <Select
                     labelId="month-helper-label"
                     id="month-select"
-                    value={month}
+                    value={monthExpiry}
+                    inputProps={{
+                      autoComplete: 'cc-exp-month'
+                    }}
                     onChange={handleChangeMonth}>
                     {[...Array(12).keys()].map((n) => {
                       const val = n + 1;
@@ -197,7 +197,10 @@ const CardInformation = ({
                   <Select
                     labelId="year-helper-label"
                     id="year-select"
-                    value={year}
+                    value={yearExpiry}
+                    inputProps={{
+                      autoComplete: 'cc-exp-year'
+                    }}
                     onChange={handleChangeYear}>
                     {[...Array(60).keys()].map((n) => {
                       const valStr = `${n + YEAR}`;
@@ -238,6 +241,7 @@ const CardInformation = ({
               <TextField
                 value={cvv}
                 inputProps={{
+                  autoComplete: 'cc-csc',
                   maxLength: creditCardType(cardNumber.replace(/\s/g, '')) === 'AMEX' ? 4 : 3
                 }}
                 sx={{ width: '80px' }}
@@ -250,8 +254,7 @@ const CardInformation = ({
       <Grid item xs={12}>
         <Stack spacing={1} direction="row" textAlign={'center'} alignItems="center">
           <FormControlLabel
-            checked={paySecure}
-            value={paySecure}
+            checked={securePaymentEnable}
             onChange={handleChangePaySecure}
             label={
               <Stack spacing={1} direction="row">

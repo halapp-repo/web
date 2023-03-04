@@ -79,8 +79,14 @@ const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlac
         </Button>
         <Typography variant="body2" color="secondary">
           Kaydet ve Devam Et tuşuna tıklayarak, halapp{"'"}in{' '}
-          <Link to={'/privacy#gizlilik-politikasi'}>gizlilik politikası</Link> ve{' '}
-          <Link to={'/privacy#kullanim-sartlari'}>kullanım şartlarını</Link> kabul etmektesin.
+          <Link to={'/privacy#gizlilik-politikasi'}>
+            <b>gizlilik politikası</b>
+          </Link>{' '}
+          ve{' '}
+          <Link to={'/privacy#kullanim-sartlari'}>
+            <b>kullanım şartlarını</b>
+          </Link>{' '}
+          kabul etmektesin.
         </Typography>
       </Box>
       <Divider />
