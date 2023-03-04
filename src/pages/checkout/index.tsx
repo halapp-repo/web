@@ -41,6 +41,10 @@ const Checkout = () => {
     }
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeStep]);
+
   const handleMoveToPayment = async (
     orderNote: string,
     organizationId: string,

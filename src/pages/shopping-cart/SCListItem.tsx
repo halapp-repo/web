@@ -54,7 +54,7 @@ const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
                 CounterText={(counter: number) => (
                   <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: '5px' }}>
                     <Typography>{`${counter}`}</Typography>
-                    <Typography variant="subtitle2">{`${Item.Unit}`}</Typography>
+                    <Typography variant="subtitle2">{`${Item.Unit || ''}`}</Typography>
                   </Box>
                 )}
                 OnUpdateCounter={(counter) => {

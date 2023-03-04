@@ -9,6 +9,9 @@ import { fetchTodaysPrices, selectPricesOfToday } from '../../store/prices/price
 import { ProductType } from '@halapp/common';
 import ShoppingCartEmptyListContent from './SCEmptyListContent';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import SummaryIsLoading from './SummaryIsLoading';
+import { Price } from '../../models/price';
+import SummaryError from './SummaryError';
 
 const ShoppingCartContent = () => {
   const shoppingCart = useAppSelector(selectEnhancedShoppingCart);
@@ -26,6 +29,15 @@ const ShoppingCartContent = () => {
       );
     }
   }, []);
+
+  const getSummary = (prices: Price[] | null | undefined) => {
+    if (typeof prices === 'undefined') {
+      return <SummaryIsLoading />;
+    } else if (prices === null) {
+      return <SummaryError />;
+    }
+    return <SummaryNCheckout ShoppingCart={shoppingCart} />;
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -53,9 +65,7 @@ const ShoppingCartContent = () => {
         )}
       </Box>
 
-      <Box sx={{ p: '16px' }}>
-        <SummaryNCheckout ShoppingCart={shoppingCart} />
-      </Box>
+      <Box sx={{ p: '16px' }}>{getSummary(todaysPrices)}</Box>
     </Box>
   );
 };

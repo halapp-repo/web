@@ -22,7 +22,9 @@ import {
   CircularProgress,
   Toolbar,
   TableSortLabel,
-  Chip
+  Chip,
+  Stack,
+  Button
 } from '@mui/material';
 import { ProductType } from '@halapp/common';
 import moment from 'moment';
@@ -63,12 +65,21 @@ const PriceTable = () => {
   const handleCloseAnalyticsPanel = () => {
     setOpen('');
   };
+  const handleRetry = () => {
+    dispatch(
+      fetchPrices({
+        location: selectedCity,
+        type: ProductType.produce,
+        date: selectedDate
+      })
+    );
+  };
 
   useEffect(() => {
     if (!selectedDate) {
       dispatch(updateListingSelectedDate());
     }
-    if (!selectedDatePrices) {
+    if (typeof selectedDatePrices === 'undefined') {
       dispatch(
         fetchPrices({
           location: selectedCity,
@@ -79,7 +90,7 @@ const PriceTable = () => {
     }
   }, [selectedDate]);
 
-  const createTableRow = (prices: Price[]): ReactElement[] => {
+  const createTableRow = (prices: Price[] | null | undefined): ReactElement[] => {
     if (isLoading || inventories?.length == 0) {
       return [
         <TableRow key="0" sx={{ height: '20vh' }}>
@@ -88,8 +99,28 @@ const PriceTable = () => {
           </TableCell>
         </TableRow>
       ];
+    } else if (prices === null) {
+      return [
+        <TableRow key="0" sx={{ height: '20vh' }}>
+          <TableCell colSpan={3} align="center" sx={{ height: '80%' }}>
+            <Stack spacing={2} alignItems="center">
+              <Typography variant="h5">{'Eyvah!'}</Typography>
+              <Typography variant="body1" color="text.secondary">
+                {'Bir şeyler yanlış gitti. Lütfen tekrar deneyin.'}
+              </Typography>
+              <Button
+                color="primary"
+                variant="contained"
+                sx={{ width: '200px' }}
+                onClick={handleRetry}>
+                {'Yeniden Dene.'}
+              </Button>
+            </Stack>
+          </TableCell>
+        </TableRow>
+      ];
     }
-    return prices
+    return (prices || [])
       .sort(getComparator(order, orderBy))
       .filter((p) => {
         if (!filteringProductName) {
@@ -157,7 +188,7 @@ const PriceTable = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>{createTableRow(selectedDatePrices || [])}</TableBody>
+          <TableBody>{createTableRow(selectedDatePrices)}</TableBody>
         </Table>
       </TableContainer>
       <PriceDialog
