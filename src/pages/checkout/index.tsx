@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { Stepper, Step, StepLabel, Grid, StepButton } from '@mui/material';
 import { OrganizationAddress } from '../../models/organization';
@@ -104,7 +105,7 @@ const Checkout = () => {
       </Grid>
       {activeStep === 0 && <CheckoutForm onSubmit={handleMoveToPayment} />}
       {activeStep === 1 && (
-        <PaymentForm onSubmit={handlePayment} OrganizationId={creatingOrder?.Id} />
+        <PaymentForm onSubmit={handlePayment} OrganizationId={creatingOrder?.OrganizationId} />
       )}
     </OrganizationsContext.Provider>
   );

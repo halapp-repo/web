@@ -39,7 +39,7 @@ const SummaryNPay = ({
         <Button
           type="submit"
           variant="contained"
-          disabled={IsDisable}
+          disabled={true}
           sx={{ width: '100%', fontWeight: 'bold', textTransform: 'none' }}>
           {'Ödeme Yap'}
         </Button>

@@ -65,7 +65,7 @@ const CardInformation = ({
   const debouncedCVVField = debounce(SetCVVField, 300);
 
   useEffect(() => {
-    debouncedSetCardNumberField('');
+    SetCardNumberField('');
     SetMonthField('');
     SetYearField('');
     SetSecurePaymentEnabledField(false);

@@ -11,7 +11,7 @@ import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 import { PaymentType } from '@halapp/common';
 import { CardInformation } from './CardInformation';
 import { SummaryNPay } from './SummaryNPay';
-import { cardValidationSchema } from './PaymentFormValidation';
+import { cardValidationSchema, withdrawValidationSchema } from './PaymentFormValidation';
 import { Contracts } from './Contracts';
 import { DialogContracts } from './DialogContracts';
 import { WithdrawFromBalance } from './WithdrawFromBalance';
@@ -19,6 +19,7 @@ import { SummaryNWithdraw } from './SummaryNWithdraw';
 
 interface FormValues {
   organizationId?: string;
+  //card
   step: PaymentType;
   cardNumber: string;
   approvedContract: boolean;
@@ -26,6 +27,8 @@ interface FormValues {
   yearExpiry: string;
   cvv: string;
   securePaymentEnabled: boolean;
+  // withdraw
+  hasEnoughBalance: boolean;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
@@ -133,7 +136,9 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
               />
             )}
-            {activeStep === PaymentType.balance && <SummaryNWithdraw IsDisable={false} />}
+            {activeStep === PaymentType.balance && (
+              <SummaryNWithdraw IsDisable={isSubmitting || !isValid} />
+            )}
           </MainCard>
         </Grid>
       </Grid>
@@ -159,7 +164,8 @@ const PaymentForm = withFormik<MyFormProps, FormValues>({
       monthExpiry: '',
       yearExpiry: '',
       cvv: '',
-      securePaymentEnabled: false
+      securePaymentEnabled: false,
+      hasEnoughBalance: false
     };
   },
   // Transform outer props into form values
@@ -169,7 +175,7 @@ const PaymentForm = withFormik<MyFormProps, FormValues>({
     if (values.step === PaymentType.card) {
       schema = cardValidationSchema;
     } else {
-      schema = Yup.object().shape({});
+      schema = withdrawValidationSchema;
     }
 
     try {

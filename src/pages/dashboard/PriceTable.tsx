@@ -35,6 +35,7 @@ import PriceDialog from './PriceDialog';
 import { contains } from '../../utils/filter';
 import { Price } from '../../models/price';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import { RetryOnError } from '../../components/RetryOnError';
 
 type SortablePriceListItem = Pick<Price, 'Price' | 'ProductName'>;
 
@@ -103,19 +104,7 @@ const PriceTable = () => {
       return [
         <TableRow key="0" sx={{ height: '20vh' }}>
           <TableCell colSpan={3} align="center" sx={{ height: '80%' }}>
-            <Stack spacing={2} alignItems="center">
-              <Typography variant="h5">{'Eyvah!'}</Typography>
-              <Typography variant="body1" color="text.secondary">
-                {'Bir şeyler yanlış gitti. Lütfen tekrar deneyin.'}
-              </Typography>
-              <Button
-                color="primary"
-                variant="contained"
-                sx={{ width: '200px' }}
-                onClick={handleRetry}>
-                {'Yeniden Dene.'}
-              </Button>
-            </Stack>
+            <RetryOnError HandleRetry={handleRetry} />
           </TableCell>
         </TableRow>
       ];
