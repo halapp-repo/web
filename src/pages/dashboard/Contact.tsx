@@ -18,7 +18,7 @@ const Contact = () => {
           sx={{ fontSize: 20, fontWeight: 'bold' }}
           color="text.secondary"
           gutterBottom>
-          7/24 Siparis Hatti
+          7/24 Sipariş Hatti
         </Typography>
         <Typography align="center">
           <Link

@@ -13,7 +13,7 @@ const OrderTimeline = ({ Events }: OrderTimelineProps) => {
       return (
         <ListItem sx={{ height: '200px', display: 'flex', justifyContent: 'center' }}>
           <Typography variant="h4" alignContent={'center'}>
-            {'Siparis bulunmamaktadir.'}
+            {'Sipariş bulunmamaktadir.'}
           </Typography>
         </ListItem>
       );

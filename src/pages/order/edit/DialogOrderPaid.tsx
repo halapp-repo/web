@@ -46,7 +46,7 @@ const DialogOrderPaid = ({ Order, HandleClose, Open, Organization }: DialogOrder
           <b>{Organization.Name}</b>
           <i>{' tarafından '}</i>
           <b>{Order.CreatedDate.format('MMMM DD YYYY')}</b>
-          <i>{`'da verilen siparis ödendi mi ?`}</i>
+          <i>{`'da verilen sipariş ödendi mi ?`}</i>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'space-around' }}>

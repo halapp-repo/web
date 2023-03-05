@@ -44,7 +44,7 @@ const DialogCancelOrder = ({ Order, HandleClose, Open, Organization }: DialogCan
             textAlign: 'center'
           }}>
           <b>{Order.CreatedDate.format('MMMM DD YYYY')}</b>
-          <i>{`'da verilen siparisi iptal etmek istediğinizden emin misiniz?`}</i>
+          <i>{`'da verilen siparişi iptal etmek istediğinizden emin misiniz?`}</i>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'space-around' }}>

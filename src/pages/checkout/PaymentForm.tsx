@@ -14,6 +14,7 @@ import { SummaryNPay } from './SummaryNPay';
 import { cardValidationSchema } from './PaymentFormValidation';
 import { Contracts } from './Contracts';
 import { DialogContracts } from './DialogContracts';
+import { WithdrawFromBalance } from './WithdrawFromBalance';
 
 interface FormValues {
   step: PaymentType;
@@ -110,7 +111,9 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               </Box>
             </TabPanel>
             <TabPanel value={activeStep} index={PaymentType.balance}>
-              <Box sx={{ p: 1 }}>uuu </Box>
+              <Box sx={{ p: 1 }}>
+                <WithdrawFromBalance />
+              </Box>
             </TabPanel>
           </MainCard>
           {activeStep === PaymentType.card && (
