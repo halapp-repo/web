@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { red, grey } from '@mui/material/colors';
+import { blue, grey } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -118,7 +118,11 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                     ? 'inherit'
                     : grey['A400']
                 }}>
-                <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }} color={red[900]}>
+                <Typography
+                  variant="h5"
+                  fontWeight={'bold'}
+                  sx={{ mb: '10px' }}
+                  color={blue['500']}>
                   {org.Name}
                 </Typography>
                 {areStringsEqual(deliveryAddress?.City, selectedCity) || (

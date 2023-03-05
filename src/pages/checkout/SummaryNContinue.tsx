@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import { blue } from '@mui/material/colors';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
@@ -101,7 +102,10 @@ const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlac
           }}>
           <Stack direction={'row'} justifyContent="space-between">
             <Stack direction={'row'}>
-              <Typography variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
+              <Typography
+                fontWeight={'bold'}
+                color={blue[500]}
+                variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
               {showAllItems ? (
                 <ArrowDropDownIcon fontSize="small" />
               ) : (

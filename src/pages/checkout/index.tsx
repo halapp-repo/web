@@ -103,7 +103,9 @@ const Checkout = () => {
         </Grid>
       </Grid>
       {activeStep === 0 && <CheckoutForm onSubmit={handleMoveToPayment} />}
-      {activeStep === 1 && <PaymentForm onSubmit={handlePayment} />}
+      {activeStep === 1 && (
+        <PaymentForm onSubmit={handlePayment} OrganizationId={creatingOrder?.Id} />
+      )}
     </OrganizationsContext.Provider>
   );
 };

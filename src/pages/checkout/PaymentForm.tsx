@@ -15,8 +15,10 @@ import { cardValidationSchema } from './PaymentFormValidation';
 import { Contracts } from './Contracts';
 import { DialogContracts } from './DialogContracts';
 import { WithdrawFromBalance } from './WithdrawFromBalance';
+import { SummaryNWithdraw } from './SummaryNWithdraw';
 
 interface FormValues {
+  organizationId?: string;
   step: PaymentType;
   cardNumber: string;
   approvedContract: boolean;
@@ -112,7 +114,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             </TabPanel>
             <TabPanel value={activeStep} index={PaymentType.balance}>
               <Box sx={{ p: 1 }}>
-                <WithdrawFromBalance />
+                <WithdrawFromBalance OrganizationId={values.organizationId} />
               </Box>
             </TabPanel>
           </MainCard>
@@ -124,11 +126,14 @@ const InnerForm = (props: FormikProps<FormValues>) => {
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <MainCard sx={{ mt: 2, p: 2 }}>
-            <SummaryNPay
-              IsDisable={isSubmitting || !isValid}
-              SetChangeApprovedContractField={handleSetApprovedContract}
-              OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
-            />
+            {activeStep === PaymentType.card && (
+              <SummaryNPay
+                IsDisable={isSubmitting || !isValid}
+                SetChangeApprovedContractField={handleSetApprovedContract}
+                OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
+              />
+            )}
+            {activeStep === PaymentType.balance && <SummaryNWithdraw IsDisable={false} />}
           </MainCard>
         </Grid>
       </Grid>
@@ -142,8 +147,21 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 interface MyFormProps {
   onSubmit: () => void;
+  OrganizationId?: string;
 }
 const PaymentForm = withFormik<MyFormProps, FormValues>({
+  mapPropsToValues: (props) => {
+    return {
+      organizationId: props.OrganizationId,
+      step: PaymentType.card,
+      cardNumber: '',
+      approvedContract: false,
+      monthExpiry: '',
+      yearExpiry: '',
+      cvv: '',
+      securePaymentEnabled: false
+    };
+  },
   // Transform outer props into form values
   // Add a custom validation function (this can be async too!)
   validate: async (values) => {
