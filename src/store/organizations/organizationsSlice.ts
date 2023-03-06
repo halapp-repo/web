@@ -7,6 +7,7 @@ import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-
 import { instanceToInstance, plainToClass } from 'class-transformer';
 import { AxiosError } from 'axios';
 import { signOut } from '../auth/authSlice';
+import { OrganizationVM } from '@halapp/common';
 
 const initialState = {
   Organizations: {},
@@ -15,9 +16,9 @@ const initialState = {
   AdminList: {}
 } as OrganizationsState;
 
-export const fetchOrganizations = createAsyncThunk<Organization[], void, { state: RootState }>(
+export const fetchOrganizations = createAsyncThunk<OrganizationVM[], void, { state: RootState }>(
   'organizations/fetch',
-  async (_, { getState }): Promise<Organization[]> => {
+  async (_, { getState }): Promise<OrganizationVM[]> => {
     const { userAuth } = getState().auth;
     if (!userAuth.authenticated || !userAuth.idToken) {
       throw new Error('Unauthenticated');
@@ -29,9 +30,9 @@ export const fetchOrganizations = createAsyncThunk<Organization[], void, { state
     return response;
   }
 );
-export const fetchAllOrganizations = createAsyncThunk<Organization[], void, { state: RootState }>(
+export const fetchAllOrganizations = createAsyncThunk<OrganizationVM[], void, { state: RootState }>(
   'admin/organizations/fetchAllOrganizations',
-  async (_, { getState }): Promise<Organization[]> => {
+  async (_, { getState }): Promise<OrganizationVM[]> => {
     const { userAuth } = getState().auth;
     if (!userAuth.authenticated || !userAuth.idToken) {
       throw new Error('Unauthenticated');
@@ -44,10 +45,10 @@ export const fetchAllOrganizations = createAsyncThunk<Organization[], void, { st
   }
 );
 export const fetchIndividualOrganization = createAsyncThunk<
-  Organization,
+  OrganizationVM,
   string,
   { state: RootState }
->('organization/fetch', async (orgId, { getState }): Promise<Organization> => {
+>('organization/fetch', async (orgId, { getState }): Promise<OrganizationVM> => {
   const { userAuth } = getState().auth;
   if (!userAuth.authenticated || !userAuth.idToken) {
     throw new Error('Unauthenticated');
@@ -60,10 +61,10 @@ export const fetchIndividualOrganization = createAsyncThunk<
   return response;
 });
 export const updateOrganization = createAsyncThunk<
-  Organization,
+  OrganizationVM,
   Organization,
   { state: RootState }
->('organization/update', async (arg, { getState }): Promise<Organization> => {
+>('organization/update', async (arg, { getState }): Promise<OrganizationVM> => {
   const { userAuth } = getState().auth;
   if (!userAuth.authenticated || !userAuth.idToken) {
     throw new Error('Unauthenticated');
@@ -83,10 +84,10 @@ export const updateOrganization = createAsyncThunk<
   }
 });
 export const updateOrganizationDeliveryAddresses = createAsyncThunk<
-  Organization,
+  OrganizationVM,
   { deliveryAddresses: OrganizationAddress[]; organizationId: string },
   { state: RootState }
->('organization/updateDeliveryAddresses', async (arg, { getState }): Promise<Organization> => {
+>('organization/updateDeliveryAddresses', async (arg, { getState }): Promise<OrganizationVM> => {
   const { userAuth } = getState().auth;
   if (!userAuth.authenticated || !userAuth.idToken) {
     throw new Error('Unauthenticated');
@@ -125,11 +126,11 @@ export const createOrganizationEnrollmentRequest = createAsyncThunk<void, Organi
 );
 export const toggleOrganizationActivation = createAsyncThunk<
   void,
-  { OrganizationId: string; Activation: boolean; Balance: number },
+  { OrganizationId: string; Activation: boolean; CreditLimit: number },
   { state: RootState }
 >(
   'organization/toggleActivation',
-  async ({ OrganizationId, Activation, Balance }, { getState }): Promise<void> => {
+  async ({ OrganizationId, Activation, CreditLimit }, { getState }): Promise<void> => {
     const { userAuth } = getState().auth;
     if (!userAuth.authenticated || !userAuth.idToken) {
       throw new Error('Unauthenticated');
@@ -137,7 +138,7 @@ export const toggleOrganizationActivation = createAsyncThunk<
     try {
       return await new OrganizationsApi().toggleOrganizationActivation({
         isActive: Activation,
-        balance: Balance,
+        creditLimit: CreditLimit,
         organizationId: OrganizationId,
         token: userAuth.idToken
       });
@@ -239,7 +240,7 @@ const OrganizationsSlice = createSlice({
      * ADMIN / TOGGLE ACTIVATION
      */
     builder.addCase(toggleOrganizationActivation.fulfilled, (state, action) => {
-      const { Activation, Balance, OrganizationId } = action.meta.arg;
+      const { Activation, CreditLimit, OrganizationId } = action.meta.arg;
       state.Organizations = {
         ...state.Organizations,
         ...(state.Organizations?.List
@@ -247,7 +248,7 @@ const OrganizationsSlice = createSlice({
               List: [...(state.Organizations?.List || [])].map((l) => {
                 if (l.ID === OrganizationId) {
                   l.Active = Activation;
-                  l.Balance = Balance;
+                  l.CreditLimit = CreditLimit;
                 }
                 return instanceToInstance(l);
               })
@@ -261,7 +262,7 @@ const OrganizationsSlice = createSlice({
               List: [...(state.AdminList?.List || [])].map((l) => {
                 if (l.ID === OrganizationId) {
                   l.Active = Activation;
-                  l.Balance = Balance;
+                  l.CreditLimit = CreditLimit;
                 }
                 return instanceToInstance(l);
               })
@@ -298,7 +299,7 @@ const OrganizationsSlice = createSlice({
     builder.addCase(fetchOrganizations.rejected, (state) => {
       state.Organizations = {
         ...state.Organizations,
-        List: []
+        List: null
       };
       state.IsLoading = false;
     });
@@ -322,7 +323,7 @@ const OrganizationsSlice = createSlice({
     builder.addCase(fetchAllOrganizations.rejected, (state) => {
       state.AdminList = {
         ...state.AdminList,
-        List: []
+        List: null
       };
       state.IsLoading = false;
     });
@@ -375,7 +376,10 @@ export const { destroyOrganizationList } = OrganizationsSlice.actions;
 
 export const selectOrganizations = createSelector(
   [(state: RootState) => state.organizations],
-  (org: OrganizationsState) => org.Organizations
+  (org: OrganizationsState) => {
+    const mapper = new OrganizationToOrganizationDTOMapper();
+    return org.Organizations?.List && mapper.toListModel(org.Organizations.List);
+  }
 );
 export const selectIndividualOrganization = createSelector(
   [
@@ -383,6 +387,7 @@ export const selectIndividualOrganization = createSelector(
     (state: RootState, orgId?: string): string | undefined => orgId
   ],
   (org: OrganizationsState, orgId?: string) => {
+    const mapper = new OrganizationToOrganizationDTOMapper();
     if (orgId) {
       const organization = [
         ...(org.Organizations?.List || []),
@@ -391,7 +396,7 @@ export const selectIndividualOrganization = createSelector(
       if (!organization) {
         return null;
       }
-      return organization;
+      return mapper.toModel(organization);
     }
     return null;
   }
@@ -406,7 +411,10 @@ export const selectOrganizationIsLoading = createSelector(
 );
 export const selectAdminList = createSelector(
   [(state: RootState) => state.organizations],
-  (org: OrganizationsState) => org.AdminList.List
+  (org: OrganizationsState) => {
+    const mapper = new OrganizationToOrganizationDTOMapper();
+    return org.AdminList.List && mapper.toListModel(org.AdminList.List);
+  }
 );
 
 export default OrganizationsSlice.reducer;

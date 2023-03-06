@@ -1,5 +1,5 @@
 import { ProductType } from '@halapp/common';
-import { Divider, Stack, Typography, Button } from '@mui/material';
+import { Divider } from '@mui/material';
 import { RetryOnError } from '../../components/RetryOnError';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';

@@ -53,7 +53,7 @@ const DeliveryAddressListItem = ({
             <Stack direction={'row'} gap={2} sx={{ pb: '10px' }}>
               <Box>
                 <Stack direction={'row'} spacing={1}>
-                  <Typography fontWeight={'bold'} variant="h5" color={theme.palette.primary.main}>
+                  <Typography fontWeight={'bold'} variant="h5" color={theme.palette.info.main}>
                     {`#${Key}`}
                   </Typography>
                   {Address.Active && (

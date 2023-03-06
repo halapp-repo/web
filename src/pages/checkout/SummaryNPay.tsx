@@ -9,11 +9,7 @@ interface SummaryNPayProps {
   OnChangeDialogOpen: (isOpen: boolean) => void;
 }
 
-const SummaryNPay = ({
-  IsDisable,
-  SetChangeApprovedContractField,
-  OnChangeDialogOpen
-}: SummaryNPayProps) => {
+const SummaryNPay = ({ SetChangeApprovedContractField, OnChangeDialogOpen }: SummaryNPayProps) => {
   const dispatch = useAppDispatch();
   const { approvedContract } = useAppSelector(selectUICheckout);
 

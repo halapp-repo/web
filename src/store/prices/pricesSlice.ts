@@ -64,6 +64,7 @@ const PricesSlice = createSlice({
         ...state.data[date],
         [location]: data
       };
+      state.isLoading = false;
     });
     builder.addCase(fetchTodaysPrices.rejected, (state, action) => {
       const date = trMoment().format('YYYY-MM-DD');
@@ -72,6 +73,10 @@ const PricesSlice = createSlice({
         ...state.data[date],
         [location]: null
       };
+      state.isLoading = false;
+    });
+    builder.addCase(fetchTodaysPrices.pending, (state) => {
+      state.isLoading = true;
     });
   }
 });

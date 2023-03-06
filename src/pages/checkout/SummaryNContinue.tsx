@@ -9,18 +9,16 @@ import {
   ListItem,
   ListItemText
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { ProductType, OrderItemVM } from '@halapp/common';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
-import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
-import { toggleShoppingCart } from '../../store/ui/uiSlice';
+import { useContext, useEffect, useState } from 'react';
 import { trMoment } from '../../utils/timezone';
 import { Link } from 'react-router-dom';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import { blue } from '@mui/material/colors';
+import { ShoppingCartContext } from './ShoppingCartContext';
+import { OrderItemVM } from '@halapp/common';
+import { useAppSelector } from '../../store/hooks';
+import { useTheme } from '@mui/system';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
@@ -29,28 +27,11 @@ interface SummaryNPlaceOrderProps {
 }
 
 const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
-  const dispatch = useAppDispatch();
+  const ShoppingCart = useContext(ShoppingCartContext);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
-  const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
   const selectedCity = useAppSelector(selectSelectedCity);
   const deliveryTime = trMoment(DeliveryTime).clone();
-
-  useEffect(() => {
-    dispatch(
-      fetchTodaysPrices({
-        location: selectedCity,
-        type: ProductType.produce
-      })
-    );
-    const timer = setInterval(() => {
-      dispatch(fetchTodaysPrices({ location: selectedCity, type: ProductType.produce }));
-    }, 300000);
-
-    return () => {
-      clearTimeout(timer);
-      dispatch(toggleShoppingCart(false));
-    };
-  }, []);
+  const theme = useTheme();
 
   useEffect(() => {
     if (ShoppingCart) {
@@ -104,7 +85,7 @@ const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlac
             <Stack direction={'row'}>
               <Typography
                 fontWeight={'bold'}
-                color={blue[500]}
+                color={theme.palette.info.main}
                 variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
               {showAllItems ? (
                 <ArrowDropDownIcon fontSize="small" />

@@ -14,32 +14,57 @@ import {
 } from '../../store/organizations/organizationsSlice';
 import { Overlay } from '../../components/Overlay';
 import { useNavigate } from 'react-router-dom';
-import { OrderItemVM, OrderVM } from '@halapp/common';
-import { updateCheckout } from '../../store/ui/uiSlice';
+import { OrderItemVM, OrderVM, ProductType } from '@halapp/common';
+import { toggleShoppingCart, updateCheckout } from '../../store/ui/uiSlice';
 import { PaymentForm } from './PaymentForm';
 import { selectUserAuth } from '../../store/auth/authSlice';
+import { ShoppingCartContext } from './ShoppingCartContext';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import { fetchTodaysPrices, selectPriceIsLoading } from '../../store/prices/pricesSlice';
+import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 
 const Checkout = () => {
+  const dispatch = useAppDispatch();
   const userAuth = useAppSelector(selectUserAuth);
+  const organizations = useAppSelector(selectOrganizations);
+  const organizationAreLoading = useAppSelector(selectOrganizationIsLoading);
+  const pricesAreLoading = useAppSelector(selectPriceIsLoading);
+  const selectedCity = useAppSelector(selectSelectedCity);
+  const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState<{
     [k: number]: boolean;
   }>({});
   const [creatingOrder, setCreatingOrder] = useState<OrderVM | null>(null);
-  const organizations = useAppSelector(selectOrganizations);
-  const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
-  const dispatch = useAppDispatch();
+
   // const navigate = useNavigate();
 
   useEffect(() => {
+    // Organization
     if (
       userAuth.authenticated == true &&
       (typeof organizations === 'undefined' ||
-        typeof organizations.List === 'undefined' ||
-        organizations.List.length === 0)
+        typeof organizations === 'undefined' ||
+        organizations === null ||
+        organizations.length === 0)
     ) {
       dispatch(fetchOrganizations());
     }
+    // Price
+    dispatch(
+      fetchTodaysPrices({
+        location: selectedCity,
+        type: ProductType.produce
+      })
+    );
+    const timer = setInterval(() => {
+      dispatch(fetchTodaysPrices({ location: selectedCity, type: ProductType.produce }));
+    }, 600000);
+
+    return () => {
+      clearTimeout(timer);
+      dispatch(toggleShoppingCart(false));
+    };
   }, []);
 
   useEffect(() => {
@@ -83,30 +108,37 @@ const Checkout = () => {
   };
 
   return (
-    <OrganizationsContext.Provider value={organizations?.List || []}>
-      {organizationIsLoading && <Overlay />}
-      <Grid container rowSpacing={4.5} justifyContent="left" columnSpacing={2.75} alignItems="left">
-        <Grid item xs={12} sm={12} md={6}>
-          <Stepper activeStep={activeStep} alternativeLabel>
-            <Step key={'shipping'} completed={completed[0]}>
-              <StepButton
-                sx={{ padding: '0', margin: '0' }}
-                onClick={() => {
-                  setActiveStep(0);
-                }}>
-                {'Teslimat'}
-              </StepButton>
-            </Step>
-            <Step key={'payment'} completed={completed[1]}>
-              <StepLabel>{'Ödeme'}</StepLabel>
-            </Step>
-          </Stepper>
+    <OrganizationsContext.Provider value={organizations || []}>
+      <ShoppingCartContext.Provider value={ShoppingCart}>
+        {(organizationAreLoading || pricesAreLoading) && <Overlay />}
+        <Grid
+          container
+          rowSpacing={4.5}
+          justifyContent="left"
+          columnSpacing={2.75}
+          alignItems="left">
+          <Grid item xs={12} sm={12} md={6}>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              <Step key={'shipping'} completed={completed[0]}>
+                <StepButton
+                  sx={{ padding: '0', margin: '0' }}
+                  onClick={() => {
+                    setActiveStep(0);
+                  }}>
+                  {'Teslimat'}
+                </StepButton>
+              </Step>
+              <Step key={'payment'} completed={completed[1]}>
+                <StepLabel>{'Ödeme'}</StepLabel>
+              </Step>
+            </Stepper>
+          </Grid>
         </Grid>
-      </Grid>
-      {activeStep === 0 && <CheckoutForm onSubmit={handleMoveToPayment} />}
-      {activeStep === 1 && (
-        <PaymentForm onSubmit={handlePayment} OrganizationId={creatingOrder?.OrganizationId} />
-      )}
+        {activeStep === 0 && <CheckoutForm onSubmit={handleMoveToPayment} />}
+        {activeStep === 1 && (
+          <PaymentForm onSubmit={handlePayment} OrganizationId={creatingOrder?.OrganizationId} />
+        )}
+      </ShoppingCartContext.Provider>
     </OrganizationsContext.Provider>
   );
 };

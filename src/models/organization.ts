@@ -28,9 +28,11 @@ class Organization {
   Email?: string;
   PhoneNumber?: string;
   Active?: boolean;
-  // Balance section
-  Balance?: number;
-  UsedBalance?: number;
+  // Money section
+  // CreditLimit means how low amount can be
+  CreditLimit = 0;
+  // Balance means Payment - order amounts
+  Balance = 0;
 
   @Type(() => OrganizationAddress)
   CompanyAddress?: OrganizationAddress;
@@ -58,14 +60,14 @@ class Organization {
     }
     return deliveryAddress;
   }
-  getBalanceAmount() {
+  getCreditLimitAmount() {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
-      this.Balance || 0
+      this.CreditLimit
     );
   }
-  getRemainingBalanceAmount() {
+  getBalanceAmount() {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
-      (this.Balance || 0) - (this.UsedBalance || 0)
+      this.Balance
     );
   }
   setInvoiceAddress(addr?: OrganizationAddress): void {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
-import { OrganizationDTO } from '../../models/dtos/organization.dto';
-import { Organization, OrganizationAddress } from '../../models/organization';
+import { OrganizationVM } from '@halapp/common';
+import { OrganizationAddress } from '../../models/organization';
 
 export class OrganizationsApi {
   baseUrl: string;
@@ -16,7 +16,7 @@ export class OrganizationsApi {
     this.mapper = new OrganizationToOrganizationDTOMapper();
   }
 
-  async createEnrollmentRequest(request: OrganizationDTO): Promise<void> {
+  async createEnrollmentRequest(request: OrganizationVM): Promise<void> {
     return await axios.post('/organizations/enrollment', JSON.stringify(request), {
       baseURL: this.baseUrl,
       headers: {
@@ -26,9 +26,9 @@ export class OrganizationsApi {
       }
     });
   }
-  async fetchOrganizations({ token }: { token: string }): Promise<Organization[]> {
+  async fetchOrganizations({ token }: { token: string }): Promise<OrganizationVM[]> {
     return await axios
-      .get<OrganizationDTO[]>('/organizations', {
+      .get<OrganizationVM[]>('/organizations', {
         baseURL: this.baseUrl,
         headers: {
           Authorization: `Bearer ${token}`
@@ -36,12 +36,12 @@ export class OrganizationsApi {
       })
       .then((response) => {
         const { data } = response;
-        return this.mapper.toListModel(data);
+        return data;
       });
   }
-  async fetchAllOrganizations({ token }: { token: string }): Promise<Organization[]> {
+  async fetchAllOrganizations({ token }: { token: string }): Promise<OrganizationVM[]> {
     return await axios
-      .get<OrganizationDTO[]>('/admin/organizations', {
+      .get<OrganizationVM[]>('/admin/organizations', {
         baseURL: this.baseUrl,
         headers: {
           Authorization: `Bearer ${token}`
@@ -49,23 +49,23 @@ export class OrganizationsApi {
       })
       .then((response) => {
         const { data } = response;
-        return this.mapper.toListModel(data);
+        return data;
       });
   }
   async toggleOrganizationActivation({
     isActive,
-    balance,
+    creditLimit,
     organizationId,
     token
   }: {
     isActive: boolean;
-    balance: number;
+    creditLimit: number;
     organizationId: string;
     token: string;
   }): Promise<void> {
     return await axios.put(
       `/admin/organizations/${organizationId}/activation`,
-      { Activation: isActive, Balance: balance },
+      { Activation: isActive, CreditLimit: creditLimit },
       {
         baseURL: this.baseUrl,
         headers: {
@@ -80,10 +80,10 @@ export class OrganizationsApi {
     organization
   }: {
     token: string;
-    organization: OrganizationDTO;
-  }): Promise<Organization> {
+    organization: OrganizationVM;
+  }): Promise<OrganizationVM> {
     return await axios
-      .put<OrganizationDTO>(`/organizations/${organization.ID}`, JSON.stringify(organization), {
+      .put<OrganizationVM>(`/organizations/${organization.ID}`, JSON.stringify(organization), {
         baseURL: this.baseUrl,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ export class OrganizationsApi {
       })
       .then((response) => {
         const { data } = response;
-        return this.mapper.toModel(data);
+        return data;
       });
   }
   async updateOrganizationDeliveryAddresses({
@@ -103,9 +103,9 @@ export class OrganizationsApi {
     token: string;
     organizationId: string;
     deliveryAddresses: OrganizationAddress[];
-  }): Promise<Organization> {
+  }): Promise<OrganizationVM> {
     return await axios
-      .post<OrganizationDTO>(
+      .post<OrganizationVM>(
         `/organizations/${organizationId}/deliveryaddresses`,
         JSON.stringify({
           DeliveryAddresses: deliveryAddresses
@@ -120,7 +120,7 @@ export class OrganizationsApi {
       )
       .then((response) => {
         const { data } = response;
-        return this.mapper.toModel(data);
+        return data;
       });
   }
   async fetchIndividualOrganization({
@@ -131,7 +131,7 @@ export class OrganizationsApi {
     organizationId: string;
   }) {
     return await axios
-      .get<OrganizationDTO>(`/organizations/${organizationId}`, {
+      .get<OrganizationVM>(`/organizations/${organizationId}`, {
         baseURL: this.baseUrl,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ export class OrganizationsApi {
       })
       .then((response) => {
         const { data } = response;
-        return this.mapper.toModel(data);
+        return data;
       });
   }
 }

@@ -1,16 +1,10 @@
-import { Stack, Button, Typography, Checkbox } from '@mui/material';
-import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
+import { Stack, Button } from '@mui/material';
 
 interface SummaryNWithdrawProps {
   IsDisable: boolean;
 }
 
 const SummaryNWithdraw = ({ IsDisable }: SummaryNWithdrawProps) => {
-  const dispatch = useAppDispatch();
-  const { approvedContract } = useAppSelector(selectUICheckout);
-
   return (
     <Stack spacing={1}>
       <Stack spacing={1}>
@@ -19,7 +13,7 @@ const SummaryNWithdraw = ({ IsDisable }: SummaryNWithdrawProps) => {
           variant="contained"
           disabled={IsDisable}
           sx={{ width: '100%', fontWeight: 'bold', textTransform: 'none' }}>
-          {'Bakiyeden Düş'}
+          {'Krediden Düş'}
         </Button>
         <Stack spacing={1} direction="row"></Stack>
       </Stack>

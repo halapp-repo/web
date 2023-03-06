@@ -14,7 +14,7 @@ import { SummaryNPay } from './SummaryNPay';
 import { cardValidationSchema, withdrawValidationSchema } from './PaymentFormValidation';
 import { Contracts } from './Contracts';
 import { DialogContracts } from './DialogContracts';
-import { WithdrawFromBalance } from './WithdrawFromBalance';
+import { WithdrawFromCredit } from './WithdrawFromCredit';
 import { SummaryNWithdraw } from './SummaryNWithdraw';
 
 interface FormValues {
@@ -99,7 +99,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               <Tab
                 sx={{ textTransform: 'none' }}
                 value={PaymentType.balance}
-                label="Bakiyeden düş"
+                label="Krediden düş"
                 icon={!matchesSm ? <AccountBalanceIcon /> : <></>}
                 iconPosition="start"
               />
@@ -117,7 +117,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             </TabPanel>
             <TabPanel value={activeStep} index={PaymentType.balance}>
               <Box sx={{ p: 1 }}>
-                <WithdrawFromBalance OrganizationId={values.organizationId} />
+                <WithdrawFromCredit OrganizationId={values.organizationId} />
               </Box>
             </TabPanel>
           </MainCard>
@@ -188,7 +188,7 @@ const PaymentForm = withFormik<MyFormProps, FormValues>({
     }
   },
   validateOnMount: true,
-  handleSubmit: async (values, { props, setSubmitting }) => {
+  handleSubmit: async (values, { setSubmitting }) => {
     // do submitting things
     setSubmitting(false);
   }

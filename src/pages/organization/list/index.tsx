@@ -11,6 +11,8 @@ import {
 import PageWrapper from '../../../components/PageWrapper';
 import MainCard from '../../../components/MainCard';
 import { OrganizationListItem } from './OrganizationListItem';
+import { Organization } from '../../../models/organization';
+import { RetryOnError } from '../../../components/RetryOnError';
 
 const OrganizationList = () => {
   const navigate = useNavigate();
@@ -22,11 +24,37 @@ const OrganizationList = () => {
     if (!userAuth.authenticated) {
       navigate('/auth/signin');
     } else {
-      if (!organizations?.List) {
+      if (!organizations) {
         dispatch(fetchOrganizations());
       }
     }
   }, [userAuth]);
+
+  const handleRetry = () => {
+    dispatch(fetchOrganizations());
+  };
+
+  const getContent = (organizations: Organization[] | null | undefined, isLoading: boolean) => {
+    if (isLoading || typeof organizations === 'undefined') {
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      );
+    } else if (organizations === null) {
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <RetryOnError HandleRetry={handleRetry} />
+        </Box>
+      );
+    }
+    return organizations.map((i) => (
+      <>
+        <Divider />
+        <OrganizationListItem Organization={i} key={i.ID} />
+      </>
+    ));
+  };
 
   return (
     <PageWrapper md={6} lg={4}>
@@ -45,18 +73,7 @@ const OrganizationList = () => {
               </Typography>
             </Box>
           }>
-          {isLoading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <CircularProgress />
-            </Box>
-          ) : (
-            organizations?.List?.map((i) => (
-              <>
-                <Divider />
-                <OrganizationListItem Organization={i} key={i.ID} />
-              </>
-            ))
-          )}
+          {getContent(organizations, isLoading)}
         </List>
       </MainCard>
     </PageWrapper>

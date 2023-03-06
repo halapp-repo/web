@@ -1,3 +1,4 @@
+import { OrganizationVM } from '@halapp/common';
 import { Organization } from '../../models/organization';
 
 interface Enrollment {
@@ -8,11 +9,11 @@ interface Enrollment {
 
 export interface OrganizationsState {
   Organizations?: {
-    List?: Organization[];
+    List?: OrganizationVM[] | null;
   };
   IsLoading: boolean;
   Enrollment?: Enrollment | undefined;
   AdminList: {
-    List?: Organization[];
+    List?: OrganizationVM[] | null;
   };
 }
