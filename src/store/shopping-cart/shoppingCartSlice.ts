@@ -141,7 +141,7 @@ export const selectEnhancedShoppingCart = createSelector(
   (
     state: ShoppingCartState,
     inventoryState: InventoriesState,
-    prices: Price[]
+    prices: Price[] | undefined | null
   ): ShoppingCartList => {
     return plainToInstance(ShoppingCartList, {
       Items: state.cart.Items.map((itm) => {

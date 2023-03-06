@@ -9,17 +9,16 @@ import {
   ListItem,
   ListItemText
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { ProductType, OrderItemVM } from '@halapp/common';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchTodaysPrices } from '../../store/prices/pricesSlice';
-import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
-import { toggleShoppingCart } from '../../store/ui/uiSlice';
+import { useContext, useEffect, useState } from 'react';
 import { trMoment } from '../../utils/timezone';
 import { Link } from 'react-router-dom';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import { ShoppingCartContext } from './ShoppingCartContext';
+import { OrderItemVM } from '@halapp/common';
+import { useAppSelector } from '../../store/hooks';
+import { useTheme } from '@mui/system';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
@@ -27,29 +26,12 @@ interface SummaryNPlaceOrderProps {
   DeliveryTime: string;
 }
 
-const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
-  const dispatch = useAppDispatch();
+const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
+  const ShoppingCart = useContext(ShoppingCartContext);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
-  const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
   const selectedCity = useAppSelector(selectSelectedCity);
   const deliveryTime = trMoment(DeliveryTime).clone();
-
-  useEffect(() => {
-    dispatch(
-      fetchTodaysPrices({
-        location: selectedCity,
-        type: ProductType.produce
-      })
-    );
-    const timer = setInterval(() => {
-      dispatch(fetchTodaysPrices({ location: selectedCity, type: ProductType.produce }));
-    }, 300000);
-
-    return () => {
-      clearTimeout(timer);
-      dispatch(toggleShoppingCart(false));
-    };
-  }, []);
+  const theme = useTheme();
 
   useEffect(() => {
     if (ShoppingCart) {
@@ -78,9 +60,15 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
           {'Kaydet ve Devam Et'}
         </Button>
         <Typography variant="body2" color="secondary">
-          Kaydet ve Devam Et tuşuna tıklayarak , halapp{"'"}in{' '}
-          <Link to={'/privacy#gizlilik-politikasi'}>gizlilik politikası</Link> ve{' '}
-          <Link to={'/privacy#kullanim-sartlari'}>kullanım şartlarını</Link> kabul etmektesin.
+          Kaydet ve Devam Et tuşuna tıklayarak, halapp{"'"}in{' '}
+          <Link to={'/privacy#gizlilik-politikasi'}>
+            <b>gizlilik politikası</b>
+          </Link>{' '}
+          ve{' '}
+          <Link to={'/privacy#kullanim-sartlari'}>
+            <b>kullanım şartlarını</b>
+          </Link>{' '}
+          kabul etmektesin.
         </Typography>
       </Box>
       <Divider />
@@ -95,7 +83,10 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
           }}>
           <Stack direction={'row'} justifyContent="space-between">
             <Stack direction={'row'}>
-              <Typography variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
+              <Typography
+                fontWeight={'bold'}
+                color={theme.palette.info.main}
+                variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
               {showAllItems ? (
                 <ArrowDropDownIcon fontSize="small" />
               ) : (
@@ -118,7 +109,7 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
                     secondary={
                       <Typography
                         color="secondary"
-                        variant="body2">{`${i.UnitAmount} x ${i.Count}`}</Typography>
+                        variant="body2">{`${i.UnitAmount} x ${i.Count} ${i.Unit}`}</Typography>
                     }
                   />
                 </ListItem>
@@ -160,4 +151,4 @@ const SummaryNPlaceOrder = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPl
   );
 };
 
-export { SummaryNPlaceOrder };
+export { SummaryNContinue };

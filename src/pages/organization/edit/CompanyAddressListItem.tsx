@@ -29,7 +29,7 @@ const CompanyAddressListItem = ({
           <Stack direction={'row'} gap={2} sx={{ pb: '10px' }}>
             <Box>
               <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-start' }}>
-                <Typography fontWeight={'bold'} variant="h5" color={theme.palette.primary.main}>
+                <Typography fontWeight={'bold'} variant="h5" color={theme.palette.info.main}>
                   {`İşletme Adresi`}
                 </Typography>
                 {IsDefault && (

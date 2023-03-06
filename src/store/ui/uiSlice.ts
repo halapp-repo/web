@@ -3,7 +3,7 @@ import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import { UIState } from './uiState';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { ProductType } from '@halapp/common';
+import { PaymentType, ProductType } from '@halapp/common';
 import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
@@ -33,7 +33,12 @@ const initialState = {
     generalInfoEditMode: false
   },
   checkout: {
-    orderNote: ''
+    cardNumber: '',
+    orderNote: '',
+    paymentMethod: PaymentType.card,
+    approvedContract: false,
+    monthExpiry: '',
+    yearExpiry: ''
   },
   orders: {
     filter: undefined,
@@ -98,19 +103,64 @@ const UISlice = createSlice({
     },
     updateCheckout: (
       state: UIState,
-      action: PayloadAction<{ note?: string; organizationId?: string; deliveryTime?: string }>
+      action: PayloadAction<{
+        note?: string;
+        organizationId?: string;
+        deliveryTime?: string;
+        paymentMethod?: PaymentType;
+        cardNumber?: string;
+        monthExpiry?: string;
+        yearExpiry?: string;
+        securePaymentEnable?: boolean;
+        approvedContract?: boolean;
+      }>
     ) => {
-      state.checkout = {
-        ...state.checkout,
-        ...(typeof action.payload.note !== 'undefined' ? { orderNote: action.payload.note } : null),
-        ...(typeof action.payload.organizationId !== 'undefined'
-          ? {
-              organizationId: action.payload.organizationId
-            }
-          : null),
-        ...(typeof action.payload.deliveryTime !== 'undefined'
-          ? { deliveryTime: action.payload.deliveryTime }
-          : null)
+      return {
+        ...state,
+        checkout: {
+          ...state.checkout,
+          ...(typeof action.payload.note !== 'undefined'
+            ? { orderNote: action.payload.note }
+            : null),
+          ...(typeof action.payload.organizationId !== 'undefined'
+            ? {
+                organizationId: action.payload.organizationId
+              }
+            : null),
+          ...(typeof action.payload.deliveryTime !== 'undefined'
+            ? { deliveryTime: action.payload.deliveryTime }
+            : null),
+          ...(typeof action.payload.paymentMethod !== 'undefined'
+            ? {
+                paymentMethod: action.payload.paymentMethod
+              }
+            : null),
+          ...(typeof action.payload.cardNumber !== 'undefined'
+            ? {
+                cardNumber: action.payload.cardNumber
+              }
+            : null),
+          ...(typeof action.payload.monthExpiry !== 'undefined'
+            ? {
+                monthExpiry: action.payload.monthExpiry
+              }
+            : null),
+          ...(typeof action.payload.yearExpiry !== 'undefined'
+            ? {
+                yearExpiry: action.payload.yearExpiry
+              }
+            : null),
+          ...(typeof action.payload.securePaymentEnable !== 'undefined'
+            ? {
+                securePaymentEnable: action.payload.securePaymentEnable
+              }
+            : null),
+          ...(typeof action.payload.approvedContract !== 'undefined'
+            ? {
+                approvedContract: action.payload.approvedContract
+              }
+            : null)
+        }
       };
     },
     toggleGlobalIsLoading: (state: UIState, action: PayloadAction<boolean>) => {
@@ -190,7 +240,15 @@ const UISlice = createSlice({
     });
     builder.addCase(createOrder.fulfilled, (state) => {
       state.checkout = {
-        orderNote: ''
+        orderNote: '',
+        organizationId: undefined,
+        paymentMethod: PaymentType.card,
+        deliveryTime: undefined,
+        cardNumber: '',
+        monthExpiry: '',
+        yearExpiry: '',
+        securePaymentEnable: undefined,
+        approvedContract: false
       };
     });
     builder.addCase(organizationUpdateOrganization.fulfilled, (state) => {

@@ -49,7 +49,7 @@ const PricesSlice = createSlice({
       const { date, location } = action.meta.arg;
       state.data[date] = {
         ...state.data[date],
-        [location]: []
+        [location]: null
       };
       state.isLoading = false;
     });
@@ -64,31 +64,23 @@ const PricesSlice = createSlice({
         ...state.data[date],
         [location]: data
       };
+      state.isLoading = false;
     });
     builder.addCase(fetchTodaysPrices.rejected, (state, action) => {
       const date = trMoment().format('YYYY-MM-DD');
       const { location } = action.meta.arg;
       state.data[date] = {
         ...state.data[date],
-        [location]: []
+        [location]: null
       };
+      state.isLoading = false;
+    });
+    builder.addCase(fetchTodaysPrices.pending, (state) => {
+      state.isLoading = true;
     });
   }
 });
 
-export const selectPricesOfSelectedDate = createSelector(
-  [
-    (state: RootState) => state.prices.data,
-    (state: RootState) => state.inventories.inventories,
-    (state: RootState) => state.ui.listing.selectedDate,
-    (state: RootState) => state.cities.selectedCity
-  ],
-  (prices, inventories, selectedDate, selectedCity) => {
-    const list = prices[selectedDate]?.[selectedCity] || undefined;
-    const mapper = new PriceToPriceDTOMapper(inventories);
-    return list && mapper.toListModel(list);
-  }
-);
 export const selectPriceIsLoading = createSelector(
   [(state: RootState) => state.prices.isLoading],
   (isLoading) => isLoading
@@ -100,7 +92,8 @@ export const selectPricesOfToday = createSelector(
     (state: RootState) => state.cities.selectedCity
   ],
   (prices, inventories, selectedCity) => {
-    const list = prices[trMoment().format('YYYY-MM-DD')]?.[selectedCity] || undefined;
+    const list: PriceVM[] | undefined | null =
+      prices[trMoment().format('YYYY-MM-DD')]?.[selectedCity];
     const mapper = new PriceToPriceDTOMapper(inventories);
     return list && mapper.toListModel(list);
   }
@@ -113,7 +106,7 @@ export const selectPriceListItemsOfSelectedDate = createSelector(
     (state: RootState) => state.cities.selectedCity
   ],
   (prices, inventories, selectedDate, selectedCity) => {
-    const list = prices[selectedDate]?.[selectedCity] || undefined;
+    const list: PriceVM[] | undefined | null = prices[selectedDate]?.[selectedCity];
     const mapper = new PriceToPriceDTOMapper(inventories);
     return list && mapper.toListModel(list);
   }

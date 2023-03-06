@@ -8,7 +8,8 @@ import {
   DialogActions,
   Button,
   OutlinedInput,
-  InputAdornment
+  InputAdornment,
+  Alert
 } from '@mui/material';
 import { useState } from 'react';
 import { Organization } from '../../../models/organization';
@@ -21,8 +22,8 @@ interface DialogOrganizationActivationProps {
   IsOpen: boolean;
   OnClose: () => void;
 }
-const MIN_BALANCE = 0;
-const MAX_BALANCE = 100000;
+const MIN_CREDIT = 0;
+const MAX_CREDIT = 100000;
 
 const DialogOrganizationActivation = ({
   IsOpen,
@@ -31,13 +32,13 @@ const DialogOrganizationActivation = ({
   NewActivationStatus
 }: DialogOrganizationActivationProps) => {
   const dispatch = useAppDispatch();
-  const [newBalance, setBalance] = useState(Organization.Balance);
+  const [newCreditLimit, setCreditLimit] = useState(Organization.CreditLimit);
 
   const handleSetActivation = () => {
     dispatch(
       toggleOrganizationActivation({
         Activation: NewActivationStatus,
-        Balance: newBalance || 0,
+        CreditLimit: newCreditLimit || 0,
         OrganizationId: Organization.ID!
       })
     );
@@ -60,27 +61,33 @@ const DialogOrganizationActivation = ({
           fontWeight={700}
           fontSize={'16px'}
           sx={{ padding: '16px 0', minHeight: '56px', lineHeight: '24px' }}>
-          {'Activation & Balance'}
+          {'Activation & Credit Limit'}
         </Typography>
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
           <Box />
           <Typography variant="body2" color="secondary">
-            {'You are about to change of activation and balance of organization.'}
+            {'You are about to change of activation and credit limit of organization.'}
           </Typography>
-          <Typography variant="body2" color="primary">
-            {`Min balance is ₺${MIN_BALANCE}, and  Max Balance ₺${MAX_BALANCE}`}
-          </Typography>
+          <Alert severity="warning">
+            {`Min Credit Limit is ${new Intl.NumberFormat('tr-TR', {
+              style: 'currency',
+              currency: 'TRY'
+            }).format(MIN_CREDIT)}, and  Max Credit Limit ${new Intl.NumberFormat('tr-TR', {
+              style: 'currency',
+              currency: 'TRY'
+            }).format(MAX_CREDIT)}`}
+          </Alert>
           <OutlinedInput
             type="number"
             fullWidth
             startAdornment={<InputAdornment position="start">₺</InputAdornment>}
-            value={newBalance}
+            value={newCreditLimit}
             onChange={(e) => {
               const val = parseInt(e.target.value);
-              if (!val || (val >= MIN_BALANCE && val <= MAX_BALANCE)) {
-                setBalance(val);
+              if (!val || (val >= MIN_CREDIT && val <= MAX_CREDIT)) {
+                setCreditLimit(val);
               }
             }}
           />
@@ -106,11 +113,12 @@ const DialogOrganizationActivation = ({
               Deactivate
             </Button>
           ))}
-        {Organization.Active === NewActivationStatus && newBalance !== Organization.Balance && (
-          <Button variant="contained" onClick={handleSetActivation}>
-            Change Balance
-          </Button>
-        )}
+        {Organization.Active === NewActivationStatus &&
+          newCreditLimit !== Organization.CreditLimit && (
+            <Button variant="contained" onClick={handleSetActivation}>
+              Change Limit
+            </Button>
+          )}
       </DialogActions>
     </Dialog>
   );

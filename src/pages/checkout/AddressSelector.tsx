@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { red, grey } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -21,6 +21,7 @@ import { instanceToInstance } from 'class-transformer';
 import { OrganizationsContext } from './OrganizationsContext';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { areStringsEqual } from '../../utils/filter';
+import { useTheme } from '@mui/system';
 
 interface AddressSelectorProps {
   SetAddress: (orgId: string, deliveryAddress: OrganizationAddress) => Promise<void>;
@@ -72,6 +73,7 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
   };
 
   const getListItem = (org: Organization): JSX.Element => {
+    const theme = useTheme();
     const deliveryAddress = org.getDeliveryAddress();
     return (
       <ListItem
@@ -118,7 +120,11 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                     ? 'inherit'
                     : grey['A400']
                 }}>
-                <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }} color={red[900]}>
+                <Typography
+                  variant="h5"
+                  fontWeight={'bold'}
+                  sx={{ mb: '10px' }}
+                  color={theme.palette.info.main}>
                   {org.Name}
                 </Typography>
                 {areStringsEqual(deliveryAddress?.City, selectedCity) || (

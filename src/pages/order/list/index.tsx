@@ -21,6 +21,8 @@ import {
 import { trMoment } from '../../../utils/timezone';
 import moment from 'moment';
 import { selectOrdersFilter, setOrdersFilter } from '../../../store/ui/uiSlice';
+import { RetryOnError } from '../../../components/RetryOnError';
+import { Organization } from '../../../models/organization';
 
 const OrderList = () => {
   const filter = useAppSelector(selectOrdersFilter);
@@ -34,6 +36,7 @@ const OrderList = () => {
   );
   const ordersAreLoading = useAppSelector(selectOrderIsLoading);
   const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
+  const selectedOrganization = organizations?.find((o) => o.ID === selectedOrganizationId);
 
   useEffect(() => {
     if (!filter) {
@@ -45,7 +48,7 @@ const OrderList = () => {
     if (!userAuth.authenticated) {
       navigate('/auth/signin');
     } else {
-      if (!organizations?.List) {
+      if (!organizations) {
         dispatch(fetchOrganizations());
       }
     }
@@ -73,42 +76,42 @@ const OrderList = () => {
   const handleSetOrganization = (organizationId: string): void => {
     setSelectedOrganizationId(organizationId);
   };
+  const handleRetry = () => {
+    dispatch(fetchOrganizations());
+  };
 
-  const selectedOrganization = organizations?.List?.find((o) => o.ID === selectedOrganizationId);
-
-  return (
-    <>
-      {organizationIsLoading && <Overlay />}
-      {organizations?.List && organizations?.List.length > 0 && (
-        <Grid
-          container
-          rowSpacing={4.5}
-          justifyContent="left"
-          columnSpacing={2.75}
-          alignItems="left">
-          <Grid item xs={12} sm={3} md={3} lg={3}>
-            <MainCard sx={{ mt: 2 }}>
-              <OrdersFilters
-                Organizations={organizations.List}
-                Filter={filter}
-                SetFilter={handleSetFilter}
-                SetOrganization={handleSetOrganization}
-                SelectedOrganization={selectedOrganizationId}
-              />
-            </MainCard>
-          </Grid>
-          <Grid item xs={12} sm={6} md={5}>
-            <OrdersContent
-              Orders={ordersWithFilter}
-              IsLoading={ordersAreLoading}
+  const getContent = (organizations: Organization[] | null | undefined, isLoading: boolean) => {
+    if (isLoading === true || typeof organizations === 'undefined') {
+      return <Overlay />;
+    } else if (organizations === null) {
+      return <RetryOnError HandleRetry={handleRetry} />;
+    }
+    return (
+      <Grid container rowSpacing={4.5} justifyContent="left" columnSpacing={2.75} alignItems="left">
+        <Grid item xs={12} sm={3} md={3} lg={3}>
+          <MainCard sx={{ mt: 2 }}>
+            <OrdersFilters
+              Organizations={organizations}
               Filter={filter}
-              SelectedOrganization={selectedOrganization}
+              SetFilter={handleSetFilter}
+              SetOrganization={handleSetOrganization}
+              SelectedOrganization={selectedOrganizationId}
             />
-          </Grid>
+          </MainCard>
         </Grid>
-      )}
-    </>
-  );
+        <Grid item xs={12} sm={6} md={5}>
+          <OrdersContent
+            Orders={ordersWithFilter}
+            IsLoading={ordersAreLoading}
+            Filter={filter}
+            SelectedOrganization={selectedOrganization}
+          />
+        </Grid>
+      </Grid>
+    );
+  };
+
+  return <>{getContent(organizations, organizationIsLoading)}</>;
 };
 
 export default OrderList;

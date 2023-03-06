@@ -33,6 +33,7 @@ import PriceDialog from './PriceDialog';
 import { contains } from '../../utils/filter';
 import { Price } from '../../models/price';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import { RetryOnError } from '../../components/RetryOnError';
 
 type SortablePriceListItem = Pick<Price, 'Price' | 'ProductName'>;
 
@@ -63,12 +64,21 @@ const PriceTable = () => {
   const handleCloseAnalyticsPanel = () => {
     setOpen('');
   };
+  const handleRetry = () => {
+    dispatch(
+      fetchPrices({
+        location: selectedCity,
+        type: ProductType.produce,
+        date: selectedDate
+      })
+    );
+  };
 
   useEffect(() => {
     if (!selectedDate) {
       dispatch(updateListingSelectedDate());
     }
-    if (!selectedDatePrices) {
+    if (typeof selectedDatePrices === 'undefined') {
       dispatch(
         fetchPrices({
           location: selectedCity,
@@ -79,7 +89,7 @@ const PriceTable = () => {
     }
   }, [selectedDate]);
 
-  const createTableRow = (prices: Price[]): ReactElement[] => {
+  const createTableRow = (prices: Price[] | null | undefined): ReactElement[] => {
     if (isLoading || inventories?.length == 0) {
       return [
         <TableRow key="0" sx={{ height: '20vh' }}>
@@ -88,8 +98,16 @@ const PriceTable = () => {
           </TableCell>
         </TableRow>
       ];
+    } else if (prices === null) {
+      return [
+        <TableRow key="0" sx={{ height: '20vh' }}>
+          <TableCell colSpan={3} align="center" sx={{ height: '80%' }}>
+            <RetryOnError HandleRetry={handleRetry} />
+          </TableCell>
+        </TableRow>
+      ];
     }
-    return prices
+    return (prices || [])
       .sort(getComparator(order, orderBy))
       .filter((p) => {
         if (!filteringProductName) {
@@ -157,7 +175,7 @@ const PriceTable = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>{createTableRow(selectedDatePrices || [])}</TableBody>
+          <TableBody>{createTableRow(selectedDatePrices)}</TableBody>
         </Table>
       </TableContainer>
       <PriceDialog

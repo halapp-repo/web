@@ -106,7 +106,6 @@ export const signIn = createAsyncThunk<
 
 export const signOut = createAsyncThunk('auth/signout', async () => {
   await signOutFunc();
-  localStorage.removeItem(UserSessionLS);
 });
 
 export const getSession = createAsyncThunk<AuthResponseDTO>(
@@ -324,6 +323,7 @@ const AuthSlice = createSlice({
       }
     });
     builder.addCase(signOut.fulfilled, (state) => {
+      localStorage.removeItem(UserSessionLS);
       state.userAuth = {
         ...state.userAuth,
         ...defaultUserAuth

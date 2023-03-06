@@ -5,15 +5,23 @@ import ShoppingCartListItem from './SCListItem';
 import ShoppingCartItemCounter from './SCItemCounter';
 import SummaryNCheckout from './SummaryNCheckout';
 import { useEffect } from 'react';
-import { fetchTodaysPrices, selectPricesOfToday } from '../../store/prices/pricesSlice';
+import {
+  fetchTodaysPrices,
+  selectPriceIsLoading,
+  selectPricesOfToday
+} from '../../store/prices/pricesSlice';
 import { ProductType } from '@halapp/common';
 import ShoppingCartEmptyListContent from './SCEmptyListContent';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import SummaryIsLoading from './SummaryIsLoading';
+import { Price } from '../../models/price';
+import SummaryError from './SummaryError';
 
 const ShoppingCartContent = () => {
   const shoppingCart = useAppSelector(selectEnhancedShoppingCart);
   const todaysPrices = useAppSelector(selectPricesOfToday);
   const selectedCity = useAppSelector(selectSelectedCity);
+  const priceIsLoading = useAppSelector(selectPriceIsLoading);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -26,6 +34,15 @@ const ShoppingCartContent = () => {
       );
     }
   }, []);
+
+  const getSummary = (prices: Price[] | null | undefined, isLoading: boolean) => {
+    if (typeof prices === 'undefined' || isLoading) {
+      return <SummaryIsLoading />;
+    } else if (prices === null) {
+      return <SummaryError />;
+    }
+    return <SummaryNCheckout ShoppingCart={shoppingCart} />;
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -53,9 +70,7 @@ const ShoppingCartContent = () => {
         )}
       </Box>
 
-      <Box sx={{ p: '16px' }}>
-        <SummaryNCheckout ShoppingCart={shoppingCart} />
-      </Box>
+      <Box sx={{ p: '16px' }}>{getSummary(todaysPrices, priceIsLoading)}</Box>
     </Box>
   );
 };

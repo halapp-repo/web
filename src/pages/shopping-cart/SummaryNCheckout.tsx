@@ -24,9 +24,6 @@ const SummaryNCheckout = ({ ShoppingCart }: SummaryNCheckoutProps) => {
         Ürünler, <b>{`${selectedCity}`}</b>
         {`'a göre fiyatlandirilmistir.`}
       </Typography>
-      <Typography variant="body2" color="secondary">
-        <b>Fiyatlara KDV dahildir.</b>
-      </Typography>
       <Box
         sx={{
           display: 'flex',

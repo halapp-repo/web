@@ -186,6 +186,8 @@ export const OTPInputComponent = (props: OTPInputProps) => {
         .fill('')
         .map((_, index) => (
           <SingleInput
+            type="text"
+            pattern="\d*"
             key={`SingleInput-${index}`}
             focus={activeInput === index}
             value={otpValues && otpValues[index]}

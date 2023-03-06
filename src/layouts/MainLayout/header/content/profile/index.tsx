@@ -50,6 +50,7 @@ const Profile = (props: ProfileProps) => {
 
   const handleSignOut = async () => {
     await dispatch(signOut());
+    navigate('/');
     setOpen(false);
   };
 

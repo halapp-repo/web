@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React, { useEffect, useState } from 'react';
 import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { debounce } from '@mui/material/utils';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -32,23 +33,27 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 });
 
 interface OrderNoteProps {
-  SetNote: (note: string) => Promise<void>;
+  SetNoteField: (note: string) => Promise<void>;
 }
 
-const OrderNote = ({ SetNote }: OrderNoteProps) => {
+const OrderNote = ({ SetNoteField }: OrderNoteProps) => {
   const dispatch = useAppDispatch();
   const { orderNote: note } = useAppSelector(selectUICheckout);
   const [expanded, setExpanded] = React.useState(note ? true : false);
-  const [orderNote, setOrderNote] = useState(note);
+  const [orderNote, setOrderNote] = useState('');
+  const debouncedSetNoteField = debounce(SetNoteField, 300);
+  const debouncedDispatch = debounce(dispatch, 300);
 
   useEffect(() => {
-    const timeOutId = setTimeout(() => {
-      dispatch(updateCheckout({ note: orderNote }));
-      SetNote(orderNote || '');
-    }, 1000);
-    return () => {
-      clearTimeout(timeOutId);
-    };
+    if (note) {
+      setOrderNote(note);
+      SetNoteField(orderNote);
+    }
+  }, []);
+
+  useEffect(() => {
+    debouncedDispatch(updateCheckout({ note: orderNote }));
+    debouncedSetNoteField(orderNote);
   }, [orderNote]);
 
   const handleExpandClick = () => {

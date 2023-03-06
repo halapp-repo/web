@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { OrganizationDTO } from '../models/dtos/organization.dto';
+import { OrganizationVM } from '@halapp/common';
 import { OrganizationToOrganizationDTOMapper } from './organization-to-organization-dto.mapper';
 
 describe('OrganizationToOrganizationDTOMapper', () => {
@@ -8,7 +8,7 @@ describe('OrganizationToOrganizationDTOMapper', () => {
     mapper = new OrganizationToOrganizationDTOMapper();
   });
   test('Convert to Organization simple', () => {
-    const orgDto = new OrganizationDTO();
+    const orgDto = new OrganizationVM();
     orgDto.VKN = '1234';
 
     const org = mapper.toModel(orgDto);
@@ -17,7 +17,7 @@ describe('OrganizationToOrganizationDTOMapper', () => {
   });
 
   test('Convert to Organization complex', () => {
-    const orgDto = new OrganizationDTO();
+    const orgDto = new OrganizationVM();
     orgDto.VKN = '1234';
     orgDto.CompanyAddress = {
       AddressLine: 'A',

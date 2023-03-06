@@ -1,7 +1,7 @@
-import { Stack, Grid, Switch, OutlinedInput, InputAdornment } from '@mui/material';
+import { Stack, Grid, Switch, OutlinedInput, InputAdornment, Typography } from '@mui/material';
 import { Organization } from '../../../models/organization';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { useState, useEffect } from 'react';
 import { DialogOrganizationActivation } from './DialogOrganizationActivation';
 import { blue } from '@mui/material/colors';
@@ -21,6 +21,11 @@ const OrganizationAdminPanel = ({ Organization }: OrganizationAdminPanelProps) =
     <>
       <Stack spacing={2}>
         <Grid container>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="secondary" fontWeight={'bold'}>
+              {'Activation Status'}
+            </Typography>
+          </Grid>
           <Grid item xs={2}>
             <PowerSettingsNewIcon color={'info'} fontSize="large" />
           </Grid>
@@ -37,8 +42,13 @@ const OrganizationAdminPanel = ({ Organization }: OrganizationAdminPanelProps) =
         </Grid>
         {Organization.Active && (
           <Grid container>
+            <Grid item xs={12}>
+              <Typography variant="body2" color="secondary" fontWeight={'bold'}>
+                {'Credit Limit'}
+              </Typography>
+            </Grid>
             <Grid item xs={2}>
-              <AccountBalanceIcon color={'info'} fontSize="large" />
+              <CreditCardIcon color={'info'} fontSize="large" />
             </Grid>
             <Grid item xs={10}>
               <OutlinedInput
@@ -51,7 +61,7 @@ const OrganizationAdminPanel = ({ Organization }: OrganizationAdminPanelProps) =
                   }
                 }}
                 startAdornment={<InputAdornment position="start">₺</InputAdornment>}
-                value={Organization.Balance || 0}
+                value={Organization.CreditLimit || 0}
                 disabled
                 onClick={() => {
                   setDialogOpen(true);

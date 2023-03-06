@@ -13,6 +13,8 @@ import {
 } from '../../../store/organizations/organizationsSlice';
 import { getComparator } from '../../../utils/sort';
 import { contains } from '../../../utils/filter';
+import { Organization } from '../../../models/organization';
+import { RetryOnError } from '../../../components/RetryOnError';
 
 const AdminOrganizationList = () => {
   const navigate = useNavigate();
@@ -34,6 +36,40 @@ const AdminOrganizationList = () => {
     }
   }, [organizations]);
 
+  const handleRetry = () => {
+    dispatch(fetchAllOrganizations());
+  };
+
+  const getContent = (organizations: Organization[] | undefined | null, isLoading: boolean) => {
+    if (isLoading || typeof organizations === 'undefined') {
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      );
+    } else if (organizations === null) {
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <RetryOnError HandleRetry={handleRetry} />
+        </Box>
+      );
+    }
+    return [...(organizations || [])]
+      ?.sort(getComparator('desc', 'CreatedDate'))
+      .filter((p) => {
+        if (!filteringOrgName) {
+          return true;
+        } else {
+          return contains((p.Name || '').toLowerCase(), filteringOrgName);
+        }
+      })
+      .map((i) => (
+        <>
+          <Divider />
+          <OrganizationListItem Organization={i} key={i.ID} />
+        </>
+      ));
+  };
   return (
     <PageWrapper md={6} lg={4}>
       <MainCard>
@@ -57,27 +93,7 @@ const AdminOrganizationList = () => {
               />
             </Box>
           }>
-          {isLoading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <CircularProgress />
-            </Box>
-          ) : (
-            [...(organizations || [])]
-              ?.sort(getComparator('desc', 'CreatedDate'))
-              .filter((p) => {
-                if (!filteringOrgName) {
-                  return true;
-                } else {
-                  return contains((p.Name || '').toLowerCase(), filteringOrgName);
-                }
-              })
-              .map((i) => (
-                <>
-                  <Divider />
-                  <OrganizationListItem Organization={i} key={i.ID} />
-                </>
-              ))
-          )}
+          {getContent(organizations, isLoading)}
         </List>
       </MainCard>
     </PageWrapper>
