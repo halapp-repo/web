@@ -258,7 +258,7 @@ const CardInformation = ({
             onChange={handleChangePaySecure}
             label={
               <Stack spacing={1} direction="row">
-                <SecurityOutlinedIcon />
+                <SecurityOutlinedIcon fontSize="small" />
                 <Typography variant="body1" color="text.secondary">
                   <b>3D Secure</b> ile ödemek istiyorum.
                 </Typography>

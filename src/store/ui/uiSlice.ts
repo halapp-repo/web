@@ -3,7 +3,7 @@ import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import { UIState } from './uiState';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { PaymentType, ProductType } from '@halapp/common';
+import { PaymentMethodType, ProductType } from '@halapp/common';
 import { trMoment } from '../../utils/timezone';
 import { getSession } from '../auth/authSlice';
 import { getSignupCodeDetails } from '../auth/authSlice';
@@ -35,7 +35,7 @@ const initialState = {
   checkout: {
     cardNumber: '',
     orderNote: '',
-    paymentMethod: PaymentType.card,
+    paymentMethod: PaymentMethodType.card,
     approvedContract: false,
     monthExpiry: '',
     yearExpiry: ''
@@ -107,7 +107,7 @@ const UISlice = createSlice({
         note?: string;
         organizationId?: string;
         deliveryTime?: string;
-        paymentMethod?: PaymentType;
+        paymentMethod?: PaymentMethodType;
         cardNumber?: string;
         monthExpiry?: string;
         yearExpiry?: string;
@@ -242,7 +242,7 @@ const UISlice = createSlice({
       state.checkout = {
         orderNote: '',
         organizationId: undefined,
-        paymentMethod: PaymentType.card,
+        paymentMethod: PaymentMethodType.card,
         deliveryTime: undefined,
         cardNumber: '',
         monthExpiry: '',

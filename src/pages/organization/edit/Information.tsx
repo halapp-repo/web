@@ -1,4 +1,4 @@
-import { Typography, Grid, Stack, Button, Divider, Chip, Tooltip } from '@mui/material';
+import { Typography, Grid, Stack, Button, Divider, Chip } from '@mui/material';
 import { Organization } from '../../../models/organization';
 import { EditFilled } from '@ant-design/icons';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
@@ -8,7 +8,6 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useTheme } from '@mui/system';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 interface InformationProps {
   Organization: Organization;
@@ -47,24 +46,11 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
                 <Grid item xs={10}>
                   <Grid container>
                     <Grid item xs={6} sm={4}>
-                      <Stack spacing={1} direction={'row'} alignItems="center">
-                        <Typography variant="body1" color="secondary" fontWeight={'bold'}>
-                          {'Bakiye'}
-                        </Typography>
-                        <Tooltip
-                          enterDelay={500}
-                          leaveDelay={200}
-                          title={
-                            <Stack>
-                              <Typography variant="h5">{'Kredi Limiti'}</Typography>
-                              <Typography variant="h6">
-                                {Organization.getCreditLimitAmount()}
-                              </Typography>
-                            </Stack>
-                          }>
-                          <InfoOutlinedIcon sx={{ fontSize: 'small' }} color="info" />
-                        </Tooltip>
-                      </Stack>
+                      <Typography variant="body1" color="secondary" fontWeight={'bold'}>
+                        {'Bakiye'}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6} sm={8}>
                       <Typography
                         variant="body1"
                         fontWeight={'bold'}
@@ -76,17 +62,21 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
                         {Organization.getBalanceAmount()}
                       </Typography>
                     </Grid>
-                    {/* <Grid item xs={6} sm={4}>
+                  </Grid>
+                  <Grid container>
+                    <Grid item xs={6} sm={4}>
                       <Typography variant="body1" color="secondary" fontWeight={'bold'}>
-                        {'Kredi limiti'}
+                        {'Kullanılabilir Kredi'}
                       </Typography>
+                    </Grid>
+                    <Grid item xs={6} sm={8}>
                       <Typography
                         variant="body1"
                         fontWeight={'bold'}
                         color={theme.palette.info.main}>
-                        {Organization.getCreditLimitAmount()}
+                        {Organization.getAvailableCreditAmount()}
                       </Typography>
-                    </Grid> */}
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>

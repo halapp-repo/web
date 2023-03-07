@@ -1,4 +1,4 @@
-import { OrderStatusType } from '@halapp/common';
+import { OrderStatusType, PaymentMethodType } from '@halapp/common';
 
 const translateOrderStatus = (status: OrderStatusType): string => {
   if (status === OrderStatusType.Created) {
@@ -14,4 +14,14 @@ const translateOrderStatus = (status: OrderStatusType): string => {
   }
 };
 
-export { translateOrderStatus };
+const translatePaymentMethodType = (paymentMethodType: PaymentMethodType): string => {
+  if (paymentMethodType === PaymentMethodType.card) {
+    return 'Kart ile';
+  } else if (paymentMethodType === PaymentMethodType.credit) {
+    return 'Kredi ile';
+  } else {
+    throw new Error('Bilinmeyen durum');
+  }
+};
+
+export { translateOrderStatus, translatePaymentMethodType };

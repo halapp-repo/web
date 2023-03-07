@@ -1,24 +1,12 @@
-import {
-  Stack,
-  Box,
-  Button,
-  Typography,
-  Divider,
-  ButtonBase,
-  List,
-  ListItem,
-  ListItemText
-} from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { Stack, Box, Button, Typography, Divider } from '@mui/material';
+import { useContext, useEffect } from 'react';
 import { trMoment } from '../../utils/timezone';
 import { Link } from 'react-router-dom';
-import { selectSelectedCity } from '../../store/cities/citiesSlice';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { ShoppingCartContext } from './ShoppingCartContext';
 import { OrderItemVM } from '@halapp/common';
-import { useAppSelector } from '../../store/hooks';
-import { useTheme } from '@mui/system';
+import { SummaryOrder } from './SummaryOrder';
+import { SummaryDelivery } from './SummaryDelivery';
+import { SummaryTotalPrice } from './SummaryTotalPrice';
 
 interface SummaryNPlaceOrderProps {
   IsValid: boolean;
@@ -27,16 +15,13 @@ interface SummaryNPlaceOrderProps {
 }
 
 const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
-  const ShoppingCart = useContext(ShoppingCartContext);
-  const [showAllItems, setShowAllItems] = useState<boolean>(false);
-  const selectedCity = useAppSelector(selectSelectedCity);
+  const shoppingCart = useContext(ShoppingCartContext);
   const deliveryTime = trMoment(DeliveryTime).clone();
-  const theme = useTheme();
 
   useEffect(() => {
-    if (ShoppingCart) {
+    if (shoppingCart) {
       SetOrderItems(
-        ShoppingCart.Items.map(
+        shoppingCart.Items.map(
           (i) =>
             ({
               Count: i.Count,
@@ -47,7 +32,7 @@ const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlac
         )
       );
     }
-  }, [ShoppingCart]);
+  }, [shoppingCart]);
 
   return (
     <Stack spacing={1}>
@@ -72,81 +57,11 @@ const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlac
         </Typography>
       </Box>
       <Divider />
-      <Box>
-        <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }}>
-          {'Teslimat özeti'}
-        </Typography>
-        <ButtonBase
-          sx={{ width: '100%', display: 'block' }}
-          onClick={() => {
-            setShowAllItems(!showAllItems);
-          }}>
-          <Stack direction={'row'} justifyContent="space-between">
-            <Stack direction={'row'}>
-              <Typography
-                fontWeight={'bold'}
-                color={theme.palette.info.main}
-                variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
-              {showAllItems ? (
-                <ArrowDropDownIcon fontSize="small" />
-              ) : (
-                <ArrowDropUpIcon fontSize="small" />
-              )}
-            </Stack>
-            <Typography variant="body2">{`${ShoppingCart.TotalAmount}`}</Typography>
-          </Stack>
-          {showAllItems && (
-            <List>
-              {ShoppingCart.Items.map((i) => (
-                <ListItem key={i.ProductId}>
-                  <ListItemText
-                    primary={
-                      <Stack direction={'row'} justifyContent="space-between">
-                        <Typography variant="body2">{i.Name}</Typography>
-                        <Typography variant="body2">{i.TotalAmount}</Typography>
-                      </Stack>
-                    }
-                    secondary={
-                      <Typography
-                        color="secondary"
-                        variant="body2">{`${i.UnitAmount} x ${i.Count} ${i.Unit}`}</Typography>
-                    }
-                  />
-                </ListItem>
-              ))}
-            </List>
-          )}
-        </ButtonBase>
-        <Stack direction={'row'} justifyContent="space-between">
-          <Typography variant="body2">{`Taşıma ve nakliye:`}</Typography>
-          <Typography variant="body2" color="primary">{`Ücretsiz`}</Typography>
-        </Stack>
-        <Stack direction={'row'} justifyContent="space-between">
-          <Typography variant="body2">{`Teslimat zamanı:`}</Typography>
-          <Typography variant="body2" fontWeight={'bold'}>
-            {`${deliveryTime.format('DD MMM (HH:mm')}-${deliveryTime
-              .clone()
-              .add(1, 'h')
-              .format('HH:mm)')}`}
-          </Typography>
-        </Stack>
-      </Box>
+      <SummaryOrder ShoppingCart={shoppingCart} />
       <Divider />
-      <Box>
-        <Typography variant="body2" color="secondary">
-          Ürünler, <b>{`${selectedCity}`}</b>
-          {`'a göre fiyatlandırılmıştır.`}
-        </Typography>
-        <Stack direction={'row'} justifyContent="flex-start">
-          <Typography variant="body2" color="secondary">
-            <b>Fiyatlara KDV dahildir.</b>
-          </Typography>
-        </Stack>
-        <Stack direction={'row'} justifyContent="space-between">
-          <Typography variant="h4" color="primary">{`Toplam ücret:`}</Typography>
-          <Typography variant="h4" color="primary">{`${ShoppingCart.TotalAmount}`}</Typography>
-        </Stack>
-      </Box>
+      <SummaryDelivery ShoppingCart={shoppingCart} DeliveryTime={deliveryTime} />
+      <Divider />
+      <SummaryTotalPrice ShoppingCart={shoppingCart} />
     </Stack>
   );
 };

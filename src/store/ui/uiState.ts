@@ -1,4 +1,4 @@
-import { OrderStatusType, PaymentType } from '@halapp/common';
+import { OrderStatusType, PaymentMethodType } from '@halapp/common';
 import moment from 'moment';
 import { DateRangeType } from '../../models/types/date-range.type';
 import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
@@ -26,7 +26,7 @@ export interface UIState {
     organizationId?: string;
     deliveryTime?: string;
     orderNote?: string;
-    paymentMethod: PaymentType;
+    paymentMethod: PaymentMethodType;
     cardNumber: string;
     monthExpiry: string;
     yearExpiry: string;

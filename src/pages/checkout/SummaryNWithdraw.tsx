@@ -1,10 +1,18 @@
-import { Stack, Button } from '@mui/material';
+import { Stack, Button, Divider } from '@mui/material';
+import { SummaryOrder } from './SummaryOrder';
+import { SummaryTotalPrice } from './SummaryTotalPrice';
+import { useContext } from 'react';
+import { ShoppingCartContext } from './ShoppingCartContext';
+import { SummaryPayment } from './SummaryPayment';
+import { PaymentMethodType } from '@halapp/common';
 
 interface SummaryNWithdrawProps {
+  PaymentMethodType: PaymentMethodType;
   IsDisable: boolean;
 }
 
-const SummaryNWithdraw = ({ IsDisable }: SummaryNWithdrawProps) => {
+const SummaryNWithdraw = ({ IsDisable, PaymentMethodType }: SummaryNWithdrawProps) => {
+  const shoppingCart = useContext(ShoppingCartContext);
   return (
     <Stack spacing={1}>
       <Stack spacing={1}>
@@ -13,9 +21,14 @@ const SummaryNWithdraw = ({ IsDisable }: SummaryNWithdrawProps) => {
           variant="contained"
           disabled={IsDisable}
           sx={{ width: '100%', fontWeight: 'bold', textTransform: 'none' }}>
-          {'Krediden Düş'}
+          {'Siparişi Oluştur'}
         </Button>
-        <Stack spacing={1} direction="row"></Stack>
+        <Divider />
+        <SummaryOrder ShoppingCart={shoppingCart} />
+        <Divider />
+        <SummaryPayment PaymentMethodType={PaymentMethodType} />
+        <Divider />
+        <SummaryTotalPrice ShoppingCart={shoppingCart} />
       </Stack>
     </Stack>
   );

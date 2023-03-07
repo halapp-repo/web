@@ -22,6 +22,7 @@ import { ShoppingCartContext } from './ShoppingCartContext';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { fetchTodaysPrices, selectPriceIsLoading } from '../../store/prices/pricesSlice';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
+import { plainToInstance } from 'class-transformer';
 
 const Checkout = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +36,7 @@ const Checkout = () => {
   const [completed, setCompleted] = useState<{
     [k: number]: boolean;
   }>({});
-  const [creatingOrder, setCreatingOrder] = useState<OrderVM | null>(null);
+  const [creatingOrder, setCreatingOrder] = useState<OrderVM>(plainToInstance(OrderVM, {}));
 
   // const navigate = useNavigate();
 
@@ -43,10 +44,7 @@ const Checkout = () => {
     // Organization
     if (
       userAuth.authenticated == true &&
-      (typeof organizations === 'undefined' ||
-        typeof organizations === 'undefined' ||
-        organizations === null ||
-        organizations.length === 0)
+      (typeof organizations === 'undefined' || organizations === null || organizations.length === 0)
     ) {
       dispatch(fetchOrganizations());
     }
@@ -78,18 +76,14 @@ const Checkout = () => {
     orderItems: OrderItemVM[],
     deliveryTime: string
   ): Promise<void> => {
-    setCreatingOrder({
-      Id: '0',
-      Status: '',
-      CreatedBy: '',
-      CreatedDate: '',
+    const preOrder = plainToInstance(OrderVM, {
       DeliveryAddress: deliveryAddress,
       Items: orderItems,
       OrganizationId: organizationId,
       Note: orderNote,
-      TS: trMoment().format(),
       DeliveryTime: deliveryTime
-    } as OrderVM);
+    });
+    setCreatingOrder(preOrder);
     setCompleted({
       0: true,
       1: false
@@ -135,9 +129,7 @@ const Checkout = () => {
           </Grid>
         </Grid>
         {activeStep === 0 && <CheckoutForm onSubmit={handleMoveToPayment} />}
-        {activeStep === 1 && (
-          <PaymentForm onSubmit={handlePayment} OrganizationId={creatingOrder?.OrganizationId} />
-        )}
+        {activeStep === 1 && <PaymentForm onSubmit={handlePayment} PreOrder={creatingOrder} />}
       </ShoppingCartContext.Provider>
     </OrganizationsContext.Provider>
   );
