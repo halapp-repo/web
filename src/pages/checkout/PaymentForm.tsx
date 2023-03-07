@@ -8,7 +8,7 @@ import { TabPanel } from '../../components/form/TabPanel';
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
-import { PaymentType } from '@halapp/common';
+import { OrderVM, PaymentMethodType } from '@halapp/common';
 import { CardInformation } from './CardInformation';
 import { SummaryNPay } from './SummaryNPay';
 import { cardValidationSchema, withdrawValidationSchema } from './PaymentFormValidation';
@@ -18,9 +18,9 @@ import { WithdrawFromCredit } from './WithdrawFromCredit';
 import { SummaryNWithdraw } from './SummaryNWithdraw';
 
 interface FormValues {
-  organizationId?: string;
+  preOrder: OrderVM;
   //card
-  step: PaymentType;
+  step: PaymentMethodType;
   cardNumber: string;
   approvedContract: boolean;
   monthExpiry: string;
@@ -28,18 +28,18 @@ interface FormValues {
   cvv: string;
   securePaymentEnabled: boolean;
   // withdraw
-  hasEnoughBalance: boolean;
+  hasEnoughCredit: boolean;
 }
 
 const InnerForm = (props: FormikProps<FormValues>) => {
   const dispatch = useAppDispatch();
   const { paymentMethod } = useAppSelector(selectUICheckout);
-  const [activeStep, setActiveStep] = useState<PaymentType>(paymentMethod);
+  const [activeStep, setActiveStep] = useState<PaymentMethodType>(paymentMethod);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { isSubmitting, isValid, setFieldValue, setFieldTouched, values } = props;
 
-  const handleChangePaymentMethod = (event: React.SyntheticEvent, newValue: PaymentType) => {
+  const handleChangePaymentMethod = (event: React.SyntheticEvent, newValue: PaymentMethodType) => {
     setActiveStep(newValue);
   };
   const handleSetCardNumberField = async (cardNumber: string): Promise<void> => {
@@ -66,6 +66,10 @@ const InnerForm = (props: FormikProps<FormValues>) => {
     setFieldValue('securePaymentEnabled', value);
     setTimeout(() => setFieldTouched('securePaymentEnabled', true), 100);
   };
+  const handleSetHasEnoughCredit = async (value: boolean): Promise<void> => {
+    setFieldValue('hasEnoughCredit', value);
+    setTimeout(() => setFieldTouched('hasEnoughCredit', true), 100);
+  };
   useEffect(() => {
     setFieldValue('step', activeStep, true);
     setTimeout(() => setFieldTouched('step', true), 100);
@@ -91,20 +95,20 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tab
                 sx={{ textTransform: 'none' }}
-                value={PaymentType.card}
+                value={PaymentMethodType.card}
                 label="Kart ile öde"
                 icon={!matchesSm ? <CreditCardIcon /> : <></>}
                 iconPosition="start"
               />
               <Tab
                 sx={{ textTransform: 'none' }}
-                value={PaymentType.balance}
-                label="Krediden düş"
+                value={PaymentMethodType.credit}
+                label="Bakiyeden düş"
                 icon={!matchesSm ? <AccountBalanceIcon /> : <></>}
                 iconPosition="start"
               />
             </Tabs>
-            <TabPanel value={activeStep} index={PaymentType.card}>
+            <TabPanel value={activeStep} index={PaymentMethodType.card}>
               <Box sx={{ p: 1 }}>
                 <CardInformation
                   SetCardNumberField={handleSetCardNumberField}
@@ -115,13 +119,16 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 />
               </Box>
             </TabPanel>
-            <TabPanel value={activeStep} index={PaymentType.balance}>
+            <TabPanel value={activeStep} index={PaymentMethodType.credit}>
               <Box sx={{ p: 1 }}>
-                <WithdrawFromCredit OrganizationId={values.organizationId} />
+                <WithdrawFromCredit
+                  OrganizationId={values.preOrder.OrganizationId}
+                  SetHasEnoughCredit={handleSetHasEnoughCredit}
+                />
               </Box>
             </TabPanel>
           </MainCard>
-          {activeStep === PaymentType.card && (
+          {activeStep === PaymentMethodType.card && (
             <MainCard sx={{ mt: 2, p: 2 }}>
               <Contracts />
             </MainCard>
@@ -129,15 +136,19 @@ const InnerForm = (props: FormikProps<FormValues>) => {
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <MainCard sx={{ mt: 2, p: 2 }}>
-            {activeStep === PaymentType.card && (
+            {activeStep === PaymentMethodType.card && (
               <SummaryNPay
+                PaymentMethodType={activeStep}
                 IsDisable={isSubmitting || !isValid}
                 SetChangeApprovedContractField={handleSetApprovedContract}
                 OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
               />
             )}
-            {activeStep === PaymentType.balance && (
-              <SummaryNWithdraw IsDisable={isSubmitting || !isValid} />
+            {activeStep === PaymentMethodType.credit && (
+              <SummaryNWithdraw
+                PaymentMethodType={activeStep}
+                IsDisable={isSubmitting || !isValid}
+              />
             )}
           </MainCard>
         </Grid>
@@ -152,27 +163,27 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 
 interface MyFormProps {
   onSubmit: () => void;
-  OrganizationId?: string;
+  PreOrder: OrderVM;
 }
 const PaymentForm = withFormik<MyFormProps, FormValues>({
   mapPropsToValues: (props) => {
     return {
-      organizationId: props.OrganizationId,
-      step: PaymentType.card,
+      preOrder: props.PreOrder,
+      step: PaymentMethodType.card,
       cardNumber: '',
       approvedContract: false,
       monthExpiry: '',
       yearExpiry: '',
       cvv: '',
       securePaymentEnabled: false,
-      hasEnoughBalance: false
+      hasEnoughCredit: false
     };
   },
   // Transform outer props into form values
   // Add a custom validation function (this can be async too!)
   validate: async (values) => {
     let schema;
-    if (values.step === PaymentType.card) {
+    if (values.step === PaymentMethodType.card) {
       schema = cardValidationSchema;
     } else {
       schema = withdrawValidationSchema;

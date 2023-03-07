@@ -60,14 +60,19 @@ class Organization {
     }
     return deliveryAddress;
   }
-  getCreditLimitAmount() {
+  getCreditLimitAmount(): string {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
       this.CreditLimit
     );
   }
-  getBalanceAmount() {
+  getBalanceAmount(): string {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
       this.Balance
+    );
+  }
+  getAvailableCreditAmount(): string {
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
+      this.Balance + this.CreditLimit
     );
   }
   setInvoiceAddress(addr?: OrganizationAddress): void {

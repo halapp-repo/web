@@ -29,6 +29,15 @@ class ShoppingCartList {
   @Type(() => ShoppingCartListItem)
   Items: ShoppingCartListItem[];
 
+  get Total(): number {
+    let total = 0;
+    for (const item of this.Items) {
+      if (item.Price) {
+        total += item.Count * item.Price;
+      }
+    }
+    return total;
+  }
   get TotalAmount(): string {
     let total = 0;
     for (const item of this.Items) {
