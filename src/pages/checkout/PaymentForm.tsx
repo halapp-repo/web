@@ -1,9 +1,7 @@
-import { Grid, Box, Tabs, Tab, useMediaQuery, Theme } from '@mui/material';
+import { Grid, Box, Tabs, useMediaQuery, Theme } from '@mui/material';
 import { withFormik, FormikProps, Form, yupToFormErrors } from 'formik';
 import * as Yup from 'yup';
 import MainCard from '../../components/MainCard';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { TabPanel } from '../../components/form/TabPanel';
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -16,6 +14,10 @@ import { Contracts } from './Contracts';
 import { DialogContracts } from './DialogContracts';
 import { WithdrawFromCredit } from './WithdrawFromCredit';
 import { SummaryNWithdraw } from './SummaryNWithdraw';
+import { Tab } from '../../components/form/Tab';
+import { CreditCardOutlined, CreditCardFilled } from '@ant-design/icons';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 
 interface FormValues {
   preOrder: OrderVM;
@@ -97,15 +99,27 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 sx={{ textTransform: 'none' }}
                 value={PaymentMethodType.card}
                 label="Kart ile öde"
-                icon={!matchesSm ? <CreditCardIcon /> : <></>}
-                iconPosition="start"
+                icon={
+                  activeStep === PaymentMethodType.card ? (
+                    <CreditCardFilled style={{ fontSize: '24px' }} />
+                  ) : (
+                    <CreditCardOutlined style={{ fontSize: '24px' }} />
+                  )
+                }
+                iconPosition={!matchesSm ? 'start' : 'top'}
               />
               <Tab
                 sx={{ textTransform: 'none' }}
                 value={PaymentMethodType.credit}
                 label="Bakiyeden düş"
-                icon={!matchesSm ? <AccountBalanceIcon /> : <></>}
-                iconPosition="start"
+                icon={
+                  activeStep === PaymentMethodType.credit ? (
+                    <AccountBalanceIcon style={{ fontSize: '24px' }} />
+                  ) : (
+                    <AccountBalanceOutlinedIcon style={{ fontSize: '24px' }} />
+                  )
+                }
+                iconPosition={!matchesSm ? 'start' : 'top'}
               />
             </Tabs>
             <TabPanel value={activeStep} index={PaymentMethodType.card}>
