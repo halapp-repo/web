@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material';
 
 interface Props {
   children: ReactNode;
+  xs?: number;
   sm?: number;
   md?: number;
   lg?: number;
@@ -11,8 +12,8 @@ interface Props {
 const PageWrapper = (props: Props) => (
   <Box>
     <Grid container direction="column" justifyContent="flex-start">
-      <Grid item xs={12} container justifyContent="center" alignItems="center">
-        <Grid item xs={12} {...props}>
+      <Grid item xs={props.xs || 12} container justifyContent="center" alignItems="center">
+        <Grid item xs={props.xs || 12} {...props}>
           {props.children}
         </Grid>
       </Grid>

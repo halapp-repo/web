@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Box, Tabs, Tab, CircularProgress } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Box, Tabs, Tab, CircularProgress, useMediaQuery, Theme, Grid } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   destroyOrganizationList,
@@ -21,19 +22,41 @@ import Information from './Information';
 import { Users } from './Users';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { OrganizationAdminPanel } from './AdminPanel';
-
+import { ShopOutlined, ShopFilled } from '@ant-design/icons';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
+import PeopleIcon from '@mui/icons-material/People';
+import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined';
+import ShieldIcon from '@mui/icons-material/Shield';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
 }
 
+const StyledTab = styled(Tab)({
+  alignItems: 'self-start',
+  justifyContent: 'flex-start',
+  padding: '20px 10px',
+  fontSize: '15px',
+  fontWeight: 'normal',
+  '&.MuiTab-labelIcon': {
+    alignItems: 'center'
+  },
+  '&.Mui-selected': {
+    fontWeight: 'bold',
+    color: 'inherit'
+  },
+  '&.tab-admin': {
+    color: '#8753de'
+  }
+});
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
   return (
     <Box
-      sx={{ mt: 3 }}
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -44,6 +67,7 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const OrganizationEdit = () => {
+  const matchesMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   const { isAdmin } = useAppSelector(selectUserAuth);
   const { organizationId } = useParams();
   const dispatch = useAppDispatch();
@@ -53,6 +77,7 @@ const OrganizationEdit = () => {
   );
 
   useEffect(() => {
+    console.log('hereeee');
     let destroyList = false;
     if (!organization && organizationId) {
       destroyList = true;
@@ -70,7 +95,7 @@ const OrganizationEdit = () => {
         dispatch(destroyOrganizationList());
       }
     };
-  }, []);
+  }, [organizationId]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     dispatch(
@@ -92,69 +117,57 @@ const OrganizationEdit = () => {
   const generateTabs = (tab: number, organization: Organization | null): JSX.Element => {
     if (!organization) {
       return (
-        <PageWrapper md={6} lg={5}>
-          <Box
-            sx={{
-              width: '100%',
-              height: '200px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-            <CircularProgress />
-          </Box>
-        </PageWrapper>
+        <Box
+          sx={{
+            width: '100%',
+            height: '200px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+          <CircularProgress />
+        </Box>
       );
     }
     if (tab === 0) {
       // General Info
       if (generalInfoEditMode) {
         return (
-          <PageWrapper md={6} lg={5}>
-            <TabPanel value={0} index={0}>
-              <GeneralInformationForm
-                Organization={organization}
-                OnSubmit={handleUpdateOrganizationInformation}
-                OnCancel={() => toggleGeneralInformationEditMode(false)}
-              />
-            </TabPanel>
-          </PageWrapper>
+          <TabPanel value={0} index={0}>
+            <GeneralInformationForm
+              Organization={organization}
+              OnSubmit={handleUpdateOrganizationInformation}
+              OnCancel={() => toggleGeneralInformationEditMode(false)}
+            />
+          </TabPanel>
         );
       } else {
         return (
-          <PageWrapper md={6} lg={5}>
-            <TabPanel value={0} index={0}>
-              <Information
-                Organization={organization}
-                OnEnterEditMode={() => toggleGeneralInformationEditMode(true)}
-              />
-            </TabPanel>
-          </PageWrapper>
+          <TabPanel value={0} index={0}>
+            <Information
+              Organization={organization}
+              OnEnterEditMode={() => toggleGeneralInformationEditMode(true)}
+            />
+          </TabPanel>
         );
       }
     } else if (tab === 1) {
       return (
-        <PageWrapper md={6} lg={5}>
-          <TabPanel value={1} index={1}>
-            <DeliveryAddresses Organization={organization} />
-          </TabPanel>
-        </PageWrapper>
+        <TabPanel value={1} index={1}>
+          <DeliveryAddresses Organization={organization} />
+        </TabPanel>
       );
     } else if (tab === 2) {
       return (
-        <PageWrapper md={6} lg={5}>
-          <TabPanel value={2} index={2}>
-            <Users Organization={organization} />
-          </TabPanel>
-        </PageWrapper>
+        <TabPanel value={2} index={2}>
+          <Users Organization={organization} />
+        </TabPanel>
       );
     } else if (tab === 3) {
       return (
-        <PageWrapper md={6} lg={5}>
-          <TabPanel value={2} index={2}>
-            <OrganizationAdminPanel Organization={organization} />
-          </TabPanel>
-        </PageWrapper>
+        <TabPanel value={2} index={2}>
+          <OrganizationAdminPanel Organization={organization} />
+        </TabPanel>
       );
     }
     throw new Error('Not Found Tab error');
@@ -162,22 +175,135 @@ const OrganizationEdit = () => {
 
   return (
     <>
-      <PageWrapper md={6} lg={5}>
-        <MainCard>
-          <Tabs
-            value={currentTab}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons
-            allowScrollButtonsMobile>
-            <Tab label="Şirket Bilgisi" value={0} />
-            <Tab label="Teslimat Adresleri" value={1} />
-            <Tab label="Kullanıcılar" value={2} />
-            {isAdmin && <Tab label="Admin" value={3} />}
-          </Tabs>
-        </MainCard>
-      </PageWrapper>
-      {generateTabs(currentTab, organization)}
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={3} lg={3}>
+          {matchesMd ? (
+            <MainCard>
+              <Tabs
+                value={currentTab}
+                onChange={handleTabChange}
+                variant="scrollable"
+                scrollButtons
+                allowScrollButtonsMobile>
+                <StyledTab
+                  icon={
+                    currentTab === 0 ? (
+                      <ShopFilled style={{ fontSize: '24px' }} />
+                    ) : (
+                      <ShopOutlined style={{ fontSize: '24px' }} />
+                    )
+                  }
+                  iconPosition="top"
+                  label="Şirket Bilgisi"
+                  value={0}
+                />
+                <StyledTab
+                  icon={
+                    currentTab === 1 ? (
+                      <LocalShippingIcon style={{ fontSize: '24px' }} />
+                    ) : (
+                      <LocalShippingOutlinedIcon style={{ fontSize: '24px' }} />
+                    )
+                  }
+                  iconPosition="top"
+                  label="Teslimat Adresleri"
+                  value={1}
+                />
+                <StyledTab
+                  icon={
+                    currentTab === 2 ? (
+                      <PeopleIcon style={{ fontSize: '24px' }} />
+                    ) : (
+                      <PeopleOutlinedIcon style={{ fontSize: '24px' }} />
+                    )
+                  }
+                  iconPosition="top"
+                  label="Kullanıcılar"
+                  value={2}
+                />
+                {isAdmin && (
+                  <StyledTab
+                    className="tab-admin"
+                    icon={
+                      currentTab === 3 ? (
+                        <ShieldIcon style={{ fontSize: '24px' }} />
+                      ) : (
+                        <ShieldOutlinedIcon style={{ fontSize: '24px' }} />
+                      )
+                    }
+                    iconPosition="top"
+                    label="Admin"
+                    value={3}
+                  />
+                )}
+              </Tabs>
+            </MainCard>
+          ) : (
+            <MainCard>
+              <Tabs
+                indicatorColor="primary"
+                value={currentTab}
+                orientation="vertical"
+                onChange={handleTabChange}>
+                <StyledTab
+                  icon={
+                    currentTab === 0 ? (
+                      <ShopFilled style={{ fontSize: '24px' }} />
+                    ) : (
+                      <ShopOutlined style={{ fontSize: '24px' }} />
+                    )
+                  }
+                  iconPosition="start"
+                  label="Şirket Bilgisi"
+                  value={0}
+                />
+                <StyledTab
+                  icon={
+                    currentTab === 1 ? (
+                      <LocalShippingIcon style={{ fontSize: '24px' }} />
+                    ) : (
+                      <LocalShippingOutlinedIcon style={{ fontSize: '24px' }} />
+                    )
+                  }
+                  iconPosition="start"
+                  label="Teslimat Adresleri"
+                  value={1}
+                />
+                <StyledTab
+                  icon={
+                    currentTab === 2 ? (
+                      <PeopleIcon style={{ fontSize: '24px' }} />
+                    ) : (
+                      <PeopleOutlinedIcon style={{ fontSize: '24px' }} />
+                    )
+                  }
+                  iconPosition="start"
+                  label="Kullanıcılar"
+                  value={2}
+                />
+                {isAdmin && (
+                  <StyledTab
+                    icon={
+                      currentTab === 3 ? (
+                        <ShieldIcon style={{ fontSize: '24px' }} />
+                      ) : (
+                        <ShieldOutlinedIcon style={{ fontSize: '24px' }} />
+                      )
+                    }
+                    className="tab-admin"
+                    iconPosition="start"
+                    label="Admin"
+                    value={3}
+                  />
+                )}
+              </Tabs>
+            </MainCard>
+          )}
+        </Grid>
+        <Grid item xs={12} md={6} lg={5}>
+          {generateTabs(currentTab, organization)}
+        </Grid>
+      </Grid>
     </>
   );
 };
