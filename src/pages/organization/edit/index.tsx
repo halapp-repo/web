@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import { Box, Tabs, Tab, CircularProgress, useMediaQuery, Theme, Grid } from '@mui/material';
+import { Box, Tabs, CircularProgress, useMediaQuery, Theme, Grid } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   destroyOrganizationList,
@@ -9,7 +8,6 @@ import {
   updateOrganization
 } from '../../../store/organizations/organizationsSlice';
 import { useParams } from 'react-router-dom';
-import PageWrapper from '../../../components/PageWrapper';
 import MainCard from '../../../components/MainCard';
 import GeneralInformationForm from './GeneralInformationForm';
 import { Organization } from '../../../models/organization';
@@ -29,29 +27,13 @@ import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import PeopleIcon from '@mui/icons-material/People';
 import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined';
 import ShieldIcon from '@mui/icons-material/Shield';
+import { Tab } from '../../../components/form/Tab';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
 }
 
-const StyledTab = styled(Tab)({
-  alignItems: 'self-start',
-  justifyContent: 'flex-start',
-  padding: '20px 10px',
-  fontSize: '15px',
-  fontWeight: 'normal',
-  '&.MuiTab-labelIcon': {
-    alignItems: 'center'
-  },
-  '&.Mui-selected': {
-    fontWeight: 'bold',
-    color: 'inherit'
-  },
-  '&.tab-admin': {
-    color: '#8753de'
-  }
-});
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
@@ -185,7 +167,7 @@ const OrganizationEdit = () => {
                 variant="scrollable"
                 scrollButtons
                 allowScrollButtonsMobile>
-                <StyledTab
+                <Tab
                   icon={
                     currentTab === 0 ? (
                       <ShopFilled style={{ fontSize: '24px' }} />
@@ -197,7 +179,7 @@ const OrganizationEdit = () => {
                   label="Şirket Bilgisi"
                   value={0}
                 />
-                <StyledTab
+                <Tab
                   icon={
                     currentTab === 1 ? (
                       <LocalShippingIcon style={{ fontSize: '24px' }} />
@@ -209,7 +191,7 @@ const OrganizationEdit = () => {
                   label="Teslimat Adresleri"
                   value={1}
                 />
-                <StyledTab
+                <Tab
                   icon={
                     currentTab === 2 ? (
                       <PeopleIcon style={{ fontSize: '24px' }} />
@@ -222,7 +204,7 @@ const OrganizationEdit = () => {
                   value={2}
                 />
                 {isAdmin && (
-                  <StyledTab
+                  <Tab
                     className="tab-admin"
                     icon={
                       currentTab === 3 ? (
@@ -245,7 +227,7 @@ const OrganizationEdit = () => {
                 value={currentTab}
                 orientation="vertical"
                 onChange={handleTabChange}>
-                <StyledTab
+                <Tab
                   icon={
                     currentTab === 0 ? (
                       <ShopFilled style={{ fontSize: '24px' }} />
@@ -257,7 +239,7 @@ const OrganizationEdit = () => {
                   label="Şirket Bilgisi"
                   value={0}
                 />
-                <StyledTab
+                <Tab
                   icon={
                     currentTab === 1 ? (
                       <LocalShippingIcon style={{ fontSize: '24px' }} />
@@ -269,7 +251,7 @@ const OrganizationEdit = () => {
                   label="Teslimat Adresleri"
                   value={1}
                 />
-                <StyledTab
+                <Tab
                   icon={
                     currentTab === 2 ? (
                       <PeopleIcon style={{ fontSize: '24px' }} />
@@ -282,7 +264,7 @@ const OrganizationEdit = () => {
                   value={2}
                 />
                 {isAdmin && (
-                  <StyledTab
+                  <Tab
                     icon={
                       currentTab === 3 ? (
                         <ShieldIcon style={{ fontSize: '24px' }} />
