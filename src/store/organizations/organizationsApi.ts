@@ -125,14 +125,23 @@ export class OrganizationsApi {
   }
   async fetchIndividualOrganization({
     token,
-    organizationId
+    organizationId,
+    includeEvents
   }: {
     token: string;
     organizationId: string;
+    includeEvents?: boolean;
   }) {
     return await axios
       .get<OrganizationVM>(`/organizations/${organizationId}`, {
         baseURL: this.baseUrl,
+        ...(includeEvents
+          ? {
+              params: {
+                includeEvents: true
+              }
+            }
+          : null),
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

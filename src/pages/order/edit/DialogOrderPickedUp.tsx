@@ -7,33 +7,37 @@ import {
   DialogActions,
   Button,
   Typography,
-  Grid
+  Grid,
+  List,
+  ListItemText,
+  Box,
+  Stack
 } from '@mui/material';
 import { Order } from '../../../models/order';
 import { Organization } from '../../../models/organization';
 import { useAppDispatch } from '../../../store/hooks';
 import { updateOrderStatus } from '../../../store/orders/ordersSlice';
 
-interface DialogOrderDeliveredProps {
+interface DialogOrderPickedUpProps {
   Order: Order;
   Organization: Organization;
   HandleClose: () => void;
   Open: boolean;
 }
 
-const DialogOrderDelivered = ({
+const DialogOrderPickedUp = ({
   Order,
   Organization,
   HandleClose,
   Open
-}: DialogOrderDeliveredProps) => {
+}: DialogOrderPickedUpProps) => {
   const dispatch = useAppDispatch();
 
-  const handleOrderDelivered = (orderId: string) => {
+  const handleOrderPickedUp = (orderId: string) => {
     dispatch(
       updateOrderStatus({
         OrderId: orderId,
-        Status: OrderStatusType.Delivered,
+        Status: OrderStatusType.PickedUp,
         OrganizationId: Organization.ID!
       })
     );
@@ -62,7 +66,7 @@ const DialogOrderDelivered = ({
           fontWeight={700}
           fontSize={'16px'}
           sx={{ padding: '16px 0', minHeight: '56px', lineHeight: '24px' }}>
-          {'Sipariş Teslim Edildi Mi ?'}
+          {'Sipariş Hazırlandı Mi ?'}
         </Typography>
       </DialogTitle>
       <DialogContent>
@@ -85,36 +89,55 @@ const DialogOrderDelivered = ({
                 </Grid>
               </Grid>
             </Grid>
-
             <Grid item xs={12}>
               <Grid container>
                 <Grid item xs={4}>
                   <Typography variant="h6" fontWeight={'bold'} color="info.main">
-                    {'Teslimat Adresi'}
+                    {'Sipariş'}
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
-                  <Typography variant="body2" fontWeight={'bold'}>
-                    {Order.DeliveryAddress?.AddressLine}
-                  </Typography>
-                  <Typography variant="body2" fontWeight={'bold'}>
-                    {`${Order.DeliveryAddress?.County} ${Order.DeliveryAddress?.City} ${Order.DeliveryAddress?.ZipCode} ${Order.DeliveryAddress?.Country}`}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Grid container>
-                <Grid item xs={4}>
-                  <Typography variant="h6" fontWeight={'bold'} color="info.main">
-                    {'Teslimat Zamani'}
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography variant="h6" fontWeight={'bold'}>{`${Order.DeliveryTime.format(
-                    'DD.MM.YY (HH:mm'
-                  )} - ${Order.DeliveryTime.clone().add(1, 'h').format('HH:mm)')}`}</Typography>
+                  <List>
+                    {Order.Items.map((o) => (
+                      <ListItemText
+                        key={o.ProductId}
+                        primary={o.ProductName}
+                        primaryTypographyProps={{ fontWeight: 'bold' }}
+                        secondaryTypographyProps={{ component: 'div' }}
+                        secondary={
+                          <Box>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                              }}>
+                              <Stack direction={'row'} spacing={1}>
+                                <Typography variant="body2">
+                                  {new Intl.NumberFormat('tr-TR', {
+                                    style: 'currency',
+                                    currency: 'TRY'
+                                  }).format(o.Price)}
+                                </Typography>
+                                <Typography variant="body2">{'x'}</Typography>
+                                <Typography variant="body2" fontWeight={'bold'}>
+                                  {`(${o.Count})${o.Unit}`}
+                                </Typography>
+                              </Stack>
+                              <Typography variant="body2" color="info.main">
+                                <strong>
+                                  {new Intl.NumberFormat('tr-TR', {
+                                    style: 'currency',
+                                    currency: 'TRY'
+                                  }).format(o.TotalPrice)}
+                                </strong>
+                              </Typography>
+                            </Box>
+                          </Box>
+                        }
+                      />
+                    ))}
+                  </List>
                 </Grid>
               </Grid>
             </Grid>
@@ -128,15 +151,15 @@ const DialogOrderDelivered = ({
         <Button
           variant="contained"
           onClick={() => {
-            handleOrderDelivered(Order.Id);
+            handleOrderPickedUp(Order.Id);
             HandleClose();
           }}
           color={'admin'}>
-          {'Evet, Sipariş Teslim Edildi'}
+          {'Evet, Sipariş Hazırlandı'}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export { DialogOrderDelivered };
+export { DialogOrderPickedUp };

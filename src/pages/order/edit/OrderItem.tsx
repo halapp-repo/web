@@ -54,7 +54,7 @@ const OrderItem = ({ Item, CanBeDeleted, OnDeleteItem }: OrderItemProps) => {
               <Typography variant="body2">
                 <strong>
                   {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
-                    Item.totalPrice()
+                    Item.TotalPrice
                   )}
                 </strong>
               </Typography>

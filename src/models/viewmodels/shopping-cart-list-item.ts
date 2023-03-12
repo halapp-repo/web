@@ -29,6 +29,9 @@ class ShoppingCartList {
   @Type(() => ShoppingCartListItem)
   Items: ShoppingCartListItem[];
 
+  get ActiveItems(): ShoppingCartListItem[] {
+    return this.Items.filter((i) => typeof i.Price !== 'undefined' && i.Price > 0);
+  }
   get Total(): number {
     let total = 0;
     for (const item of this.Items) {

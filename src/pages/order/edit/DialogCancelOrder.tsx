@@ -32,9 +32,27 @@ const DialogCancelOrder = ({ Order, HandleClose, Open, Organization }: DialogCan
     );
   };
   return (
-    <Dialog onClose={HandleClose} open={Open} fullWidth>
-      <DialogTitle sx={{ textAlign: 'center' }}>
-        <Typography variant="h5" color={'error'}>
+    <Dialog
+      PaperProps={{
+        sx: {
+          width: '375px'
+        }
+      }}
+      sx={{ borderRadius: '8px' }}
+      onClose={HandleClose}
+      open={Open}>
+      <DialogTitle
+        sx={{
+          textAlign: 'center',
+          backgroundColor: '#F0F2F2',
+          padding: '0 24px',
+          borderBottom: '1px solid #D5D9D9'
+        }}>
+        <Typography
+          variant="h4"
+          fontWeight={700}
+          fontSize={'16px'}
+          sx={{ padding: '16px 0', minHeight: '56px', lineHeight: '24px' }}>
           {'Siparişi Iptal Et ?'}
         </Typography>
       </DialogTitle>

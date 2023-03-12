@@ -110,7 +110,7 @@ const OrderItemList = ({ Order, Organization }: OrderItemListProps) => {
             <strong>
               {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
                 items.reduce((acc, curr) => {
-                  return acc + curr.totalPrice();
+                  return acc + curr.TotalPrice;
                 }, 0)
               )}
             </strong>

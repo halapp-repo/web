@@ -10,14 +10,15 @@ import {
 } from '@mui/material';
 import { OrderEvent } from '../../../models/events/order-event';
 import { OrderEventType } from '@halapp/common';
-import { red, green, blue, purple, blueGrey } from '@mui/material/colors';
+import { red, green, blue, purple, blueGrey, lightBlue } from '@mui/material/colors';
 import { OrderTimelineItemContent } from './OrderTimelineItemContent';
 import {
   DeleteOutlined,
   ShoppingCartOutlined,
   EnvironmentOutlined,
   EditOutlined,
-  MinusCircleOutlined
+  MinusCircleOutlined,
+  CodeSandboxOutlined
 } from '@ant-design/icons';
 import { OrderItemsUpdatedV1Payload } from '../../../models/events/payloads/order-items-updated-v1.payload';
 
@@ -71,6 +72,32 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
             </OrderTimelineItemContent>
             <Box className="circle canceled">
               <DeleteOutlined width={'20px'} height={'20px'} />
+            </Box>
+          </>
+        );
+      }
+      case OrderEventType.OrderPickedUpV1: {
+        return (
+          <>
+            <OrderTimelineItemContent
+              Event={Event}
+              sx={{
+                minHeight: '100px',
+                paddingRight: '5px'
+              }}>
+              <Box
+                sx={{
+                  height: '70px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  justifyItems: 'center'
+                }}>
+                <Typography variant="h5">{'Sipariş Hazırlandı'}</Typography>
+              </Box>
+            </OrderTimelineItemContent>
+            <Box className="circle pickedup">
+              <CodeSandboxOutlined width={'20px'} height={'20px'} />
             </Box>
           </>
         );
@@ -209,6 +236,9 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
           },
           '& .canceled': {
             border: `3px solid ${red['A400']}`
+          },
+          '& .pickedup': {
+            border: `3px solid ${lightBlue['A400']}`
           },
           '& .delivered': {
             border: `3px solid ${blue['A400']}`

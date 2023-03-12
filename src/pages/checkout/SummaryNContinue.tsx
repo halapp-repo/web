@@ -21,7 +21,7 @@ const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlac
   useEffect(() => {
     if (shoppingCart) {
       SetOrderItems(
-        shoppingCart.Items.map(
+        shoppingCart.ActiveItems.map(
           (i) =>
             ({
               Count: i.Count,

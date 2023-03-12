@@ -1,7 +1,7 @@
 import { Transform, Type } from 'class-transformer';
 import moment from 'moment';
 import { trMoment } from '../utils/timezone';
-import { OrderStatusType } from '@halapp/common';
+import { CityType, OrderEventType, OrderStatusType, PaymentMethodType } from '@halapp/common';
 import { OrganizationAddress } from './organization';
 import { OrderEvent } from './events/order-event';
 
@@ -12,7 +12,7 @@ class OrderItem {
   Count: number;
   Unit: string;
 
-  totalPrice(): number {
+  get TotalPrice(): number {
     return this.Count * this.Price;
   }
 }
@@ -61,23 +61,33 @@ class Order {
   @Type(() => OrderEvent)
   Events?: OrderEvent[];
 
-  totalPrice(): number {
+  City: CityType;
+  PaymentMethodType: PaymentMethodType;
+
+  get TotalPrice(): number {
     return this.Items.reduce((acc, curr) => {
-      return acc + curr.totalPrice();
+      return acc + curr.TotalPrice;
     }, 0);
   }
 
+  isPickedUp(): boolean {
+    return this.Events?.some((e) => e.EventType === OrderEventType.OrderPickedUpV1) || false;
+  }
+  isDelivered(): boolean {
+    return this.Events?.some((e) => e.EventType === OrderEventType.OrderDeliveredV1) || false;
+  }
+
   canBeCanceled(): boolean {
-    return this.Status === OrderStatusType.Created;
+    return this.Status !== OrderStatusType.Canceled && !this.isPickedUp();
   }
   canBeDelivered(): boolean {
-    return this.Status === OrderStatusType.Created;
+    return this.Status !== OrderStatusType.Canceled && this.isPickedUp() && !this.isDelivered();
   }
   canBeUpdated(): boolean {
-    return this.Status === OrderStatusType.Created;
+    return this.Status !== OrderStatusType.Canceled && !this.isPickedUp();
   }
-  canBePaid(): boolean {
-    return this.Status === OrderStatusType.Delivered;
+  canBePickedUp(): boolean {
+    return this.Status !== OrderStatusType.Canceled && !this.isPickedUp();
   }
 }
 

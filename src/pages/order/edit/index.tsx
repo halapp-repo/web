@@ -20,7 +20,7 @@ import { OrderButtons } from './OrderButtons';
 import { DialogCancelOrder } from './DialogCancelOrder';
 import { DialogOrderDelivered } from './DialogOrderDelivered';
 import { OrderItemList } from './OrderItemList';
-import { DialogOrderPaid } from './DialogOrderPaid';
+import { DialogOrderPickedUp } from './DialogOrderPickedUp';
 
 const OrderEdit = () => {
   const { orderId } = useParams();
@@ -37,7 +37,7 @@ const OrderEdit = () => {
   const organizationIsLoading = useAppSelector(selectOrganizationIsLoading);
   const [isDialogCancelOrderOpen, setIsDialogCancelOrderOpen] = useState(false);
   const [isDialogOrderDeliveredOpen, setIsDialogOrderDeliveredOpen] = useState(false);
-  const [isDialogOrderPaidOpen, setIsDialogOrderPaidOpen] = useState(false);
+  const [isDialogOrderPickedUpOpen, setIsDialogOrderPickedUpOpen] = useState(false);
 
   useEffect(() => {
     if (!userAuth.authenticated) {
@@ -74,8 +74,8 @@ const OrderEdit = () => {
   const handleToggleDialogOrderDelivered = (toggle: boolean): void => {
     setIsDialogOrderDeliveredOpen(toggle);
   };
-  const handleToggleDialogOrderPaid = (toggle: boolean): void => {
-    setIsDialogOrderPaidOpen(toggle);
+  const handleToggleDialogOrderPickedUp = (toggle: boolean): void => {
+    setIsDialogOrderPickedUpOpen(toggle);
   };
 
   return (
@@ -100,7 +100,7 @@ const OrderEdit = () => {
               Order={order}
               HandleOpenDialogCancelOrder={() => handleToggleDialogCancelOrder(true)}
               HandleOpenDialogOrderDelivered={() => handleToggleDialogOrderDelivered(true)}
-              HandleOpenDialogOrderPaid={() => handleToggleDialogOrderPaid(true)}
+              HandleOpenDialogOrderPickedUp={() => handleToggleDialogOrderPickedUp(true)}
             />
           )}
           <MainCard
@@ -152,9 +152,9 @@ const OrderEdit = () => {
         />
       )}
       {order && organization && (
-        <DialogOrderPaid
-          Open={isDialogOrderPaidOpen}
-          HandleClose={() => handleToggleDialogOrderPaid(false)}
+        <DialogOrderPickedUp
+          Open={isDialogOrderPickedUpOpen}
+          HandleClose={() => handleToggleDialogOrderPickedUp(false)}
           Order={order}
           Organization={organization}
         />

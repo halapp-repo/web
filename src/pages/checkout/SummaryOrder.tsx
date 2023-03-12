@@ -27,7 +27,7 @@ const SummaryOrder = ({ ShoppingCart }: SummaryOrderProps) => {
             <Typography
               fontWeight={'bold'}
               color={theme.palette.info.main}
-              variant="body2">{`Ürünler (${ShoppingCart.Items.length}):`}</Typography>
+              variant="body2">{`Ürünler (${ShoppingCart.ActiveItems.length}):`}</Typography>
             {showAllItems ? (
               <ArrowDropUpIcon fontSize="small" />
             ) : (
@@ -38,7 +38,7 @@ const SummaryOrder = ({ ShoppingCart }: SummaryOrderProps) => {
         </Stack>
         {showAllItems && (
           <List>
-            {ShoppingCart.Items.map((i) => (
+            {ShoppingCart.ActiveItems.map((i) => (
               <ListItem key={i.ProductId}>
                 <ListItemText
                   primary={
