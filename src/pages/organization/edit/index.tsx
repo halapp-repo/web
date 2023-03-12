@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { Box, Tabs, CircularProgress, useMediaQuery, Theme, Grid } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  destroyOrganizationList,
-  fetchIndividualOrganization,
+  fetchAllOrganizations,
+  fetchOrganizations,
   selectIndividualOrganization,
   updateOrganization
 } from '../../../store/organizations/organizationsSlice';
@@ -62,12 +62,13 @@ const OrganizationEdit = () => {
   );
 
   useEffect(() => {
-    let destroyList = false;
     if (!organization && organizationId) {
-      destroyList = true;
-      dispatch(fetchIndividualOrganization(organizationId));
+      if (isAdmin) {
+        dispatch(fetchAllOrganizations());
+      } else {
+        dispatch(fetchOrganizations());
+      }
     }
-
     return () => {
       dispatch(
         updateUIOrganization({
@@ -75,11 +76,8 @@ const OrganizationEdit = () => {
           generalInfoEditMode: false
         })
       );
-      if (destroyList) {
-        dispatch(destroyOrganizationList());
-      }
     };
-  }, [organizationId]);
+  }, [organizationId, isAdmin]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     dispatch(
