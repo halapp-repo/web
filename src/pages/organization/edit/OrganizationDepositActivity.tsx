@@ -1,32 +1,32 @@
 import { Grid, Typography, Button } from '@mui/material';
-import { MinusSquareOutlined } from '@ant-design/icons';
+import { PlusSquareOutlined } from '@ant-design/icons';
 import {
   AccountEventType,
-  OrganizationWithdrewV1PayloadVM,
-  PaymentMethodType
+  PaymentMethodType,
+  OrganizationDepositV1PayloadVM
 } from '@halapp/common';
 import { AccountEvent } from '../../../models/events/account-event';
 import { translatePaymentMethodType } from '../../../utils/english-turkish-translator';
 import { Link } from 'react-router-dom';
 
-interface OrganizationWithdrewActivityProps {
+interface OrganizationDepositActivityProps {
   Event: AccountEvent;
 }
-const OrganizationWithdrewActivity = ({ Event }: OrganizationWithdrewActivityProps) => {
+const OrganizationDepositActivity = ({ Event }: OrganizationDepositActivityProps) => {
   let paymentMethodType: PaymentMethodType | undefined;
   let orderId: string | undefined;
-  if (Event.EventType === AccountEventType.OrganizationWithdrewFromBalanceV1) {
-    const { PaymentMethodType, OrderId } = Event.Payload as OrganizationWithdrewV1PayloadVM;
+  if (Event.EventType === AccountEventType.OrganizationDepositedToBalanceV1) {
+    const { PaymentMethodType, OrderId } = Event.Payload as OrganizationDepositV1PayloadVM;
     paymentMethodType = PaymentMethodType;
     orderId = OrderId;
   }
   return (
     <Grid container>
       <Grid item xs={12} md={2}>
-        <MinusSquareOutlined style={{ fontSize: '30px' }} />
+        <PlusSquareOutlined style={{ fontSize: '30px' }} />
       </Grid>
       <Grid item xs={12} md={10}>
-        <Typography variant="h5">{'Bakiyeden düşüldü'}</Typography>
+        <Typography variant="h5">{'Bakiyeye eklendi'}</Typography>
         {paymentMethodType && (
           <Grid container>
             <Grid item xs={12} sm={6} md={4}>
@@ -60,4 +60,4 @@ const OrganizationWithdrewActivity = ({ Event }: OrganizationWithdrewActivityPro
   );
 };
 
-export { OrganizationWithdrewActivity };
+export { OrganizationDepositActivity };

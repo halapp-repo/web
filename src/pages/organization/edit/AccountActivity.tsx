@@ -48,8 +48,10 @@ const AccountActivity = ({ Organization }: AccountActivityProps) => {
       return events
         ?.filter((e) => {
           return (
-            e.EventType === AccountEventType.OrganizationWithdrewV1 ||
-            e.EventType === AccountEventType.OrganizationCreatedV1
+            e.EventType === AccountEventType.OrganizationWithdrewFromBalanceV1 ||
+            e.EventType === AccountEventType.OrganizationCreatedV1 ||
+            e.EventType === AccountEventType.OrganizationDepositedToBalanceV1 ||
+            e.EventType === AccountEventType.OrganizationPaidWithCardV1
           );
         })
         .sort(getComparator('desc', 'TS'))

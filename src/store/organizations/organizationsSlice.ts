@@ -7,7 +7,7 @@ import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-
 import { instanceToInstance, plainToClass, plainToInstance } from 'class-transformer';
 import { AxiosError } from 'axios';
 import { signOut } from '../auth/authSlice';
-import { OrganizationVM } from '@halapp/common';
+import { AccountEventType, OrganizationVM } from '@halapp/common';
 import { createOrder } from '../orders/ordersSlice';
 import { AccountEvent } from '../../models/events/account-event';
 
@@ -77,7 +77,13 @@ export const fetchIndividualOrganizationWithEvents = createAsyncThunk<
   const response = await new OrganizationsApi().fetchIndividualOrganization({
     token: userAuth.idToken,
     organizationId: orgId,
-    includeEvents: true
+    includeEvents: true,
+    eventTypes: [
+      AccountEventType.OrganizationCreatedV1,
+      AccountEventType.OrganizationWithdrewFromBalanceV1,
+      AccountEventType.OrganizationDepositedToBalanceV1,
+      AccountEventType.OrganizationPaidWithCardV1
+    ]
   });
   return response;
 });

@@ -2,7 +2,11 @@ import { ReactNode } from 'react';
 import { Typography, Grid, Stack } from '@mui/material';
 import { trMoment } from '../../../utils/timezone';
 import { AccountEvent } from '../../../models/events/account-event';
-import { AccountEventType, OrganizationWithdrewV1PayloadVM } from '@halapp/common';
+import {
+  AccountEventType,
+  OrganizationDepositV1PayloadVM,
+  OrganizationWithdrewV1PayloadVM
+} from '@halapp/common';
 
 interface AccountActivityItemContentProps {
   children?: ReactNode;
@@ -14,9 +18,14 @@ const AccountActivityItemContent = ({ children, Event, sx }: AccountActivityItem
   const hourDuration = trMoment().diff(Event.TS, 'hours');
   let amount: number | undefined;
   let balance = 0;
-  if (Event.EventType === AccountEventType.OrganizationWithdrewV1) {
+  if (Event.EventType === AccountEventType.OrganizationWithdrewFromBalanceV1) {
     const { CurrentBalance, WithdrawAmount } = Event.Payload as OrganizationWithdrewV1PayloadVM;
     amount = WithdrawAmount * -1;
+    balance = CurrentBalance;
+  }
+  if (Event.EventType === AccountEventType.OrganizationDepositedToBalanceV1) {
+    const { CurrentBalance, DepositAmount } = Event.Payload as OrganizationDepositV1PayloadVM;
+    amount = DepositAmount;
     balance = CurrentBalance;
   }
   return (
@@ -49,7 +58,7 @@ const AccountActivityItemContent = ({ children, Event, sx }: AccountActivityItem
             <Typography variant="body2" fontWeight="bold" color="secondary">
               {'Bakiye'}
             </Typography>
-            <Typography variant="h5">
+            <Typography variant="body2" fontWeight={'bold'}>
               {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
                 balance
               )}

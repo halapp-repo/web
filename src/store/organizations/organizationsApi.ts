@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
-import { OrganizationVM } from '@halapp/common';
+import { AccountEventType, OrganizationVM } from '@halapp/common';
 import { OrganizationAddress } from '../../models/organization';
 
 export class OrganizationsApi {
@@ -126,11 +126,14 @@ export class OrganizationsApi {
   async fetchIndividualOrganization({
     token,
     organizationId,
-    includeEvents
+    includeEvents,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    eventTypes
   }: {
     token: string;
     organizationId: string;
     includeEvents?: boolean;
+    eventTypes?: AccountEventType[];
   }) {
     return await axios
       .get<OrganizationVM>(`/organizations/${organizationId}`, {
