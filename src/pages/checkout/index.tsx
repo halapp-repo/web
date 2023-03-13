@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { Stepper, Step, StepLabel, Grid, StepButton } from '@mui/material';
 import { OrganizationAddress } from '../../models/organization';
@@ -14,7 +13,7 @@ import {
 } from '../../store/organizations/organizationsSlice';
 import { Overlay } from '../../components/Overlay';
 import { useNavigate } from 'react-router-dom';
-import { OrderItemVM, OrderVM, ProductType } from '@halapp/common';
+import { OrderItemVM, OrderVM, PaymentMethodType, ProductType } from '@halapp/common';
 import { toggleShoppingCart, updateCheckout } from '../../store/ui/uiSlice';
 import { PaymentForm } from './PaymentForm';
 import { selectUserAuth } from '../../store/auth/authSlice';
@@ -22,7 +21,7 @@ import { ShoppingCartContext } from './ShoppingCartContext';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { fetchTodaysPrices, selectPriceIsLoading } from '../../store/prices/pricesSlice';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
-import { plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 
 const Checkout = () => {
   const dispatch = useAppDispatch();
@@ -37,8 +36,7 @@ const Checkout = () => {
     [k: number]: boolean;
   }>({});
   const [creatingOrder, setCreatingOrder] = useState<OrderVM>(plainToInstance(OrderVM, {}));
-
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Organization
@@ -97,8 +95,18 @@ const Checkout = () => {
     );
     setActiveStep(1);
   };
-  const handlePayment = async (): Promise<void> => {
-    //
+  const handleCheckout = async (
+    creatingOrder: OrderVM,
+    paymentMethodType: PaymentMethodType
+  ): Promise<void> => {
+    const preOrder = instanceToPlain(creatingOrder);
+    const order = plainToInstance(OrderVM, {
+      ...preOrder,
+      City: selectedCity,
+      PaymentMethodType: paymentMethodType,
+      TS: trMoment().format()
+    });
+    await dispatch(createOrder(order)).then(() => navigate('/'));
   };
 
   return (
@@ -129,7 +137,7 @@ const Checkout = () => {
           </Grid>
         </Grid>
         {activeStep === 0 && <CheckoutForm onSubmit={handleMoveToPayment} />}
-        {activeStep === 1 && <PaymentForm onSubmit={handlePayment} PreOrder={creatingOrder} />}
+        {activeStep === 1 && <PaymentForm onSubmit={handleCheckout} PreOrder={creatingOrder} />}
       </ShoppingCartContext.Provider>
     </OrganizationsContext.Provider>
   );

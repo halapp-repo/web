@@ -1,7 +1,7 @@
 import { Chip } from '@mui/material';
 import { Order } from '../../models/order';
 import { OrderStatusType } from '@halapp/common';
-import { red, green, grey, blue, purple } from '@mui/material/colors';
+import { red, green, grey, blue, purple, lightBlue } from '@mui/material/colors';
 import { translateOrderStatus } from '../../utils/english-turkish-translator';
 
 const getColor = (status: OrderStatusType): string => {
@@ -9,6 +9,8 @@ const getColor = (status: OrderStatusType): string => {
     return green['A400'];
   } else if (status === OrderStatusType.Canceled) {
     return red['A400'];
+  } else if (status === OrderStatusType.PickedUp) {
+    return lightBlue['A400'];
   } else if (status === OrderStatusType.Delivered) {
     return blue['A400'];
   } else if (status === OrderStatusType.Paid) {
@@ -27,7 +29,7 @@ const StatusChip = ({ Order }: StatusChipProps) => {
     <Chip
       size="small"
       label={`${translateOrderStatus(Order.Status)}`}
-      sx={{ backgroundColor: getColor(Order.Status), borderRadius: '36px', color: '#ffff' }}
+      sx={{ backgroundColor: getColor(Order.Status), color: '#ffff' }}
     />
   );
 };

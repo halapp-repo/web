@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { Box, Tabs, CircularProgress, useMediaQuery, Theme, Grid } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  destroyOrganizationList,
-  fetchIndividualOrganization,
+  fetchAllOrganizations,
+  fetchOrganizations,
   selectIndividualOrganization,
   updateOrganization
 } from '../../../store/organizations/organizationsSlice';
@@ -28,6 +28,9 @@ import PeopleIcon from '@mui/icons-material/People';
 import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined';
 import ShieldIcon from '@mui/icons-material/Shield';
 import { Tab } from '../../../components/form/Tab';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import { AccountActivity } from './AccountActivity';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -59,13 +62,13 @@ const OrganizationEdit = () => {
   );
 
   useEffect(() => {
-    console.log('hereeee');
-    let destroyList = false;
     if (!organization && organizationId) {
-      destroyList = true;
-      dispatch(fetchIndividualOrganization(organizationId));
+      if (isAdmin) {
+        dispatch(fetchAllOrganizations());
+      } else {
+        dispatch(fetchOrganizations());
+      }
     }
-
     return () => {
       dispatch(
         updateUIOrganization({
@@ -73,11 +76,8 @@ const OrganizationEdit = () => {
           generalInfoEditMode: false
         })
       );
-      if (destroyList) {
-        dispatch(destroyOrganizationList());
-      }
     };
-  }, [organizationId]);
+  }, [organizationId, isAdmin]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     dispatch(
@@ -148,6 +148,12 @@ const OrganizationEdit = () => {
     } else if (tab === 3) {
       return (
         <TabPanel value={2} index={2}>
+          <AccountActivity Organization={organization} />
+        </TabPanel>
+      );
+    } else if (tab === 101) {
+      return (
+        <TabPanel value={2} index={2}>
           <OrganizationAdminPanel Organization={organization} />
         </TabPanel>
       );
@@ -203,11 +209,23 @@ const OrganizationEdit = () => {
                   label="Kullanıcılar"
                   value={2}
                 />
+                <Tab
+                  icon={
+                    currentTab === 3 ? (
+                      <ReceiptLongIcon style={{ fontSize: '24px' }} />
+                    ) : (
+                      <ReceiptLongOutlinedIcon style={{ fontSize: '24px' }} />
+                    )
+                  }
+                  iconPosition="top"
+                  label="İşlemler"
+                  value={3}
+                />
                 {isAdmin && (
                   <Tab
                     className="tab-admin"
                     icon={
-                      currentTab === 3 ? (
+                      currentTab === 101 ? (
                         <ShieldIcon style={{ fontSize: '24px' }} />
                       ) : (
                         <ShieldOutlinedIcon style={{ fontSize: '24px' }} />
@@ -215,7 +233,7 @@ const OrganizationEdit = () => {
                     }
                     iconPosition="top"
                     label="Admin"
-                    value={3}
+                    value={101}
                   />
                 )}
               </Tabs>
@@ -263,10 +281,22 @@ const OrganizationEdit = () => {
                   label="Kullanıcılar"
                   value={2}
                 />
+                <Tab
+                  icon={
+                    currentTab === 3 ? (
+                      <ReceiptLongIcon style={{ fontSize: '24px' }} />
+                    ) : (
+                      <ReceiptLongOutlinedIcon style={{ fontSize: '24px' }} />
+                    )
+                  }
+                  iconPosition="start"
+                  label="İşlemler"
+                  value={3}
+                />
                 {isAdmin && (
                   <Tab
                     icon={
-                      currentTab === 3 ? (
+                      currentTab === 101 ? (
                         <ShieldIcon style={{ fontSize: '24px' }} />
                       ) : (
                         <ShieldOutlinedIcon style={{ fontSize: '24px' }} />
@@ -275,7 +305,7 @@ const OrganizationEdit = () => {
                     className="tab-admin"
                     iconPosition="start"
                     label="Admin"
-                    value={3}
+                    value={101}
                   />
                 )}
               </Tabs>

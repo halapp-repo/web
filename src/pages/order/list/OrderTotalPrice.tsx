@@ -18,7 +18,7 @@ const OrderTotalPrice = ({ Order }: OrderTotalPriceProps) => {
           {new Intl.NumberFormat('tr-TR', {
             style: 'currency',
             currency: 'TRY'
-          }).format(Order.totalPrice())}
+          }).format(Order.TotalPrice)}
         </Typography>
       </Box>
     </Stack>

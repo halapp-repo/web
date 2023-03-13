@@ -48,11 +48,11 @@ const OrderList = () => {
     if (!userAuth.authenticated) {
       navigate('/auth/signin');
     } else {
-      if (!organizations) {
+      if (typeof organizations === 'undefined') {
         dispatch(fetchOrganizations());
       }
     }
-  }, [userAuth]);
+  }, [userAuth, organizations]);
 
   useEffect(() => {
     if (!selectedOrganizationId) {

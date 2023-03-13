@@ -1,6 +1,7 @@
 import { plainToInstance, Transform, Type } from 'class-transformer';
 import * as moment from 'moment';
 import { trMoment } from '../utils/timezone';
+import { AccountEvent } from './events/account-event';
 
 class OrganizationAddress {
   Active?: boolean;
@@ -50,6 +51,9 @@ class Organization {
 
   @Type(() => OrganizationAddress)
   DeliveryAddresses: OrganizationAddress[];
+
+  @Type(() => AccountEvent)
+  Events?: AccountEvent[];
 
   getDeliveryAddress(): OrganizationAddress | undefined {
     let deliveryAddress;

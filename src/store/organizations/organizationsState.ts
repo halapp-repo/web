@@ -1,4 +1,4 @@
-import { OrganizationVM } from '@halapp/common';
+import { AccountEventVM, OrganizationVM } from '@halapp/common';
 import { Organization } from '../../models/organization';
 
 interface Enrollment {
@@ -16,4 +16,7 @@ export interface OrganizationsState {
   AdminList: {
     List?: OrganizationVM[] | null;
   };
+  Events: {
+    [organizationId: string]: AccountEventVM[] | undefined | null;
+  } & { IsLoading: boolean };
 }

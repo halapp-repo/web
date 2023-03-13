@@ -5,7 +5,8 @@ import {
   IconButton,
   Box,
   Stack,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  Alert
 } from '@mui/material';
 import { DeleteOutlined } from '@ant-design/icons';
 import { NumberInput } from '../../components/form/NumberInput';
@@ -34,14 +35,23 @@ const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
   };
 
   return (
-    <ListItem disabled={!active} key={Item.ProductId} alignItems="flex-start">
+    <ListItem key={Item.ProductId} alignItems="flex-start">
       <ListItemSecondaryAction sx={{ height: '100%' }}>
         <IconButton edge="end" onClick={() => handleDeleteCartItem(Item.ProductId)}>
           <DeleteOutlined />
         </IconButton>
       </ListItemSecondaryAction>
       <ListItemText
-        primary={Item.Name}
+        primary={
+          active ? (
+            Item.Name
+          ) : (
+            <Stack>
+              <Alert severity="warning">{`${Item.Name} şu anda envanterimizde bulunmamaktadır.`}</Alert>
+              <s>{Item.Name}</s>
+            </Stack>
+          )
+        }
         primaryTypographyProps={{ fontWeight: 'bold' }}
         secondaryTypographyProps={{ component: 'div' }}
         secondary={
@@ -63,14 +73,18 @@ const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
               />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Stack direction={'row'} spacing={1}>
-                <Typography variant="body2">{Item.UnitAmount}</Typography>
-                <Typography variant="body2">{'x'}</Typography>
-                <Typography variant="body2">{Item.Count}</Typography>
-              </Stack>
-              <Typography variant="body2">
-                <strong>{Item.TotalAmount}</strong>
-              </Typography>
+              {Item.UnitAmount ? (
+                <>
+                  <Stack direction={'row'} spacing={1}>
+                    <Typography variant="body2">{Item.UnitAmount}</Typography>
+                    <Typography variant="body2">{'x'}</Typography>
+                    <Typography variant="body2">{Item.Count}</Typography>
+                  </Stack>
+                  <Typography variant="body2">
+                    <strong>{Item.TotalAmount}</strong>
+                  </Typography>
+                </>
+              ) : undefined}
             </Box>
           </Box>
         }

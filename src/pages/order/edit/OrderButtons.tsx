@@ -1,22 +1,23 @@
-import { Button, List, ListItem } from '@mui/material';
+import { Button, List, ListItem, Stack, Typography } from '@mui/material';
 import { Order } from '../../../models/order';
 import { useAppSelector } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { ReactElement } from 'react';
 import MainCard from '../../../components/MainCard';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface OrderButtonsProps {
   Order: Order;
   HandleOpenDialogCancelOrder: () => void;
   HandleOpenDialogOrderDelivered: () => void;
-  HandleOpenDialogOrderPaid: () => void;
+  HandleOpenDialogOrderPickedUp: () => void;
 }
 
 const OrderButtons = ({
   Order,
   HandleOpenDialogCancelOrder,
   HandleOpenDialogOrderDelivered,
-  HandleOpenDialogOrderPaid
+  HandleOpenDialogOrderPickedUp
 }: OrderButtonsProps) => {
   const userAuth = useAppSelector(selectUserAuth);
   const getButtons = (): ReactElement[] => {
@@ -28,7 +29,10 @@ const OrderButtons = ({
           onClick={HandleOpenDialogCancelOrder}
           sx={{ width: '100%', color: '#fff' }}
           color="error">
-          {'Siparişi Iptal Et'}
+          <Stack spacing={1} direction="row" alignItems={'center'}>
+            <CancelIcon sx={{ fontSize: '20px' }} />
+            <Typography>{'Siparişi Iptal Et'}</Typography>
+          </Stack>
         </Button>
       );
     }
@@ -43,14 +47,14 @@ const OrderButtons = ({
         </Button>
       );
     }
-    if (userAuth.isAdmin && Order.canBePaid()) {
+    if (userAuth.isAdmin && Order.canBePickedUp()) {
       buttons.push(
         <Button
           variant="contained"
-          onClick={HandleOpenDialogOrderPaid}
+          onClick={HandleOpenDialogOrderPickedUp}
           sx={{ width: '100%', color: '#fff' }}
           color="admin">
-          {'Sipariş Ödendi'}
+          {'Sipariş Hazırlandı'}
         </Button>
       );
     }
@@ -59,9 +63,7 @@ const OrderButtons = ({
 
   return (
     <>
-      {getButtons().length === 0 ? (
-        <></>
-      ) : (
+      {getButtons().length === 0 ? undefined : (
         <MainCard sx={{ mt: 2, p: '10px' }}>
           <List>
             {getButtons().map((b, i) => (

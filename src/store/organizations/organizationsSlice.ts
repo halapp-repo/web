@@ -4,16 +4,21 @@ import type { RootState } from '../index';
 import { Organization, OrganizationAddress } from '../../models/organization';
 import { OrganizationsApi } from './organizationsApi';
 import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
-import { instanceToInstance, plainToClass } from 'class-transformer';
+import { instanceToInstance, plainToClass, plainToInstance } from 'class-transformer';
 import { AxiosError } from 'axios';
 import { signOut } from '../auth/authSlice';
-import { OrganizationVM } from '@halapp/common';
+import { AccountEventType, OrganizationVM } from '@halapp/common';
+import { createOrder } from '../orders/ordersSlice';
+import { AccountEvent } from '../../models/events/account-event';
 
 const initialState = {
   Organizations: {},
   IsLoading: false,
   Enrollment: undefined,
-  AdminList: {}
+  AdminList: {},
+  Events: {
+    IsLoading: false
+  }
 } as OrganizationsState;
 
 export const fetchOrganizations = createAsyncThunk<OrganizationVM[], void, { state: RootState }>(
@@ -57,6 +62,28 @@ export const fetchIndividualOrganization = createAsyncThunk<
   const response = await new OrganizationsApi().fetchIndividualOrganization({
     token: userAuth.idToken,
     organizationId: orgId
+  });
+  return response;
+});
+export const fetchIndividualOrganizationWithEvents = createAsyncThunk<
+  OrganizationVM,
+  string,
+  { state: RootState }
+>('organization/fetchWithEvents', async (orgId, { getState }): Promise<OrganizationVM> => {
+  const { userAuth } = getState().auth;
+  if (!userAuth.authenticated || !userAuth.idToken) {
+    throw new Error('Unauthenticated');
+  }
+  const response = await new OrganizationsApi().fetchIndividualOrganization({
+    token: userAuth.idToken,
+    organizationId: orgId,
+    includeEvents: true,
+    eventTypes: [
+      AccountEventType.OrganizationCreatedV1,
+      AccountEventType.OrganizationWithdrewFromBalanceV1,
+      AccountEventType.OrganizationDepositedToBalanceV1,
+      AccountEventType.OrganizationPaidWithCardV1
+    ]
   });
   return response;
 });
@@ -159,10 +186,23 @@ const OrganizationsSlice = createSlice({
   initialState,
   reducers: {
     destroyOrganizationList: (state: OrganizationsState) => {
-      state.Organizations = {};
+      state.Organizations = {
+        List: undefined
+      };
     }
   },
   extraReducers: (builder) => {
+    builder.addCase(createOrder.fulfilled, (state) => {
+      state.Organizations = {
+        List: undefined
+      };
+      state.AdminList = {
+        List: undefined
+      };
+    });
+    /**
+     *
+     */
     builder.addCase(signOut.fulfilled, (state) => {
       state.Organizations = undefined;
       state.Enrollment = undefined;
@@ -370,6 +410,49 @@ const OrganizationsSlice = createSlice({
       };
       state.IsLoading = true;
     });
+    /**
+     * CREATE INDIVIDUAL ORGANIZATION WITH EVENTS
+     */
+    builder.addCase(fetchIndividualOrganizationWithEvents.fulfilled, (state, action) => {
+      const orgId = action.meta.arg;
+      const data = action.payload;
+      state.Events[orgId] = data.Events;
+      state.Events.IsLoading = false;
+      state.Organizations = {
+        ...state.Organizations,
+        ...(state.Organizations?.List
+          ? {
+              List: [...state.Organizations.List]?.map((o) => {
+                if (o.ID === orgId) {
+                  return data;
+                }
+                return o;
+              })
+            }
+          : null)
+      };
+      state.AdminList = {
+        ...state.AdminList,
+        ...(state.AdminList?.List
+          ? {
+              List: [...state.AdminList.List]?.map((o) => {
+                if (o.ID === orgId) {
+                  return data;
+                }
+                return o;
+              })
+            }
+          : null)
+      };
+    });
+    builder.addCase(fetchIndividualOrganizationWithEvents.rejected, (state, action) => {
+      const orgId = action.meta.arg;
+      state.Events[orgId] = null;
+      state.Events.IsLoading = false;
+    });
+    builder.addCase(fetchIndividualOrganizationWithEvents.pending, (state) => {
+      state.Events.IsLoading = true;
+    });
   }
 });
 export const { destroyOrganizationList } = OrganizationsSlice.actions;
@@ -408,6 +491,27 @@ export const selectOrganizationEnrollment = createSelector(
 export const selectOrganizationIsLoading = createSelector(
   [(state: RootState) => state.organizations],
   (org: OrganizationsState) => org.IsLoading
+);
+export const selectOrganizationEventsIsLoading = createSelector(
+  [(state: RootState) => state.organizations],
+  (org: OrganizationsState) => org.Events.IsLoading
+);
+export const selectOrganizationEvents = createSelector(
+  [
+    (state: RootState) => state.organizations,
+    (state: RootState, orgId?: string): string | undefined => orgId
+  ],
+  (org: OrganizationsState, orgId?: string) => {
+    if (orgId) {
+      const events = org.Events[orgId];
+      if (!events) {
+        return events;
+      } else {
+        return plainToInstance(AccountEvent, events);
+      }
+    }
+    return undefined;
+  }
 );
 export const selectAdminList = createSelector(
   [(state: RootState) => state.organizations],

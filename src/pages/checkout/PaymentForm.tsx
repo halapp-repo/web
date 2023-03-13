@@ -21,8 +21,8 @@ import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlin
 
 interface FormValues {
   preOrder: OrderVM;
-  //card
   step: PaymentMethodType;
+  //card
   cardNumber: string;
   approvedContract: boolean;
   monthExpiry: string;
@@ -110,10 +110,10 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               />
               <Tab
                 sx={{ textTransform: 'none' }}
-                value={PaymentMethodType.credit}
+                value={PaymentMethodType.balance}
                 label="Bakiyeden düş"
                 icon={
-                  activeStep === PaymentMethodType.credit ? (
+                  activeStep === PaymentMethodType.balance ? (
                     <AccountBalanceIcon style={{ fontSize: '24px' }} />
                   ) : (
                     <AccountBalanceOutlinedIcon style={{ fontSize: '24px' }} />
@@ -133,7 +133,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 />
               </Box>
             </TabPanel>
-            <TabPanel value={activeStep} index={PaymentMethodType.credit}>
+            <TabPanel value={activeStep} index={PaymentMethodType.balance}>
               <Box sx={{ p: 1 }}>
                 <WithdrawFromCredit
                   OrganizationId={values.preOrder.OrganizationId}
@@ -158,7 +158,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
               />
             )}
-            {activeStep === PaymentMethodType.credit && (
+            {activeStep === PaymentMethodType.balance && (
               <SummaryNWithdraw
                 PaymentMethodType={activeStep}
                 IsDisable={isSubmitting || !isValid}
@@ -176,7 +176,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
 };
 
 interface MyFormProps {
-  onSubmit: () => void;
+  onSubmit: (prevStepOrder: OrderVM, paymentMethodType: PaymentMethodType) => Promise<void>;
   PreOrder: OrderVM;
 }
 const PaymentForm = withFormik<MyFormProps, FormValues>({
@@ -213,9 +213,8 @@ const PaymentForm = withFormik<MyFormProps, FormValues>({
     }
   },
   validateOnMount: true,
-  handleSubmit: async (values, { setSubmitting }) => {
-    // do submitting things
-    setSubmitting(false);
+  handleSubmit: async (values, { props, setSubmitting }) => {
+    props.onSubmit(props.PreOrder, values.step).then(() => setSubmitting(false));
   }
 })(InnerForm);
 
