@@ -21,6 +21,8 @@ export interface UIState {
   organization: {
     currentTab: number;
     generalInfoEditMode: boolean;
+    paginationCount: number;
+    page: number;
   };
   checkout: {
     organizationId?: string;

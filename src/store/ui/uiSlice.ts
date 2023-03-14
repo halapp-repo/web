@@ -30,7 +30,9 @@ const initialState = {
   },
   organization: {
     currentTab: 0,
-    generalInfoEditMode: false
+    generalInfoEditMode: false,
+    paginationCount: 10,
+    page: 1
   },
   checkout: {
     cardNumber: '',
@@ -84,9 +86,9 @@ const UISlice = createSlice({
     },
     updateOrganization: (
       state: UIState,
-      action: PayloadAction<{ tab?: number; generalInfoEditMode?: boolean }>
+      action: PayloadAction<{ tab?: number; generalInfoEditMode?: boolean; page?: number }>
     ) => {
-      const { tab, generalInfoEditMode } = action.payload;
+      const { tab, generalInfoEditMode, page } = action.payload;
       state.organization = {
         ...state.organization,
         ...(typeof generalInfoEditMode !== 'undefined'
@@ -97,6 +99,11 @@ const UISlice = createSlice({
         ...(typeof tab !== 'undefined'
           ? {
               currentTab: tab
+            }
+          : null),
+        ...(typeof page !== 'undefined'
+          ? {
+              page: page
             }
           : null)
       };

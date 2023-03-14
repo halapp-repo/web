@@ -73,7 +73,8 @@ const OrganizationEdit = () => {
       dispatch(
         updateUIOrganization({
           tab: 0,
-          generalInfoEditMode: false
+          generalInfoEditMode: false,
+          page: 1
         })
       );
     };

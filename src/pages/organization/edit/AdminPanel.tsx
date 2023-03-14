@@ -13,6 +13,7 @@ interface OrganizationAdminPanelProps {
 const OrganizationAdminPanel = ({ Organization }: OrganizationAdminPanelProps) => {
   const [active, setActive] = useState<boolean>(Organization.Active === true);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+
   useEffect(() => {
     setDialogOpen(false);
   }, [Organization]);

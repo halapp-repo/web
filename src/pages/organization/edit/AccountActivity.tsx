@@ -1,6 +1,17 @@
 import { AccountEventType } from '@halapp/common';
-import { Stack, Box, Typography, List, ListItem, CircularProgress, Divider } from '@mui/material';
-import { useEffect } from 'react';
+import {
+  Stack,
+  Box,
+  Typography,
+  List,
+  ListItem,
+  CircularProgress,
+  Divider,
+  Pagination,
+  useMediaQuery,
+  Theme
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 import { RetryOnError } from '../../../components/RetryOnError';
 import { AccountEvent } from '../../../models/events/account-event';
 import { Organization } from '../../../models/organization';
@@ -13,6 +24,11 @@ import {
 import { getComparator } from '../../../utils/sort';
 import { ActivityListItem } from './ActivityListItem';
 import { useTheme } from '@mui/system';
+import {
+  selectUIOrganization,
+  updateOrganization as updateUIOrganization
+} from '../../../store/ui/uiSlice';
+import { paginate } from '../../../utils/pagination';
 
 interface AccountActivityProps {
   Organization: Organization;
@@ -20,13 +36,24 @@ interface AccountActivityProps {
 
 const AccountActivity = ({ Organization }: AccountActivityProps) => {
   const theme = useTheme();
+  const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const dispatch = useAppDispatch();
+  const { page: pageUI, paginationCount } = useAppSelector(selectUIOrganization);
   const events = useAppSelector((state) => selectOrganizationEvents(state, Organization.ID));
   const isLoading = useAppSelector(selectOrganizationEventsIsLoading);
+  const [page, setPage] = useState<number>(pageUI);
+
   useEffect(() => {
     if (!events) {
       dispatch(fetchIndividualOrganizationWithEvents(Organization.ID!));
     }
+    return () => {
+      dispatch(
+        updateUIOrganization({
+          page: page
+        })
+      );
+    };
   }, []);
   const handleRetry = () => {
     dispatch(fetchIndividualOrganizationWithEvents(Organization.ID!));
@@ -45,24 +72,28 @@ const AccountActivity = ({ Organization }: AccountActivityProps) => {
         </ListItem>
       );
     } else {
-      return events
-        ?.filter((e) => {
-          return (
-            e.EventType === AccountEventType.OrganizationWithdrewFromBalanceV1 ||
-            e.EventType === AccountEventType.OrganizationCreatedV1 ||
-            e.EventType === AccountEventType.OrganizationDepositedToBalanceV1 ||
-            e.EventType === AccountEventType.OrganizationPaidWithCardV1
-          );
-        })
-        .sort(getComparator('desc', 'TS'))
-        .map((e, i, arr) => (
-          <>
-            <ListItem key={e.TS.format()}>
-              <ActivityListItem Event={e} />
-            </ListItem>
-            {i !== arr.length - 1 && <Divider />}
-          </>
-        ));
+      return paginate(
+        (events || [])
+          .filter((e) => {
+            return (
+              e.EventType === AccountEventType.OrganizationWithdrewFromBalanceV1 ||
+              e.EventType === AccountEventType.OrganizationCreatedV1 ||
+              e.EventType === AccountEventType.OrganizationDepositedToBalanceV1 ||
+              e.EventType === AccountEventType.OrganizationPaidWithCardV1
+            );
+          })
+          .sort(getComparator('desc', 'TS'))
+          .map((e, i, arr) => (
+            <>
+              <ListItem key={e.TS.format()}>
+                <ActivityListItem Event={e} />
+              </ListItem>
+              {i !== arr.length - 1 && <Divider />}
+            </>
+          )),
+        paginationCount,
+        page
+      );
     }
   };
   return (
@@ -87,6 +118,17 @@ const AccountActivity = ({ Organization }: AccountActivityProps) => {
         }>
         {getContent(events, isLoading)}
       </List>
+      {events && events.length > paginationCount && (
+        <Pagination
+          variant="outlined"
+          color="primary"
+          shape="rounded"
+          onChange={(e, p) => setPage(p)}
+          size={matchesSm ? 'small' : 'medium'}
+          sx={{ justifyContent: 'center', display: 'flex' }}
+          count={Math.ceil(events.length / paginationCount)}
+        />
+      )}
     </Box>
   );
 };
