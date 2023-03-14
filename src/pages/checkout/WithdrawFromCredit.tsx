@@ -1,8 +1,11 @@
-import { Grid, Box, Typography, Stack, Alert } from '@mui/material';
+import { Grid, Box, Typography, Stack, Alert, Button, Divider } from '@mui/material';
 import { useContext, useEffect } from 'react';
 import { OrganizationsContext } from './OrganizationsContext';
 import { useTheme } from '@mui/system';
 import { ShoppingCartContext } from './ShoppingCartContext';
+import { useAppDispatch } from '../../store/hooks';
+import { updateOrganization as updateUIOrganization } from '../../store/ui/uiSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface WithdrawFromBalanceProps {
   OrganizationId?: string;
@@ -11,6 +14,8 @@ interface WithdrawFromBalanceProps {
 
 const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFromBalanceProps) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const organizations = useContext(OrganizationsContext);
   const shoppingCart = useContext(ShoppingCartContext);
   const selectedOrganization = organizations?.find((o) => o.ID === OrganizationId);
@@ -22,6 +27,11 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
       );
     }
   }, [selectedOrganization, shoppingCart]);
+
+  const handleDepositBalance = () => {
+    dispatch(updateUIOrganization({ tab: 3 }));
+    navigate(`/organization/${selectedOrganization?.ID}`);
+  };
 
   return (
     <Grid container spacing={1}>
@@ -62,6 +72,14 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
                     }>
                     {selectedOrganization.getBalanceAmount()}
                   </Typography>
+                  <Divider sx={{ m: '10px 0px' }} />
+                  <Button
+                    variant="outlined"
+                    color="blackNWhite"
+                    size="small"
+                    onClick={handleDepositBalance}>
+                    Bakiye ekle
+                  </Button>
                 </Grid>
                 <Grid item xs={6} md={4}>
                   <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
