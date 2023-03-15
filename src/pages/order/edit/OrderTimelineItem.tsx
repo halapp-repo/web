@@ -18,7 +18,8 @@ import {
   EnvironmentOutlined,
   EditOutlined,
   MinusCircleOutlined,
-  CodeSandboxOutlined
+  CodeSandboxOutlined,
+  CheckOutlined
 } from '@ant-design/icons';
 import { OrderItemsUpdatedV1Payload } from '../../../models/events/payloads/order-items-updated-v1.payload';
 
@@ -192,6 +193,30 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
           </>
         );
       }
+      case OrderEventType.OrderCompletedV1: {
+        return (
+          <>
+            <OrderTimelineItemContent
+              Event={Event}
+              sx={{
+                minHeight: '100px',
+                paddingRight: '5px'
+              }}>
+              <Box
+                sx={{
+                  minHeight: '70px'
+                }}>
+                <Typography variant="h5" textAlign={'center'}>
+                  {'Sipariş Tamamlandı'}
+                </Typography>
+              </Box>
+            </OrderTimelineItemContent>
+            <Box className="circle completed">
+              <CheckOutlined width={'20px'} height={'20px'} />
+            </Box>
+          </>
+        );
+      }
     }
   };
   return (
@@ -248,6 +273,9 @@ const OrderTimelineItem = ({ Event }: OrderTimelineItemProps) => {
           },
           '& .itemsUpdated': {
             border: `3px solid ${blueGrey['A400']}`
+          },
+          '& .completed': {
+            border: `3px solid ${green['A700']}`
           }
         }}>
         {getContent()}

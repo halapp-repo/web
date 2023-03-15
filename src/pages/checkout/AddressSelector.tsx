@@ -11,7 +11,8 @@ import {
   Typography,
   Stack,
   Button,
-  Alert
+  Alert,
+  Divider
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization, OrganizationAddress } from '../../models/organization';
@@ -88,38 +89,22 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
           padding: '0px 10px',
           boxShadow: 'sm',
           bgcolor: 'background.body',
+          border: '1px solid #eeeeee',
+          borderRadius: '8px',
           '&.Mui-selected': {
             backgroundColor: 'inherit',
-            border: '1px solid #ffc423',
-            borderRadius: '8px'
+            border: '1px solid #ffc423'
           },
           '&.Mui-selected:hover': {
             backgroundColor: 'inherit'
           }
         }}
-        secondaryAction={
-          <Stack direction={'column'} justifyContent="space-around">
-            <Radio value={org.ID} />
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                handleChangeOrganization(org.ID!);
-              }}>
-              {'Değiştir'}
-            </Button>
-          </Stack>
-        }>
+        secondaryAction={<Stack justifyContent="flex-end"></Stack>}>
         <ListItemText
           primary={
             <>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  color: areStringsEqual(deliveryAddress?.City, selectedCity)
-                    ? 'inherit'
-                    : grey['A400']
-                }}>
+              <Stack direction={'row'} spacing={1} alignItems="center">
+                <Radio value={org.ID} color="info" />
                 <Typography
                   variant="h5"
                   fontWeight={'bold'}
@@ -127,19 +112,41 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                   color={theme.palette.info.main}>
                   {org.Name}
                 </Typography>
+              </Stack>
+              <Stack
+                spacing={1}
+                sx={{
+                  color: areStringsEqual(deliveryAddress?.City, selectedCity)
+                    ? 'inherit'
+                    : grey['A400']
+                }}>
                 {areStringsEqual(deliveryAddress?.City, selectedCity) || (
                   <Alert severity="warning">
                     Teslimat şehri (<b>{`${deliveryAddress?.City.toLowerCase()}`}</b>) ile seçilen
                     şehir (<b>{`${selectedCity}`}</b>) uyuşmamaktadır!
                   </Alert>
                 )}
-                <Typography variant="body2" fontWeight={'bold'}>
-                  {deliveryAddress?.AddressLine}
-                </Typography>
-                <Typography variant="body2" fontWeight={'bold'}>
-                  {`${deliveryAddress?.County} ${deliveryAddress?.City} ${deliveryAddress?.ZipCode} ${deliveryAddress?.Country}`}
-                </Typography>
-              </Box>
+                <Box sx={{ p: '0px 5px 0px 50px' }}>
+                  <Typography variant="body2" fontWeight={'bold'}>
+                    {deliveryAddress?.AddressLine}
+                  </Typography>
+                  <Typography variant="body2" fontWeight={'bold'}>
+                    {`${deliveryAddress?.County} ${deliveryAddress?.City} ${deliveryAddress?.ZipCode} ${deliveryAddress?.Country}`}
+                  </Typography>
+                </Box>
+                <Divider />
+                <Stack direction={'row'} justifyContent="flex-end">
+                  <Button
+                    variant="text"
+                    color="primary"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleChangeOrganization(org.ID!);
+                    }}>
+                    {'Değiştir'}
+                  </Button>
+                </Stack>
+              </Stack>
             </>
           }
           primaryTypographyProps={{ fontWeight: 'bold' }}
