@@ -15,6 +15,8 @@ const getColor = (status: OrderStatusType): string => {
     return blue['A400'];
   } else if (status === OrderStatusType.Paid) {
     return purple['A400'];
+  } else if (status === OrderStatusType.Completed) {
+    return green['A700'];
   } else {
     return grey['900'];
   }
