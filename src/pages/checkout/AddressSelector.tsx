@@ -104,7 +104,7 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
           primary={
             <>
               <Stack direction={'row'} spacing={1} alignItems="center">
-                <Radio value={org.ID} color="info" />
+                <Radio value={org.ID} color="primary" />
                 <Typography
                   variant="h5"
                   fontWeight={'bold'}
