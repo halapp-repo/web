@@ -12,7 +12,8 @@ import {
   Stack,
   Button,
   Alert,
-  Divider
+  Divider,
+  Collapse
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization, OrganizationAddress } from '../../models/organization';
@@ -134,18 +135,23 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                     {`${deliveryAddress?.County} ${deliveryAddress?.City} ${deliveryAddress?.ZipCode} ${deliveryAddress?.Country}`}
                   </Typography>
                 </Box>
-                <Divider />
-                <Stack direction={'row'} justifyContent="flex-end">
-                  <Button
-                    variant="text"
-                    color="primary"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleChangeOrganization(org.ID!);
-                    }}>
-                    {'Değiştir'}
-                  </Button>
-                </Stack>
+                <Collapse in={org.ID === selectedOrganizationID}>
+                  <Stack spacing={1}>
+                    <Divider />
+                    <Stack direction={'row'} justifyContent="flex-end">
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="blackNWhite"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleChangeOrganization(org.ID!);
+                        }}>
+                        {'Teslimat Adresini Değiştir'}
+                      </Button>
+                    </Stack>
+                  </Stack>
+                </Collapse>
               </Stack>
             </>
           }
