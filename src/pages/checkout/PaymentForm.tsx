@@ -162,6 +162,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
               <SummaryNWithdraw
                 PaymentMethodType={activeStep}
                 IsDisable={isSubmitting || !isValid}
+                OrganizationId={values.preOrder.OrganizationId}
               />
             )}
           </MainCard>

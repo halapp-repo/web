@@ -31,7 +31,7 @@ interface AddressSelectorProps {
 
 const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
   const organizations = useContext(OrganizationsContext);
-
+  const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { organizationId: savedOrganizationId } = useAppSelector(selectUICheckout);
@@ -75,7 +75,6 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
   };
 
   const getListItem = (org: Organization): JSX.Element => {
-    const theme = useTheme();
     const deliveryAddress = org.getDeliveryAddress();
     return (
       <ListItem

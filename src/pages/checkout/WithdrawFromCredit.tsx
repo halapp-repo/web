@@ -6,6 +6,8 @@ import { ShoppingCartContext } from './ShoppingCartContext';
 import { useAppDispatch } from '../../store/hooks';
 import { updateOrganization as updateUIOrganization } from '../../store/ui/uiSlice';
 import { useNavigate } from 'react-router-dom';
+import { getExtraCharges } from '../../models/services/extra-charges.service';
+import { translateExtraChargeType } from '../../utils/english-turkish-translator';
 
 interface WithdrawFromBalanceProps {
   OrganizationId?: string;
@@ -19,11 +21,20 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
   const organizations = useContext(OrganizationsContext);
   const shoppingCart = useContext(ShoppingCartContext);
   const selectedOrganization = organizations?.find((o) => o.ID === OrganizationId);
+  const extraCharges = getExtraCharges({
+    shoppingCart: shoppingCart,
+    organization: selectedOrganization
+  });
 
   useEffect(() => {
     if (selectedOrganization && shoppingCart) {
+      let totalPrice = shoppingCart.Total;
+      for (const charge of extraCharges || []) {
+        console.log(extraCharges);
+        totalPrice += charge.Price;
+      }
       SetHasEnoughCredit(
-        selectedOrganization.Balance + selectedOrganization.CreditLimit - shoppingCart.Total >= 0
+        selectedOrganization.Balance + selectedOrganization.CreditLimit - totalPrice >= 0
       );
     }
   }, [selectedOrganization, shoppingCart]);
@@ -55,12 +66,6 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
               <Grid container>
                 <Grid item xs={6} md={4}>
                   <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
-                    {'Kullanılabilir kredi'}
-                  </Typography>
-                  <Typography variant="h4" color={theme.palette.info.main}>
-                    {selectedOrganization.getAvailableCreditAmount()}
-                  </Typography>
-                  <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
                     {'Bakiye'}
                   </Typography>
                   <Typography
@@ -71,8 +76,15 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
                         : theme.palette.error.main
                     }>
                     {selectedOrganization.getBalanceAmount()}
+
+                    <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
+                      {'Kullanılabilir kredi'}
+                    </Typography>
+                    <Typography variant="h4" color={theme.palette.info.main}>
+                      {selectedOrganization.getAvailableCreditAmount()}
+                    </Typography>
                   </Typography>
-                  <Divider sx={{ m: '10px 0px' }} />
+                  <Divider sx={{ m: '10px 0px', width: '80%' }} />
                   <Button
                     variant="outlined"
                     color="blackNWhite"
@@ -88,6 +100,19 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
                   <Typography variant="h4" color="primary">
                     {shoppingCart.TotalAmount}
                   </Typography>
+                  {extraCharges.map((e) => (
+                    <>
+                      <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
+                        {translateExtraChargeType(e.Type)}
+                      </Typography>
+                      <Typography variant="h6" color="primary" fontWeight={'bold'}>
+                        {`${new Intl.NumberFormat('tr-TR', {
+                          style: 'currency',
+                          currency: 'TRY'
+                        }).format(e.Price)}`}
+                      </Typography>
+                    </>
+                  ))}
                 </Grid>
               </Grid>
             </Stack>

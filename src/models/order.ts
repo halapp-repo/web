@@ -1,7 +1,13 @@
 import { Transform, Type } from 'class-transformer';
 import moment from 'moment';
 import { trMoment } from '../utils/timezone';
-import { CityType, OrderEventType, OrderStatusType, PaymentMethodType } from '@halapp/common';
+import {
+  CityType,
+  ExtraCharge,
+  OrderEventType,
+  OrderStatusType,
+  PaymentMethodType
+} from '@halapp/common';
 import { OrganizationAddress } from './organization';
 import { OrderEvent } from './events/order-event';
 
@@ -64,10 +70,17 @@ class Order {
   City: CityType;
   PaymentMethodType: PaymentMethodType;
 
+  ExtraCharges?: ExtraCharge[];
+
   get TotalPrice(): number {
-    return this.Items.reduce((acc, curr) => {
+    let total = 0;
+    total += this.Items.reduce((acc, curr) => {
       return acc + curr.TotalPrice;
     }, 0);
+    for (const charge of this.ExtraCharges || []) {
+      total += charge.Price;
+    }
+    return total;
   }
 
   isPickedUp(): boolean {
