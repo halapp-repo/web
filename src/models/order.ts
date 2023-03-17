@@ -72,16 +72,7 @@ class Order {
 
   ExtraCharges?: ExtraCharge[];
 
-  get TotalPrice(): number {
-    let total = 0;
-    total += this.Items.reduce((acc, curr) => {
-      return acc + curr.TotalPrice;
-    }, 0);
-    for (const charge of this.ExtraCharges || []) {
-      total += charge.Price;
-    }
-    return total;
-  }
+  TotalPrice: number;
 
   isPickedUp(): boolean {
     return this.Events?.some((e) => e.EventType === OrderEventType.OrderPickedUpV1) || false;

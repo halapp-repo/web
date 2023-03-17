@@ -6,8 +6,7 @@ import { ShoppingCartContext } from './ShoppingCartContext';
 import { useAppDispatch } from '../../store/hooks';
 import { updateOrganization as updateUIOrganization } from '../../store/ui/uiSlice';
 import { useNavigate } from 'react-router-dom';
-import { getExtraCharges } from '../../models/services/extra-charges.service';
-import { translateExtraChargeType } from '../../utils/english-turkish-translator';
+import { ExtraChargeService, translateExtraChargeType } from '@halapp/common';
 
 interface WithdrawFromBalanceProps {
   OrganizationId?: string;
@@ -21,9 +20,9 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
   const organizations = useContext(OrganizationsContext);
   const shoppingCart = useContext(ShoppingCartContext);
   const selectedOrganization = organizations?.find((o) => o.ID === OrganizationId);
-  const extraCharges = getExtraCharges({
-    shoppingCart: shoppingCart,
-    organization: selectedOrganization
+  const extraCharges = new ExtraChargeService().getExtraCharges({
+    orderPrice: shoppingCart.Total,
+    balance: selectedOrganization?.Balance
   });
 
   useEffect(() => {

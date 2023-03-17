@@ -7,6 +7,7 @@ import { selectUserAuth } from '../../../store/auth/authSlice';
 import { DialogSaveItems } from './DialogSaveItems';
 import { useEffect } from 'react';
 import { Organization } from '../../../models/organization';
+import { ExtraChargeListItem } from './ExtraChargeListItem';
 
 interface OrderItemListProps {
   Order: Order;
@@ -96,6 +97,9 @@ const OrderItemList = ({ Order, Organization }: OrderItemListProps) => {
           </Stack>
         )}
         <Divider sx={{ marginBottom: '10px' }} />
+        {Order.ExtraCharges?.map((e) => (
+          <ExtraChargeListItem key={e.Type} Charge={e} />
+        ))}
         <Box
           sx={{
             display: 'flex',
@@ -109,9 +113,7 @@ const OrderItemList = ({ Order, Organization }: OrderItemListProps) => {
           <Typography variant="h5" color="primary">
             <strong>
               {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
-                items.reduce((acc, curr) => {
-                  return acc + curr.TotalPrice;
-                }, 0)
+                Order.TotalPrice
               )}
             </strong>
           </Typography>

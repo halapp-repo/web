@@ -3,10 +3,10 @@ import { MinusSquareOutlined } from '@ant-design/icons';
 import {
   AccountEventType,
   OrganizationWithdrewV1PayloadVM,
-  PaymentMethodType
+  PaymentMethodType,
+  translatePaymentMethodType
 } from '@halapp/common';
 import { AccountEvent } from '../../../models/events/account-event';
-import { translatePaymentMethodType } from '../../../utils/english-turkish-translator';
 import { Link } from 'react-router-dom';
 
 interface OrganizationWithdrewActivityProps {

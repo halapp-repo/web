@@ -1,7 +1,6 @@
 import { Typography, Box, Select, MenuItem } from '@mui/material';
-import { OrderStatusType } from '@halapp/common';
+import { OrderStatusType, translateOrderStatus } from '@halapp/common';
 import { FieldTimeOutlined } from '@ant-design/icons';
-import { translateOrderStatus } from '../../../utils/english-turkish-translator';
 
 interface TypeFilterProps {
   Filter: OrderStatusType | null;

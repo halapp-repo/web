@@ -6,7 +6,7 @@ import {
   OrganizationDepositV1PayloadVM
 } from '@halapp/common';
 import { AccountEvent } from '../../../models/events/account-event';
-import { translatePaymentMethodType } from '../../../utils/english-turkish-translator';
+import { translatePaymentMethodType } from '@halapp/common';
 import { Link } from 'react-router-dom';
 
 interface OrganizationDepositActivityProps {

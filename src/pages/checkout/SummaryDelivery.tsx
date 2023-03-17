@@ -1,8 +1,7 @@
 import { Stack, Typography, Box } from '@mui/material';
 import moment from 'moment';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
-import { getExtraCharges } from '../../models/services/extra-charges.service';
-import { ExtraChargeType } from '@halapp/common';
+import { ExtraChargeType, ExtraChargeService } from '@halapp/common';
 
 interface SummaryDeliveryProps {
   ShoppingCart: ShoppingCartList;
@@ -10,7 +9,9 @@ interface SummaryDeliveryProps {
 }
 
 const SummaryDelivery = ({ ShoppingCart, DeliveryTime }: SummaryDeliveryProps) => {
-  const extraCharges = getExtraCharges({ shoppingCart: ShoppingCart });
+  const extraCharges = new ExtraChargeService().getExtraCharges({
+    orderPrice: ShoppingCart.Total
+  });
   const deliveryCharge = extraCharges.find(
     (e) => e.Type === ExtraChargeType.lowPriceDeliveryCharge
   );

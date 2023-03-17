@@ -1,9 +1,8 @@
 import { ExtraChargeType, PaymentMethodType } from '@halapp/common';
 import { Stack, Typography, Box } from '@mui/material';
 import { Organization } from '../../models/organization';
-import { getExtraCharges } from '../../models/services/extra-charges.service';
+import { ExtraChargeService, translatePaymentMethodType } from '@halapp/common';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
-import { translatePaymentMethodType } from '../../utils/english-turkish-translator';
 
 interface SummaryPaymentProps {
   PaymentMethodType: PaymentMethodType;
@@ -12,7 +11,10 @@ interface SummaryPaymentProps {
 }
 
 const SummaryPayment = ({ PaymentMethodType, ShoppingCart, Organization }: SummaryPaymentProps) => {
-  const extraCharges = getExtraCharges({ shoppingCart: ShoppingCart, organization: Organization });
+  const extraCharges = new ExtraChargeService().getExtraCharges({
+    orderPrice: ShoppingCart.Total,
+    balance: Organization?.Balance
+  });
   const paymentCharge = extraCharges.find((e) => e.Type === ExtraChargeType.usingCreditCharge);
   return (
     <Box>

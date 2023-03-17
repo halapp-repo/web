@@ -5,10 +5,9 @@ import moment from 'moment';
 import MainCard from '../../../components/MainCard';
 import OrderListItem from './OrderListItem';
 import { getComparator } from '../../../utils/sort';
-import { OrderStatusType } from '@halapp/common';
+import { OrderStatusType, translateOrderStatus } from '@halapp/common';
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization } from '../../../models/organization';
-import { translateOrderStatus } from '../../../utils/english-turkish-translator';
 
 interface OrdersContentProps {
   SelectedOrganization?: Organization;

@@ -1,7 +1,6 @@
-import { ExtraChargeType } from '@halapp/common';
+import { ExtraChargeType, ExtraChargeService } from '@halapp/common';
 import { Stack, Typography, Box } from '@mui/material';
 import { Organization } from '../../models/organization';
-import { getExtraCharges } from '../../models/services/extra-charges.service';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { useAppSelector } from '../../store/hooks';
@@ -13,9 +12,9 @@ interface SummaryTotalPriceProps {
 
 const SummaryTotalPrice = ({ ShoppingCart, Organization }: SummaryTotalPriceProps) => {
   const selectedCity = useAppSelector(selectSelectedCity);
-  const extraCharges = getExtraCharges({
-    shoppingCart: ShoppingCart,
-    organization: Organization
+  const extraCharges = new ExtraChargeService().getExtraCharges({
+    orderPrice: ShoppingCart.Total,
+    balance: Organization?.Balance
   });
   const deliveryCharge = extraCharges.find(
     (e) => e.Type === ExtraChargeType.lowPriceDeliveryCharge
