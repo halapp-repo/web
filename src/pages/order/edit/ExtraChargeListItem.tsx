@@ -14,15 +14,27 @@ const ExtraChargeListItem = ({ Charge }: ExtraChargeListItemProps) => {
         secondaryTypographyProps={{ component: 'div' }}
         secondary={
           <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Stack direction={'row'} spacing={1}>
-                <Typography variant="body2">
-                  {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
-                    Charge.Price
-                  )}
+            <Stack
+              direction={'row'}
+              justifyContent={'space-between'}
+              alignItems="center"
+              spacing={2}>
+              <Stack>
+                <Typography variant="body2" fontStyle={'italic'}>
+                  {Charge.Warning}
                 </Typography>
               </Stack>
-            </Box>
+              <Stack direction={'row'} spacing={1}>
+                <Typography variant="body2">
+                  <strong>
+                    {new Intl.NumberFormat('tr-TR', {
+                      style: 'currency',
+                      currency: 'TRY'
+                    }).format(Charge.Price)}
+                  </strong>
+                </Typography>
+              </Stack>
+            </Stack>
           </Box>
         }
       />
