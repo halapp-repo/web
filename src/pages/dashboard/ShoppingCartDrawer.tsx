@@ -26,7 +26,7 @@ const ShoppingCartDrawer = () => {
         open={isOpen}
         PaperProps={{
           sx: {
-            width: { xs: '80%', md: '50', lg: '30%' }
+            width: { xs: '80%', sm: '50%', md: '40%', lg: '30%' }
           }
         }}
         onClose={toggleDrawer(false)}>

@@ -12,7 +12,8 @@ import {
   Stack,
   Button,
   Alert,
-  Divider
+  Divider,
+  Collapse
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Organization, OrganizationAddress } from '../../models/organization';
@@ -30,7 +31,7 @@ interface AddressSelectorProps {
 
 const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
   const organizations = useContext(OrganizationsContext);
-
+  const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { organizationId: savedOrganizationId } = useAppSelector(selectUICheckout);
@@ -74,7 +75,6 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
   };
 
   const getListItem = (org: Organization): JSX.Element => {
-    const theme = useTheme();
     const deliveryAddress = org.getDeliveryAddress();
     return (
       <ListItem
@@ -104,7 +104,7 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
           primary={
             <>
               <Stack direction={'row'} spacing={1} alignItems="center">
-                <Radio value={org.ID} color="info" />
+                <Radio value={org.ID} color="primary" />
                 <Typography
                   variant="h5"
                   fontWeight={'bold'}
@@ -134,18 +134,23 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                     {`${deliveryAddress?.County} ${deliveryAddress?.City} ${deliveryAddress?.ZipCode} ${deliveryAddress?.Country}`}
                   </Typography>
                 </Box>
-                <Divider />
-                <Stack direction={'row'} justifyContent="flex-end">
-                  <Button
-                    variant="text"
-                    color="primary"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleChangeOrganization(org.ID!);
-                    }}>
-                    {'Değiştir'}
-                  </Button>
-                </Stack>
+                <Collapse in={org.ID === selectedOrganizationID}>
+                  <Stack spacing={1}>
+                    <Divider />
+                    <Stack direction={'row'} justifyContent="flex-end">
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="blackNWhite"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleChangeOrganization(org.ID!);
+                        }}>
+                        {'Teslimat Adresini Değiştir'}
+                      </Button>
+                    </Stack>
+                  </Stack>
+                </Collapse>
               </Stack>
             </>
           }

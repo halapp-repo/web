@@ -78,9 +78,13 @@ const SummaryNPay = ({
         <Divider />
         <SummaryOrder ShoppingCart={shoppingCart} />
         <Divider />
-        <SummaryPayment PaymentMethodType={PaymentMethodType} />
+        <SummaryPayment
+          PaymentMethodType={PaymentMethodType}
+          ShoppingCart={shoppingCart}
+          Organization={undefined}
+        />
         <Divider />
-        <SummaryTotalPrice ShoppingCart={shoppingCart} />
+        <SummaryTotalPrice ShoppingCart={shoppingCart} Organization={undefined} />
       </Stack>
     </Stack>
   );

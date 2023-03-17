@@ -1,6 +1,7 @@
 import { Stack, Typography, Box } from '@mui/material';
 import moment from 'moment';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
+import { ExtraChargeType, ExtraChargeService } from '@halapp/common';
 
 interface SummaryDeliveryProps {
   ShoppingCart: ShoppingCartList;
@@ -8,6 +9,12 @@ interface SummaryDeliveryProps {
 }
 
 const SummaryDelivery = ({ ShoppingCart, DeliveryTime }: SummaryDeliveryProps) => {
+  const extraCharges = new ExtraChargeService().getExtraCharges({
+    orderPrice: ShoppingCart.Total
+  });
+  const deliveryCharge = extraCharges.find(
+    (e) => e.Type === ExtraChargeType.lowPriceDeliveryCharge
+  );
   return (
     <Box>
       <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }}>
@@ -15,8 +22,12 @@ const SummaryDelivery = ({ ShoppingCart, DeliveryTime }: SummaryDeliveryProps) =
       </Typography>
       <Stack direction={'row'} justifyContent="space-between">
         <Typography variant="body2">{`Taşıma ve nakliye:`}</Typography>
-        <Typography variant="body2" fontWeight={'bold'} color="primary">
-          {ShoppingCart.Total > 0 && 'Ücretsiz'}
+        <Typography variant="body2" fontWeight={'bold'}>
+          {deliveryCharge
+            ? new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
+                deliveryCharge.Price
+              )
+            : 'Ücretsiz'}
         </Typography>
       </Stack>
       <Stack direction={'row'} justifyContent="space-between">

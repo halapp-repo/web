@@ -5,14 +5,22 @@ import { useContext } from 'react';
 import { ShoppingCartContext } from './ShoppingCartContext';
 import { SummaryPayment } from './SummaryPayment';
 import { PaymentMethodType } from '@halapp/common';
+import { OrganizationsContext } from './OrganizationsContext';
 
 interface SummaryNWithdrawProps {
   PaymentMethodType: PaymentMethodType;
   IsDisable: boolean;
+  OrganizationId: string;
 }
 
-const SummaryNWithdraw = ({ IsDisable, PaymentMethodType }: SummaryNWithdrawProps) => {
+const SummaryNWithdraw = ({
+  IsDisable,
+  PaymentMethodType,
+  OrganizationId
+}: SummaryNWithdrawProps) => {
   const shoppingCart = useContext(ShoppingCartContext);
+  const organizations = useContext(OrganizationsContext);
+  const selectedOrganization = organizations?.find((o) => o.ID === OrganizationId);
   return (
     <Stack spacing={1}>
       <Stack spacing={1}>
@@ -26,9 +34,13 @@ const SummaryNWithdraw = ({ IsDisable, PaymentMethodType }: SummaryNWithdrawProp
         <Divider />
         <SummaryOrder ShoppingCart={shoppingCart} />
         <Divider />
-        <SummaryPayment PaymentMethodType={PaymentMethodType} />
+        <SummaryPayment
+          PaymentMethodType={PaymentMethodType}
+          ShoppingCart={shoppingCart}
+          Organization={selectedOrganization}
+        />
         <Divider />
-        <SummaryTotalPrice ShoppingCart={shoppingCart} />
+        <SummaryTotalPrice ShoppingCart={shoppingCart} Organization={selectedOrganization} />
       </Stack>
     </Stack>
   );

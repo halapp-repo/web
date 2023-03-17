@@ -61,7 +61,7 @@ const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlac
       <Divider />
       <SummaryDelivery ShoppingCart={shoppingCart} DeliveryTime={deliveryTime} />
       <Divider />
-      <SummaryTotalPrice ShoppingCart={shoppingCart} />
+      <SummaryTotalPrice ShoppingCart={shoppingCart} Organization={undefined} />
     </Stack>
   );
 };

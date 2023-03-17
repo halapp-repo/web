@@ -25,7 +25,7 @@ import { instanceToPlain, plainToInstance } from 'class-transformer';
 
 const Checkout = () => {
   const dispatch = useAppDispatch();
-  const userAuth = useAppSelector(selectUserAuth);
+  const { authenticated } = useAppSelector(selectUserAuth);
   const organizations = useAppSelector(selectOrganizations);
   const organizationAreLoading = useAppSelector(selectOrganizationIsLoading);
   const pricesAreLoading = useAppSelector(selectPriceIsLoading);
@@ -41,7 +41,7 @@ const Checkout = () => {
   useEffect(() => {
     // Organization
     if (
-      userAuth.authenticated == true &&
+      authenticated == true &&
       (typeof organizations === 'undefined' || organizations === null || organizations.length === 0)
     ) {
       dispatch(fetchOrganizations());
