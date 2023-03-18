@@ -1,13 +1,24 @@
-import { Stack, Typography, Collapse } from '@mui/material';
-import { useState } from 'react';
+import { Stack, Typography, Collapse, useMediaQuery, Theme } from '@mui/material';
+import { useState, useContext } from 'react';
 import { DistantSaleContract } from './DistantSaleContract';
 import { ForeknowledgeContract } from './ForeknowledgeContract';
 import { ReturnPolicyContract } from './ReturnPolicyContract';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ExpandMore } from '../../components/ExpandMoreButton';
+import { ShoppingCartContext } from './ShoppingCartContext';
+import { ExtraCharge } from '@halapp/common';
+import { Organization } from '../../models/organization';
 
-const Contracts = () => {
-  const [expanded, setExpanded] = useState(false);
+interface ContractsProps {
+  Organization: Organization;
+  ExtraCharges?: ExtraCharge[];
+}
+
+const Contracts = ({ Organization, ExtraCharges }: ContractsProps) => {
+  const shoppingCart = useContext(ShoppingCartContext);
+  const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
+  const [expanded, setExpanded] = useState(matchesSm ? false : true);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -28,7 +39,11 @@ const Contracts = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <ReturnPolicyContract />
         <ForeknowledgeContract />
-        <DistantSaleContract />
+        <DistantSaleContract
+          ShoppingCart={shoppingCart}
+          ExtraCharges={ExtraCharges}
+          Organization={Organization}
+        />
       </Collapse>
     </Stack>
   );

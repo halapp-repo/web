@@ -11,20 +11,31 @@ import {
   Button,
   IconButton
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { DistantSaleContract } from './DistantSaleContract';
 import { ForeknowledgeContract } from './ForeknowledgeContract';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch } from '../../store/hooks';
 import { updateCheckout } from '../../store/ui/uiSlice';
+import { ShoppingCartContext } from './ShoppingCartContext';
+import { Organization } from '../../models/organization';
+import { ExtraCharge } from '@halapp/common';
 
 interface DialogContractsProps {
   IsDialogOpen: boolean;
   OnChangeDialogOpen: (isOpen: boolean) => void;
+  Organization: Organization;
+  ExtraCharges?: ExtraCharge[];
 }
 
-const DialogContracts = ({ IsDialogOpen, OnChangeDialogOpen }: DialogContractsProps) => {
+const DialogContracts = ({
+  IsDialogOpen,
+  OnChangeDialogOpen,
+  Organization,
+  ExtraCharges
+}: DialogContractsProps) => {
   const dispatch = useAppDispatch();
+  const shoppingCart = useContext(ShoppingCartContext);
   const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [maxWidth] = useState<DialogProps['maxWidth']>('xs');
 
@@ -70,7 +81,11 @@ const DialogContracts = ({ IsDialogOpen, OnChangeDialogOpen }: DialogContractsPr
       <DialogContent>
         <Stack spacing={3}>
           <ForeknowledgeContract />
-          <DistantSaleContract />
+          <DistantSaleContract
+            Organization={Organization}
+            ShoppingCart={shoppingCart}
+            ExtraCharges={ExtraCharges}
+          />
         </Stack>
       </DialogContent>
       <DialogActions

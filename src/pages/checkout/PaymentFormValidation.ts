@@ -24,7 +24,8 @@ const cardValidationSchema = Yup.object().shape({
 });
 
 const withdrawValidationSchema = Yup.object().shape({
-  hasEnoughCredit: Yup.bool().oneOf([true], `Yeterince kredi yok`).required()
+  hasEnoughCredit: Yup.bool().oneOf([true], `Yeterince kredi yok`).required(),
+  approvedContract: Yup.bool().oneOf([true], `Sözleşme onaylanmalı`).required()
 });
 
 export { cardValidationSchema, withdrawValidationSchema };
