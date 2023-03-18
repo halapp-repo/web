@@ -43,9 +43,7 @@ const InnerForm = (props: FormikProps<FormValues>) => {
   const { isSubmitting, isValid, setFieldValue, setFieldTouched, values } = props;
   const shoppingCart = useContext(ShoppingCartContext);
   const organizations = useContext(OrganizationsContext);
-  const selectedOrganization = organizations?.find(
-    (o) => o.ID === props.values.preOrder.OrganizationId
-  );
+  const selectedOrganization = organizations?.find((o) => o.ID === values.preOrder.OrganizationId);
 
   const handleChangePaymentMethod = (event: React.SyntheticEvent, newValue: PaymentMethodType) => {
     setActiveStep(newValue);
