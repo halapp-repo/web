@@ -1,21 +1,14 @@
-import { ExtraChargeType, PaymentMethodType } from '@halapp/common';
+import { ExtraCharge, ExtraChargeType, PaymentMethodType } from '@halapp/common';
 import { Stack, Typography, Box } from '@mui/material';
-import { Organization } from '../../models/organization';
-import { ExtraChargeService, translatePaymentMethodType } from '@halapp/common';
-import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
+import { translatePaymentMethodType } from '@halapp/common';
 
 interface SummaryPaymentProps {
   PaymentMethodType: PaymentMethodType;
-  ShoppingCart: ShoppingCartList;
-  Organization?: Organization;
+  ExtraCharges?: ExtraCharge[];
 }
 
-const SummaryPayment = ({ PaymentMethodType, ShoppingCart, Organization }: SummaryPaymentProps) => {
-  const extraCharges = new ExtraChargeService().getExtraCharges({
-    orderPrice: ShoppingCart.Total,
-    balance: Organization?.Balance
-  });
-  const paymentCharge = extraCharges.find((e) => e.Type === ExtraChargeType.usingCreditCharge);
+const SummaryPayment = ({ PaymentMethodType: PMT, ExtraCharges }: SummaryPaymentProps) => {
+  const paymentCharge = ExtraCharges?.find((e) => e.Type === ExtraChargeType.usingCreditCharge);
   return (
     <Box>
       <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }}>
@@ -25,7 +18,7 @@ const SummaryPayment = ({ PaymentMethodType, ShoppingCart, Organization }: Summa
         <Stack direction={'row'} justifyContent="space-between">
           <Typography variant="body2">{`Ödeme yöntemi:`}</Typography>
           <Typography variant="body2" fontWeight={'bold'}>
-            {translatePaymentMethodType(PaymentMethodType)}
+            {translatePaymentMethodType(PMT)}
           </Typography>
         </Stack>
         <Stack direction={'row'} justifyContent="space-between">

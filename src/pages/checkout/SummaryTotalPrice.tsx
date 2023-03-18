@@ -1,28 +1,24 @@
-import { ExtraChargeType, ExtraChargeService } from '@halapp/common';
+import { ExtraChargeType, ExtraCharge } from '@halapp/common';
 import { Stack, Typography, Box } from '@mui/material';
-import { Organization } from '../../models/organization';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { useAppSelector } from '../../store/hooks';
 
 interface SummaryTotalPriceProps {
   ShoppingCart: ShoppingCartList;
-  Organization?: Organization;
+  ExtraCharges?: ExtraCharge[];
 }
 
-const SummaryTotalPrice = ({ ShoppingCart, Organization }: SummaryTotalPriceProps) => {
+const SummaryTotalPrice = ({ ShoppingCart, ExtraCharges }: SummaryTotalPriceProps) => {
   const selectedCity = useAppSelector(selectSelectedCity);
-  const extraCharges = new ExtraChargeService().getExtraCharges({
-    orderPrice: ShoppingCart.Total,
-    balance: Organization?.Balance
-  });
-  const deliveryCharge = extraCharges.find(
+
+  const deliveryCharge = ExtraCharges?.find(
     (e) => e.Type === ExtraChargeType.lowPriceDeliveryCharge
   );
-  const paymentCharge = extraCharges.find((e) => e.Type === ExtraChargeType.usingCreditCharge);
+  const paymentCharge = ExtraCharges?.find((e) => e.Type === ExtraChargeType.usingCreditCharge);
   let totalAmount = 0;
   totalAmount += ShoppingCart.Total;
-  for (const charge of extraCharges) {
+  for (const charge of ExtraCharges || []) {
     totalAmount += charge.Price;
   }
 

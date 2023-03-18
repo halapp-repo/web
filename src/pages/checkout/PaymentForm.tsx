@@ -3,21 +3,22 @@ import { withFormik, FormikProps, Form, yupToFormErrors } from 'formik';
 import * as Yup from 'yup';
 import MainCard from '../../components/MainCard';
 import { TabPanel } from '../../components/form/TabPanel';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
-import { OrderVM, PaymentMethodType } from '@halapp/common';
+import { ExtraChargeService, OrderVM, PaymentMethodType } from '@halapp/common';
 import { CardInformation } from './CardInformation';
 import { SummaryNPay } from './SummaryNPay';
 import { cardValidationSchema, withdrawValidationSchema } from './PaymentFormValidation';
 import { Contracts } from './Contracts';
 import { DialogContracts } from './DialogContracts';
 import { WithdrawFromCredit } from './WithdrawFromCredit';
-import { SummaryNWithdraw } from './SummaryNWithdraw';
 import { Tab } from '../../components/form/Tab';
 import { CreditCardOutlined, CreditCardFilled } from '@ant-design/icons';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import { ShoppingCartContext } from './ShoppingCartContext';
+import { OrganizationsContext } from './OrganizationsContext';
 
 interface FormValues {
   preOrder: OrderVM;
@@ -40,6 +41,9 @@ const InnerForm = (props: FormikProps<FormValues>) => {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const matchesSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { isSubmitting, isValid, setFieldValue, setFieldTouched, values } = props;
+  const shoppingCart = useContext(ShoppingCartContext);
+  const organizations = useContext(OrganizationsContext);
+  const selectedOrganization = organizations?.find((o) => o.ID === values.preOrder.OrganizationId);
 
   const handleChangePaymentMethod = (event: React.SyntheticEvent, newValue: PaymentMethodType) => {
     setActiveStep(newValue);
@@ -83,6 +87,10 @@ const InnerForm = (props: FormikProps<FormValues>) => {
       );
     };
   }, [activeStep]);
+  const extraCharges = new ExtraChargeService().getExtraCharges({
+    orderPrice: shoppingCart.Total,
+    balance: activeStep === PaymentMethodType.balance ? selectedOrganization?.Balance : undefined
+  });
   return (
     <Form
       onKeyPress={(e) => {
@@ -136,39 +144,31 @@ const InnerForm = (props: FormikProps<FormValues>) => {
             <TabPanel value={activeStep} index={PaymentMethodType.balance}>
               <Box sx={{ p: 1 }}>
                 <WithdrawFromCredit
-                  OrganizationId={values.preOrder.OrganizationId}
+                  Organization={selectedOrganization!}
                   SetHasEnoughCredit={handleSetHasEnoughCredit}
                 />
               </Box>
             </TabPanel>
           </MainCard>
-          {activeStep === PaymentMethodType.card && (
-            <MainCard sx={{ mt: 2, p: 2 }}>
-              <Contracts />
-            </MainCard>
-          )}
+          <MainCard sx={{ mt: 2, p: 2 }}>
+            <Contracts Organization={selectedOrganization!} ExtraCharges={extraCharges} />
+          </MainCard>
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <MainCard sx={{ mt: 2, p: 2 }}>
-            {activeStep === PaymentMethodType.card && (
-              <SummaryNPay
-                PaymentMethodType={activeStep}
-                IsDisable={isSubmitting || !isValid}
-                SetChangeApprovedContractField={handleSetApprovedContract}
-                OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
-              />
-            )}
-            {activeStep === PaymentMethodType.balance && (
-              <SummaryNWithdraw
-                PaymentMethodType={activeStep}
-                IsDisable={isSubmitting || !isValid}
-                OrganizationId={values.preOrder.OrganizationId}
-              />
-            )}
+            <SummaryNPay
+              PaymentMethodType={activeStep}
+              IsDisable={isSubmitting || !isValid}
+              SetChangeApprovedContractField={handleSetApprovedContract}
+              OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
+              ExtraCharges={extraCharges}
+            />
           </MainCard>
         </Grid>
       </Grid>
       <DialogContracts
+        Organization={selectedOrganization!}
+        ExtraCharges={extraCharges}
         IsDialogOpen={isDialogOpen}
         OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
       />

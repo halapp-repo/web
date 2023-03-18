@@ -1,46 +1,42 @@
 import { Grid, Box, Typography, Stack, Alert, Button, Divider } from '@mui/material';
 import { useContext, useEffect } from 'react';
-import { OrganizationsContext } from './OrganizationsContext';
 import { useTheme } from '@mui/system';
 import { ShoppingCartContext } from './ShoppingCartContext';
 import { useAppDispatch } from '../../store/hooks';
 import { updateOrganization as updateUIOrganization } from '../../store/ui/uiSlice';
 import { useNavigate } from 'react-router-dom';
 import { ExtraChargeService, translateExtraChargeType } from '@halapp/common';
+import { Organization } from '../../models/organization';
 
 interface WithdrawFromBalanceProps {
-  OrganizationId?: string;
+  Organization: Organization;
   SetHasEnoughCredit: (value: boolean) => void;
 }
 
-const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFromBalanceProps) => {
+const WithdrawFromCredit = ({ Organization, SetHasEnoughCredit }: WithdrawFromBalanceProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const organizations = useContext(OrganizationsContext);
   const shoppingCart = useContext(ShoppingCartContext);
-  const selectedOrganization = organizations?.find((o) => o.ID === OrganizationId);
   const extraCharges = new ExtraChargeService().getExtraCharges({
     orderPrice: shoppingCart.Total,
-    balance: selectedOrganization?.Balance
+    balance: Organization.Balance
   });
 
   useEffect(() => {
-    if (selectedOrganization && shoppingCart) {
+    if (Organization && shoppingCart) {
       let totalPrice = shoppingCart.Total;
       for (const charge of extraCharges || []) {
         console.log(extraCharges);
         totalPrice += charge.Price;
       }
-      SetHasEnoughCredit(
-        selectedOrganization.Balance + selectedOrganization.CreditLimit - totalPrice >= 0
-      );
+      SetHasEnoughCredit(Organization.Balance + Organization.CreditLimit - totalPrice >= 0);
     }
-  }, [selectedOrganization, shoppingCart]);
+  }, [Organization, shoppingCart]);
 
   const handleDepositBalance = () => {
     dispatch(updateUIOrganization({ tab: 3 }));
-    navigate(`/organization/${selectedOrganization?.ID}`);
+    navigate(`/organization/${Organization.ID}`);
   };
 
   return (
@@ -51,14 +47,14 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
             {'Şirket Bilgileri'}
           </Typography>
         </Box>
-        {OrganizationId && selectedOrganization ? (
+        {Organization ? (
           <Stack spacing={1}>
             <Grid container>
               <Grid item xs={12}>
                 <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
                   Şirket
                 </Typography>
-                <Typography variant="h5">{selectedOrganization.Name}</Typography>
+                <Typography variant="h5">{Organization.Name}</Typography>
               </Grid>
             </Grid>
             <Stack spacing={1}>
@@ -70,17 +66,17 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
                   <Typography
                     variant="h4"
                     color={
-                      selectedOrganization.Balance >= 0
+                      Organization.Balance >= 0
                         ? theme.palette.success.main
                         : theme.palette.error.main
                     }>
-                    {selectedOrganization.getBalanceAmount()}
+                    {Organization.getBalanceAmount()}
 
                     <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
                       {'Kullanılabilir kredi'}
                     </Typography>
                     <Typography variant="h4" color={theme.palette.info.main}>
-                      {selectedOrganization.getAvailableCreditAmount()}
+                      {Organization.getAvailableCreditAmount()}
                     </Typography>
                   </Typography>
                   <Divider sx={{ m: '10px 0px', width: '80%' }} />
@@ -104,7 +100,7 @@ const WithdrawFromCredit = ({ OrganizationId, SetHasEnoughCredit }: WithdrawFrom
                       <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
                         {translateExtraChargeType(e.Type)}
                       </Typography>
-                      <Typography variant="h6" color="primary" fontWeight={'bold'}>
+                      <Typography variant="h4" color="primary" fontWeight={'bold'}>
                         {`${new Intl.NumberFormat('tr-TR', {
                           style: 'currency',
                           currency: 'TRY'

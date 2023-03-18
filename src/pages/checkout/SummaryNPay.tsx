@@ -1,4 +1,4 @@
-import { PaymentMethodType } from '@halapp/common';
+import { ExtraCharge, PaymentMethodType } from '@halapp/common';
 import { Stack, Button, Typography, Checkbox, Divider } from '@mui/material';
 import { useEffect, useContext } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
@@ -9,16 +9,19 @@ import { SummaryPayment } from './SummaryPayment';
 import { SummaryTotalPrice } from './SummaryTotalPrice';
 
 interface SummaryNPayProps {
-  PaymentMethodType: PaymentMethodType;
-  IsDisable: boolean;
   SetChangeApprovedContractField: (value: boolean) => Promise<void>;
   OnChangeDialogOpen: (isOpen: boolean) => void;
+  PaymentMethodType: PaymentMethodType;
+  IsDisable: boolean;
+  ExtraCharges?: ExtraCharge[];
 }
 
 const SummaryNPay = ({
   SetChangeApprovedContractField,
   OnChangeDialogOpen,
-  PaymentMethodType
+  PaymentMethodType: PMT,
+  IsDisable,
+  ExtraCharges
 }: SummaryNPayProps) => {
   const dispatch = useAppDispatch();
   const shoppingCart = useContext(ShoppingCartContext);
@@ -46,7 +49,7 @@ const SummaryNPay = ({
         <Button
           type="submit"
           variant="contained"
-          disabled={true}
+          disabled={IsDisable || PMT !== PaymentMethodType.balance}
           sx={{ width: '100%', fontWeight: 'bold', textTransform: 'none' }}>
           {'Ödeme Yap'}
         </Button>
@@ -62,7 +65,7 @@ const SummaryNPay = ({
               }}>
               <b>Ön Bilgilendirme Koşulları</b>
             </u>
-            {"'"}nı ve{' '}
+            &apos;nı ve&nbsp;
             <u
               style={{
                 cursor: 'pointer'
@@ -72,19 +75,15 @@ const SummaryNPay = ({
               }}>
               <b>Mesafeli Satış Sözleşmesi</b>
             </u>
-            {"'"}ni okudum, onaylıyorum.
+            &apos;ni okudum, onaylıyorum.
           </Typography>
         </Stack>
         <Divider />
         <SummaryOrder ShoppingCart={shoppingCart} />
         <Divider />
-        <SummaryPayment
-          PaymentMethodType={PaymentMethodType}
-          ShoppingCart={shoppingCart}
-          Organization={undefined}
-        />
+        <SummaryPayment PaymentMethodType={PMT} ExtraCharges={ExtraCharges} />
         <Divider />
-        <SummaryTotalPrice ShoppingCart={shoppingCart} Organization={undefined} />
+        <SummaryTotalPrice ShoppingCart={shoppingCart} ExtraCharges={ExtraCharges} />
       </Stack>
     </Stack>
   );

@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react';
 import { trMoment } from '../../utils/timezone';
 import { Link } from 'react-router-dom';
 import { ShoppingCartContext } from './ShoppingCartContext';
-import { OrderItemVM } from '@halapp/common';
+import { ExtraChargeService, OrderItemVM } from '@halapp/common';
 import { SummaryOrder } from './SummaryOrder';
 import { SummaryDelivery } from './SummaryDelivery';
 import { SummaryTotalPrice } from './SummaryTotalPrice';
@@ -17,6 +17,10 @@ interface SummaryNPlaceOrderProps {
 const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlaceOrderProps) => {
   const shoppingCart = useContext(ShoppingCartContext);
   const deliveryTime = trMoment(DeliveryTime).clone();
+  const extraCharges = new ExtraChargeService().getExtraCharges({
+    orderPrice: shoppingCart.Total,
+    balance: undefined
+  });
 
   useEffect(() => {
     if (shoppingCart) {
@@ -59,9 +63,9 @@ const SummaryNContinue = ({ IsValid, SetOrderItems, DeliveryTime }: SummaryNPlac
       <Divider />
       <SummaryOrder ShoppingCart={shoppingCart} />
       <Divider />
-      <SummaryDelivery ShoppingCart={shoppingCart} DeliveryTime={deliveryTime} />
+      <SummaryDelivery DeliveryTime={deliveryTime} ExtraCharges={extraCharges} />
       <Divider />
-      <SummaryTotalPrice ShoppingCart={shoppingCart} Organization={undefined} />
+      <SummaryTotalPrice ShoppingCart={shoppingCart} ExtraCharges={extraCharges} />
     </Stack>
   );
 };
