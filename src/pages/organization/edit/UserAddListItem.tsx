@@ -72,12 +72,8 @@ const UserAddListItem = ({ Organization }: UserAddListItemProps) => {
     } else {
       return (
         <Stack direction={'row'} gap={2} sx={{ pb: '10px' }} justifyContent="center">
-          <IconButton>
-            <ControlPointOutlinedIcon
-              color="info"
-              style={{ fontSize: '32px' }}
-              onClick={() => setEditMode(true)}
-            />
+          <IconButton onClick={() => setEditMode(true)}>
+            <ControlPointOutlinedIcon color="info" style={{ fontSize: '32px' }} />
           </IconButton>
         </Stack>
       );

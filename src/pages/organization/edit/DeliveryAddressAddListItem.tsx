@@ -28,12 +28,8 @@ const DeliveryAddressAddListItem = ({ OnAddAddress }: DeliveryAddressAddListItem
         <ListItemText
           primary={
             <Stack direction={'row'} justifyContent="center">
-              <IconButton>
-                <ControlPointOutlinedIcon
-                  color="info"
-                  style={{ fontSize: '32px' }}
-                  onClick={() => setEditMode(true)}
-                />
+              <IconButton onClick={() => setEditMode(true)}>
+                <ControlPointOutlinedIcon color="info" style={{ fontSize: '32px' }} />
               </IconButton>
             </Stack>
           }
