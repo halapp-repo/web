@@ -4,7 +4,7 @@ import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCa
 import ShoppingCartListItem from './SCListItem';
 import ShoppingCartItemCounter from './SCItemCounter';
 import SummaryNCheckout from './SummaryNCheckout';
-import { useEffect } from 'react';
+import { useEffect, Fragment } from 'react';
 import {
   fetchTodaysPrices,
   selectPriceIsLoading,
@@ -57,10 +57,10 @@ const ShoppingCartContent = () => {
                 return <ShoppingCartListItem key={i.ProductId} Item={i} />;
               } else {
                 return (
-                  <>
+                  <Fragment key={i.ProductId}>
                     <ShoppingCartListItem key={i.ProductId} Item={i} />
                     <Divider />
-                  </>
+                  </Fragment>
                 );
               }
             })}

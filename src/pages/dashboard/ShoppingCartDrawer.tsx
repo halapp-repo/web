@@ -3,10 +3,17 @@ import { Drawer } from '@mui/material';
 import ShoppingCartContent from '../shopping-cart/SCContent';
 import { selectUIShoppingCartIsOpen, toggleShoppingCart } from '../../store/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useEffect } from 'react';
 
 const ShoppingCartDrawer = () => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector(selectUIShoppingCartIsOpen);
+
+  useEffect(() => {
+    return () => {
+      dispatch(toggleShoppingCart(false));
+    };
+  }, []);
 
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (

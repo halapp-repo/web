@@ -22,7 +22,8 @@ import {
   CircularProgress,
   Toolbar,
   TableSortLabel,
-  Chip
+  Chip,
+  Stack
 } from '@mui/material';
 import { ProductType } from '@halapp/common';
 import moment from 'moment';
@@ -136,18 +137,22 @@ const PriceTable = () => {
           maxWidth: '100%'
         }}>
         <Toolbar>
-          <Typography variant="h3" color="inherit">
-            {selectedDate && moment(selectedDate).format('DD.MM.YYYY')}
-            <Typography color="text.secondary" variant="body2">
-              {`Meyve/Sebze `}
-              <Chip color="default" size="small" label={selectedCity} variant="outlined" />
+          <Stack>
+            <Typography variant="h3" color="inherit">
+              {selectedDate && moment(selectedDate).format('DD.MM.YYYY')}
             </Typography>
-          </Typography>
+            <Stack direction={'row'} spacing={1}>
+              <Typography color="text.secondary" variant="body2">
+                {`Meyve/Sebze `}
+              </Typography>
+              <Chip color="default" size="small" label={selectedCity} variant="outlined" />
+            </Stack>
+          </Stack>
         </Toolbar>
         <Table
           sx={{
             width: '100%',
-            '& .MuiTableCell-root:first-child': {
+            '& .MuiTableCell-root:first-of-type': {
               pl: 2
             },
             '& .MuiTableCell-root:last-child': {

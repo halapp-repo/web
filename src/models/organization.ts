@@ -41,13 +41,13 @@ class Organization {
   @Type(() => OrganizationAddress)
   InvoiceAddress?: OrganizationAddress;
 
-  JoinedUsers?: string[];
+  JoinedUsers: string[] = [];
 
   @Type(() => String)
   @Transform(({ value }: { value: string }) => trMoment(value), {
     toClassOnly: true
   })
-  CreatedDate?: moment.Moment;
+  CreatedDate: moment.Moment = trMoment();
 
   @Type(() => OrganizationAddress)
   DeliveryAddresses: OrganizationAddress[];

@@ -19,6 +19,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import { ShoppingCartContext } from './ShoppingCartContext';
 import { OrganizationsContext } from './OrganizationsContext';
+import { Overlay } from '../../components/Overlay';
 
 interface FormValues {
   preOrder: OrderVM;
@@ -96,82 +97,93 @@ const InnerForm = (props: FormikProps<FormValues>) => {
       onKeyPress={(e) => {
         e.which === 13 && e.preventDefault();
       }}>
-      <Grid container rowSpacing={4.5} justifyContent="left" columnSpacing={2.75} alignItems="left">
-        <Grid item xs={12} sm={12} md={6}>
-          <MainCard sx={{ mt: 2, p: 2 }}>
-            <Tabs
-              value={activeStep}
-              onChange={handleChangePaymentMethod}
-              sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <Tab
-                sx={{ textTransform: 'none' }}
-                value={PaymentMethodType.card}
-                label="Kart ile öde"
-                icon={
-                  activeStep === PaymentMethodType.card ? (
-                    <CreditCardFilled style={{ fontSize: '24px' }} />
-                  ) : (
-                    <CreditCardOutlined style={{ fontSize: '24px' }} />
-                  )
-                }
-                iconPosition={!matchesSm ? 'start' : 'top'}
-              />
-              <Tab
-                sx={{ textTransform: 'none' }}
-                value={PaymentMethodType.balance}
-                label="Bakiyeden düş"
-                icon={
-                  activeStep === PaymentMethodType.balance ? (
-                    <AccountBalanceIcon style={{ fontSize: '24px' }} />
-                  ) : (
-                    <AccountBalanceOutlinedIcon style={{ fontSize: '24px' }} />
-                  )
-                }
-                iconPosition={!matchesSm ? 'start' : 'top'}
-              />
-            </Tabs>
-            <TabPanel value={activeStep} index={PaymentMethodType.card}>
-              <Box sx={{ p: 1 }}>
-                <CardInformation
-                  SetCardNumberField={handleSetCardNumberField}
-                  SetMonthField={handleSetMonthExpiry}
-                  SetYearField={handleSetYearExpiry}
-                  SetCVVField={handleSetCVV}
-                  SetSecurePaymentEnabledField={handleSetSecurePaymentEnabled}
+      {selectedOrganization ? (
+        <>
+          <Grid
+            container
+            rowSpacing={4.5}
+            justifyContent="left"
+            columnSpacing={2.75}
+            alignItems="left">
+            <Grid item xs={12} sm={12} md={6}>
+              <MainCard sx={{ mt: 2, p: 2 }}>
+                <Tabs
+                  value={activeStep}
+                  onChange={handleChangePaymentMethod}
+                  sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <Tab
+                    sx={{ textTransform: 'none' }}
+                    value={PaymentMethodType.card}
+                    label="Kart ile öde"
+                    icon={
+                      activeStep === PaymentMethodType.card ? (
+                        <CreditCardFilled style={{ fontSize: '24px' }} />
+                      ) : (
+                        <CreditCardOutlined style={{ fontSize: '24px' }} />
+                      )
+                    }
+                    iconPosition={!matchesSm ? 'start' : 'top'}
+                  />
+                  <Tab
+                    sx={{ textTransform: 'none' }}
+                    value={PaymentMethodType.balance}
+                    label="Bakiyeden düş"
+                    icon={
+                      activeStep === PaymentMethodType.balance ? (
+                        <AccountBalanceIcon style={{ fontSize: '24px' }} />
+                      ) : (
+                        <AccountBalanceOutlinedIcon style={{ fontSize: '24px' }} />
+                      )
+                    }
+                    iconPosition={!matchesSm ? 'start' : 'top'}
+                  />
+                </Tabs>
+                <TabPanel value={activeStep} index={PaymentMethodType.card}>
+                  <Box sx={{ p: 1 }}>
+                    <CardInformation
+                      SetCardNumberField={handleSetCardNumberField}
+                      SetMonthField={handleSetMonthExpiry}
+                      SetYearField={handleSetYearExpiry}
+                      SetCVVField={handleSetCVV}
+                      SetSecurePaymentEnabledField={handleSetSecurePaymentEnabled}
+                    />
+                  </Box>
+                </TabPanel>
+                <TabPanel value={activeStep} index={PaymentMethodType.balance}>
+                  <Box sx={{ p: 1 }}>
+                    <WithdrawFromCredit
+                      Organization={selectedOrganization}
+                      SetHasEnoughCredit={handleSetHasEnoughCredit}
+                    />
+                  </Box>
+                </TabPanel>
+              </MainCard>
+              <MainCard sx={{ mt: 2, p: 2 }}>
+                <Contracts Organization={selectedOrganization} ExtraCharges={extraCharges} />
+              </MainCard>
+            </Grid>
+            <Grid item xs={12} sm={12} md={4} lg={3}>
+              <MainCard sx={{ mt: 2, p: 2 }}>
+                <SummaryNPay
+                  PaymentMethodType={activeStep}
+                  IsDisable={isSubmitting || !isValid}
+                  SetChangeApprovedContractField={handleSetApprovedContract}
+                  OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
+                  ExtraCharges={extraCharges}
                 />
-              </Box>
-            </TabPanel>
-            <TabPanel value={activeStep} index={PaymentMethodType.balance}>
-              <Box sx={{ p: 1 }}>
-                <WithdrawFromCredit
-                  Organization={selectedOrganization!}
-                  SetHasEnoughCredit={handleSetHasEnoughCredit}
-                />
-              </Box>
-            </TabPanel>
-          </MainCard>
-          <MainCard sx={{ mt: 2, p: 2 }}>
-            <Contracts Organization={selectedOrganization!} ExtraCharges={extraCharges} />
-          </MainCard>
-        </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3}>
-          <MainCard sx={{ mt: 2, p: 2 }}>
-            <SummaryNPay
-              PaymentMethodType={activeStep}
-              IsDisable={isSubmitting || !isValid}
-              SetChangeApprovedContractField={handleSetApprovedContract}
-              OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
-              ExtraCharges={extraCharges}
-            />
-          </MainCard>
-        </Grid>
-      </Grid>
-      <DialogContracts
-        Organization={selectedOrganization!}
-        ExtraCharges={extraCharges}
-        IsDialogOpen={isDialogOpen}
-        OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
-      />
+              </MainCard>
+            </Grid>
+          </Grid>
+          <DialogContracts
+            Organization={selectedOrganization}
+            ExtraCharges={extraCharges}
+            IsDialogOpen={isDialogOpen}
+            OnChangeDialogOpen={(isOpen: boolean) => setDialogOpen(isOpen)}
+          />
+        </>
+      ) : (
+        <Overlay />
+      )}
     </Form>
   );
 };

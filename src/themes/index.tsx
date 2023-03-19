@@ -60,7 +60,6 @@ export default function ThemeCustomization({ children }: Props) {
             okButtonLabel: 'onay'
           }}
           dateAdapter={AdapterDateFns}
-          locale={trLocale}
           adapterLocale={trLocale}>
           <CssBaseline />
           {children}

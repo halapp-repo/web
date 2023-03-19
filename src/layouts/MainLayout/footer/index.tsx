@@ -80,10 +80,10 @@ const Footer = () => {
             type="link"
             href="https://www.instagram.com/halapptoptan/"
             rel="noreferrer"
-            LinkComponent={InstagramOutlined}
             target="_blank"
-            onClick={() => window.open('https://www.instagram.com/halapptoptan/')}
-          />
+            onClick={() => window.open('https://www.instagram.com/halapptoptan/')}>
+            <InstagramOutlined />
+          </IconButton>
         </Grid>
       </Grid>
     </Box>

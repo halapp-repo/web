@@ -108,14 +108,11 @@ const PriceDialog = ({ ProductId, Location, Type, CloseAnalyticsPanel }: PriceDi
             sm: `calc(100% - ${theme.spacing(11)} )`
           }
         }}>
-        <Box
-          sx={{
+        <div
+          style={{
             flexGrow: 1,
-            bgcolor: 'background.paper',
-            display: {
-              sx: 'block',
-              sm: 'flex'
-            },
+            backgroundColor: 'background.paper',
+            display: 'flex',
             height: '100%'
           }}>
           {matchesSM && (
@@ -154,7 +151,7 @@ const PriceDialog = ({ ProductId, Location, Type, CloseAnalyticsPanel }: PriceDi
             </Tabs>
           )}
           <PriceChart Slot={slot} ProductId={ProductId} Location={Location} Type={Type} />
-        </Box>
+        </div>
       </DialogContent>
     </Dialog>
   );
