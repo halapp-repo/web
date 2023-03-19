@@ -17,7 +17,7 @@ const TypeFilter = ({ Filter, SetType }: TypeFilterProps) => {
         <Select
           fullWidth
           sx={{ marginTop: '10px' }}
-          value={Filter}
+          value={Filter || ''}
           onChange={(e) => {
             const value = e.target.value;
             if (value) {
