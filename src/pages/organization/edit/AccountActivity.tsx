@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   Theme
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { RetryOnError } from '../../../components/RetryOnError';
 import { AccountEvent } from '../../../models/events/account-event';
 import { Organization } from '../../../models/organization';
@@ -84,12 +84,12 @@ const AccountActivity = ({ Organization }: AccountActivityProps) => {
           })
           .sort(getComparator('desc', 'TS'))
           .map((e, i, arr) => (
-            <>
+            <Fragment key={i}>
               <ListItem key={e.TS.format()}>
                 <ActivityListItem Event={e} />
               </ListItem>
               {i !== arr.length - 1 && <Divider />}
-            </>
+            </Fragment>
           )),
         paginationCount,
         page

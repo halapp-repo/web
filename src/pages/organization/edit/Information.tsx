@@ -24,6 +24,7 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
             <Typography variant="body2" color={theme.palette.secondary.main} fontWeight={'bold'}>
               {Organization.VKN!}
             </Typography>
+
             <Divider />
 
             <Grid container>
@@ -38,6 +39,7 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
                 )}
               </Grid>
             </Grid>
+
             {Organization.Active && (
               <Grid container>
                 <Grid item xs={2}>

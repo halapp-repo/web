@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, Fragment } from 'react';
 import { List, CircularProgress, Box, Typography, Divider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { selectUserAuth } from '../../../store/auth/authSlice';
@@ -49,10 +49,10 @@ const OrganizationList = () => {
       );
     }
     return organizations.map((i) => (
-      <>
+      <Fragment key={i.ID}>
         <Divider />
-        <OrganizationListItem Organization={i} key={i.ID} />
-      </>
+        <OrganizationListItem Organization={i} />
+      </Fragment>
     ));
   };
 

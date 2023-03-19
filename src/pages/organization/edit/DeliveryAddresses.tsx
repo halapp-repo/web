@@ -3,7 +3,7 @@ import { Organization, OrganizationAddress } from '../../../models/organization'
 import { DeliveryAddressListItem } from './DeliveryAddressListItem';
 import { DeliveryAddressAddListItem } from './DeliveryAddressAddListItem';
 import { useAppDispatch } from '../../../store/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { updateOrganizationDeliveryAddresses } from '../../../store/organizations/organizationsSlice';
 import { CompanyAddressListItem } from './CompanyAddressListItem';
 
@@ -74,7 +74,7 @@ const DeliveryAddresses = ({ Organization }: DeliveryAddressesProps) => {
       />
       {/* Delivery Addresses  */}
       {Organization.DeliveryAddresses.map((d: OrganizationAddress, index: number) => (
-        <>
+        <Fragment key={index}>
           <Divider />
           <DeliveryAddressListItem
             key={index}
@@ -84,7 +84,7 @@ const DeliveryAddresses = ({ Organization }: DeliveryAddressesProps) => {
             OnDeleteAddress={deleteAddress(index)}
             OnSetDefault={setDefault(index)}
           />
-        </>
+        </Fragment>
       ))}
       {/* Add */}
       <Divider />

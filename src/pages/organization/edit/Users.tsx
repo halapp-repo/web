@@ -1,7 +1,7 @@
 import { Organization } from '../../../models/organization';
 import { List, ListItem, CircularProgress, Stack, Typography, Chip } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { useEffect } from 'react';
+import { useEffect, Fragment } from 'react';
 import {
   fetchAllByOrganizationId,
   selectOrganizationUsers,
@@ -35,8 +35,8 @@ const Users = ({ Organization }: UsersProps) => {
       {!isLoading &&
         users &&
         users.map((u) => (
-          <>
-            <ListItem key={u.ID}>
+          <Fragment key={u.ID}>
+            <ListItem>
               <Stack spacing={1}>
                 <Stack direction={'row'} spacing={2} textAlign="center" alignItems={'center'}>
                   <Typography variant="body2" fontWeight={'bold'}>
@@ -52,7 +52,7 @@ const Users = ({ Organization }: UsersProps) => {
               </Stack>
             </ListItem>
             <Divider />
-          </>
+          </Fragment>
         ))}
       {!isLoading && <UserAddListItem Organization={Organization} />}
     </List>

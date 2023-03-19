@@ -98,24 +98,26 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
           '&.Mui-selected:hover': {
             backgroundColor: 'inherit'
           }
-        }}
-        secondaryAction={<Stack justifyContent="flex-end"></Stack>}>
+        }}>
         <ListItemText
           primary={
             <>
-              <Stack direction={'row'} spacing={1} alignItems="center">
+              <div
+                style={{
+                  boxAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center'
+                }}>
                 <Radio value={org.ID} color="primary" />
-                <Typography
-                  variant="h5"
-                  fontWeight={'bold'}
-                  sx={{ mb: '10px' }}
-                  color={theme.palette.info.main}>
+                <Typography variant="h5" fontWeight={'bold'} color={theme.palette.info.main}>
                   {org.Name}
                 </Typography>
-              </Stack>
-              <Stack
-                spacing={1}
-                sx={{
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
                   color: areStringsEqual(deliveryAddress?.City, selectedCity)
                     ? 'inherit'
                     : grey['A400']
@@ -126,7 +128,7 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                     şehir (<b>{`${selectedCity}`}</b>) uyuşmamaktadır!
                   </Alert>
                 )}
-                <Box sx={{ p: '0px 5px 0px 50px' }}>
+                <Box sx={{ p: '0px 5px 0px 42px' }}>
                   <Typography variant="body2" fontWeight={'bold'}>
                     {deliveryAddress?.AddressLine}
                   </Typography>
@@ -151,7 +153,7 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                     </Stack>
                   </Stack>
                 </Collapse>
-              </Stack>
+              </div>
             </>
           }
           primaryTypographyProps={{ fontWeight: 'bold' }}
