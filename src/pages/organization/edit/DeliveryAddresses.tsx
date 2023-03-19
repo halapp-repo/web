@@ -75,7 +75,6 @@ const DeliveryAddresses = ({ Organization }: DeliveryAddressesProps) => {
       {/* Delivery Addresses  */}
       {Organization.DeliveryAddresses.map((d: OrganizationAddress, index: number) => (
         <Fragment key={index}>
-          <Divider />
           <DeliveryAddressListItem
             key={index}
             Key={index + 1}
@@ -86,8 +85,6 @@ const DeliveryAddresses = ({ Organization }: DeliveryAddressesProps) => {
           />
         </Fragment>
       ))}
-      {/* Add */}
-      <Divider />
       <DeliveryAddressAddListItem OnAddAddress={addAddress} />
     </List>
   );

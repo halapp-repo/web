@@ -110,13 +110,15 @@ const OrderEdit = () => {
             }}
             title={
               matchesXS && (
-                <Stack
-                  direction={'row'}
-                  justifyContent="space-between"
-                  justifyItems={'center'}
-                  alignItems="center">
-                  {expanded && <span>{''}</span>}
-                  {expanded || <span>{'Zaman Çizgisi'}</span>}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    justifyItems: 'center',
+                    alignItems: 'center'
+                  }}>
+                  {expanded ? <span /> : <span>{'Zaman Çizgisi'}</span>}
                   <ExpandMore
                     expand={expanded}
                     onClick={handleExpandClick}
@@ -124,7 +126,7 @@ const OrderEdit = () => {
                     aria-label="show more">
                     <ExpandMoreIcon />
                   </ExpandMore>
-                </Stack>
+                </div>
               )
             }>
             <Collapse in={!matchesXS ? true : expanded} timeout="auto" unmountOnExit>
