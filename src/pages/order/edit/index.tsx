@@ -1,4 +1,4 @@
-import { Grid, useMediaQuery, Theme, Stack, Collapse, CardContent } from '@mui/material';
+import { Grid, useMediaQuery, Theme, Collapse, CardContent } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { useEffect, useState } from 'react';
