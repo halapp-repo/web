@@ -58,26 +58,21 @@ const DeliveryAddressListItem = ({
         <Stack spacing={1}>
           <Stack direction={'row'} gap={2} sx={{ pb: '10px' }}>
             <Box>
-              <Stack direction={'row'} spacing={1} alignItems="center">
+              <Stack direction={'row'} alignItems="center">
                 <Radio checked={Address.Active} color="primary" />
                 <Typography fontWeight={'bold'} variant="h5" color={theme.palette.info.main}>
                   {`#${Key}`}
                 </Typography>
               </Stack>
-              <Typography>{Address.AddressLine}</Typography>
-              <Typography>
-                {`${Address.County} ${Address.City} ${Address.ZipCode} ${Address.Country}`}
-              </Typography>
+              <Box sx={{ padding: '0px 0px 0px 42px' }}>
+                <Typography>{Address.AddressLine}</Typography>
+                <Typography>
+                  {`${Address.County} ${Address.City} ${Address.ZipCode} ${Address.Country}`}
+                </Typography>
+              </Box>
             </Box>
           </Stack>
           <Stack direction={'row'} gap={2}>
-            <Button
-              size="small"
-              color="blackNWhite"
-              variant="outlined"
-              onClick={() => setEditMode(true)}>
-              {'Düzenle'}
-            </Button>
             <Button
               size="small"
               disabled={Address.Active}
@@ -86,6 +81,14 @@ const DeliveryAddressListItem = ({
               onClick={OnSetDefault}>
               {'Seç'}
             </Button>
+            <Button
+              size="small"
+              color="blackNWhite"
+              variant="outlined"
+              onClick={() => setEditMode(true)}>
+              {'Düzenle'}
+            </Button>
+
             <Button
               size="small"
               color="blackNWhite"

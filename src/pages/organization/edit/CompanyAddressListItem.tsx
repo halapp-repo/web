@@ -37,7 +37,6 @@ const CompanyAddressListItem = ({
             <Box
               sx={{
                 display: 'flex',
-                gap: '10px',
                 alignItems: 'center',
                 justifyContent: 'flex-start'
               }}>
@@ -46,10 +45,12 @@ const CompanyAddressListItem = ({
                 {`İşletme Adresi`}
               </Typography>
             </Box>
-            <Typography>{Address.AddressLine}</Typography>
-            <Typography>
-              {`${Address.County} ${Address.City} ${Address.ZipCode} ${Address.Country}`}
-            </Typography>
+            <Box sx={{ padding: '0px 0px 0px 42px' }}>
+              <Typography>{Address.AddressLine}</Typography>
+              <Typography>
+                {`${Address.County} ${Address.City} ${Address.ZipCode} ${Address.Country}`}
+              </Typography>
+            </Box>
           </Box>
         </Stack>
         {IsDefault || (
