@@ -35,12 +35,7 @@ const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
   };
 
   return (
-    <ListItem key={Item.ProductId} alignItems="flex-start">
-      <ListItemSecondaryAction sx={{ height: '100%' }}>
-        <IconButton edge="end" onClick={() => handleDeleteCartItem(Item.ProductId)}>
-          <DeleteOutlined />
-        </IconButton>
-      </ListItemSecondaryAction>
+    <ListItem alignItems="flex-start">
       <ListItemText
         primary={
           active ? (
@@ -89,6 +84,11 @@ const ShoppingCartListItem = ({ Item }: ShoppingCartItemProps) => {
           </Box>
         }
       />
+      <ListItemSecondaryAction sx={{ height: '100%' }}>
+        <IconButton edge="end" onClick={() => handleDeleteCartItem(Item.ProductId)}>
+          <DeleteOutlined />
+        </IconButton>
+      </ListItemSecondaryAction>
     </ListItem>
   );
 };

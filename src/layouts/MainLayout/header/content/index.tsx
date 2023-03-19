@@ -12,23 +12,16 @@ const HeaderContent = () => {
 
   return (
     <>
-      <NavLink
-        onClick={() => dispatch(updateListingSelectedDate())}
-        to="/"
-        // eslint-disable-next-line react/no-children-prop
-        children={() => {
-          return (
-            <Stack direction={'row'}>
-              <Logo />
-              {matchesSm || (
-                <Box sx={{ mt: '15px' }}>
-                  <LogoText />
-                </Box>
-              )}
-            </Stack>
-          );
-        }}
-      />
+      <NavLink onClick={() => dispatch(updateListingSelectedDate())} to="/">
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <Logo />
+          {matchesSm || (
+            <Box sx={{ mt: '15px' }}>
+              <LogoText />
+            </Box>
+          )}
+        </div>
+      </NavLink>
       <Box sx={{ width: '100%', ml: 1 }} />
       <NavigationButtons />
     </>

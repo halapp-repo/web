@@ -57,7 +57,7 @@ const CityNavButton = () => {
               borderRadius: '8px'
             }}>
             <ButtonBase onClick={handleCityClicked}>
-              <Stack direction={'row'}>
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <Typography fontSize={'18px'} fontWeight={'bold'}>
                   {selectedCity}
                 </Typography>
@@ -71,7 +71,7 @@ const CityNavButton = () => {
                     style={{ display: 'flex', alignItems: 'center', fontSize: '18px' }}
                   />
                 )}
-              </Stack>
+              </div>
             </ButtonBase>
           </Box>
         ))}
