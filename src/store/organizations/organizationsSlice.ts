@@ -139,7 +139,8 @@ export const createOrganizationEnrollmentRequest = createAsyncThunk<void, Organi
   async (arg): Promise<void> => {
     const mapper = new OrganizationToOrganizationDTOMapper();
     try {
-      return await new OrganizationsApi().createEnrollmentRequest(mapper.toDTO(arg));
+      const orgVM = mapper.toDTO(arg);
+      return await new OrganizationsApi().createEnrollmentRequest(orgVM);
     } catch (err) {
       if (err instanceof AxiosError) {
         throw new Error(

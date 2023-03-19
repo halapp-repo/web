@@ -3,6 +3,7 @@ import IconBoxInMail from '../../../components/icons/IconBoxInMail';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAppSelector } from '../../../store/hooks';
 import { selectOrganizationEnrollment } from '../../../store/organizations/organizationsSlice';
+import LogoText from '../../../components/logo/LogoText';
 
 const PostEnrollment = () => {
   const enrollmentRequest = useAppSelector(selectOrganizationEnrollment);
@@ -33,8 +34,12 @@ const PostEnrollment = () => {
  
         Teşekkürler 
  
-        halapp`}
+        `}
         </Typography>
+        <Box sx={{ width: '100%', justifyContent: 'center', display: 'flex' }}>
+          <LogoText />
+        </Box>
+
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Typography variant="body1">{'Bu arada fiyatlarımıza bakabilirsiniz '}</Typography>
           <Button variant="text" component={RouterLink} to="/dashboard">

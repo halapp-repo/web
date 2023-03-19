@@ -2,7 +2,6 @@ import {
   ButtonBase,
   Typography,
   Box,
-  Stack,
   useMediaQuery,
   Theme,
   IconButton,
