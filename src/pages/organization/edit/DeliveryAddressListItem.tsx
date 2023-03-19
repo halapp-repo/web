@@ -1,4 +1,4 @@
-import { Typography, Stack, Button, Box, ListItem, Chip, useTheme } from '@mui/material';
+import { Typography, Stack, Button, Box, ListItem, Radio, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { OrganizationAddress } from '../../../models/organization';
 import { DeliveryAddressListItemForm } from './DeliveryAddressListItemForm';
@@ -38,17 +38,31 @@ const DeliveryAddressListItem = ({
       );
     }
     return (
-      <ListItem>
+      <ListItem
+        selected={Address.Active}
+        sx={{
+          margin: '5px 0px 5px 0px',
+          padding: '10px 10px',
+          boxShadow: 'sm',
+          bgcolor: 'background.body',
+          border: '1px solid #eeeeee',
+          borderRadius: '8px',
+          '&.Mui-selected': {
+            backgroundColor: 'inherit',
+            border: '1px solid #ffc423'
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: 'inherit'
+          }
+        }}>
         <Stack spacing={1}>
           <Stack direction={'row'} gap={2} sx={{ pb: '10px' }}>
             <Box>
-              <Stack direction={'row'} spacing={1}>
+              <Stack direction={'row'} spacing={1} alignItems="center">
+                <Radio checked={Address.Active} color="primary" />
                 <Typography fontWeight={'bold'} variant="h5" color={theme.palette.info.main}>
                   {`#${Key}`}
                 </Typography>
-                {Address.Active && (
-                  <Chip label="Varsayılan" color="success" variant="outlined" size="small" />
-                )}
               </Stack>
               <Typography>{Address.AddressLine}</Typography>
               <Typography>
@@ -64,8 +78,13 @@ const DeliveryAddressListItem = ({
               onClick={() => setEditMode(true)}>
               {'Düzenle'}
             </Button>
-            <Button size="small" color="blackNWhite" variant="outlined" onClick={OnSetDefault}>
-              {'Varsayılan'}
+            <Button
+              size="small"
+              disabled={Address.Active}
+              color="primary"
+              variant="contained"
+              onClick={OnSetDefault}>
+              {'Seç'}
             </Button>
             <Button
               size="small"

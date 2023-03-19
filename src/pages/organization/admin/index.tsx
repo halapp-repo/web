@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { List, CircularProgress, Box, TextField, Divider } from '@mui/material';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import MainCard from '../../../components/MainCard';
 import { OrganizationListItem } from '../list/OrganizationListItem';
@@ -64,10 +64,10 @@ const AdminOrganizationList = () => {
         }
       })
       .map((i) => (
-        <>
+        <Fragment key={i.ID}>
           <Divider />
-          <OrganizationListItem Organization={i} key={i.ID} />
-        </>
+          <OrganizationListItem Organization={i} />
+        </Fragment>
       ));
   };
   return (

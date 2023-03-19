@@ -119,7 +119,19 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
                 <LocationOnOutlinedIcon color={'info'} />
               </Grid>
               <Grid item xs={10}>
-                {Organization.areInvoiceAndCompanyAddressesSame() || (
+                {Organization.areInvoiceAndCompanyAddressesSame() ? (
+                  <Grid container>
+                    <Grid item md={12}>
+                      <Typography variant="body1" color="secondary" fontWeight={'bold'}>
+                        {'Fatura/Sirket Adresi'}
+                      </Typography>
+                      <Typography variant="body1">
+                        {Organization.InvoiceAddress?.AddressLine}
+                      </Typography>
+                      <Typography variant="body1">{`${Organization.InvoiceAddress?.County} ${Organization.InvoiceAddress?.City} ${Organization.InvoiceAddress?.ZipCode} ${Organization.InvoiceAddress?.Country}`}</Typography>
+                    </Grid>
+                  </Grid>
+                ) : (
                   <Grid container spacing={2}>
                     <Grid item md={6}>
                       <Typography variant="body1" color="secondary" fontWeight={'bold'}>
@@ -138,19 +150,6 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
                         {Organization.CompanyAddress?.AddressLine}
                       </Typography>
                       <Typography variant="body1">{`${Organization.CompanyAddress?.County} ${Organization.CompanyAddress?.City} ${Organization.CompanyAddress?.ZipCode} ${Organization.CompanyAddress?.Country}`}</Typography>
-                    </Grid>
-                  </Grid>
-                )}
-                {Organization.areInvoiceAndCompanyAddressesSame() && (
-                  <Grid container>
-                    <Grid item md={12}>
-                      <Typography variant="body1" color="secondary" fontWeight={'bold'}>
-                        {'Fatura/Sirket Adresi'}
-                      </Typography>
-                      <Typography variant="body1">
-                        {Organization.InvoiceAddress?.AddressLine}
-                      </Typography>
-                      <Typography variant="body1">{`${Organization.InvoiceAddress?.County} ${Organization.InvoiceAddress?.City} ${Organization.InvoiceAddress?.ZipCode} ${Organization.InvoiceAddress?.Country}`}</Typography>
                     </Grid>
                   </Grid>
                 )}

@@ -19,14 +19,14 @@ interface OrdersContentProps {
 const createOrderListItem = (isLoading: boolean, orders?: Order[] | null) => {
   if (isLoading) {
     return (
-      <ListItem sx={{ height: '200px', display: 'flex', justifyContent: 'center' }}>
+      <ListItem key={`item-0`} sx={{ height: '200px', display: 'flex', justifyContent: 'center' }}>
         <CircularProgress />
       </ListItem>
     );
   }
   if (!orders) {
     return (
-      <ListItem sx={{ height: '200px', display: 'flex', justifyContent: 'center' }}>
+      <ListItem key={`item--1`} sx={{ height: '200px', display: 'flex', justifyContent: 'center' }}>
         <Typography variant="h4" alignContent={'center'}>
           {'Sipariş bulunmamaktadir.'}
         </Typography>

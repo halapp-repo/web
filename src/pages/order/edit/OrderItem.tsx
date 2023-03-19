@@ -23,16 +23,6 @@ const OrderItem = ({ Item, CanBeDeleted, OnDeleteItem }: OrderItemProps) => {
 
   return (
     <ListItem key={Item.ProductId} alignItems="flex-start">
-      {isAdmin && CanBeDeleted && (
-        <ListItemSecondaryAction sx={{ height: '100%' }}>
-          <IconButton
-            edge="end"
-            sx={{ color: '#8753de' }}
-            onClick={() => OnDeleteItem(Item.ProductId)}>
-            <DeleteFilled />
-          </IconButton>
-        </ListItemSecondaryAction>
-      )}
       <ListItemText
         primary={Item.ProductName}
         primaryTypographyProps={{ fontWeight: 'bold' }}
@@ -62,6 +52,16 @@ const OrderItem = ({ Item, CanBeDeleted, OnDeleteItem }: OrderItemProps) => {
           </Box>
         }
       />
+      {isAdmin && CanBeDeleted && (
+        <ListItemSecondaryAction sx={{ height: '100%' }}>
+          <IconButton
+            edge="end"
+            sx={{ color: '#8753de' }}
+            onClick={() => OnDeleteItem(Item.ProductId)}>
+            <DeleteFilled />
+          </IconButton>
+        </ListItemSecondaryAction>
+      )}
     </ListItem>
   );
 };
