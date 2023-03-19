@@ -1,9 +1,10 @@
-import { Stack, Typography, ButtonBase, List, ListItem, ListItemText, Box } from '@mui/material';
-import { useState } from 'react';
+import { Stack, Typography, List, ListItem, ListItemText, Box, Button } from '@mui/material';
+import React, { useState } from 'react';
 import { useTheme } from '@mui/system';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
+import { useNavigate } from 'react-router-dom';
 
 interface SummaryOrderProps {
   ShoppingCart: ShoppingCartList;
@@ -11,14 +12,21 @@ interface SummaryOrderProps {
 
 const SummaryOrder = ({ ShoppingCart }: SummaryOrderProps) => {
   const theme = useTheme();
-  const [showAllItems, setShowAllItems] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [showAllItems, setShowAllItems] = useState<boolean>(true);
+
+  const handleReturnToShopping = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+
+    navigate('/shopping-cart');
+  };
   return (
     <Box>
       <Typography variant="h5" fontWeight={'bold'} sx={{ mb: '10px' }}>
         {'Sipariş özeti'}
       </Typography>
-      <ButtonBase
-        sx={{ width: '100%', display: 'block' }}
+      <Box
+        sx={{ width: '100%', display: 'block', cursor: 'pointer' }}
         onClick={() => {
           setShowAllItems(!showAllItems);
         }}>
@@ -34,7 +42,9 @@ const SummaryOrder = ({ ShoppingCart }: SummaryOrderProps) => {
               <ArrowDropDownIcon fontSize="small" />
             )}
           </Stack>
-          <Typography variant="body2">{`${ShoppingCart.TotalAmount}`}</Typography>
+          <Typography
+            variant="body2"
+            fontWeight={'bold'}>{`${ShoppingCart.TotalAmount}`}</Typography>
         </Stack>
         {showAllItems && (
           <List>
@@ -43,21 +53,36 @@ const SummaryOrder = ({ ShoppingCart }: SummaryOrderProps) => {
                 <ListItemText
                   primary={
                     <Stack direction={'row'} justifyContent="space-between">
-                      <Typography variant="body2">{i.Name}</Typography>
-                      <Typography variant="body2">{i.TotalAmount}</Typography>
+                      <Typography variant="body2" fontWeight={'bold'}>
+                        {i.Name}
+                      </Typography>
+                      <Typography variant="body2" fontWeight={'bold'}>
+                        {i.TotalAmount}
+                      </Typography>
                     </Stack>
                   }
                   secondary={
                     <Typography
                       color="secondary"
+                      fontWeight={'bold'}
                       variant="body2">{`${i.UnitAmount} x ${i.Count} ${i.Unit}`}</Typography>
                   }
                 />
               </ListItem>
             ))}
+            <ListItem key={0}>
+              <Button
+                onClick={handleReturnToShopping}
+                sx={{ textTransform: 'none' }}
+                size={'small'}
+                color="blackNWhite"
+                variant="outlined">
+                {'Bir ürün mü unuttun? Sepete geri dön.'}
+              </Button>
+            </ListItem>
           </List>
         )}
-      </ButtonBase>
+      </Box>
     </Box>
   );
 };

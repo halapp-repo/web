@@ -7,7 +7,7 @@
     "@ant-design/icons": "^4.8.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@halapp/common": "^1.0.68",
+    "@halapp/common": "^1.0.70",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.10",
     "@mui/x-date-pickers": "^5.0.20",

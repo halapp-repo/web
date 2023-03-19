@@ -1,5 +1,5 @@
 import { Grid, Box, Typography, Stack, Alert, Button, Divider } from '@mui/material';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, Fragment } from 'react';
 import { useTheme } from '@mui/system';
 import { ShoppingCartContext } from './ShoppingCartContext';
 import { useAppDispatch } from '../../store/hooks';
@@ -71,14 +71,14 @@ const WithdrawFromCredit = ({ Organization, SetHasEnoughCredit }: WithdrawFromBa
                         : theme.palette.error.main
                     }>
                     {Organization.getBalanceAmount()}
-
-                    <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
-                      {'Kullanılabilir kredi'}
-                    </Typography>
-                    <Typography variant="h4" color={theme.palette.info.main}>
-                      {Organization.getAvailableCreditAmount()}
-                    </Typography>
                   </Typography>
+                  <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
+                    {'Kullanılabilir kredi'}
+                  </Typography>
+                  <Typography variant="h4" color={theme.palette.info.main}>
+                    {Organization.getAvailableCreditAmount()}
+                  </Typography>
+
                   <Divider sx={{ m: '10px 0px', width: '80%' }} />
                   <Button
                     variant="outlined"
@@ -96,7 +96,7 @@ const WithdrawFromCredit = ({ Organization, SetHasEnoughCredit }: WithdrawFromBa
                     {shoppingCart.TotalAmount}
                   </Typography>
                   {extraCharges.map((e) => (
-                    <>
+                    <Fragment key={e.Type}>
                       <Typography variant="body2" fontWeight={'bold'} color="text.secondary">
                         {translateExtraChargeType(e.Type)}
                       </Typography>
@@ -106,7 +106,7 @@ const WithdrawFromCredit = ({ Organization, SetHasEnoughCredit }: WithdrawFromBa
                           currency: 'TRY'
                         }).format(e.Price)}`}
                       </Typography>
-                    </>
+                    </Fragment>
                   ))}
                 </Grid>
               </Grid>
