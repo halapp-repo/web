@@ -39,15 +39,15 @@ const OrganizationSelect = ({
       return (
         <Box sx={{ p: '0px 10px' }}>
           <Select
-            value={selectedOrganizationId!}
+            value={selectedOrganizationId || ''}
             sx={{ width: '100%' }}
             label="Sirketler"
             onChange={(event: SelectChangeEvent) => {
               SetOrganization(event.target.value as string);
             }}>
             {Organizations.map((o) => (
-              <MenuItem key={o.ID!} value={o.ID!}>
-                {o.Name!}
+              <MenuItem key={o.ID} value={o.ID}>
+                {o.Name}
               </MenuItem>
             ))}
           </Select>
