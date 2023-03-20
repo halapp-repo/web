@@ -40,7 +40,7 @@ const CompanyAddressListItem = ({
                 alignItems: 'center',
                 justifyContent: 'flex-start'
               }}>
-              <Radio checked={IsDefault} color="primary" />
+              <Radio checked={IsDefault} disabled={!IsDefault} color="primary" />
               <Typography fontWeight={'bold'} variant="h5" color={theme.palette.info.main}>
                 {`İşletme Adresi`}
               </Typography>

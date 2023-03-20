@@ -59,7 +59,7 @@ const DeliveryAddressListItem = ({
           <Stack direction={'row'} gap={2} sx={{ pb: '10px' }}>
             <Box>
               <Stack direction={'row'} alignItems="center">
-                <Radio checked={Address.Active} color="primary" />
+                <Radio checked={Address.Active} disabled={!Address.Active} color="primary" />
                 <Typography fontWeight={'bold'} variant="h5" color={theme.palette.info.main}>
                   {`#${Key}`}
                 </Typography>

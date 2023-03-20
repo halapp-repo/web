@@ -6,7 +6,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import PhoneIcon from '@mui/icons-material/Phone';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import { useTheme } from '@mui/system';
 
 interface InformationProps {
@@ -85,7 +85,7 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
             )}
             <Grid container>
               <Grid item xs={2}>
-                <PhoneIcon color={'info'} />
+                <PhoneOutlinedIcon color={'info'} />
               </Grid>
               <Grid item xs={10}>
                 {Organization.PhoneNumber!}
