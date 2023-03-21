@@ -47,6 +47,8 @@ const InnerForm = (props: FormikProps<FormValues>) => {
                 />
                 <Button
                   component={NavLink}
+                  variant="text"
+                  color="primary"
                   to={'/auth/resetpassword'}
                   sx={{
                     whiteSpace: 'nowrap',

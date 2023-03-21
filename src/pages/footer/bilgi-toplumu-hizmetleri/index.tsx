@@ -2,6 +2,7 @@ import MainCard from '../../../components/MainCard';
 import PageWrapper from '../../../components/PageWrapper';
 import { Box, Typography, Stack, Link } from '@mui/material';
 import Logo from '../../../components/logo/Logo';
+import LogoText from '../../../components/logo/LogoText';
 
 const BilgiToplumuHizmetleri = () => {
   return (
@@ -14,6 +15,9 @@ const BilgiToplumuHizmetleri = () => {
           alignItems={'center'}>
           <Box>
             <Logo Size="large" />
+            <Stack alignItems={'center'}>
+              <LogoText />
+            </Stack>
           </Box>
           <Typography color="primary" variant="h3">
             {'Bilgi Toplumu Hizmetleri'}
