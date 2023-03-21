@@ -4,6 +4,7 @@ import Logo from '../../../components/logo/Logo';
 import MainCard from '../../../components/MainCard';
 import PageWrapper from '../../../components/PageWrapper';
 import { Link as RouterLink } from 'react-router-dom';
+import LogoText from '../../../components/logo/LogoText';
 
 const Contact = () => {
   return (
@@ -16,6 +17,9 @@ const Contact = () => {
           alignItems={'center'}>
           <Box>
             <Logo Size="large" />
+            <Stack alignItems={'center'}>
+              <LogoText />
+            </Stack>
           </Box>
           <Typography color="primary" variant="h3">
             {'Halapp İletişim Merkezi'}

@@ -51,10 +51,13 @@ const SignIn = () => {
     }
   }, [searchParams]);
 
-  const createSigninForm = () => {
+  useEffect(() => {
     if (userAuth.authenticated) {
       navigate('/dashboard');
     }
+  }, [userAuth]);
+
+  const createSigninForm = () => {
     if (!userAuth.needConfirmation) {
       return <SignInForm code={signupCode} onSignin={handleSignin} />;
     } else if (userAuth.needConfirmation && userAuth.email) {
@@ -73,11 +76,9 @@ const SignIn = () => {
   };
 
   return (
-    <>
-      <AuthWrapper>
-        <AuthCard>{createSigninForm()}</AuthCard>
-      </AuthWrapper>
-    </>
+    <AuthWrapper>
+      <AuthCard>{createSigninForm()}</AuthCard>
+    </AuthWrapper>
   );
 };
 
