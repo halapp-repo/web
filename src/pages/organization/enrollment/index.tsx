@@ -149,13 +149,21 @@ const Enrollment = () => {
                     activeStep={stage}
                     sx={{ flexGrow: 1, backgroundColor: '#ffffff' }}
                     nextButton={
-                      <Button size="small" sx={{ visibility: 'hidden' }}>
+                      <Button
+                        color="blackNWhite"
+                        size="small"
+                        sx={{ visibility: 'hidden', fontWeight: 'bold' }}>
                         Ileri
                         {theme.direction === 'rtl' ? <LeftOutlined /> : <RightOutlined />}
                       </Button>
                     }
                     backButton={
-                      <Button size="small" onClick={handleBack} disabled={stage === 0}>
+                      <Button
+                        sx={{ fontWeight: 'bold' }}
+                        color="blackNWhite"
+                        size="small"
+                        onClick={handleBack}
+                        disabled={stage === 0}>
                         {theme.direction === 'rtl' ? <RightOutlined /> : <LeftOutlined />}
                         Geri
                       </Button>
