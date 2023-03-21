@@ -5,6 +5,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 import { useNavigate } from 'react-router-dom';
+import { getComparator } from '../../utils/sort';
 
 interface SummaryOrderProps {
   ShoppingCart: ShoppingCartList;
@@ -48,7 +49,7 @@ const SummaryOrder = ({ ShoppingCart }: SummaryOrderProps) => {
         </Stack>
         {showAllItems && (
           <List>
-            {ShoppingCart.ActiveItems.map((i) => (
+            {ShoppingCart.ActiveItems.sort(getComparator('asc', 'Name')).map((i) => (
               <ListItem key={i.ProductId}>
                 <ListItemText
                   primary={

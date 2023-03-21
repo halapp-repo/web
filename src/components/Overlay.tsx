@@ -1,5 +1,6 @@
 import { Box, Stack, LinearProgress } from '@mui/material';
 import Logo from '../components/logo/Logo';
+import LogoText from './logo/LogoText';
 
 const Overlay = () => {
   return (
@@ -19,6 +20,9 @@ const Overlay = () => {
       }}>
       <Stack spacing={2}>
         <Logo Size="large" />
+        <Stack sx={{ alignItems: 'center' }}>
+          <LogoText />
+        </Stack>
         <LinearProgress />
       </Stack>
     </Box>
