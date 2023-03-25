@@ -19,8 +19,8 @@ const Overlay = () => {
         backgroundColor: '#fafafb'
       }}>
       <Stack spacing={2}>
-        <Logo Size="large" />
         <Stack sx={{ alignItems: 'center' }}>
+          <Logo Size="large" />
           <LogoText />
         </Stack>
         <LinearProgress />

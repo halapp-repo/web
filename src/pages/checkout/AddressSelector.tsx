@@ -136,7 +136,11 @@ const AddressSelector = ({ SetAddress }: AddressSelectorProps) => {
                     {`${deliveryAddress?.County} ${deliveryAddress?.City} ${deliveryAddress?.ZipCode} ${deliveryAddress?.Country}`}
                   </Typography>
                 </Box>
-                <Collapse in={org.ID === selectedOrganizationID}>
+                <Collapse
+                  in={
+                    org.ID === selectedOrganizationID ||
+                    !areStringsEqual(deliveryAddress?.City, selectedCity)
+                  }>
                   <Stack spacing={1}>
                     <Divider />
                     <Stack direction={'row'} justifyContent="flex-end">

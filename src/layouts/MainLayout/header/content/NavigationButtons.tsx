@@ -63,7 +63,7 @@ const NavigationButtons = () => {
       {userAuth.authenticated && (
         <>
           <ShoppingCartNavButton />
-          <Profile email={userAuth.email} />
+          <Profile />
         </>
       )}
     </Stack>

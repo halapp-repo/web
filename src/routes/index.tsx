@@ -8,6 +8,7 @@ import OrganizationRoutes from './OrganizationRoutes';
 import LocationsRoutes from './LocationRoutes';
 import OrdersRoutes from './OrdersRouter';
 import AdminRoutes from './AdminRoutes';
+import ProfileRoutes from './ProfileRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -19,6 +20,7 @@ export default function Routes() {
     LocationsRoutes,
     OrdersRoutes,
     NotFoundRoutes,
-    AdminRoutes
+    AdminRoutes,
+    ProfileRoutes
   ]);
 }

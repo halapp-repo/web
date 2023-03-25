@@ -11,7 +11,11 @@ export class UserToUserDTOMapper extends IMapper<User, UserVM> {
     return plainToClass(User, {
       Active: arg.Active,
       Email: arg.Email,
-      ID: arg.ID
+      ID: arg.ID,
+      FirstName: arg.FirstName,
+      LastName: arg.LastName,
+      BaseImageUrl: arg.BaseImageUrl,
+      PhoneNumber: arg.PhoneNumber
     } as User);
   }
   toListDTO(): UserVM[] {
