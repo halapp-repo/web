@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Stack, Typography, Box } from '@mui/material';
 import { useState, useEffect } from 'react';
 import {
   fetchById,
@@ -19,6 +19,7 @@ import { Overlay } from '../../components/Overlay';
 import { ProfileEmail } from './ProfileEmail';
 import { ProfileForm } from './ProfileForm';
 import { UserVM } from '@halapp/common';
+import { UpdatingCover } from '../../components/UpdatingCover';
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -87,11 +88,13 @@ const Profile = () => {
       );
     } else {
       return (
-        <Stack spacing={1}>
-          <ProfilePicture EditMode={editMode} User={user} />
-          <ProfileEmail Email={user.Email} />
-          <ProfileForm User={user} onSubmit={handleSubmit} />
-        </Stack>
+        <UpdatingCover isUpdating={isUpdating}>
+          <Stack spacing={1}>
+            <ProfilePicture EditMode={editMode} User={user} />
+            <ProfileEmail Email={user.Email} />
+            <ProfileForm User={user} onSubmit={handleSubmit} />
+          </Stack>
+        </UpdatingCover>
       );
     }
   };
@@ -101,9 +104,11 @@ const Profile = () => {
       {isLoading ? (
         <Overlay />
       ) : (
-        <PageWrapper md={4}>
-          <MainCard sx={{ padding: '20px' }}>{getContent(profile, editMode)}</MainCard>
-        </PageWrapper>
+        <Box sx={{ position: 'relative' }}>
+          <PageWrapper md={4}>
+            <MainCard sx={{ padding: '20px' }}>{getContent(profile, editMode)}</MainCard>
+          </PageWrapper>
+        </Box>
       )}
     </>
   );

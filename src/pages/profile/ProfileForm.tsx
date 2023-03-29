@@ -14,7 +14,6 @@ interface FormValues {
 
 const InnerForm = (props: FormikProps<FormValues>) => {
   const { isSubmitting, dirty, isValid, values, setFieldValue } = props;
-
   return (
     <Stack spacing={1}>
       <Form
@@ -86,7 +85,7 @@ const ProfileForm = withFormik<MyFormProps, FormValues>({
       .required('Lütfen telefon giriniz.')
   }),
 
-  handleSubmit: async (values, { props, setSubmitting }) => {
+  handleSubmit: async (values, { props, setSubmitting, resetForm }) => {
     // do submitting things
     await props.onSubmit({
       firstName: values.fname || '',
@@ -94,6 +93,7 @@ const ProfileForm = withFormik<MyFormProps, FormValues>({
       phoneNumber: values.phone || ''
     });
     setSubmitting(false);
+    resetForm({ values });
   }
 })(InnerForm);
 

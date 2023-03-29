@@ -3,7 +3,7 @@ import { Stack, Box, Button } from '@mui/material';
 import { useState, useEffect, ChangeEventHandler } from 'react';
 import { User } from '../../models/user';
 import { useAppDispatch } from '../../store/hooks';
-import { fetchById, uploadAvatar } from '../../store/users/usersSlice';
+import { uploadAvatar } from '../../store/users/usersSlice';
 import { AvatarSizeType } from '@halapp/common';
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
@@ -31,9 +31,9 @@ const ProfilePicture = ({ EditMode, User }: ProfilePictureProps) => {
     }
     setFile(file);
   };
-  const handleUploadAvatar = (file: File, userId: string) => {
+  const handleUploadAvatar = (file: File, userId: string, preview: ArrayBuffer | string) => {
     if (file && userId) {
-      dispatch(uploadAvatar({ file: file, ID: userId })).then(() => dispatch(fetchById(userId)));
+      dispatch(uploadAvatar({ file: file, ID: userId, preview }));
     }
   };
   useEffect(() => {
@@ -57,20 +57,23 @@ const ProfilePicture = ({ EditMode, User }: ProfilePictureProps) => {
       }
     };
   }, [file]);
+
   const getAvatarContent = ({
     editMode,
     userImageURL,
-    fileDataURL
+    fileDataURL,
+    preview
   }: {
     editMode: boolean;
     userImageURL?: string;
     fileDataURL: string | ArrayBuffer | null;
+    preview?: string | ArrayBuffer;
   }) => {
     if (editMode) {
-      if (fileDataURL) {
+      if (fileDataURL || preview) {
         return (
           <img
-            src={fileDataURL as string}
+            src={(fileDataURL || preview) as string}
             alt="preview"
             style={{ width: '120px', height: '120px' }}
           />
@@ -128,7 +131,7 @@ const ProfilePicture = ({ EditMode, User }: ProfilePictureProps) => {
             size="small"
             color="primary"
             variant="contained"
-            onClick={() => handleUploadAvatar(file, User.ID)}>
+            onClick={() => handleUploadAvatar(file, User.ID, fileDataURL)}>
             Profili Yükle
           </Button>
         );
@@ -150,7 +153,8 @@ const ProfilePicture = ({ EditMode, User }: ProfilePictureProps) => {
         {getAvatarContent({
           userImageURL: User.BaseImageUrl,
           editMode: EditMode,
-          fileDataURL: fileDataURL
+          fileDataURL: fileDataURL,
+          preview: User.Preview
         })}
       </Box>
 

@@ -79,7 +79,7 @@ export const updateUser = createAsyncThunk<UserVM, UserVM, { state: RootState }>
 
 export const uploadAvatar = createAsyncThunk<
   void,
-  { ID: string; file: File },
+  { ID: string; file: File; preview: ArrayBuffer | string },
   { state: RootState }
 >('users/uploadAvatar', async (arg, { getState }): Promise<void> => {
   const { userAuth } = getState().auth;
@@ -211,11 +211,22 @@ const UsersSlice = createSlice({
       return state;
     });
     // UPDATE AVATAR
-    builder.addCase(uploadAvatar.fulfilled, (state) => {
+    builder.addCase(uploadAvatar.fulfilled, (state, action) => {
+      const { ID, preview } = action.meta.arg;
+
+      const user = state.profiles[ID];
       state = {
         ...state,
         profiles: {
-          ...state.profiles
+          ...state.profiles,
+          ...(user
+            ? {
+                [ID]: {
+                  ...user,
+                  Preview: preview
+                }
+              }
+            : null)
         },
         statuses: {
           ...state.statuses,

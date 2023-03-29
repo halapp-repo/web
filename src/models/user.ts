@@ -6,4 +6,5 @@ export class User {
   LastName?: string;
   PhoneNumber?: string;
   BaseImageUrl?: string;
+  Preview?: string | ArrayBuffer;
 }
