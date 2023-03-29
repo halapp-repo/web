@@ -3,7 +3,8 @@ import { Stack, Box, Button } from '@mui/material';
 import { useState, useEffect, ChangeEventHandler } from 'react';
 import { User } from '../../models/user';
 import { useAppDispatch } from '../../store/hooks';
-import { uploadAvatar } from '../../store/users/usersSlice';
+import { fetchById, uploadAvatar } from '../../store/users/usersSlice';
+import { AvatarSizeType } from '@halapp/common';
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
@@ -31,7 +32,9 @@ const ProfilePicture = ({ EditMode, User }: ProfilePictureProps) => {
     setFile(file);
   };
   const handleUploadAvatar = (file: File, userId: string) => {
-    dispatch(uploadAvatar({ file: file, ID: userId }));
+    if (file && userId) {
+      dispatch(uploadAvatar({ file: file, ID: userId })).then(() => dispatch(fetchById(userId)));
+    }
   };
   useEffect(() => {
     let fileReader: FileReader,
@@ -73,13 +76,25 @@ const ProfilePicture = ({ EditMode, User }: ProfilePictureProps) => {
           />
         );
       } else if (userImageURL) {
-        return <img src={userImageURL} alt="preview" style={{ width: '120px', height: '120px' }} />;
+        return (
+          <img
+            src={`${userImageURL}/${AvatarSizeType.large}.png`}
+            alt="preview"
+            style={{ width: '120px', height: '120px' }}
+          />
+        );
       } else {
         return <AccountCircleTwoToneIcon color="info" sx={{ width: '120px', height: '120px' }} />;
       }
     } else {
       if (userImageURL) {
-        return <img src={userImageURL} alt="preview" style={{ width: '120px', height: '120px' }} />;
+        return (
+          <img
+            src={`${userImageURL}/${AvatarSizeType.large}.png`}
+            alt="preview"
+            style={{ width: '120px', height: '120px' }}
+          />
+        );
       } else {
         return <AccountCircleTwoToneIcon color="info" sx={{ width: '120px', height: '120px' }} />;
       }
@@ -133,6 +148,7 @@ const ProfilePicture = ({ EditMode, User }: ProfilePictureProps) => {
           borderRadius: '50%'
         }}>
         {getAvatarContent({
+          userImageURL: User.BaseImageUrl,
           editMode: EditMode,
           fileDataURL: fileDataURL
         })}

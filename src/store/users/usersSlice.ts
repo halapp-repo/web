@@ -8,7 +8,11 @@ import { UserToUserDTOMapper } from '../../mappers/user-to-user-dto.mapper';
 const initialState = {
   isLoading: false,
   organizations: {},
-  profiles: {}
+  profiles: {},
+  statuses: {
+    isProfileLoading: false,
+    isProfileUpdating: false
+  }
 } as UsersState;
 
 export const fetchAllByOrganizationId = createAsyncThunk<UserVM[], string, { state: RootState }>(
@@ -74,20 +78,22 @@ export const updateUser = createAsyncThunk<UserVM, UserVM, { state: RootState }>
 );
 
 export const uploadAvatar = createAsyncThunk<
-  UserVM,
+  void,
   { ID: string; file: File },
   { state: RootState }
->('users/uploadAvatar', async (arg, { getState }): Promise<UserVM> => {
+>('users/uploadAvatar', async (arg, { getState }): Promise<void> => {
   const { userAuth } = getState().auth;
   if (!userAuth.authenticated || !userAuth.idToken) {
     throw new Error('Unauthenticated');
   }
-  const response = await new UsersApi().uploadAvatar({
+  if (!arg.ID || !arg.file) {
+    throw new Error('ID or File is not defined');
+  }
+  await new UsersApi().uploadAvatar({
     token: userAuth.idToken,
     file: arg.file,
     userId: arg.ID
   });
-  return response;
 });
 
 const UsersSlice = createSlice({
@@ -131,10 +137,13 @@ const UsersSlice = createSlice({
       const newUser = action.payload;
       state = {
         ...state,
-        isLoading: false,
         profiles: {
           ...state.profiles,
           [userId]: newUser
+        },
+        statuses: {
+          ...state.statuses,
+          isProfileLoading: false
         }
       };
       return state;
@@ -143,10 +152,13 @@ const UsersSlice = createSlice({
       const userId = action.meta.arg;
       state = {
         ...state,
-        isLoading: false,
         profiles: {
           ...state.profiles,
           [userId]: null
+        },
+        statuses: {
+          ...state.statuses,
+          isProfileLoading: false
         }
       };
       return state;
@@ -154,7 +166,10 @@ const UsersSlice = createSlice({
     builder.addCase(fetchById.pending, (state) => {
       state = {
         ...state,
-        isLoading: true
+        statuses: {
+          ...state.statuses,
+          isProfileLoading: true
+        }
       };
       return state;
     });
@@ -164,10 +179,13 @@ const UsersSlice = createSlice({
       const newUser = action.payload;
       state = {
         ...state,
-        isLoading: false,
         profiles: {
           ...state.profiles,
           [ID]: newUser
+        },
+        statuses: {
+          ...state.statuses,
+          isProfileUpdating: false
         }
       };
       return state;
@@ -175,42 +193,56 @@ const UsersSlice = createSlice({
     builder.addCase(updateUser.rejected, (state) => {
       state = {
         ...state,
-        isLoading: false
+        statuses: {
+          ...state.statuses,
+          isProfileUpdating: false
+        }
       };
       return state;
     });
     builder.addCase(updateUser.pending, (state) => {
       state = {
         ...state,
-        isLoading: true
+        statuses: {
+          ...state.statuses,
+          isProfileUpdating: true
+        }
       };
       return state;
     });
     // UPDATE AVATAR
-    builder.addCase(uploadAvatar.fulfilled, (state, action) => {
-      const { ID } = action.meta.arg;
-      const newUser = action.payload;
+    builder.addCase(uploadAvatar.fulfilled, (state) => {
       state = {
         ...state,
-        isLoading: false,
         profiles: {
-          ...state.profiles,
-          [ID]: newUser
+          ...state.profiles
+        },
+        statuses: {
+          ...state.statuses,
+          isProfileUpdating: false
         }
       };
+
       return state;
     });
     builder.addCase(uploadAvatar.rejected, (state) => {
       state = {
         ...state,
-        isLoading: false
+        statuses: {
+          ...state.statuses,
+          isProfileUpdating: false
+        }
       };
+
       return state;
     });
     builder.addCase(uploadAvatar.pending, (state) => {
       state = {
         ...state,
-        isLoading: true
+        statuses: {
+          ...state.statuses,
+          isProfileUpdating: true
+        }
       };
       return state;
     });
@@ -250,6 +282,18 @@ export const selectProfile = createSelector(
     const mapper = new UserToUserDTOMapper();
     const rawUsers = users.profiles[userId];
     return rawUsers && mapper.toModel(rawUsers);
+  }
+);
+export const selectIsProfileLoading = createSelector(
+  [(state: RootState) => state.users],
+  (users: UsersState) => {
+    return users.statuses.isProfileLoading;
+  }
+);
+export const selectIsProfileUpdating = createSelector(
+  [(state: RootState) => state.users],
+  (users: UsersState) => {
+    return users.statuses.isProfileUpdating;
   }
 );
 

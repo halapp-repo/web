@@ -2,7 +2,8 @@ import { Stack, Typography } from '@mui/material';
 import { useState, useEffect } from 'react';
 import {
   fetchById,
-  selectIsLoading,
+  selectIsProfileLoading,
+  selectIsProfileUpdating,
   selectProfile,
   updateUser
 } from '../../store/users/usersSlice';
@@ -22,7 +23,8 @@ import { UserVM } from '@halapp/common';
 const Profile = () => {
   const dispatch = useAppDispatch();
   const userAuth = useAppSelector(selectUserAuth);
-  const isLoading = useAppSelector(selectIsLoading);
+  const isLoading = useAppSelector(selectIsProfileLoading);
+  const isUpdating = useAppSelector(selectIsProfileUpdating);
   const navigate = useNavigate();
   const { userId } = useParams();
   const profile: User | null | undefined = useAppSelector((state) => selectProfile(state, userId));

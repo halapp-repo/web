@@ -7,5 +7,9 @@ export interface UsersState {
   profiles: {
     [userId: string]: UserVM | null;
   };
+  statuses: {
+    isProfileLoading: boolean;
+    isProfileUpdating: boolean;
+  };
   isLoading: boolean;
 }

@@ -1,6 +1,7 @@
 import { axiosInstance as axios } from '../../utils/axios';
 import { UserVM } from '@halapp/common';
 import FormData from 'form-data';
+import { PresignedPost } from '@aws-sdk/s3-presigned-post';
 
 export class UsersApi {
   baseUrl: string;
@@ -96,21 +97,29 @@ export class UsersApi {
     userId: string;
     file: File;
   }): Promise<UserVM> {
-    const data = new FormData();
-    data.append('File', file);
-    return axios
-      .post(`/users/${userId}/avatar`, data, {
+    const presignedPostUrl = await axios
+      .get<PresignedPost>(`/s3/hal-account/presignurl`, {
         baseURL: this.baseUrl,
         headers: {
-          Authorization: `Bearer ${token}`,
-          accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8',
-          'Content-Type': `multipart/form-data;`
+          Authorization: `Bearer ${token}`
+        },
+        params: {
+          fileType: file.type,
+          filePath: `upload/${userId}`
         }
       })
-      .then((response) => {
-        const { data } = response;
-        return data;
-      });
+      .then((r) => r.data);
+
+    const formData = new FormData();
+    formData.append('Content-Type', file.type);
+    Object.entries(presignedPostUrl.fields).forEach(([k, v]) => {
+      formData.append(k, v);
+    });
+    formData.append('file', file); // The file has be the last element
+    await axios.post(presignedPostUrl.url, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+    return new UserVM();
   }
 }
