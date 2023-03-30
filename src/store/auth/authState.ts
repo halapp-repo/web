@@ -1,4 +1,5 @@
 import { SignupCode } from '../../models/signup-code';
+import { UserVMWithPreview } from '../../models/viewmodels/user-with-preview';
 
 export class AuthError extends Error {
   ErrorCode?: string;
@@ -25,6 +26,7 @@ export type UserAuth = {
   accessToken?: string | undefined;
   status?: UserAuthStatus;
   isAdmin: boolean;
+  profile?: UserVMWithPreview;
 };
 
 export interface AuthState {

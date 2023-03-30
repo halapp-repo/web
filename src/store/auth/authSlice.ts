@@ -17,8 +17,10 @@ import {
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
 import { SignupCode } from '../../models/signup-code';
-
-export const UserSessionLS = 'usersession';
+import { fetchById, updateUser, uploadAvatar } from '../users/usersSlice';
+import { UserSessionStorage } from '../../models/viewmodels/user-session.storage';
+import { UserToUserDTOMapper } from '../../mappers/user-to-user-dto.mapper';
+import { USERSESSION } from '../../models/constants/user-session';
 
 const defaultUserAuth: UserAuth = {
   id: '',
@@ -30,7 +32,8 @@ const defaultUserAuth: UserAuth = {
   idToken: undefined,
   accessToken: undefined,
   status: undefined,
-  isAdmin: false
+  isAdmin: false,
+  profile: undefined
 };
 
 export const signUp = createAsyncThunk<
@@ -82,7 +85,7 @@ export const signIn = createAsyncThunk<
     const userAttr = await getUserAttributesFunc(response.user);
 
     localStorage.setItem(
-      UserSessionLS,
+      USERSESSION,
       JSON.stringify({ email: userAttr.Email, id: userAttr.ID, isAdmin: userAttr.IsAdmin })
     );
     return <AuthResponseDTO>{
@@ -130,14 +133,15 @@ export const refreshSession = createAsyncThunk<AuthResponseDTO>('auth/refreshSes
 export const getCognitoUser = createAsyncThunk<AuthResponseDTO | null>(
   'auth/getCognitoUser',
   async () => {
-    const rawCognitoUser = localStorage.getItem(UserSessionLS);
+    const rawCognitoUser = localStorage.getItem(USERSESSION);
     if (rawCognitoUser) {
-      const { email, id, isAdmin } = JSON.parse(rawCognitoUser);
+      const { email, id, isAdmin, profile } = JSON.parse(rawCognitoUser) as UserSessionStorage;
       return {
         Email: email,
         UserId: id,
-        IsAdmin: isAdmin
-      };
+        IsAdmin: isAdmin,
+        Profile: profile
+      } as AuthResponseDTO;
     }
     return null;
   }
@@ -323,7 +327,7 @@ const AuthSlice = createSlice({
       }
     });
     builder.addCase(signOut.fulfilled, (state) => {
-      localStorage.removeItem(UserSessionLS);
+      localStorage.removeItem(USERSESSION);
       state.userAuth = {
         ...state.userAuth,
         ...defaultUserAuth
@@ -444,6 +448,110 @@ const AuthSlice = createSlice({
     builder.addCase(getSignupCodeDetails.rejected, (state) => {
       state.signupCode = null;
     });
+    // fetch user
+    builder.addCase(fetchById.fulfilled, (state, action) => {
+      const { id } = state.userAuth;
+      const payload = action.payload;
+      if (id === payload.ID) {
+        const rawCognitoUser = localStorage.getItem(USERSESSION);
+        if (rawCognitoUser) {
+          const { email, id, isAdmin, cart } = JSON.parse(rawCognitoUser) as UserSessionStorage;
+          localStorage.setItem(
+            USERSESSION,
+            JSON.stringify({
+              email,
+              id,
+              cart,
+              isAdmin,
+              profile: payload
+            } as UserSessionStorage)
+          );
+          state = {
+            ...state,
+            userAuth: {
+              ...state.userAuth,
+              profile: payload
+            }
+          };
+          return state;
+        }
+      }
+      return state;
+    });
+    // update user
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      const { id } = state.userAuth;
+      const payload = action.payload;
+      if (id === payload.ID) {
+        const rawCognitoUser = localStorage.getItem(USERSESSION);
+        if (rawCognitoUser) {
+          const { email, id, isAdmin, cart } = JSON.parse(rawCognitoUser) as UserSessionStorage;
+          localStorage.setItem(
+            USERSESSION,
+            JSON.stringify({
+              email,
+              id,
+              isAdmin,
+              cart,
+              profile: payload
+            } as UserSessionStorage)
+          );
+          state = {
+            ...state,
+            userAuth: {
+              ...state.userAuth,
+              profile: payload
+            }
+          };
+          return state;
+        }
+      }
+      return state;
+    });
+    // update avatar
+    builder.addCase(uploadAvatar.fulfilled, (state, action) => {
+      const { id } = state.userAuth;
+      const { preview, ID } = action.meta.arg;
+
+      if (id === ID) {
+        const rawCognitoUser = localStorage.getItem(USERSESSION);
+        if (rawCognitoUser) {
+          const { email, id, isAdmin, profile, cart } = JSON.parse(
+            rawCognitoUser
+          ) as UserSessionStorage;
+          localStorage.setItem(
+            USERSESSION,
+            JSON.stringify({
+              email,
+              id,
+              isAdmin,
+              cart,
+              profile: {
+                ...profile,
+                Preview: preview
+              }
+            } as UserSessionStorage)
+          );
+          const stateProfile = state.userAuth.profile;
+          state = {
+            ...state,
+            userAuth: {
+              ...state.userAuth,
+              ...(stateProfile
+                ? {
+                    profile: {
+                      ...stateProfile,
+                      Preview: preview
+                    }
+                  }
+                : null)
+            }
+          };
+          return state;
+        }
+      }
+      return state;
+    });
   }
 });
 export const { clearStatusAndError } = AuthSlice.actions;
@@ -456,5 +564,13 @@ export const SelectSignupCode = createSelector(
   [(state: RootState) => state.auth],
   (state) => state.signupCode
 );
+export const selectUserProfile = createSelector([(state: RootState) => state.auth], (state) => {
+  const profile = state.userAuth.profile;
+  const mapper = new UserToUserDTOMapper();
+  if (profile) {
+    return mapper.toModel(profile);
+  }
+  return undefined;
+});
 
 export default AuthSlice.reducer;

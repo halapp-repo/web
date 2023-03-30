@@ -16,6 +16,7 @@ import {
 import OTPForm from '../OTPForm';
 import { useNavigate } from 'react-router-dom';
 import { SignupCode } from '../../../models/signup-code';
+import { fetchById } from '../../../store/users/usersSlice';
 
 const SignIn = () => {
   const [searchParams] = useSearchParams();
@@ -52,8 +53,8 @@ const SignIn = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    if (userAuth.authenticated) {
-      navigate('/dashboard');
+    if (userAuth.id && userAuth.authenticated) {
+      dispatch(fetchById(userAuth.id)).then(() => navigate('/dashboard'));
     }
   }, [userAuth]);
 

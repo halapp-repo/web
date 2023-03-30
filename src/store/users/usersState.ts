@@ -1,4 +1,5 @@
 import { UserVM } from '@halapp/common';
+
 import { UserVMWithPreview } from '../../models/viewmodels/user-with-preview';
 
 export interface UsersState {

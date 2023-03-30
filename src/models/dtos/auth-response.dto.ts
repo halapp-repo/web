@@ -1,3 +1,5 @@
+import { UserVMWithPreview } from '../viewmodels/user-with-preview';
+
 export interface AuthResponseDTO {
   UserId?: string;
   Email?: string;
@@ -8,4 +10,5 @@ export interface AuthResponseDTO {
   IdToken?: string | undefined;
   AccessToken?: string | undefined;
   IsAdmin?: boolean;
+  Profile?: UserVMWithPreview;
 }
