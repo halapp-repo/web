@@ -25,6 +25,8 @@ import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettin
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { selectUserProfile } from '../../../../../store/profile/profileSlice';
+import { User } from '../../../../../models/user';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -32,6 +34,7 @@ const Profile = () => {
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const { isAdmin, email, id } = useAppSelector(selectUserAuth);
+  const profile = useAppSelector(selectUserProfile);
   const location = useLocation();
 
   const handleToggle = () => {
@@ -71,6 +74,22 @@ const Profile = () => {
     navigate(`/profile/${id}`);
     setOpen(false);
   };
+  const getAvatarImageContent = ({
+    profile,
+    email
+  }: {
+    profile?: User | null;
+    email: string;
+  }): string => {
+    if (profile) {
+      if (profile.Preview) {
+        return profile.Preview as string;
+      } else if (profile.BaseImageUrl) {
+        return `${profile.BaseImageUrl}/32.png`;
+      }
+    }
+    return email?.[0];
+  };
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -87,7 +106,14 @@ const Profile = () => {
         aria-haspopup="true"
         onClick={handleToggle}>
         <Avatar
-          alt={email?.[0]}
+          alt={getAvatarImageContent({
+            email: email,
+            profile: profile
+          })}
+          src={getAvatarImageContent({
+            email: email,
+            profile: profile
+          })}
           sx={{ width: 32, height: 32, bgcolor: stringToHslColor(email, 80, 50) }}>
           {email?.[0]}
         </Avatar>

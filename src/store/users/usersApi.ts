@@ -1,4 +1,4 @@
-import { axiosInstance as axios } from '../../utils/axios';
+import axios from 'axios';
 import { UserVM } from '@halapp/common';
 import FormData from 'form-data';
 import { PresignedPost } from '@aws-sdk/s3-presigned-post';

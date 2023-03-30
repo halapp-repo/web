@@ -1,5 +1,5 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '..';
+import { RootState } from '../index';
 import { UserToUserDTOMapper } from '../../mappers/user-to-user-dto.mapper';
 import { USERSESSION } from '../../models/constants/user-session';
 import { UserSessionStorage } from '../../models/viewmodels/user-session.storage';
@@ -17,7 +17,17 @@ const initialState = {
 const ProfileSlice = createSlice({
   name: 'profile',
   initialState,
-  reducers: {},
+  reducers: {
+    getProfile: (state: ProfileState) => {
+      let profile;
+      const rawCognitoUser = localStorage.getItem(USERSESSION);
+      if (rawCognitoUser) {
+        const storage = JSON.parse(rawCognitoUser) as UserSessionStorage;
+        profile = storage.profile;
+      }
+      state.profile = profile;
+    }
+  },
   extraReducers: (builder) => {
     // fetch user
     builder.addCase(fetchById.fulfilled, (state, action) => {
@@ -43,10 +53,26 @@ const ProfileSlice = createSlice({
       }
       return state;
     });
+    builder.addCase(fetchById.rejected, (state, action) => {
+      const { isMyProfile } = action.meta.arg;
+      if (isMyProfile) {
+        let backupProfile;
+        const rawCognitoUser = localStorage.getItem(USERSESSION);
+        if (rawCognitoUser) {
+          const storage = JSON.parse(rawCognitoUser) as UserSessionStorage;
+          backupProfile = storage.profile;
+        }
+        state = {
+          ...state,
+          profile: backupProfile
+        };
+        return state;
+      }
+      return state;
+    });
     // update user
     builder.addCase(updateUser.fulfilled, (state, action) => {
       const payload = action.payload;
-
       const rawCognitoUser = localStorage.getItem(USERSESSION);
       if (rawCognitoUser) {
         const storage = JSON.parse(rawCognitoUser) as UserSessionStorage;
@@ -68,7 +94,6 @@ const ProfileSlice = createSlice({
     // update avatar
     builder.addCase(uploadAvatar.fulfilled, (state, action) => {
       const { preview } = action.meta.arg;
-
       const rawCognitoUser = localStorage.getItem(USERSESSION);
       if (rawCognitoUser) {
         const storage = JSON.parse(rawCognitoUser) as UserSessionStorage;
@@ -100,6 +125,8 @@ const ProfileSlice = createSlice({
     });
   }
 });
+
+export const { getProfile } = ProfileSlice.actions;
 
 export const selectUserProfile = createSelector([(state: RootState) => state.profile], (state) => {
   const profile = state.profile;
