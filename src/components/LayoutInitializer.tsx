@@ -1,13 +1,7 @@
 import { useEffect } from 'react';
-import {
-  getSession,
-  getCognitoUser,
-  refreshSession,
-  selectUserAuth
-} from '../store/auth/authSlice';
+import { getSession, getCognitoUser, refreshSession } from '../store/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchInventories } from '../store/inventories/inventoriesSlice';
-import { selectUserProfile } from '../store/profile/profileSlice';
 import { fetchCartItem } from '../store/shopping-cart/shoppingCartSlice';
 import {
   selectUIGlobalLoading,
