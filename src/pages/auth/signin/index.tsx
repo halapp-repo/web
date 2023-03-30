@@ -54,7 +54,12 @@ const SignIn = () => {
 
   useEffect(() => {
     if (userAuth.id && userAuth.authenticated) {
-      dispatch(fetchById(userAuth.id)).then(() => navigate('/dashboard'));
+      dispatch(
+        fetchById({
+          userId: userAuth.id,
+          isMyProfile: true
+        })
+      ).then(() => navigate('/dashboard'));
     }
   }, [userAuth]);
 

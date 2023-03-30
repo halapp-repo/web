@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-
-import authReducer from './auth/authSlice';
-import citiesReducer from './cities/citiesSlice';
-import inventoriesReducer from './inventories/inventoriesSlice';
-import ordersReducer from './orders/ordersSlice';
-import organizationsReducer from './organizations/organizationsSlice';
 import pricesReducer from './prices/pricesSlice';
-import productPricesReducer from './product-prices/productPricesSlice';
-import shoppingCartReducer from './shopping-cart/shoppingCartSlice';
+import inventoriesReducer from './inventories/inventoriesSlice';
 import uiReducer from './ui/uiSlice';
+import productPricesReducer from './product-prices/productPricesSlice';
+import organizationsReducer from './organizations/organizationsSlice';
+import authReducer from './auth/authSlice';
+import shoppingCartReducer from './shopping-cart/shoppingCartSlice';
+import ordersReducer from './orders/ordersSlice';
 import usersReducer from './users/usersSlice';
+import citiesReducer from './cities/citiesSlice';
+import profileReducer from './profile/profileSlice';
 
 const store = configureStore({
   reducer: {
@@ -18,11 +18,12 @@ const store = configureStore({
     ui: uiReducer,
     productPrices: productPricesReducer,
     organizations: organizationsReducer,
-    users: usersReducer,
     auth: authReducer,
     shoppingCart: shoppingCartReducer,
     orders: ordersReducer,
-    cities: citiesReducer
+    users: usersReducer,
+    cities: citiesReducer,
+    profile: profileReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

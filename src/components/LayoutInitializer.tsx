@@ -7,13 +7,13 @@ import {
 } from '../store/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchInventories } from '../store/inventories/inventoriesSlice';
+import { selectUserProfile } from '../store/profile/profileSlice';
 import { fetchCartItem } from '../store/shopping-cart/shoppingCartSlice';
 import {
   selectUIGlobalLoading,
   selectUISessionLoading,
   updateListingSelectedDate
 } from '../store/ui/uiSlice';
-import { fetchById } from '../store/users/usersSlice';
 import { Cover } from './Cover';
 
 type Props = {
@@ -27,7 +27,6 @@ const LayoutInitializer = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const sesionLoading = useAppSelector(selectUISessionLoading);
   const isGlobalLoading = useAppSelector(selectUIGlobalLoading);
-  const userAuth = useAppSelector(selectUserAuth);
 
   // Fetch inital Data
   useEffect(() => {
@@ -41,12 +40,6 @@ const LayoutInitializer = ({ children }: Props) => {
     }, 180000);
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (userAuth && typeof userAuth.profile === 'undefined') {
-      dispatch(fetchById(userAuth.id));
-    }
-  }, [userAuth]);
 
   const showCover = (): boolean => {
     return sesionLoading || isGlobalLoading;
