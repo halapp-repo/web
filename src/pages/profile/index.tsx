@@ -20,6 +20,7 @@ import { ProfileEmail } from './ProfileEmail';
 import { ProfileForm } from './ProfileForm';
 import { UserVM } from '@halapp/common';
 import { UpdatingCover } from '../../components/UpdatingCover';
+import { UserAuth } from '../../store/auth/authState';
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +37,12 @@ const Profile = () => {
       navigate('/auth/signin');
     }
     if (userId && typeof profile === 'undefined') {
-      dispatch(fetchById(userId));
+      dispatch(
+        fetchById({
+          userId: userId,
+          isMyProfile: userId === userAuth.id
+        })
+      );
     }
     if (userId === userAuth.id) {
       setEditMode(true);
@@ -45,9 +51,14 @@ const Profile = () => {
     }
   }, [userAuth, userId, profile]);
 
-  const handleRetry = (userId: string | undefined) => {
+  const handleRetry = (userId: string | undefined, userAuth: UserAuth) => {
     if (userId) {
-      dispatch(fetchById(userId));
+      dispatch(
+        fetchById({
+          userId,
+          isMyProfile: userId === userAuth.id
+        })
+      );
     }
   };
   const handleSubmit = async ({
@@ -83,7 +94,7 @@ const Profile = () => {
     } else if (user === null) {
       return (
         <Stack sx={{ justifyContent: 'center' }}>
-          <RetryOnError HandleRetry={() => handleRetry(userId)} />
+          <RetryOnError HandleRetry={() => handleRetry(userId, userAuth)} />
         </Stack>
       );
     } else {

@@ -33,7 +33,7 @@ const ProfilePicture = ({ EditMode, User }: ProfilePictureProps) => {
   };
   const handleUploadAvatar = (file: File, userId: string, preview: ArrayBuffer | string) => {
     if (file && userId) {
-      dispatch(uploadAvatar({ file: file, ID: userId, preview }));
+      dispatch(uploadAvatar({ file: file, ID: userId, preview })).then(() => setFileDataURL(null));
     }
   };
   useEffect(() => {

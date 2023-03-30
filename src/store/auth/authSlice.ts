@@ -17,8 +17,8 @@ import {
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
 import { SignupCode } from '../../models/signup-code';
-
-export const UserSessionLS = 'usersession';
+import { UserSessionStorage } from '../../models/viewmodels/user-session.storage';
+import { USERSESSION } from '../../models/constants/user-session';
 
 const defaultUserAuth: UserAuth = {
   id: '',
@@ -82,7 +82,7 @@ export const signIn = createAsyncThunk<
     const userAttr = await getUserAttributesFunc(response.user);
 
     localStorage.setItem(
-      UserSessionLS,
+      USERSESSION,
       JSON.stringify({ email: userAttr.Email, id: userAttr.ID, isAdmin: userAttr.IsAdmin })
     );
     return <AuthResponseDTO>{
@@ -130,14 +130,15 @@ export const refreshSession = createAsyncThunk<AuthResponseDTO>('auth/refreshSes
 export const getCognitoUser = createAsyncThunk<AuthResponseDTO | null>(
   'auth/getCognitoUser',
   async () => {
-    const rawCognitoUser = localStorage.getItem(UserSessionLS);
+    const rawCognitoUser = localStorage.getItem(USERSESSION);
     if (rawCognitoUser) {
-      const { email, id, isAdmin } = JSON.parse(rawCognitoUser);
+      const { email, id, isAdmin, profile } = JSON.parse(rawCognitoUser) as UserSessionStorage;
       return {
         Email: email,
         UserId: id,
-        IsAdmin: isAdmin
-      };
+        IsAdmin: isAdmin,
+        Profile: profile
+      } as AuthResponseDTO;
     }
     return null;
   }
@@ -323,7 +324,7 @@ const AuthSlice = createSlice({
       }
     });
     builder.addCase(signOut.fulfilled, (state) => {
-      localStorage.removeItem(UserSessionLS);
+      localStorage.removeItem(USERSESSION);
       state.userAuth = {
         ...state.userAuth,
         ...defaultUserAuth

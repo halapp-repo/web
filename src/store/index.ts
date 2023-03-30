@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import pricesReducer from './prices/pricesSlice';
 import inventoriesReducer from './inventories/inventoriesSlice';
+import profileReducer from './profile/profileSlice';
 import uiReducer from './ui/uiSlice';
 import productPricesReducer from './product-prices/productPricesSlice';
 import organizationsReducer from './organizations/organizationsSlice';
@@ -15,6 +16,7 @@ const store = configureStore({
     prices: pricesReducer,
     inventories: inventoriesReducer,
     ui: uiReducer,
+    profile: profileReducer,
     productPrices: productPricesReducer,
     organizations: organizationsReducer,
     auth: authReducer,

@@ -47,20 +47,21 @@ export const postOrganizationUser = createAsyncThunk<
   return response;
 });
 
-export const fetchById = createAsyncThunk<UserVM, string, { state: RootState }>(
-  'users/fetchById',
-  async (userId, { getState }): Promise<UserVM> => {
-    const { userAuth } = getState().auth;
-    if (!userAuth.authenticated || !userAuth.idToken) {
-      throw new Error('Unauthenticated');
-    }
-    const response = await new UsersApi().fetchById({
-      token: userAuth.idToken,
-      userId: userId
-    });
-    return response;
+export const fetchById = createAsyncThunk<
+  UserVM,
+  { userId: string; isMyProfile: boolean },
+  { state: RootState }
+>('users/fetchById', async (arg, { getState }): Promise<UserVM> => {
+  const { userAuth } = getState().auth;
+  if (!userAuth.authenticated || !userAuth.idToken) {
+    throw new Error('Unauthenticated');
   }
-);
+  const response = await new UsersApi().fetchById({
+    token: userAuth.idToken,
+    userId: arg.userId
+  });
+  return response;
+});
 
 export const updateUser = createAsyncThunk<UserVM, UserVM, { state: RootState }>(
   'users/update',
@@ -133,7 +134,7 @@ const UsersSlice = createSlice({
       return state;
     });
     builder.addCase(fetchById.fulfilled, (state, action) => {
-      const userId = action.meta.arg;
+      const { userId } = action.meta.arg;
       const newUser = action.payload;
       state = {
         ...state,
@@ -149,7 +150,7 @@ const UsersSlice = createSlice({
       return state;
     });
     builder.addCase(fetchById.rejected, (state, action) => {
-      const userId = action.meta.arg;
+      const { userId } = action.meta.arg;
       state = {
         ...state,
         profiles: {
