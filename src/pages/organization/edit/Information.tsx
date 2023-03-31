@@ -5,7 +5,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceOutlined from '@mui/icons-material/AccountBalanceOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import { useTheme } from '@mui/system';
 
@@ -43,7 +43,7 @@ const Information = ({ Organization, OnEnterEditMode }: InformationProps) => {
             {Organization.Active && (
               <Grid container>
                 <Grid item xs={2}>
-                  <AccountBalanceIcon color={'info'} />
+                  <AccountBalanceOutlined color={'info'} />
                 </Grid>
                 <Grid item xs={10}>
                   <Grid container>

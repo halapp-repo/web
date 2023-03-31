@@ -27,7 +27,6 @@ const WithdrawFromCredit = ({ Organization, SetHasEnoughCredit }: WithdrawFromBa
     if (Organization && shoppingCart) {
       let totalPrice = shoppingCart.Total;
       for (const charge of extraCharges || []) {
-        console.log(extraCharges);
         totalPrice += charge.Price;
       }
       SetHasEnoughCredit(Organization.Balance + Organization.CreditLimit - totalPrice >= 0);

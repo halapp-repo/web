@@ -1,18 +1,20 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { plainToInstance } from 'class-transformer';
+
+import { Price } from '../../models/price';
+import { ShoppingCart } from '../../models/shopping-cart';
 import {
   ShoppingCartList,
   ShoppingCartListItem
 } from '../../models/viewmodels/shopping-cart-list-item';
-import { Price } from '../../models/price';
-import { ShoppingCart } from '../../models/shopping-cart';
+import { UserSessionStorage } from '../../models/viewmodels/user-session.storage';
+import { USERSESSION } from '../../models/constants/user-session';
 import { RootState } from '../index';
 import { InventoriesState } from '../inventories/inventoriesState';
+import { createOrder } from '../orders/ordersSlice';
 import { selectPricesOfToday } from '../prices/pricesSlice';
 import { ShoppingCartState } from './shoppingCartState';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import { UserSessionLS } from '../auth/authSlice';
-import { createOrder } from '../orders/ordersSlice';
 
 const initialState = {
   cart: {
@@ -21,20 +23,20 @@ const initialState = {
 } as ShoppingCartState;
 
 const saveToLC = (cart: ShoppingCart) => {
-  const rawUserSession = localStorage.getItem(UserSessionLS);
+  const rawUserSession = localStorage.getItem(USERSESSION);
   if (rawUserSession) {
-    let userSession = JSON.parse(rawUserSession);
+    let userSession = JSON.parse(rawUserSession) as UserSessionStorage;
     userSession = {
       ...userSession,
       cart
     };
-    localStorage.setItem(UserSessionLS, JSON.stringify(userSession));
+    localStorage.setItem(USERSESSION, JSON.stringify(userSession));
   }
 };
 const getFromLC = (): ShoppingCart | null => {
-  const rawUserSession = localStorage.getItem(UserSessionLS);
+  const rawUserSession = localStorage.getItem(USERSESSION);
   if (rawUserSession) {
-    const userSession = JSON.parse(rawUserSession);
+    const userSession = JSON.parse(rawUserSession) as UserSessionStorage;
     if (userSession.cart) {
       return userSession.cart as ShoppingCart;
     } else {

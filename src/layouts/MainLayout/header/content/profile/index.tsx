@@ -23,18 +23,18 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { stringToHslColor } from '../../../../../utils/avatar';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-const iconBackColorOpen = 'grey.300';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { selectUserProfile } from '../../../../../store/profile/profileSlice';
+import { User } from '../../../../../models/user';
 
-interface ProfileProps {
-  email: string;
-}
-
-const Profile = (props: ProfileProps) => {
+const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
-  const { isAdmin } = useAppSelector(selectUserAuth);
+  const { isAdmin, email, id } = useAppSelector(selectUserAuth);
+  const profile = useAppSelector(selectUserProfile);
   const location = useLocation();
 
   const handleToggle = () => {
@@ -70,13 +70,33 @@ const Profile = (props: ProfileProps) => {
     navigate('/admin/organizations');
     setOpen(false);
   };
+  const handleOpenProfile = () => {
+    navigate(`/profile/${id}`);
+    setOpen(false);
+  };
+  const getAvatarImageContent = ({
+    profile,
+    email
+  }: {
+    profile?: User | null;
+    email: string;
+  }): string => {
+    if (profile) {
+      if (profile.Preview) {
+        return profile.Preview as string;
+      } else if (profile.BaseImageUrl) {
+        return `${profile.BaseImageUrl}/32.png`;
+      }
+    }
+    return email?.[0];
+  };
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <ButtonBase
         sx={{
           p: 0.25,
-          bgcolor: open ? iconBackColorOpen : 'transparent',
+          bgcolor: open ? 'grey.300' : 'transparent',
           borderRadius: 1,
           '&:hover': { bgcolor: 'secondary.lighter' }
         }}
@@ -86,9 +106,16 @@ const Profile = (props: ProfileProps) => {
         aria-haspopup="true"
         onClick={handleToggle}>
         <Avatar
-          alt={props.email?.[0]}
-          sx={{ width: 32, height: 32, bgcolor: stringToHslColor(props.email, 80, 50) }}>
-          {props.email?.[0]}
+          alt={getAvatarImageContent({
+            email: email,
+            profile: profile
+          })}
+          src={getAvatarImageContent({
+            email: email,
+            profile: profile
+          })}
+          sx={{ width: 32, height: 32, bgcolor: stringToHslColor(email, 80, 50) }}>
+          {email?.[0]}
         </Avatar>
       </ButtonBase>
       <Popper
@@ -120,6 +147,29 @@ const Profile = (props: ProfileProps) => {
                 <ClickAwayListener onClickAway={handleClose}>
                   <Card>
                     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                      <ListItem disablePadding>
+                        <ListItemButton onClick={handleOpenProfile}>
+                          <ListItemIcon sx={{ fontSize: '24px' }}>
+                            {location.pathname.includes('/profile') ? (
+                              <AccountCircleIcon />
+                            ) : (
+                              <AccountCircleOutlinedIcon />
+                            )}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={'Profilim'}
+                            primaryTypographyProps={{
+                              fontSize: '15px',
+                              paddingLeft: '20px',
+                              fontWeight: location.pathname.includes('/profile')
+                                ? 'bold'
+                                : 'inherit'
+                            }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                      <Divider component="li" />
+
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleOpenOrganizationList}>
                           <ListItemIcon sx={{ fontSize: '24px' }}>
