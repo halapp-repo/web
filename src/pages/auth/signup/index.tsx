@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import AuthWrapper from '../AuthWrapper';
-import AuthCard from '../AuthCard';
-import { SignUpForm } from './SignupForm';
-import SignUpWithoutCompanyCode from './SignupWithoutCompanyCode';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { useNavigate } from 'react-router-dom';
+
+import { SignupCode } from '../../../models/signup-code';
 import {
   clearStatusAndError,
   confirmRegistration,
@@ -13,10 +11,13 @@ import {
   selectUserAuth,
   signUp
 } from '../../../store/auth/authSlice';
-import { useNavigate } from 'react-router-dom';
-import OTPForm from '../OTPForm';
 import { getSignupCodeDetails } from '../../../store/auth/authSlice';
-import { SignupCode } from '../../../models/signup-code';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import AuthCard from '../AuthCard';
+import AuthWrapper from '../AuthWrapper';
+import OTPForm from '../OTPForm';
+import { SignUpForm } from './SignupForm';
+import SignUpWithoutCompanyCode from './SignupWithoutCompanyCode';
 
 const SignUp = () => {
   const [searchParams] = useSearchParams();

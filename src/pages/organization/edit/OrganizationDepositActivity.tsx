@@ -1,13 +1,14 @@
-import { Grid, Typography, Button } from '@mui/material';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import {
   AccountEventType,
-  PaymentMethodType,
-  OrganizationDepositV1PayloadVM
+  OrganizationDepositV1PayloadVM,
+  PaymentMethodType
 } from '@halapp/common';
-import { AccountEvent } from '../../../models/events/account-event';
 import { translatePaymentMethodType } from '@halapp/common';
+import { Button, Grid, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+
+import { AccountEvent } from '../../../models/events/account-event';
 
 interface OrganizationDepositActivityProps {
   Event: AccountEvent;

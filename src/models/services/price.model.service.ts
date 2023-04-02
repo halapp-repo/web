@@ -1,6 +1,7 @@
-import { Price } from '../price';
 import moment from 'moment';
+
 import { getComparator } from '../../utils/sort';
+import { Price } from '../price';
 
 interface PriceGroup {
   [key: string]: Price[];

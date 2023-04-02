@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, MutableRefObject } from 'react';
+import { TextField, TextFieldProps } from '@mui/material';
 import { FieldProps, getIn } from 'formik';
-import { TextFieldProps, TextField } from '@mui/material';
+import React, { MutableRefObject, useEffect, useRef } from 'react';
 
 interface AddressOutput {
   formattedAddress: string | undefined;

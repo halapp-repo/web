@@ -1,4 +1,4 @@
-import { Divider, CircularProgress, Stack } from '@mui/material';
+import { CircularProgress, Divider, Stack } from '@mui/material';
 
 const SummaryIsLoading = () => {
   return (

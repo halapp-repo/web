@@ -1,8 +1,9 @@
-import MainCard from '../../../components/MainCard';
-import PageWrapper from '../../../components/PageWrapper';
-import { Box, Typography, Stack, Link } from '@mui/material';
+import { Box, Link, Stack, Typography } from '@mui/material';
+
 import Logo from '../../../components/logo/Logo';
 import LogoText from '../../../components/logo/LogoText';
+import MainCard from '../../../components/MainCard';
+import PageWrapper from '../../../components/PageWrapper';
 
 const BilgiToplumuHizmetleri = () => {
   return (

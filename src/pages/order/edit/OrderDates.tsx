@@ -1,7 +1,8 @@
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import { Typography, Grid, Stack } from '@mui/material';
-import { Order } from '../../../models/order';
+import { Grid, Stack, Typography } from '@mui/material';
+
 import { TimeOfDayIcon } from '../../../components/TimeOfDayIcon';
+import { Order } from '../../../models/order';
 
 interface OrderDatesProps {
   Order: Order;

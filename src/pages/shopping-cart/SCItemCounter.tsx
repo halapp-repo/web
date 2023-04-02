@@ -1,4 +1,5 @@
-import { Stack, Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
+
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 
 interface ShoppingCartItemCounterProps {

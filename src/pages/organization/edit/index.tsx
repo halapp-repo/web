@@ -1,5 +1,20 @@
+import { ShopFilled, ShopOutlined } from '@ant-design/icons';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import PeopleIcon from '@mui/icons-material/People';
+import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import ShieldIcon from '@mui/icons-material/Shield';
+import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined';
+import { Box, CircularProgress, Grid, Tabs, Theme, useMediaQuery } from '@mui/material';
 import { useEffect } from 'react';
-import { Box, Tabs, CircularProgress, useMediaQuery, Theme, Grid } from '@mui/material';
+import { useParams } from 'react-router-dom';
+
+import { Tab } from '../../../components/form/Tab';
+import MainCard from '../../../components/MainCard';
+import { Organization } from '../../../models/organization';
+import { selectUserAuth } from '../../../store/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   fetchAllOrganizations,
@@ -7,30 +22,16 @@ import {
   selectIndividualOrganization,
   updateOrganization
 } from '../../../store/organizations/organizationsSlice';
-import { useParams } from 'react-router-dom';
-import MainCard from '../../../components/MainCard';
-import GeneralInformationForm from './GeneralInformationForm';
-import { Organization } from '../../../models/organization';
 import {
   selectUIOrganization,
   updateOrganization as updateUIOrganization
 } from '../../../store/ui/uiSlice';
+import { AccountActivity } from './AccountActivity';
+import { OrganizationAdminPanel } from './AdminPanel';
 import { DeliveryAddresses } from './DeliveryAddresses';
+import GeneralInformationForm from './GeneralInformationForm';
 import Information from './Information';
 import { Users } from './Users';
-import { selectUserAuth } from '../../../store/auth/authSlice';
-import { OrganizationAdminPanel } from './AdminPanel';
-import { ShopOutlined, ShopFilled } from '@ant-design/icons';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
-import PeopleIcon from '@mui/icons-material/People';
-import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined';
-import ShieldIcon from '@mui/icons-material/Shield';
-import { Tab } from '../../../components/form/Tab';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import { AccountActivity } from './AccountActivity';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;

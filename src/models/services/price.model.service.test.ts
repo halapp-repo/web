@@ -1,8 +1,10 @@
 import 'reflect-metadata';
+
+import { plainToClass } from 'class-transformer';
+import timezone from 'moment-timezone';
+
 import { Price } from '../../../src/models/price';
 import { getNewestPricesByDate as getNewestPriceByDate } from '../../../src/models/services/price.model.service';
-import timezone from 'moment-timezone';
-import { plainToClass } from 'class-transformer';
 
 describe('PriceModelService', () => {
   test('getTodayPrices', () => {

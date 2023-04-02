@@ -1,10 +1,11 @@
-import { Stack, Typography, List, ListItem, ListItemText, Box, Button } from '@mui/material';
-import React, { useState } from 'react';
-import { useTheme } from '@mui/system';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
+import { Box, Button, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { useTheme } from '@mui/system';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 import { getComparator } from '../../utils/sort';
 
 interface SummaryOrderProps {

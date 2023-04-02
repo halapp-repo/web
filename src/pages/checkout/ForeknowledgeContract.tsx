@@ -1,5 +1,6 @@
-import { Stack, Typography, Card, CardContent } from '@mui/material';
 import '../../themes/styles/scrollbar.css';
+
+import { Card, CardContent, Stack, Typography } from '@mui/material';
 
 const ForeknowledgeContract = () => {
   return (

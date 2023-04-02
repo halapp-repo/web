@@ -1,6 +1,7 @@
-import axios from 'axios';
 import { CityType, ProductType } from '@halapp/common';
 import { PriceVM } from '@halapp/common';
+import axios from 'axios';
+
 import { IntervalType } from '../../models/interval-type';
 
 export class ProductPricesApi {

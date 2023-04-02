@@ -1,5 +1,17 @@
-import { Stack, Typography, Box } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { UserVM } from '@halapp/common';
+import { Box, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import MainCard from '../../components/MainCard';
+import { Overlay } from '../../components/Overlay';
+import PageWrapper from '../../components/PageWrapper';
+import { RetryOnError } from '../../components/RetryOnError';
+import { UpdatingCover } from '../../components/UpdatingCover';
+import { User } from '../../models/user';
+import { selectUserAuth } from '../../store/auth/authSlice';
+import { UserAuth } from '../../store/auth/authState';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   fetchById,
   selectIsProfileLoading,
@@ -7,20 +19,9 @@ import {
   selectProfile,
   updateUser
 } from '../../store/users/usersSlice';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { User } from '../../models/user';
-import PageWrapper from '../../components/PageWrapper';
-import MainCard from '../../components/MainCard';
-import { selectUserAuth } from '../../store/auth/authSlice';
-import { ProfilePicture } from './ProfilePicture';
-import { RetryOnError } from '../../components/RetryOnError';
-import { Overlay } from '../../components/Overlay';
 import { ProfileEmail } from './ProfileEmail';
 import { ProfileForm } from './ProfileForm';
-import { UserVM } from '@halapp/common';
-import { UpdatingCover } from '../../components/UpdatingCover';
-import { UserAuth } from '../../store/auth/authState';
+import { ProfilePicture } from './ProfilePicture';
 
 const Profile = () => {
   const dispatch = useAppDispatch();

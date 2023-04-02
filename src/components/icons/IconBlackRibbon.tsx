@@ -1,4 +1,5 @@
 import { SvgIcon } from '@mui/material';
+
 import { ReactComponent as IconContent } from './iconBlackRibbon.svg';
 
 const IconBlackRibbon = () => {

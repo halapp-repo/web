@@ -1,22 +1,23 @@
 import { useEffect } from 'react';
-import AuthWrapper from '../AuthWrapper';
 import { useSearchParams } from 'react-router-dom';
-import AuthCard from '../AuthCard';
-import { SignInForm } from './SignInForm';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import {
-  signIn,
-  selectUserAuth,
-  confirmRegistration,
-  resendConfirmCode,
-  clearStatusAndError,
-  getSignupCodeDetails,
-  SelectSignupCode
-} from '../../../store/auth/authSlice';
-import OTPForm from '../OTPForm';
 import { useNavigate } from 'react-router-dom';
+
 import { SignupCode } from '../../../models/signup-code';
+import {
+  clearStatusAndError,
+  confirmRegistration,
+  getSignupCodeDetails,
+  resendConfirmCode,
+  SelectSignupCode,
+  selectUserAuth,
+  signIn
+} from '../../../store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { fetchById } from '../../../store/users/usersSlice';
+import AuthCard from '../AuthCard';
+import AuthWrapper from '../AuthWrapper';
+import OTPForm from '../OTPForm';
+import { SignInForm } from './SignInForm';
 
 const SignIn = () => {
   const [searchParams] = useSearchParams();

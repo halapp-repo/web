@@ -1,5 +1,6 @@
-import { Button, Divider, Box, Typography } from '@mui/material';
+import { Box, Button, Divider, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { useAppSelector } from '../../store/hooks';

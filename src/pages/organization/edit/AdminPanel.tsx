@@ -1,10 +1,11 @@
-import { Stack, Grid, Switch, OutlinedInput, InputAdornment, Typography } from '@mui/material';
-import { Organization } from '../../../models/organization';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
-import { useState, useEffect } from 'react';
-import { DialogOrganizationActivation } from './DialogOrganizationActivation';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { Grid, InputAdornment, OutlinedInput, Stack, Switch, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
+import { useEffect, useState } from 'react';
+
+import { Organization } from '../../../models/organization';
+import { DialogOrganizationActivation } from './DialogOrganizationActivation';
 
 interface OrganizationAdminPanelProps {
   Organization: Organization;

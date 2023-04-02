@@ -1,4 +1,5 @@
-import { Box, Stack, LinearProgress } from '@mui/material';
+import { Box, LinearProgress, Stack } from '@mui/material';
+
 import Logo from '../components/logo/Logo';
 import LogoText from './logo/LogoText';
 

@@ -15,4 +15,4 @@ const retry = async <T>(
 
 const sleep = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export { sleep, retry };
+export { retry, sleep };

@@ -1,4 +1,5 @@
-import { Typography, Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+
 import { Order } from '../../../models/order';
 
 interface OrderInvoiceProps {

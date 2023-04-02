@@ -1,7 +1,8 @@
 import { ExtraCharge, PaymentMethodType } from '@halapp/common';
-import { Stack, Button, Typography, Checkbox, Divider } from '@mui/material';
-import { useEffect, useContext } from 'react';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { Button, Checkbox, Divider, Stack, Typography } from '@mui/material';
+import { useContext, useEffect } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 import { ShoppingCartContext } from './ShoppingCartContext';
 import { SummaryOrder } from './SummaryOrder';

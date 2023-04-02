@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { PriceVM } from '@halapp/common';
+import axios from 'axios';
 
 export class PricesApi {
   baseUrl: string;

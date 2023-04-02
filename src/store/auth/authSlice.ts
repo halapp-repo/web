@@ -1,24 +1,25 @@
-import { createSelector, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { RootState } from '../index';
-import { AuthError, AuthState, UserAuth } from './authState';
-import {
-  signUp as signUpFunc,
-  confirmRegistration as confirmRegistrationFunc,
-  resendConfirmCode as resendConfirmCodeFunc,
-  signIn as signInFunc,
-  signOut as signOutFunc,
-  getSession as getSessionFunc,
-  forgotPassword as forgotPasswordFunc,
-  confirmPassword as confirmPasswordFunc,
-  AuthApi,
-  getUserAttributes as getUserAttributesFunc,
-  checkTokenExpiration
-} from './authApi';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
+
+import { USERSESSION } from '../../models/constants/user-session';
 import { AuthResponseDTO } from '../../models/dtos/auth-response.dto';
 import { SignupCode } from '../../models/signup-code';
 import { UserSessionStorage } from '../../models/viewmodels/user-session.storage';
-import { USERSESSION } from '../../models/constants/user-session';
+import type { RootState } from '../index';
+import {
+  AuthApi,
+  checkTokenExpiration,
+  confirmPassword as confirmPasswordFunc,
+  confirmRegistration as confirmRegistrationFunc,
+  forgotPassword as forgotPasswordFunc,
+  getSession as getSessionFunc,
+  getUserAttributes as getUserAttributesFunc,
+  resendConfirmCode as resendConfirmCodeFunc,
+  signIn as signInFunc,
+  signOut as signOutFunc,
+  signUp as signUpFunc
+} from './authApi';
+import { AuthError, AuthState, UserAuth } from './authState';
 
 const defaultUserAuth: UserAuth = {
   id: '',

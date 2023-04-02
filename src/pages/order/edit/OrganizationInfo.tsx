@@ -1,6 +1,7 @@
-import { Typography, Stack, Grid } from '@mui/material';
-import { Organization } from '../../../models/organization';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import { Grid, Stack, Typography } from '@mui/material';
+
+import { Organization } from '../../../models/organization';
 interface OrganizationInfoProps {
   Organization: Organization;
 }

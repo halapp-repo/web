@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
 import { AccountEventType, OrganizationVM } from '@halapp/common';
+import axios from 'axios';
+
+import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
 import { OrganizationAddress } from '../../models/organization';
 
 export class OrganizationsApi {

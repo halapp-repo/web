@@ -1,13 +1,14 @@
 import { Button, Grid, List, ListItem } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { GizlilikPolitikasi } from './GizlilikPolitikasi';
-import { AydinlatmaMetni } from './AydinlatmaMetni';
+
 import { AcikRizaMetni } from './AcikRizaMetni';
+import { AydinlatmaMetni } from './AydinlatmaMetni';
+import { CerezPolitikasi } from './CerezPolitikasi';
+import { GizlilikPolitikasi } from './GizlilikPolitikasi';
 import { KisiselVerilerinKorunmaPolitikasi } from './KisiselVerilerinKorunmaPolitikasi';
 import { KullanimSartlari } from './KullanimSartlari';
-import { CerezPolitikasi } from './CerezPolitikasi';
 
 const Privacy = () => {
   const tabs = {

@@ -1,32 +1,33 @@
+import { ScheduleFilled, ScheduleOutlined, ShopFilled, ShopOutlined } from '@ant-design/icons';
+import { LogoutOutlined } from '@ant-design/icons';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import {
   Avatar,
   Box,
   ButtonBase,
+  Card,
   ClickAwayListener,
-  Paper,
-  Popper,
+  Divider,
   List,
   ListItem,
-  Divider,
-  ListItemText,
-  Card,
   ListItemButton,
-  ListItemIcon
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Popper
 } from '@mui/material';
-import { ScheduleFilled, ScheduleOutlined, ShopFilled, ShopOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import Transitions from '../../../../../components/Transitions';
-import { LogoutOutlined } from '@ant-design/icons';
-import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
-import { selectUserAuth, signOut } from '../../../../../store/auth/authSlice';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { stringToHslColor } from '../../../../../utils/avatar';
-import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { selectUserProfile } from '../../../../../store/profile/profileSlice';
 import { User } from '../../../../../models/user';
+import { selectUserAuth, signOut } from '../../../../../store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
+import { selectUserProfile } from '../../../../../store/profile/profileSlice';
+import { stringToHslColor } from '../../../../../utils/avatar';
 
 const Profile = () => {
   const navigate = useNavigate();

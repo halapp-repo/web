@@ -1,11 +1,12 @@
-import { Typography, Grid, Stack, Box, Button, Chip } from '@mui/material';
-import { withFormik, FormikProps, Form, Field } from 'formik';
-import { Link as RouterLink } from 'react-router-dom';
-import * as Yup from 'yup';
-import { AppTextField } from '../../../components/form/TextField';
-import { NavLink } from 'react-router-dom';
-import { SignupCode } from '../../../models/signup-code';
 import { ShopOutlined } from '@ant-design/icons';
+import { Box, Button, Chip, Grid, Stack, Typography } from '@mui/material';
+import { Field, Form, FormikProps, withFormik } from 'formik';
+import { Link as RouterLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import { AppTextField } from '../../../components/form/TextField';
+import { SignupCode } from '../../../models/signup-code';
 
 interface FormValues {
   email: string;

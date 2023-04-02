@@ -1,7 +1,8 @@
-import { Typography, Stack, Grid } from '@mui/material';
+import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
+import { Grid, Stack, Typography } from '@mui/material';
+
 import { Order } from '../../../models/order';
 import { StatusChip } from '../StatusChip';
-import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 
 interface OrderStatusProps {
   Order: Order;

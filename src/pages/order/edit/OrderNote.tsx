@@ -1,6 +1,7 @@
-import { Stack, Typography, Grid } from '@mui/material';
-import { Order } from '../../../models/order';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+import { Grid, Stack, Typography } from '@mui/material';
+
+import { Order } from '../../../models/order';
 
 interface OrderNoteProps {
   Order: Order;

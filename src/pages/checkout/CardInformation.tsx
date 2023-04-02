@@ -1,31 +1,32 @@
-import {
-  Typography,
-  Stack,
-  Grid,
-  TextField,
-  InputAdornment,
-  Select,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Tooltip,
-  Box,
-  Checkbox,
-  FormControlLabel,
-  SelectChangeEvent
-} from '@mui/material';
-import { useState, useEffect } from 'react';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
-import { creditCardType } from '../../utils/credit-card';
-import Visa from '../../components/icons/credit-cards/Visa';
-import MasterCard from '../../components/icons/credit-cards/MasterCard';
-import AmEx from '../../components/icons/credit-cards/AmEx';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
+import {
+  Box,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography
+} from '@mui/material';
 import { debounce } from '@mui/material/utils';
+import { useEffect, useState } from 'react';
+
 import { CreditCardMask } from '../../components/form/CreditCardMask';
+import AmEx from '../../components/icons/credit-cards/AmEx';
+import MasterCard from '../../components/icons/credit-cards/MasterCard';
+import Visa from '../../components/icons/credit-cards/Visa';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
+import { creditCardType } from '../../utils/credit-card';
 
 const YEAR = new Date().getFullYear();
 

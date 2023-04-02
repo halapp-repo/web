@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+
 import { creditCardType } from './credit-card';
 
 Yup.addMethod(Yup.string, 'creditCardType', function (errorMessage) {

@@ -1,7 +1,8 @@
-import { Stack, Grid } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
+
 import { Order } from '../../../models/order';
-import { OrderStatus } from './OrderStatus';
 import { OrderCalendar } from './OrderCalendar';
+import { OrderStatus } from './OrderStatus';
 import { OrderTotalPrice } from './OrderTotalPrice';
 
 interface OrderListItemProps {

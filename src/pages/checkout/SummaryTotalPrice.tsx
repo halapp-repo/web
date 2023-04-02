@@ -1,5 +1,6 @@
-import { ExtraChargeType, ExtraCharge } from '@halapp/common';
-import { Stack, Typography, Box } from '@mui/material';
+import { ExtraCharge, ExtraChargeType } from '@halapp/common';
+import { Box, Stack, Typography } from '@mui/material';
+
 import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { useAppSelector } from '../../store/hooks';

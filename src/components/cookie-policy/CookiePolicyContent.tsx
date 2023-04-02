@@ -1,29 +1,30 @@
+import { CloseOutlined } from '@ant-design/icons';
 import {
+  Avatar,
   Box,
+  Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
-  Grid,
-  Avatar,
-  Typography,
-  CardActions,
-  Button,
-  Stack,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  IconButton,
-  Switch,
+  DialogTitle,
   Divider,
-  useMediaQuery,
-  Theme
+  Grid,
+  IconButton,
+  Stack,
+  Switch,
+  Theme,
+  Typography,
+  useMediaQuery
 } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
 import { useState } from 'react';
-import { CloseOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+
 import { CookieConsent } from '../../models/cookie-consent';
 
 interface CookiePolicyContentProps {

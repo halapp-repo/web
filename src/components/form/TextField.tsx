@@ -1,6 +1,6 @@
-import React from 'react';
+import { TextField, TextFieldProps } from '@mui/material';
 import { FieldProps, getIn } from 'formik';
-import { TextFieldProps, TextField } from '@mui/material';
+import React from 'react';
 
 export const AppTextField: React.FC<FieldProps & TextFieldProps> = (props) => {
   const isTouched = getIn(props.form.touched, props.field.name);

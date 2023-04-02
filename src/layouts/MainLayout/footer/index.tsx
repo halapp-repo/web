@@ -1,7 +1,7 @@
 import { InstagramOutlined } from '@ant-design/icons';
-import { Box, Grid, Typography, IconButton, Stack, Button, Divider } from '@mui/material';
-import { useMemo } from 'react';
+import { Box, Button, Divider, Grid, IconButton, Stack, Typography } from '@mui/material';
 import moment from 'moment';
+import { useMemo } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Footer = () => {

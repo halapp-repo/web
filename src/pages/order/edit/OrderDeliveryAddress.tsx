@@ -1,6 +1,7 @@
-import { Box, Typography, Stack, Grid } from '@mui/material';
-import { Order } from '../../../models/order';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import { Box, Grid, Stack, Typography } from '@mui/material';
+
+import { Order } from '../../../models/order';
 
 interface OrderDeliveryAddressProps {
   Order: Order;

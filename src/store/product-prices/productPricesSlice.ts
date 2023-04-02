@@ -1,15 +1,16 @@
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '..';
 import { CityType, ProductType } from '@halapp/common';
+import { PriceVM } from '@halapp/common';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+
+import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
+import { ChartSlot } from '../../models/chart-slot';
+import { IntervalType } from '../../models/interval-type';
+import { getComparator } from '../../utils/sort';
+import { trMoment } from '../../utils/timezone';
+import { RootState } from '..';
+import { fetchPrices } from '../prices/pricesSlice';
 import { ProductPricesApi } from './productPricesApi';
 import { ProductPricesState } from './productPricesState';
-import { getComparator } from '../../utils/sort';
-import { ChartSlot } from '../../models/chart-slot';
-import { fetchPrices } from '../prices/pricesSlice';
-import { IntervalType } from '../../models/interval-type';
-import { trMoment } from '../../utils/timezone';
-import { PriceVM } from '@halapp/common';
-import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
 
 const initialState = {
   data: {},

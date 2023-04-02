@@ -1,9 +1,10 @@
-import { Typography, Stack, Select, MenuItem, Button } from '@mui/material';
 import { CityType } from '@halapp/common';
+import { Button, MenuItem, Select, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+
+import { selectSelectedCity } from '../../../../../store/cities/citiesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 import { toggleCity } from '../../../../../store/ui/uiSlice';
-import { useState } from 'react';
-import { selectSelectedCity } from '../../../../../store/cities/citiesSlice';
 
 const DrawerCityContent = () => {
   const city = useAppSelector(selectSelectedCity);

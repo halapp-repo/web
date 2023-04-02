@@ -1,5 +1,7 @@
-import React, { useState, useCallback, memo } from 'react';
 import './index.css';
+
+import React, { memo, useCallback, useState } from 'react';
+
 import SingleInput from './SingleOTPInput';
 
 interface OTPInputProps {

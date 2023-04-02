@@ -1,8 +1,9 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../index';
+
 import { UserToUserDTOMapper } from '../../mappers/user-to-user-dto.mapper';
 import { USERSESSION } from '../../models/constants/user-session';
 import { UserSessionStorage } from '../../models/viewmodels/user-session.storage';
+import { RootState } from '../index';
 import { fetchById, updateUser, uploadAvatar } from '../users/usersSlice';
 import { ProfileState } from './profileState';
 

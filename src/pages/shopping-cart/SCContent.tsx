@@ -1,21 +1,22 @@
+import { ProductType } from '@halapp/common';
 import { Box, Divider, List } from '@mui/material';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
-import ShoppingCartListItem from './SCListItem';
-import ShoppingCartItemCounter from './SCItemCounter';
-import SummaryNCheckout from './SummaryNCheckout';
-import { useEffect, Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
+
+import { Price } from '../../models/price';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   fetchTodaysPrices,
   selectPriceIsLoading,
   selectPricesOfToday
 } from '../../store/prices/pricesSlice';
-import { ProductType } from '@halapp/common';
+import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
 import ShoppingCartEmptyListContent from './SCEmptyListContent';
-import { selectSelectedCity } from '../../store/cities/citiesSlice';
-import SummaryIsLoading from './SummaryIsLoading';
-import { Price } from '../../models/price';
+import ShoppingCartItemCounter from './SCItemCounter';
+import ShoppingCartListItem from './SCListItem';
 import SummaryError from './SummaryError';
+import SummaryIsLoading from './SummaryIsLoading';
+import SummaryNCheckout from './SummaryNCheckout';
 
 const ShoppingCartContent = () => {
   const shoppingCart = useAppSelector(selectEnhancedShoppingCart);

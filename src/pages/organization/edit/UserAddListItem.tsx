@@ -1,20 +1,21 @@
+import { CheckCircleOutlined } from '@ant-design/icons';
+import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import {
-  Stack,
+  Button,
+  Divider,
+  IconButton,
   ListItem,
   ListItemText,
-  Typography,
-  Divider,
-  Button,
-  IconButton
+  Stack,
+  Typography
 } from '@mui/material';
-import { useState } from 'react';
-import { CheckCircleOutlined } from '@ant-design/icons';
-import { UserListItemForm } from './UserListItemForm';
-import { useAppDispatch } from '../../../store/hooks';
-import { Organization } from '../../../models/organization';
-import { postOrganizationUser } from '../../../store/users/usersSlice';
 import { green } from '@mui/material/colors';
-import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
+import { useState } from 'react';
+
+import { Organization } from '../../../models/organization';
+import { useAppDispatch } from '../../../store/hooks';
+import { postOrganizationUser } from '../../../store/users/usersSlice';
+import { UserListItemForm } from './UserListItemForm';
 
 interface UserAddListItemProps {
   Organization: Organization;

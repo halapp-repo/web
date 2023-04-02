@@ -1,6 +1,7 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../index';
 import { CityType } from '@halapp/common';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { RootState } from '../index';
 import { CitiesState } from './citiesState';
 
 const initialState = {

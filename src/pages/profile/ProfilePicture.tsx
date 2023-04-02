@@ -1,10 +1,11 @@
+import { AvatarSizeType } from '@halapp/common';
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
-import { Stack, Box, Button } from '@mui/material';
-import { useState, useEffect, ChangeEventHandler } from 'react';
+import { Box, Button, Stack } from '@mui/material';
+import { ChangeEventHandler, useEffect, useState } from 'react';
+
 import { User } from '../../models/user';
 import { useAppDispatch } from '../../store/hooks';
 import { uploadAvatar } from '../../store/users/usersSlice';
-import { AvatarSizeType } from '@halapp/common';
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 

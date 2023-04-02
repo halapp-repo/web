@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react';
+import { CloseOutlined } from '@ant-design/icons';
+import { CityType, ProductType } from '@halapp/common';
 import {
   Box,
-  useMediaQuery,
-  Theme,
   Dialog,
   DialogContent,
   DialogTitle,
   IconButton,
-  useTheme,
-  Typography,
+  Tab,
   Tabs,
-  Tab
+  Theme,
+  Typography,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
-import { CloseOutlined } from '@ant-design/icons';
-import PriceChart from './PriceChart';
-import { CityType, ProductType } from '@halapp/common';
+import { useEffect, useState } from 'react';
+
 import { useAppSelector } from '../../store/hooks';
 import { selectProductByProductId } from '../../store/inventories/inventoriesSlice';
 import {
@@ -22,6 +22,7 @@ import {
   selectProductCurrentPrice,
   selectProductDailyPriceIncrease
 } from '../../store/product-prices/productPricesSlice';
+import PriceChart from './PriceChart';
 
 interface PriceDialogProps {
   ProductId: string;

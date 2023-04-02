@@ -1,29 +1,30 @@
-import { useEffect, useState, useContext } from 'react';
-import { grey } from '@mui/material/colors';
-import { useNavigate } from 'react-router-dom';
 import {
+  Alert,
   Box,
+  Button,
+  Collapse,
+  Divider,
   List,
-  Radio,
-  RadioGroup,
   ListItem,
   ListItemText,
-  Typography,
+  Radio,
+  RadioGroup,
   Stack,
-  Button,
-  Alert,
-  Divider,
-  Collapse
+  Typography
 } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { useTheme } from '@mui/system';
+import { instanceToInstance } from 'class-transformer';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
+
 import { Organization, OrganizationAddress } from '../../models/organization';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectUICheckout, updateOrganization } from '../../store/ui/uiSlice';
-import { instanceToInstance } from 'class-transformer';
-import { OrganizationsContext } from './OrganizationsContext';
-import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { areStringsEqual } from '../../utils/filter';
-import { useTheme } from '@mui/system';
+import { OrganizationsContext } from './OrganizationsContext';
 
 interface AddressSelectorProps {
   SetAddress: (orgId: string, deliveryAddress: OrganizationAddress) => Promise<void>;

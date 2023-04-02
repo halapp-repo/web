@@ -1,18 +1,19 @@
-import { useEffect, Fragment } from 'react';
-import { List, CircularProgress, Box, Typography, Divider } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { selectUserAuth } from '../../../store/auth/authSlice';
+import { Box, CircularProgress, Divider, List, Typography } from '@mui/material';
+import { Fragment, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import MainCard from '../../../components/MainCard';
+import PageWrapper from '../../../components/PageWrapper';
+import { RetryOnError } from '../../../components/RetryOnError';
+import { Organization } from '../../../models/organization';
+import { selectUserAuth } from '../../../store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   fetchOrganizations,
   selectOrganizationIsLoading,
   selectOrganizations
 } from '../../../store/organizations/organizationsSlice';
-import PageWrapper from '../../../components/PageWrapper';
-import MainCard from '../../../components/MainCard';
 import { OrganizationListItem } from './OrganizationListItem';
-import { Organization } from '../../../models/organization';
-import { RetryOnError } from '../../../components/RetryOnError';
 
 const OrganizationList = () => {
   const navigate = useNavigate();

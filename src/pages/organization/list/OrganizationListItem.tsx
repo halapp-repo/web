@@ -1,8 +1,9 @@
-import { Box, Stack, Typography, Chip, ListItemButton } from '@mui/material';
-import { Organization } from '../../../models/organization';
-import { useNavigate } from 'react-router-dom';
 import LocationOnOutlined from '@mui/icons-material/LocationOnOutlined';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { Box, Chip, ListItemButton, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+import { Organization } from '../../../models/organization';
 
 interface OrganizationListItemProps {
   Organization: Organization;

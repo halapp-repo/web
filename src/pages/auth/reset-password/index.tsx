@@ -1,17 +1,18 @@
-import AuthCard from '../AuthCard';
-import AuthWrapper from '../AuthWrapper';
-import { useState, useEffect } from 'react';
-import Email from './Email';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
   clearStatusAndError,
   confirmPassword,
   forgotPassword,
   selectUserAuth
 } from '../../../store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import AuthCard from '../AuthCard';
+import AuthWrapper from '../AuthWrapper';
 import OTPForm from '../OTPForm';
+import Email from './Email';
 import { NewPasswordForm } from './NewPassword';
-import { useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
   const navigate = useNavigate();

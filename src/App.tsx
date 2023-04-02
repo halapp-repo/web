@@ -1,8 +1,8 @@
-import ThemeCustomization from './themes';
-import Routes from './routes';
-import ScrollTop from './components/ScrollTop';
 import { CookiePolicy } from './components/cookie-policy/CookiePolicy';
 import { InternetConnection } from './components/InternetConnection';
+import ScrollTop from './components/ScrollTop';
+import Routes from './routes';
+import ThemeCustomization from './themes';
 
 function App() {
   return (

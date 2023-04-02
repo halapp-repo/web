@@ -1,8 +1,9 @@
-import { Box, Typography, Stack, Button } from '@mui/material';
-import locations, { Office } from './locations';
+import { Box, Button, Stack, Typography } from '@mui/material';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+
 import MainCard from '../../../components/MainCard';
 import PageWrapper from '../../../components/PageWrapper';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import locations, { Office } from './locations';
 
 const City = () => {
   const { city = '' } = useParams();

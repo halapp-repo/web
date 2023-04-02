@@ -1,4 +1,5 @@
 import { PriceVM } from '@halapp/common';
+
 import { ChartSlot } from '../../models/chart-slot';
 
 type IntervalPrices = {

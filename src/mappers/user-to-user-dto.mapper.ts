@@ -1,8 +1,9 @@
-import { plainToClass } from 'class-transformer';
 import { UserVM } from '@halapp/common';
-import { IMapper } from './base.mapper';
+import { plainToClass } from 'class-transformer';
+
 import { User } from '../models/user';
 import { UserVMWithPreview } from '../models/viewmodels/user-with-preview';
+import { IMapper } from './base.mapper';
 
 export class UserToUserDTOMapper extends IMapper<User, UserVM> {
   toDTO(): UserVM {

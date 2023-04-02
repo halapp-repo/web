@@ -1,5 +1,5 @@
-import { styled } from '@mui/material/styles';
 import { Tab as MuiTab } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const Tab = styled(MuiTab)({
   alignItems: 'self-start',

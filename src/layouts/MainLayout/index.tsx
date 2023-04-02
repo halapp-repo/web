@@ -1,8 +1,9 @@
-import { Box, Toolbar, Grid } from '@mui/material';
+import { Box, Grid, Toolbar } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import Header from './header';
+
 import LayoutInitializer from '../../components/LayoutInitializer';
 import Footer from './footer';
+import Header from './header';
 import { ModalCitySelect } from './header/content/city/ModalCitySelect';
 
 const MainLayout = () => {

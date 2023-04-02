@@ -1,6 +1,8 @@
-import * as Yup from 'yup';
-import { creditCardType } from '../../utils/credit-card';
 import '../../utils/yup';
+
+import * as Yup from 'yup';
+
+import { creditCardType } from '../../utils/credit-card';
 
 const cardValidationSchema = Yup.object().shape({
   cardNumber: Yup.string()

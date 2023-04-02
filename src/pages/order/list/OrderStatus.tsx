@@ -1,6 +1,7 @@
-import { Order } from '../../../models/order';
-import { Box, Stack, Typography } from '@mui/material';
 import { FieldTimeOutlined } from '@ant-design/icons';
+import { Box, Stack, Typography } from '@mui/material';
+
+import { Order } from '../../../models/order';
 import { StatusChip } from '../StatusChip';
 
 interface OrderStatusProps {

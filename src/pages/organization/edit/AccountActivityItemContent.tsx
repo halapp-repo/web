@@ -1,12 +1,13 @@
-import { ReactNode } from 'react';
-import { Typography, Grid, Stack } from '@mui/material';
-import { trMoment } from '../../../utils/timezone';
-import { AccountEvent } from '../../../models/events/account-event';
 import {
   AccountEventType,
   OrganizationDepositV1PayloadVM,
   OrganizationWithdrewV1PayloadVM
 } from '@halapp/common';
+import { Grid, Stack, Typography } from '@mui/material';
+import { ReactNode } from 'react';
+
+import { AccountEvent } from '../../../models/events/account-event';
+import { trMoment } from '../../../utils/timezone';
 
 interface AccountActivityItemContentProps {
   children?: ReactNode;

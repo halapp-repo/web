@@ -1,5 +1,6 @@
+import { Button, ButtonGroup } from '@mui/material';
 import { ReactElement, useEffect, useState } from 'react';
-import { ButtonGroup, Button } from '@mui/material';
+
 import useLongPress from '../../hooks/useLongPress';
 
 interface NumberInputProps {

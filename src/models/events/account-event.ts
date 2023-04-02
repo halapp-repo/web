@@ -1,7 +1,8 @@
+import { AccountEventType } from '@halapp/common';
 import { Transform, Type } from 'class-transformer';
 import moment from 'moment';
+
 import { trMoment } from '../../utils/timezone';
-import { AccountEventType } from '@halapp/common';
 
 class AccountEvent {
   @Type(() => String)

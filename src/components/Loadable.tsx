@@ -1,4 +1,4 @@
-import React, { Suspense, ComponentType } from 'react';
+import React, { ComponentType, Suspense } from 'react';
 
 // project import
 import Loader from './Loader';

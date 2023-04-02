@@ -1,4 +1,5 @@
-import { Typography, Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+
 import Logo from '../../../components/logo/Logo';
 import MainCard from '../../../components/MainCard';
 

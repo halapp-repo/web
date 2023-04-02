@@ -1,9 +1,10 @@
+import { OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
 import axios from 'axios';
 import moment from 'moment';
+
 import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
-import { OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
-import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
 import { DateRangeType } from '../../models/types/date-range.type';
+import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
 
 export class OrderApi {
   baseUrl: string;

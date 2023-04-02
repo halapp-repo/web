@@ -1,18 +1,19 @@
 import {
+  Box,
+  Button,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  Button,
-  Typography,
-  Box
+  DialogTitle,
+  Typography
 } from '@mui/material';
+import { green } from '@mui/material/colors';
+
 import { Order, OrderItem } from '../../../models/order';
+import { Organization } from '../../../models/organization';
 import { useAppDispatch } from '../../../store/hooks';
 import { updateOrderItems } from '../../../store/orders/ordersSlice';
-import { green } from '@mui/material/colors';
-import { Organization } from '../../../models/organization';
 
 interface DialogSaveItemsProps {
   HandleClose: () => void;

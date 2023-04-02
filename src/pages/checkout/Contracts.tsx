@@ -1,13 +1,14 @@
-import { Stack, Typography, Collapse, useMediaQuery, Theme } from '@mui/material';
-import { useState, useContext } from 'react';
+import { ExtraCharge } from '@halapp/common';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Collapse, Stack, Theme, Typography, useMediaQuery } from '@mui/material';
+import { useContext, useState } from 'react';
+
+import { ExpandMore } from '../../components/ExpandMoreButton';
+import { Organization } from '../../models/organization';
 import { DistantSaleContract } from './DistantSaleContract';
 import { ForeknowledgeContract } from './ForeknowledgeContract';
 import { ReturnPolicyContract } from './ReturnPolicyContract';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { ExpandMore } from '../../components/ExpandMoreButton';
 import { ShoppingCartContext } from './ShoppingCartContext';
-import { ExtraCharge } from '@halapp/common';
-import { Organization } from '../../models/organization';
 
 interface ContractsProps {
   Organization: Organization;

@@ -1,5 +1,5 @@
-import { Grid, Typography } from '@mui/material';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
+import { Grid, Typography } from '@mui/material';
 
 const OrganizationCreatedActivity = () => {
   return (

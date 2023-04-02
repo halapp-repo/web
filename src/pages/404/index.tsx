@@ -1,6 +1,7 @@
-import { Box, Grid, Stack, Typography, Button } from '@mui/material';
-import Icon404 from '../../components/icons/Icon404';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+
+import Icon404 from '../../components/icons/Icon404';
 import MainCard from '../../components/MainCard';
 
 const NotFound = () => {

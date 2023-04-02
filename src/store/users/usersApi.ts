@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { UserVM } from '@halapp/common';
-import FormData from 'form-data';
 import { PresignedPost } from '@aws-sdk/s3-presigned-post';
+import { UserVM } from '@halapp/common';
+import axios from 'axios';
+import FormData from 'form-data';
 
 export class UsersApi {
   baseUrl: string;

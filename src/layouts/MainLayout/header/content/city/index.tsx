@@ -1,19 +1,20 @@
+import { CaretDownOutlined, CaretUpOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import {
-  ButtonBase,
-  Typography,
   Box,
-  useMediaQuery,
-  Theme,
+  ButtonBase,
   IconButton,
+  Theme,
+  Typography,
+  useMediaQuery,
   useTheme
 } from '@mui/material';
-import { CaretDownOutlined, CaretUpOutlined, EnvironmentOutlined } from '@ant-design/icons';
-import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 import { useLocation } from 'react-router-dom';
-import { selectUICityIsOpen, toggleCity } from '../../../../../store/ui/uiSlice';
-import { selectUserAuth } from '../../../../../store/auth/authSlice';
+
 import { StyledBadge } from '../../../../../components/StyledBadge';
+import { selectUserAuth } from '../../../../../store/auth/authSlice';
 import { selectSelectedCity } from '../../../../../store/cities/citiesSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
+import { selectUICityIsOpen, toggleCity } from '../../../../../store/ui/uiSlice';
 
 const CityNavButton = () => {
   const location = useLocation();

@@ -1,4 +1,5 @@
-import { useMediaQuery, Theme, Drawer } from '@mui/material';
+import { Drawer, Theme, useMediaQuery } from '@mui/material';
+
 import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 import { selectUICityIsOpen, toggleCity } from '../../../../../store/ui/uiSlice';
 import { DialogCityContent } from './DialogCityContent';

@@ -1,4 +1,5 @@
-import { Grid, Stack, Typography, Box } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
+
 import IconOffline from '../../components/icons/IconOffline';
 import MainCard from '../../components/MainCard';
 

@@ -1,16 +1,14 @@
-import { useMemo } from 'react';
-import trLocale from 'date-fns/locale/tr';
-
 // material-ui
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
-import { createTheme, ThemeProvider, ThemeOptions } from '@mui/material/styles';
+import { createTheme, ThemeOptions, ThemeProvider } from '@mui/material/styles';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import trLocale from 'date-fns/locale/tr';
+import { useMemo } from 'react';
 
+import componentsOverride from './overrides';
 import Palette from './palette';
 import Typography from './typography';
-import componentsOverride from './overrides';
-
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 

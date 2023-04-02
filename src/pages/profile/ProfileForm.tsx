@@ -1,9 +1,11 @@
-import { Stack, Button, Grid } from '@mui/material';
-import { withFormik, FormikProps, Form, Field } from 'formik';
-import * as Yup from 'yup';
 import 'yup-phone';
-import { AppTextField } from '../../components/form/TextField';
+
+import { Button, Grid, Stack } from '@mui/material';
+import { Field, Form, FormikProps, withFormik } from 'formik';
 import { MuiTelInput } from 'mui-tel-input';
+import * as Yup from 'yup';
+
+import { AppTextField } from '../../components/form/TextField';
 import { User } from '../../models/user';
 
 interface FormValues {

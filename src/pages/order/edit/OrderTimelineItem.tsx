@@ -1,27 +1,28 @@
 import {
+  CheckOutlined,
+  CodeSandboxOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  EnvironmentOutlined,
+  MinusCircleOutlined,
+  ShoppingCartOutlined
+} from '@ant-design/icons';
+import { OrderEventType } from '@halapp/common';
+import {
   Box,
   Card,
   CardContent,
-  Typography,
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  Typography
 } from '@mui/material';
+import { blue, blueGrey, green, lightBlue, purple, red } from '@mui/material/colors';
+
 import { OrderEvent } from '../../../models/events/order-event';
-import { OrderEventType } from '@halapp/common';
-import { red, green, blue, purple, blueGrey, lightBlue } from '@mui/material/colors';
-import { OrderTimelineItemContent } from './OrderTimelineItemContent';
-import {
-  DeleteOutlined,
-  ShoppingCartOutlined,
-  EnvironmentOutlined,
-  EditOutlined,
-  MinusCircleOutlined,
-  CodeSandboxOutlined,
-  CheckOutlined
-} from '@ant-design/icons';
 import { OrderItemsUpdatedV1Payload } from '../../../models/events/payloads/order-items-updated-v1.payload';
+import { OrderTimelineItemContent } from './OrderTimelineItemContent';
 
 interface OrderTimelineItemProps {
   Event: OrderEvent;

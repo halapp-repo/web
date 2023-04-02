@@ -1,5 +1,6 @@
 import { AppBar, Toolbar } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+
 import Content from './content';
 
 const Header = () => {

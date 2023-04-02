@@ -1,4 +1,5 @@
 import { AccountEventType } from '@halapp/common';
+
 import { AccountEvent } from '../../../models/events/account-event';
 import { AccountActivityItemContent } from './AccountActivityItemContent';
 import { OrganizationCreatedActivity } from './OrganizationCreatedActivity';
