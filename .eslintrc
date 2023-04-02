@@ -18,13 +18,13 @@
     "plugins": [
         "react",
         "react-hooks",
-        "simple-import-sort"
+        // "simple-import-sort"
     ],
     "rules": {
         "react/react-in-jsx-scope": "off",
         "@typescript-eslint/no-non-null-assertion":"off",
         "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks,
-        "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error"
+        // "simple-import-sort/imports": "error",
+        // "simple-import-sort/exports": "error"
     }
 }
