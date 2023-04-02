@@ -1,23 +1,24 @@
 import {
-  Typography,
-  Grid,
-  Stack,
   Box,
   Button,
   Divider,
-  Switch,
+  FormControlLabel,
   FormGroup,
-  FormControlLabel
+  Grid,
+  Stack,
+  Switch,
+  Typography
 } from '@mui/material';
+import { Field, Form, FormikProps, withFormik } from 'formik';
 import { useState } from 'react';
-import { withFormik, FormikProps, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { AppTextField } from '../../../components/form/TextField';
-import { Organization } from '../../../models/organization';
+
 import {
   AddressFieldWithPlaceFromQuery,
   AddressOutput
 } from '../../../components/form/AddressFieldWithPlaceFromQuery';
+import { AppTextField } from '../../../components/form/TextField';
+import { Organization } from '../../../models/organization';
 
 interface FormValues {
   areSame: boolean;

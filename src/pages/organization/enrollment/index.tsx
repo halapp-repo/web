@@ -1,19 +1,20 @@
-import { Box, Grid, MobileStepper, Button, useTheme, Alert } from '@mui/material';
-import { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Alert, Box, Button, Grid, MobileStepper, useTheme } from '@mui/material';
+import { instanceToInstance, plainToInstance } from 'class-transformer';
+import { useEffect, useState } from 'react';
+
 import MainCard from '../../../components/MainCard';
-import { TaxForm } from './TaxForm';
 import { Organization, OrganizationAddress } from '../../../models/organization';
-import { AddressForm } from './AddressForm';
-import { ContactForm } from './ContactForm';
-import PostEnrollment from './PostEnrollment';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   createOrganizationEnrollmentRequest,
   selectOrganizationEnrollment
 } from '../../../store/organizations/organizationsSlice';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { AddressForm } from './AddressForm';
+import { ContactForm } from './ContactForm';
+import PostEnrollment from './PostEnrollment';
 import { PreviewForm } from './PreviewForm';
-import { instanceToInstance, plainToInstance } from 'class-transformer';
+import { TaxForm } from './TaxForm';
 
 const Enrollment = () => {
   const dispatch = useAppDispatch();

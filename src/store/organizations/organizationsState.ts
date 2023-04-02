@@ -1,4 +1,5 @@
 import { AccountEventVM, OrganizationVM } from '@halapp/common';
+
 import { Organization } from '../../models/organization';
 
 interface Enrollment {

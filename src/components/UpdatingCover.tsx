@@ -1,4 +1,4 @@
-import { Box, Stack, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface UpdatingCoverProps {

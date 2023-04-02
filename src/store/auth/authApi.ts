@@ -1,21 +1,22 @@
 import {
-  CognitoUser,
-  CognitoUserAttribute,
-  ClientMetadata,
-  ISignUpResult,
   AuthenticationDetails,
-  IAuthenticationDetailsData,
-  ICognitoUserData,
-  CognitoUserSession,
+  ClientMetadata,
   CognitoAccessToken,
   CognitoIdToken,
-  CognitoRefreshToken
+  CognitoRefreshToken,
+  CognitoUser,
+  CognitoUserAttribute,
+  CognitoUserSession,
+  IAuthenticationDetailsData,
+  ICognitoUserData,
+  ISignUpResult
 } from 'amazon-cognito-identity-js';
-import cognitoUserPool from '../../aws/CognitoUserPool';
-import { SignupCode } from '../../models/signup-code';
-import { SignupCodeDTO } from '../../models/dtos/signup-code.dto';
 import axios from 'axios';
 import { plainToClass } from 'class-transformer';
+
+import cognitoUserPool from '../../aws/CognitoUserPool';
+import { SignupCodeDTO } from '../../models/dtos/signup-code.dto';
+import { SignupCode } from '../../models/signup-code';
 
 const signUp = (
   email: string,
@@ -307,16 +308,16 @@ class AuthApi {
 }
 
 export {
-  signUp,
+  AuthApi,
+  checkTokenExpiration,
+  confirmPassword,
   confirmRegistration,
+  forgotPassword,
+  getCurrentUser,
+  getSession,
+  getUserAttributes,
   resendConfirmCode,
   signIn,
   signOut,
-  getSession,
-  forgotPassword,
-  confirmPassword,
-  getUserAttributes,
-  AuthApi,
-  getCurrentUser,
-  checkTokenExpiration
+  signUp
 };

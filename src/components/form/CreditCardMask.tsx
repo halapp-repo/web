@@ -1,5 +1,6 @@
-import { IMaskInput } from 'react-imask';
 import { forwardRef, ReactElement } from 'react';
+import { IMaskInput } from 'react-imask';
+
 import { creditCardType } from '../../utils/credit-card';
 
 interface CustomProps {

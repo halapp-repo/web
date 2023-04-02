@@ -1,8 +1,9 @@
-import { plainToClass } from 'class-transformer';
 import { PriceVM } from '@halapp/common';
+import { plainToClass } from 'class-transformer';
+
+import { Inventory } from '../models/inventory';
 import { Price } from '../models/price';
 import { IMapper } from './base.mapper';
-import { Inventory } from '../models/inventory';
 
 export class PriceToPriceDTOMapper extends IMapper<Price, PriceVM> {
   Inventories?: Inventory[] | null;

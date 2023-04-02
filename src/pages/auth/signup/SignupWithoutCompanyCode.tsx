@@ -1,4 +1,4 @@
-import { Typography, Stack, Box, Button, Divider } from '@mui/material';
+import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 const SignUpWithoutCompanyCode = () => {

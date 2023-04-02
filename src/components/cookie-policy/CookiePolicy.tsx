@@ -1,8 +1,9 @@
-import { useLocation } from 'react-router-dom';
-import useCookie from '../../hooks/useCookie';
 import { useEffect } from 'react';
-import { CookiePolicyContent } from './CookiePolicyContent';
+import { useLocation } from 'react-router-dom';
+
+import useCookie from '../../hooks/useCookie';
 import { CookieConsent } from '../../models/cookie-consent';
+import { CookiePolicyContent } from './CookiePolicyContent';
 
 const CookiePolicy = () => {
   const { pathname } = useLocation();

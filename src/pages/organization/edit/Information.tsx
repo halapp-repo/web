@@ -1,13 +1,14 @@
-import { Typography, Grid, Stack, Button, Divider, Chip } from '@mui/material';
-import { Organization } from '../../../models/organization';
 import { EditFilled } from '@ant-design/icons';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import AccountBalanceOutlined from '@mui/icons-material/AccountBalanceOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import AccountBalanceOutlined from '@mui/icons-material/AccountBalanceOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { Button, Chip, Divider, Grid, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/system';
+
+import { Organization } from '../../../models/organization';
 
 interface InformationProps {
   Organization: Organization;

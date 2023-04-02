@@ -1,6 +1,7 @@
-import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
-import { Box, TableCell, TableRow, Typography, Button } from '@mui/material';
+import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
+import { Box, Button, TableCell, TableRow, Typography } from '@mui/material';
 import React from 'react';
+
 import { Price } from '../../models/price';
 import { useAppDispatch } from '../../store/hooks';
 import { addCartItem } from '../../store/shopping-cart/shoppingCartSlice';

@@ -1,4 +1,5 @@
-import { Typography, Stack, Button, Box, ListItem, Radio, useTheme } from '@mui/material';
+import { Box, Button, ListItem, Radio, Stack, Typography, useTheme } from '@mui/material';
+
 import { OrganizationAddress } from '../../../models/organization';
 
 interface CompanyAddressListItemProps {

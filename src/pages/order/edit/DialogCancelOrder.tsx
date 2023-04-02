@@ -1,13 +1,14 @@
 import { OrderStatusType } from '@halapp/common';
 import {
+  Button,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  Button,
+  DialogTitle,
   Typography
 } from '@mui/material';
+
 import { Order } from '../../../models/order';
 import { Organization } from '../../../models/organization';
 import { useAppDispatch } from '../../../store/hooks';

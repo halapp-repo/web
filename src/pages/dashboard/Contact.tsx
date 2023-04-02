@@ -1,12 +1,12 @@
+import { WhatsAppOutlined } from '@ant-design/icons';
 import {
   Card,
   CardContent,
   CardMedia,
-  Typography,
-  Link
+  Link,
+  Typography
   // useMediaQuery,
 } from '@mui/material';
-import { WhatsAppOutlined } from '@ant-design/icons';
 
 const Contact = () => {
   return (

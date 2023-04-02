@@ -1,4 +1,5 @@
 import { SvgIcon } from '@mui/material';
+
 import { ReactComponent as LogoContent } from './iconOffline.svg';
 
 type LogoSize = 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';

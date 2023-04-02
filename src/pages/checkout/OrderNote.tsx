@@ -1,18 +1,19 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Box,
-  Typography,
   CardActions,
-  TextField,
-  IconButton,
   Collapse,
+  IconButton,
+  IconButtonProps,
   styled,
-  IconButtonProps
+  TextField,
+  Typography
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import React, { useEffect, useState } from 'react';
-import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { debounce } from '@mui/material/utils';
+import React, { useEffect, useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectUICheckout, updateCheckout } from '../../store/ui/uiSlice';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;

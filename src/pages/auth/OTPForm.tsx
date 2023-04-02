@@ -1,6 +1,7 @@
-import { Typography, Grid, Stack, Box, Button } from '@mui/material';
-import { withFormik, FormikProps, Form, Field } from 'formik';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { Field, Form, FormikProps, withFormik } from 'formik';
 import * as Yup from 'yup';
+
 import OTPInputText from '../../components/form/otp-input';
 
 interface FormValues {

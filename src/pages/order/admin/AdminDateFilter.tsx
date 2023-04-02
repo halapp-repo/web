@@ -1,5 +1,6 @@
-import { Typography, Select, MenuItem, Stack } from '@mui/material';
 import { CalendarOutlined } from '@ant-design/icons';
+import { MenuItem, Select, Stack, Typography } from '@mui/material';
+
 import { DateRangeType } from '../../../models/types/date-range.type';
 import { DateRange } from './date-range.type';
 

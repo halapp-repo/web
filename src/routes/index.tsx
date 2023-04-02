@@ -1,13 +1,13 @@
 import { useRoutes } from 'react-router-dom';
 
+import AdminRoutes from './AdminRoutes';
+import AuthRoutes from './AuthRoutes';
+import LocationsRoutes from './LocationRoutes';
 // project import
 import MainRoutes from './MainRoutes';
-import AuthRoutes from './AuthRoutes';
 import NotFoundRoutes from './NotFoundRoutes';
-import OrganizationRoutes from './OrganizationRoutes';
-import LocationsRoutes from './LocationRoutes';
 import OrdersRoutes from './OrdersRouter';
-import AdminRoutes from './AdminRoutes';
+import OrganizationRoutes from './OrganizationRoutes';
 import ProfileRoutes from './ProfileRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //

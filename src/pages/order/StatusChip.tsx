@@ -1,7 +1,8 @@
-import { Chip } from '@mui/material';
-import { Order } from '../../models/order';
 import { OrderStatusType, translateOrderStatus } from '@halapp/common';
-import { red, green, grey, blue, purple, lightBlue } from '@mui/material/colors';
+import { Chip } from '@mui/material';
+import { blue, green, grey, lightBlue, purple, red } from '@mui/material/colors';
+
+import { Order } from '../../models/order';
 
 const getColor = (status: OrderStatusType): string => {
   if (status === OrderStatusType.Created) {

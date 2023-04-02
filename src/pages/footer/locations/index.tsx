@@ -1,8 +1,9 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+
 import MainCard from '../../../components/MainCard';
 import PageWrapper from '../../../components/PageWrapper';
 import locations from './locations';
-import { Link as RouterLink } from 'react-router-dom';
 
 const CompanyLocations = () => {
   const getCities = () => {

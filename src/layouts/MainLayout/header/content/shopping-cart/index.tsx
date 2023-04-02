@@ -1,11 +1,12 @@
+import { ShoppingCartOutlined } from '@ant-design/icons';
 import { IconButton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { ShoppingCartOutlined } from '@ant-design/icons';
-import { useAppSelector, useAppDispatch } from '../../../../../store/hooks';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { StyledBadge } from '../../../../../components/StyledBadge';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 import { selectShoppingCart } from '../../../../../store/shopping-cart/shoppingCartSlice';
 import { toggleShoppingCart } from '../../../../../store/ui/uiSlice';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { StyledBadge } from '../../../../../components/StyledBadge';
 
 const ShoppingCartNavButton = () => {
   const dispatch = useAppDispatch();

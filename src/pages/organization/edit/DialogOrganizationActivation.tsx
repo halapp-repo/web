@@ -1,17 +1,18 @@
 import {
-  Dialog,
-  DialogTitle,
-  Typography,
-  DialogContent,
-  Stack,
+  Alert,
   Box,
-  DialogActions,
   Button,
-  OutlinedInput,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   InputAdornment,
-  Alert
+  OutlinedInput,
+  Stack,
+  Typography
 } from '@mui/material';
 import { useState } from 'react';
+
 import { Organization } from '../../../models/organization';
 import { useAppDispatch } from '../../../store/hooks';
 import { toggleOrganizationActivation } from '../../../store/organizations/organizationsSlice';

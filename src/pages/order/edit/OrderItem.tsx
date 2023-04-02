@@ -1,14 +1,15 @@
-import {
-  Stack,
-  Box,
-  ListItem,
-  ListItemText,
-  Typography,
-  ListItemSecondaryAction,
-  IconButton
-} from '@mui/material';
-import { OrderItem as Item } from '../../../models/order';
 import { DeleteFilled } from '@ant-design/icons';
+import {
+  Box,
+  IconButton,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Stack,
+  Typography
+} from '@mui/material';
+
+import { OrderItem as Item } from '../../../models/order';
 import { selectUserAuth } from '../../../store/auth/authSlice';
 import { useAppSelector } from '../../../store/hooks';
 

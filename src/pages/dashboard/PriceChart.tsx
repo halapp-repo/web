@@ -1,17 +1,18 @@
-import { useEffect } from 'react';
-import { CircularProgress, Box } from '@mui/material';
-import Chart from 'react-apexcharts';
-import { ApexOptions } from 'apexcharts';
-import { IntervalType } from '../../models/interval-type';
 import { CityType, ProductType } from '@halapp/common';
+import { Box, CircularProgress } from '@mui/material';
+import { ApexOptions } from 'apexcharts';
+import { useEffect } from 'react';
+import Chart from 'react-apexcharts';
+
+import { ChartSlot } from '../../models/chart-slot';
+import { IntervalType } from '../../models/interval-type';
+import { Price } from '../../models/price';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   fetchProductPrices,
   selectProductPrices,
   selectProductPricesIsLoading
 } from '../../store/product-prices/productPricesSlice';
-import { ChartSlot } from '../../models/chart-slot';
-import { Price } from '../../models/price';
 
 interface PriceChartProps {
   ProductId: string;

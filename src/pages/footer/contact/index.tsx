@@ -1,10 +1,11 @@
 import { WhatsAppOutlined } from '@ant-design/icons';
-import { Box, Typography, Stack, Button, Link } from '@mui/material';
+import { Box, Button, Link, Stack, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+
 import Logo from '../../../components/logo/Logo';
+import LogoText from '../../../components/logo/LogoText';
 import MainCard from '../../../components/MainCard';
 import PageWrapper from '../../../components/PageWrapper';
-import { Link as RouterLink } from 'react-router-dom';
-import LogoText from '../../../components/logo/LogoText';
 
 const Contact = () => {
   return (

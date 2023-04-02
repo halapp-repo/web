@@ -1,5 +1,6 @@
 import { plainToInstance, Transform, Type } from 'class-transformer';
 import * as moment from 'moment';
+
 import { trMoment } from '../utils/timezone';
 import { AccountEvent } from './events/account-event';
 

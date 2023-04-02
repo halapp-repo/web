@@ -1,7 +1,6 @@
-import { forwardRef, ReactNode } from 'react';
-
 // material-ui
-import { Fade, Box, Grow } from '@mui/material';
+import { Box, Fade, Grow } from '@mui/material';
+import { forwardRef, ReactNode } from 'react';
 
 // ==============================|| TRANSITIONS ||============================== //
 

@@ -1,4 +1,5 @@
-import { Box, useMediaQuery, Theme } from '@mui/material';
+import { Box, Theme, useMediaQuery } from '@mui/material';
+
 import { Order } from '../../../models/order';
 
 interface OrderCalendarProps {

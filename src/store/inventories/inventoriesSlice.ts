@@ -1,9 +1,10 @@
+import { InventoryVM } from '@halapp/common';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import moment from 'moment';
-import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
-import { InventoriesState } from './inventoriesState';
+
 import type { RootState } from '../index';
 import { InventoriesApi } from './inventoriesApi';
-import { InventoryVM } from '@halapp/common';
+import { InventoriesState } from './inventoriesState';
 
 const InventoriesLS = 'inventories';
 

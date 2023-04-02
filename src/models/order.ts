@@ -1,6 +1,3 @@
-import { Transform, Type } from 'class-transformer';
-import moment from 'moment';
-import { trMoment } from '../utils/timezone';
 import {
   CityType,
   ExtraCharge,
@@ -8,8 +5,12 @@ import {
   OrderStatusType,
   PaymentMethodType
 } from '@halapp/common';
-import { OrganizationAddress } from './organization';
+import { Transform, Type } from 'class-transformer';
+import moment from 'moment';
+
+import { trMoment } from '../utils/timezone';
 import { OrderEvent } from './events/order-event';
+import { OrganizationAddress } from './organization';
 
 class OrderItem {
   ProductId: string;

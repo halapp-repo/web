@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
 import { Box, Typography } from '@mui/material';
+import { ReactNode } from 'react';
+
 import { OrderEvent } from '../../../models/events/order-event';
 import { trMoment } from '../../../utils/timezone';
 

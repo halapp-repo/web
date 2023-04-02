@@ -1,16 +1,15 @@
-import { ReactNode } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-
 // material-ui
-import { Box, IconButton, Alert, Button, Stack } from '@mui/material';
+import { Alert, Box, Button, IconButton, Stack } from '@mui/material';
+import { ReactNode } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 
+import Logo from '../../components/logo/Logo';
+import LogoText from '../../components/logo/LogoText';
 // project import
 import MainCard from '../../components/MainCard';
-import Logo from '../../components/logo/Logo';
 import { selectUserAuth } from '../../store/auth/authSlice';
 import { useAppSelector } from '../../store/hooks';
-import { Link, useSearchParams } from 'react-router-dom';
-import LogoText from '../../components/logo/LogoText';
 
 // ==============================|| AUTHENTICATION - CARD WRAPPER ||============================== //
 interface Props {

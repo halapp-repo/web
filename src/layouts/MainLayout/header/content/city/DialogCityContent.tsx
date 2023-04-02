@@ -1,20 +1,21 @@
 import { CityType } from '@halapp/common';
 import {
+  Box,
+  Button,
   Dialog,
-  DialogTitle,
-  Typography,
+  DialogActions,
   DialogContent,
+  DialogTitle,
   MenuItem,
   Select,
   Stack,
-  Box,
-  DialogActions,
-  Button
+  Typography
 } from '@mui/material';
 import { useState } from 'react';
+
 import { selectSelectedCity } from '../../../../../store/cities/citiesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
-import { toggleCity, selectUICityIsOpen } from '../../../../../store/ui/uiSlice';
+import { selectUICityIsOpen, toggleCity } from '../../../../../store/ui/uiSlice';
 
 const DialogCityContent = () => {
   const dispatch = useAppDispatch();

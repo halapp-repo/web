@@ -1,30 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import moment from 'moment';
 import 'moment-timezone';
+
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Box,
-  useMediaQuery,
-  Theme,
+  Button,
   Card,
   CardActions,
-  Collapse,
   CardContent,
-  TextField,
+  Collapse,
   Divider,
   Stack,
-  Button
+  TextField,
+  Theme,
+  useMediaQuery
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { debounce } from '@mui/material/utils';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+
+import { ExpandMore } from '../../components/ExpandMoreButton';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectUIListingSelectedDate } from '../../store/ui/uiSlice';
 import {
-  updateListingSelectedDate,
+  selectUIListingProductNameFilter,
   updateListingProductNameFilter,
-  selectUIListingProductNameFilter
+  updateListingSelectedDate
 } from '../../store/ui/uiSlice';
-import { ExpandMore } from '../../components/ExpandMoreButton';
-import { debounce } from '@mui/material/utils';
 
 const PriceFilter = () => {
   const dispatch = useAppDispatch();

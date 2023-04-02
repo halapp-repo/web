@@ -1,5 +1,6 @@
-import { Box, Typography, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Box, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import { ReactElement, useEffect } from 'react';
+
 import { Organization } from '../../../models/organization';
 
 interface OrganizationSelectProps {

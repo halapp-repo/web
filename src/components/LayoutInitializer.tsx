@@ -1,13 +1,15 @@
+import '../store/users/usersSlice';
+
 import { useEffect } from 'react';
+
 import {
-  getSession,
   getCognitoUser,
+  getSession,
   refreshSession,
   selectUserAuth
 } from '../store/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchInventories } from '../store/inventories/inventoriesSlice';
-import '../store/users/usersSlice';
 import { getProfile, selectUserProfile } from '../store/profile/profileSlice';
 import { fetchCartItem } from '../store/shopping-cart/shoppingCartSlice';
 import {
@@ -15,8 +17,8 @@ import {
   selectUISessionLoading,
   updateListingSelectedDate
 } from '../store/ui/uiSlice';
-import { Cover } from './Cover';
 import { fetchById } from '../store/users/usersSlice';
+import { Cover } from './Cover';
 
 type Props = {
   children?: React.ReactNode;

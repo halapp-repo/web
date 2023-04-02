@@ -1,34 +1,35 @@
 import { AccountEventType } from '@halapp/common';
 import {
-  Stack,
   Box,
-  Typography,
-  List,
-  ListItem,
   CircularProgress,
   Divider,
+  List,
+  ListItem,
   Pagination,
-  useMediaQuery,
-  Theme
+  Stack,
+  Theme,
+  Typography,
+  useMediaQuery
 } from '@mui/material';
-import { useEffect, useState, Fragment } from 'react';
+import { useTheme } from '@mui/system';
+import { Fragment, useEffect, useState } from 'react';
+
 import { RetryOnError } from '../../../components/RetryOnError';
 import { AccountEvent } from '../../../models/events/account-event';
 import { Organization } from '../../../models/organization';
-import { useAppSelector, useAppDispatch } from '../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   fetchIndividualOrganizationWithEvents,
   selectOrganizationEvents,
   selectOrganizationEventsIsLoading
 } from '../../../store/organizations/organizationsSlice';
-import { getComparator } from '../../../utils/sort';
-import { ActivityListItem } from './ActivityListItem';
-import { useTheme } from '@mui/system';
 import {
   selectUIOrganization,
   updateOrganization as updateUIOrganization
 } from '../../../store/ui/uiSlice';
 import { paginate } from '../../../utils/pagination';
+import { getComparator } from '../../../utils/sort';
+import { ActivityListItem } from './ActivityListItem';
 
 interface AccountActivityProps {
   Organization: Organization;

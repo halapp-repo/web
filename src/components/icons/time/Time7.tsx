@@ -1,4 +1,5 @@
 import { SvgIcon } from '@mui/material';
+
 import { ReactComponent as IconContent } from './time7.svg';
 
 type LogoSize = 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';

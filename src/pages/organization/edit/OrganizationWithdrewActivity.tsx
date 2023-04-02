@@ -1,4 +1,3 @@
-import { Grid, Typography, Button } from '@mui/material';
 import { MinusSquareOutlined } from '@ant-design/icons';
 import {
   AccountEventType,
@@ -6,8 +5,10 @@ import {
   PaymentMethodType,
   translatePaymentMethodType
 } from '@halapp/common';
-import { AccountEvent } from '../../../models/events/account-event';
+import { Button, Grid, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+
+import { AccountEvent } from '../../../models/events/account-event';
 
 interface OrganizationWithdrewActivityProps {
   Event: AccountEvent;

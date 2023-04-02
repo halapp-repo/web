@@ -1,9 +1,10 @@
-import React from 'react';
 import { Drawer } from '@mui/material';
-import ShoppingCartContent from '../shopping-cart/SCContent';
-import { selectUIShoppingCartIsOpen, toggleShoppingCart } from '../../store/ui/uiSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import React from 'react';
 import { useEffect } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectUIShoppingCartIsOpen, toggleShoppingCart } from '../../store/ui/uiSlice';
+import ShoppingCartContent from '../shopping-cart/SCContent';
 
 const ShoppingCartDrawer = () => {
   const dispatch = useAppDispatch();

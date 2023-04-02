@@ -1,8 +1,10 @@
 import 'reflect-metadata';
-import { Provider } from 'react-redux';
+
 import { render } from '@testing-library/react';
-import App from './App';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+
+import App from './App';
 import state from './store/index';
 
 test.skip('renders learn react link', async () => {

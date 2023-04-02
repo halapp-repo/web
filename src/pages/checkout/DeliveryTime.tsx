@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
-import moment from 'moment';
-import { Box, List, TextField, Typography, InputAdornment } from '@mui/material';
-import { trMoment } from '../../utils/timezone';
-import { MobileTimePicker } from '@mui/x-date-pickers';
 import { ClockCircleOutlined } from '@ant-design/icons';
+import { Box, InputAdornment, List, TextField, Typography } from '@mui/material';
+import { MobileTimePicker } from '@mui/x-date-pickers';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+
 import { TimeOfDayIcon } from '../../components/TimeOfDayIcon';
-import { selectUICheckout } from '../../store/ui/uiSlice';
 import { useAppSelector } from '../../store/hooks';
+import { selectUICheckout } from '../../store/ui/uiSlice';
+import { trMoment } from '../../utils/timezone';
 
 const getDeliveryTime = (
   currentTime: moment.Moment,

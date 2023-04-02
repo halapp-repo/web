@@ -1,40 +1,41 @@
-import React, { ReactElement, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { ProductType } from '@halapp/common';
 import {
-  fetchPrices,
-  selectPriceIsLoading,
-  selectPriceListItemsOfSelectedDate
-} from '../../store/prices/pricesSlice';
-import { selectProducts } from '../../store/inventories/inventoriesSlice';
-import {
-  selectUIListingSelectedDate,
-  selectUIListingProductNameFilter,
-  updateListingSelectedDate
-} from '../../store/ui/uiSlice';
-import {
+  Chip,
+  CircularProgress,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  CircularProgress,
-  Toolbar,
   TableSortLabel,
-  Chip,
-  Stack
+  Toolbar,
+  Typography
 } from '@mui/material';
-import { ProductType } from '@halapp/common';
 import moment from 'moment';
-import { Order } from '../../utils/order';
-import { getComparator } from '../../utils/sort';
-import PriceTableRow from './PriceTableRow';
-import PriceDialog from './PriceDialog';
-import { contains } from '../../utils/filter';
+import React, { ReactElement, useEffect } from 'react';
+
+import { RetryOnError } from '../../components/RetryOnError';
 import { Price } from '../../models/price';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
-import { RetryOnError } from '../../components/RetryOnError';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectProducts } from '../../store/inventories/inventoriesSlice';
+import {
+  fetchPrices,
+  selectPriceIsLoading,
+  selectPriceListItemsOfSelectedDate
+} from '../../store/prices/pricesSlice';
+import {
+  selectUIListingProductNameFilter,
+  selectUIListingSelectedDate,
+  updateListingSelectedDate
+} from '../../store/ui/uiSlice';
+import { contains } from '../../utils/filter';
+import { Order } from '../../utils/order';
+import { getComparator } from '../../utils/sort';
+import PriceDialog from './PriceDialog';
+import PriceTableRow from './PriceTableRow';
 
 type SortablePriceListItem = Pick<Price, 'Price' | 'ProductName'>;
 

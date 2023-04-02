@@ -1,7 +1,8 @@
+import { OrderEventType } from '@halapp/common';
 import { Transform, Type } from 'class-transformer';
 import moment from 'moment';
+
 import { trMoment } from '../../utils/timezone';
-import { OrderEventType } from '@halapp/common';
 import { OrderItemsUpdatedV1Payload } from './payloads/order-items-updated-v1.payload';
 
 class OrderEvent {

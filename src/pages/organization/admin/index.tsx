@@ -1,20 +1,21 @@
+import { Box, CircularProgress, Divider, List, TextField } from '@mui/material';
+import { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { List, CircularProgress, Box, TextField, Divider } from '@mui/material';
-import { selectUserAuth } from '../../../store/auth/authSlice';
-import { useAppSelector, useAppDispatch } from '../../../store/hooks';
-import { useEffect, useState, Fragment } from 'react';
-import PageWrapper from '../../../components/PageWrapper';
+
 import MainCard from '../../../components/MainCard';
-import { OrganizationListItem } from '../list/OrganizationListItem';
+import PageWrapper from '../../../components/PageWrapper';
+import { RetryOnError } from '../../../components/RetryOnError';
+import { Organization } from '../../../models/organization';
+import { selectUserAuth } from '../../../store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   fetchAllOrganizations,
   selectAdminList,
   selectOrganizationIsLoading
 } from '../../../store/organizations/organizationsSlice';
-import { getComparator } from '../../../utils/sort';
 import { contains } from '../../../utils/filter';
-import { Organization } from '../../../models/organization';
-import { RetryOnError } from '../../../components/RetryOnError';
+import { getComparator } from '../../../utils/sort';
+import { OrganizationListItem } from '../list/OrganizationListItem';
 
 const AdminOrganizationList = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
-import { Stack, Typography, Box } from '@mui/material';
+import { ExtraCharge, ExtraChargeType } from '@halapp/common';
+import { Box, Stack, Typography } from '@mui/material';
 import moment from 'moment';
-import { ExtraChargeType, ExtraCharge } from '@halapp/common';
 
 interface SummaryDeliveryProps {
   ExtraCharges?: ExtraCharge[];

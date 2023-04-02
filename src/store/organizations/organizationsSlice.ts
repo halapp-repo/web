@@ -1,15 +1,16 @@
-import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
-import { OrganizationsState } from './organizationsState';
-import type { RootState } from '../index';
-import { Organization, OrganizationAddress } from '../../models/organization';
-import { OrganizationsApi } from './organizationsApi';
-import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
-import { instanceToInstance, plainToClass, plainToInstance } from 'class-transformer';
-import { AxiosError } from 'axios';
-import { signOut } from '../auth/authSlice';
 import { AccountEventType, OrganizationVM } from '@halapp/common';
-import { createOrder } from '../orders/ordersSlice';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
+import { instanceToInstance, plainToClass, plainToInstance } from 'class-transformer';
+
+import { OrganizationToOrganizationDTOMapper } from '../../mappers/organization-to-organization-dto.mapper';
 import { AccountEvent } from '../../models/events/account-event';
+import { Organization, OrganizationAddress } from '../../models/organization';
+import { signOut } from '../auth/authSlice';
+import type { RootState } from '../index';
+import { createOrder } from '../orders/ordersSlice';
+import { OrganizationsApi } from './organizationsApi';
+import { OrganizationsState } from './organizationsState';
 
 const initialState = {
   Organizations: {},

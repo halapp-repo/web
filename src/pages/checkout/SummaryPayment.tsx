@@ -1,6 +1,6 @@
 import { ExtraCharge, ExtraChargeType, PaymentMethodType } from '@halapp/common';
-import { Stack, Typography, Box } from '@mui/material';
 import { translatePaymentMethodType } from '@halapp/common';
+import { Box, Stack, Typography } from '@mui/material';
 
 interface SummaryPaymentProps {
   PaymentMethodType: PaymentMethodType;

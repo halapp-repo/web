@@ -1,25 +1,26 @@
+import { ExtraCharge } from '@halapp/common';
+import CloseIcon from '@mui/icons-material/Close';
 import {
-  Stack,
-  Typography,
+  Button,
   Dialog,
-  DialogTitle,
-  useMediaQuery,
-  Theme,
+  DialogActions,
   DialogContent,
   DialogProps,
-  DialogActions,
-  Button,
-  IconButton
+  DialogTitle,
+  IconButton,
+  Stack,
+  Theme,
+  Typography,
+  useMediaQuery
 } from '@mui/material';
-import { useState, useContext } from 'react';
-import { DistantSaleContract } from './DistantSaleContract';
-import { ForeknowledgeContract } from './ForeknowledgeContract';
-import CloseIcon from '@mui/icons-material/Close';
+import { useContext, useState } from 'react';
+
+import { Organization } from '../../models/organization';
 import { useAppDispatch } from '../../store/hooks';
 import { updateCheckout } from '../../store/ui/uiSlice';
+import { DistantSaleContract } from './DistantSaleContract';
+import { ForeknowledgeContract } from './ForeknowledgeContract';
 import { ShoppingCartContext } from './ShoppingCartContext';
-import { Organization } from '../../models/organization';
-import { ExtraCharge } from '@halapp/common';
 
 interface DialogContractsProps {
   IsDialogOpen: boolean;

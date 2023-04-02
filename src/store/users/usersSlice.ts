@@ -1,9 +1,10 @@
-import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
-import { UsersState } from './usersState';
 import { UserVM } from '@halapp/common';
-import { UsersApi } from './usersApi';
-import type { RootState } from '../index';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+
 import { UserToUserDTOMapper } from '../../mappers/user-to-user-dto.mapper';
+import type { RootState } from '../index';
+import { UsersApi } from './usersApi';
+import { UsersState } from './usersState';
 
 const initialState = {
   isLoading: false,

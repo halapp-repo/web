@@ -1,6 +1,7 @@
-import { Order } from '../../../models/order';
-import { Box, useMediaQuery, Theme, Stack, Typography } from '@mui/material';
 import { ShopOutlined } from '@ant-design/icons';
+import { Box, Stack, Typography } from '@mui/material';
+
+import { Order } from '../../../models/order';
 
 interface OrderAddressProps {
   Order: Order;

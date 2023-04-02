@@ -1,15 +1,16 @@
+import { OrderEventType, OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import moment from 'moment';
+
+import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
+import { OrderItemsUpdatedV1Payload } from '../../models/events/payloads/order-items-updated-v1.payload';
+import { DateRangeType } from '../../models/types/date-range.type';
+import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
+import { trMoment } from '../../utils/timezone';
 import { RootState } from '..';
+import { signOut } from '../auth/authSlice';
 import { OrderApi } from './ordersApi';
 import { OrdersState } from './ordersState';
-import moment from 'moment';
-import { trMoment } from '../../utils/timezone';
-import { OrderEventType, OrderItemVM, OrderStatusType, OrderVM } from '@halapp/common';
-import { OrderToOrderVMMapper } from '../../mappers/order-to-order-vm.mapper';
-import { signOut } from '../auth/authSlice';
-import { OrderItemsUpdatedV1Payload } from '../../models/events/payloads/order-items-updated-v1.payload';
-import { OrderStatusExtendedType } from '../../models/types/order-status-extended.type';
-import { DateRangeType } from '../../models/types/date-range.type';
 
 const initialState = {
   IsLoading: false,

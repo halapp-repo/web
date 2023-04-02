@@ -1,9 +1,10 @@
 // material-ui
 
 import { Grid } from '@mui/material';
-import PriceTable from './PriceTable';
+
 import MainCard from '../../components/MainCard';
 import PriceFilter from './PriceFilter';
+import PriceTable from './PriceTable';
 import ShoppingCartDrawer from './ShoppingCartDrawer';
 
 const Dashboard = () => {

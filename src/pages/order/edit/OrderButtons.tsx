@@ -1,10 +1,11 @@
-import { Button, List, ListItem, Stack, Typography } from '@mui/material';
-import { Order } from '../../../models/order';
-import { useAppSelector } from '../../../store/hooks';
-import { selectUserAuth } from '../../../store/auth/authSlice';
-import { ReactElement } from 'react';
-import MainCard from '../../../components/MainCard';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { Button, List, ListItem, Stack, Typography } from '@mui/material';
+import { ReactElement } from 'react';
+
+import MainCard from '../../../components/MainCard';
+import { Order } from '../../../models/order';
+import { selectUserAuth } from '../../../store/auth/authSlice';
+import { useAppSelector } from '../../../store/hooks';
 
 interface OrderButtonsProps {
   Order: Order;

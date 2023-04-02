@@ -1,10 +1,11 @@
+import { PriceVM } from '@halapp/common';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { PricesState } from './pricesState';
+
+import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
+import { trMoment } from '../../utils/timezone';
 import type { RootState } from '../index';
 import { PricesApi } from './pricesApi';
-import { trMoment } from '../../utils/timezone';
-import { PriceVM } from '@halapp/common';
-import { PriceToPriceDTOMapper } from '../../mappers/price-to-price-dto.mapper';
+import { PricesState } from './pricesState';
 
 const initialState = {
   data: {},

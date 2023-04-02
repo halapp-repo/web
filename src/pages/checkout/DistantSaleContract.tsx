@@ -1,8 +1,10 @@
-import { Stack, Typography, Card, CardContent } from '@mui/material';
 import '../../themes/styles/scrollbar.css';
+
 import { DistantSaleContractContent, ExtraCharge, translateExtraChargeType } from '@halapp/common';
-import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
+import { Card, CardContent, Stack, Typography } from '@mui/material';
+
 import { Organization } from '../../models/organization';
+import { ShoppingCartList } from '../../models/viewmodels/shopping-cart-list-item';
 import { trMoment } from '../../utils/timezone';
 
 interface DistantSaleContractProps {

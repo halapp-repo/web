@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 import { Order } from './order';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -39,4 +40,4 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export { getComparator, descendingComparator };
+export { descendingComparator, getComparator };

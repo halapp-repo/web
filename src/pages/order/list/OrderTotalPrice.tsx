@@ -1,5 +1,6 @@
 import { CreditCardOutlined } from '@ant-design/icons';
 import { Box, Stack, Typography } from '@mui/material';
+
 import { Order } from '../../../models/order';
 
 interface OrderTotalPriceProps {

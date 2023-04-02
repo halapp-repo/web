@@ -1,4 +1,5 @@
 import React, { memo, useLayoutEffect, useRef } from 'react';
+
 import { usePrevious } from './usePrevious';
 
 interface SingleOTPInputProps extends React.InputHTMLAttributes<HTMLInputElement> {

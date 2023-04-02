@@ -1,13 +1,14 @@
+import { Chip, CircularProgress, List, ListItem, Stack, Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import { Fragment, useEffect } from 'react';
+
 import { Organization } from '../../../models/organization';
-import { List, ListItem, CircularProgress, Stack, Typography, Chip } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { useEffect, Fragment } from 'react';
 import {
   fetchAllByOrganizationId,
-  selectOrganizationUsers,
-  selectIsLoading
+  selectIsLoading,
+  selectOrganizationUsers
 } from '../../../store/users/usersSlice';
-import Divider from '@mui/material/Divider';
 import { UserAddListItem } from './UserAddListItem';
 
 interface UsersProps {

@@ -1,8 +1,9 @@
-import { Typography, Box, Select, MenuItem } from '@mui/material';
-import { OrderStatusType } from '@halapp/common';
 import { FieldTimeOutlined } from '@ant-design/icons';
-import { OrderStatusExtendedType } from '../../../models/types/order-status-extended.type';
+import { OrderStatusType } from '@halapp/common';
+import { Box, MenuItem, Select, Typography } from '@mui/material';
+
 import { DateRangeType } from '../../../models/types/date-range.type';
+import { OrderStatusExtendedType } from '../../../models/types/order-status-extended.type';
 
 interface TypeFilterProps {
   Filter: OrderStatusType | OrderStatusExtendedType;

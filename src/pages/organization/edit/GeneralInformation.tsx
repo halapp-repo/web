@@ -1,6 +1,7 @@
-import { Typography, Grid, Stack, Button, Divider, Box } from '@mui/material';
-import { Organization } from '../../../models/organization';
 import { EditFilled } from '@ant-design/icons';
+import { Button, Grid, Stack, Typography } from '@mui/material';
+
+import { Organization } from '../../../models/organization';
 
 interface GeneralInformationProps {
   Organization: Organization;

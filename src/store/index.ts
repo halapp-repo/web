@@ -1,15 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import pricesReducer from './prices/pricesSlice';
-import inventoriesReducer from './inventories/inventoriesSlice';
-import profileReducer from './profile/profileSlice';
-import uiReducer from './ui/uiSlice';
-import productPricesReducer from './product-prices/productPricesSlice';
-import organizationsReducer from './organizations/organizationsSlice';
+
 import authReducer from './auth/authSlice';
-import shoppingCartReducer from './shopping-cart/shoppingCartSlice';
-import ordersReducer from './orders/ordersSlice';
-import usersReducer from './users/usersSlice';
 import citiesReducer from './cities/citiesSlice';
+import inventoriesReducer from './inventories/inventoriesSlice';
+import ordersReducer from './orders/ordersSlice';
+import organizationsReducer from './organizations/organizationsSlice';
+import pricesReducer from './prices/pricesSlice';
+import productPricesReducer from './product-prices/productPricesSlice';
+import profileReducer from './profile/profileSlice';
+import shoppingCartReducer from './shopping-cart/shoppingCartSlice';
+import uiReducer from './ui/uiSlice';
+import usersReducer from './users/usersSlice';
 
 const store = configureStore({
   reducer: {

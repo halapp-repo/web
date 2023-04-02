@@ -32,4 +32,4 @@ function areStringsEqual(str1: string | undefined, str2: string | undefined): bo
   return false;
 }
 
-export { contains, areStringsEqual };
+export { areStringsEqual, contains };

@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { InventoryVM } from '@halapp/common';
+import axios from 'axios';
 
 export class InventoriesApi {
   baseUrl: string;

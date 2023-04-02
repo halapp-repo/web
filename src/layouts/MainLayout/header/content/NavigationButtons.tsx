@@ -1,10 +1,11 @@
-import { Stack, Button, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-import Profile from './profile';
-import { useAppSelector } from '../../../../store/hooks';
+
 import { selectUserAuth } from '../../../../store/auth/authSlice';
-import { ShoppingCartNavButton } from './shopping-cart';
+import { useAppSelector } from '../../../../store/hooks';
 import { CityNavButton } from './city';
+import Profile from './profile';
+import { ShoppingCartNavButton } from './shopping-cart';
 
 const defaultStyle = {
   textDecoration: 'none'

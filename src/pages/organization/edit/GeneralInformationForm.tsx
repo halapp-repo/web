@@ -1,14 +1,15 @@
-import { Box, Grid, Stack, Button, Divider, Typography } from '@mui/material';
-import { withFormik, FormikProps, Field, Form } from 'formik';
+import { Box, Button, Divider, Grid, Stack, Typography } from '@mui/material';
+import { instanceToInstance } from 'class-transformer';
+import { Field, Form, FormikProps, withFormik } from 'formik';
 import { MuiTelInput } from 'mui-tel-input';
-import { Organization } from '../../../models/organization';
 import * as Yup from 'yup';
-import { AppTextField } from '../../../components/form/TextField';
+
 import {
   AddressFieldWithPlaceFromQuery,
   AddressOutput
 } from '../../../components/form/AddressFieldWithPlaceFromQuery';
-import { instanceToInstance } from 'class-transformer';
+import { AppTextField } from '../../../components/form/TextField';
+import { Organization } from '../../../models/organization';
 
 interface GeneralInformationFormProps {
   Organization: Organization;

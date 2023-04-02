@@ -1,27 +1,28 @@
+import { OrderItemVM, OrderVM, PaymentMethodType, ProductType } from '@halapp/common';
+import { Grid, Step, StepButton, StepLabel, Stepper } from '@mui/material';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { useEffect, useState } from 'react';
-import { Stepper, Step, StepLabel, Grid, StepButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+import { Overlay } from '../../components/Overlay';
 import { OrganizationAddress } from '../../models/organization';
-import { CheckoutForm } from './CheckoutForm';
-import { createOrder } from '../../store/orders/ordersSlice';
-import { trMoment } from '../../utils/timezone';
-import { OrganizationsContext } from './OrganizationsContext';
+import { selectUserAuth } from '../../store/auth/authSlice';
+import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { createOrder } from '../../store/orders/ordersSlice';
 import {
   fetchOrganizations,
   selectOrganizationIsLoading,
   selectOrganizations
 } from '../../store/organizations/organizationsSlice';
-import { Overlay } from '../../components/Overlay';
-import { useNavigate } from 'react-router-dom';
-import { OrderItemVM, OrderVM, PaymentMethodType, ProductType } from '@halapp/common';
-import { toggleShoppingCart, updateCheckout } from '../../store/ui/uiSlice';
-import { PaymentForm } from './PaymentForm';
-import { selectUserAuth } from '../../store/auth/authSlice';
-import { ShoppingCartContext } from './ShoppingCartContext';
-import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { fetchTodaysPrices, selectPriceIsLoading } from '../../store/prices/pricesSlice';
 import { selectEnhancedShoppingCart } from '../../store/shopping-cart/shoppingCartSlice';
-import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { toggleShoppingCart, updateCheckout } from '../../store/ui/uiSlice';
+import { trMoment } from '../../utils/timezone';
+import { CheckoutForm } from './CheckoutForm';
+import { OrganizationsContext } from './OrganizationsContext';
+import { PaymentForm } from './PaymentForm';
+import { ShoppingCartContext } from './ShoppingCartContext';
 
 const Checkout = () => {
   const dispatch = useAppDispatch();

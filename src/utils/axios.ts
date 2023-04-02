@@ -1,7 +1,8 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import axios from 'axios';
+
 import { refreshSession } from '../store/auth/authSlice';
 import state from '../store/index';
-import { unwrapResult } from '@reduxjs/toolkit';
 
 const axiosInstance = axios.create();
 

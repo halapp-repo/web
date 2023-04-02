@@ -2,6 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { plainToInstance } from 'class-transformer';
 
+import { USERSESSION } from '../../models/constants/user-session';
 import { Price } from '../../models/price';
 import { ShoppingCart } from '../../models/shopping-cart';
 import {
@@ -9,7 +10,6 @@ import {
   ShoppingCartListItem
 } from '../../models/viewmodels/shopping-cart-list-item';
 import { UserSessionStorage } from '../../models/viewmodels/user-session.storage';
-import { USERSESSION } from '../../models/constants/user-session';
 import { RootState } from '../index';
 import { InventoriesState } from '../inventories/inventoriesState';
 import { createOrder } from '../orders/ordersSlice';

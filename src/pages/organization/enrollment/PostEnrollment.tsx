@@ -1,9 +1,10 @@
-import { Typography, Stack, Box, Button } from '@mui/material';
-import IconBoxInMail from '../../../components/icons/IconBoxInMail';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+
+import IconBoxInMail from '../../../components/icons/IconBoxInMail';
+import LogoText from '../../../components/logo/LogoText';
 import { useAppSelector } from '../../../store/hooks';
 import { selectOrganizationEnrollment } from '../../../store/organizations/organizationsSlice';
-import LogoText from '../../../components/logo/LogoText';
 
 const PostEnrollment = () => {
   const enrollmentRequest = useAppSelector(selectOrganizationEnrollment);
