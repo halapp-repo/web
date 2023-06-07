@@ -1,5 +1,5 @@
 import { OrderItemVM, OrderVM, PaymentMethodType, ProductType } from '@halapp/common';
-import { Grid, Step, StepButton, StepLabel, Stepper } from '@mui/material';
+import { Grid, Step, StepButton, StepLabel, Stepper, Stack, Typography } from '@mui/material';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { OrganizationAddress } from '../../models/organization';
 import { selectUserAuth } from '../../store/auth/authSlice';
 import { selectSelectedCity } from '../../store/cities/citiesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { createOrder } from '../../store/orders/ordersSlice';
+import { createOrder, selectIsOrderCreating } from '../../store/orders/ordersSlice';
 import {
   fetchOrganizations,
   selectOrganizationIsLoading,
@@ -23,6 +23,8 @@ import { CheckoutForm } from './CheckoutForm';
 import { OrganizationsContext } from './OrganizationsContext';
 import { PaymentForm } from './PaymentForm';
 import { ShoppingCartContext } from './ShoppingCartContext';
+import { GenericOverlay } from '../../components/GenericOverlay';
+import OrderCreatingGif from '../../assets/flying-halapp.gif';
 
 const Checkout = () => {
   const dispatch = useAppDispatch();
@@ -32,6 +34,7 @@ const Checkout = () => {
   const pricesAreLoading = useAppSelector(selectPriceIsLoading);
   const selectedCity = useAppSelector(selectSelectedCity);
   const ShoppingCart = useAppSelector(selectEnhancedShoppingCart);
+  const isOrderCreating = useAppSelector(selectIsOrderCreating);
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState<{
     [k: number]: boolean;
@@ -114,6 +117,15 @@ const Checkout = () => {
     <OrganizationsContext.Provider value={organizations || []}>
       <ShoppingCartContext.Provider value={ShoppingCart}>
         {(organizationAreLoading || pricesAreLoading) && <Overlay />}
+        {true && (
+          <GenericOverlay>
+            <Stack spacing={3}>
+              <Stack sx={{ alignItems: 'center' }}>
+                <Typography variant="h3">Siparişiniz oluşturuluyor...</Typography>
+              </Stack>
+            </Stack>
+          </GenericOverlay>
+        )}
         <Grid
           container
           rowSpacing={4.5}

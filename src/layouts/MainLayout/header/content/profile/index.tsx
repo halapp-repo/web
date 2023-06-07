@@ -174,7 +174,7 @@ const Profile = () => {
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleOpenOrganizationList}>
                           <ListItemIcon sx={{ fontSize: '24px' }}>
-                            {location.pathname === '/organization/list' ? (
+                            {location.pathname.includes('/organization') ? (
                               <ShopFilled />
                             ) : (
                               <ShopOutlined />
@@ -185,8 +185,9 @@ const Profile = () => {
                             primaryTypographyProps={{
                               fontSize: '15px',
                               paddingLeft: '20px',
-                              fontWeight:
-                                location.pathname === '/organization/list' ? 'bold' : 'inherit'
+                              fontWeight: location.pathname.includes('/organization')
+                                ? 'bold'
+                                : 'inherit'
                             }}
                           />
                         </ListItemButton>
@@ -196,7 +197,7 @@ const Profile = () => {
                       <ListItem disablePadding>
                         <ListItemButton onClick={handleOpenOrderList}>
                           <ListItemIcon sx={{ fontSize: '24px' }}>
-                            {location.pathname === '/orders' ? (
+                            {location.pathname.includes('/orders') ? (
                               <ScheduleFilled />
                             ) : (
                               <ScheduleOutlined />
@@ -207,7 +208,7 @@ const Profile = () => {
                             primaryTypographyProps={{
                               paddingLeft: '20px',
                               fontSize: '15px',
-                              fontWeight: location.pathname === '/orders' ? 'bold' : 'inherit'
+                              fontWeight: location.pathname.includes('/orders') ? 'bold' : 'inherit'
                             }}
                           />
                         </ListItemButton>
@@ -218,7 +219,7 @@ const Profile = () => {
                           <ListItem disablePadding sx={{ color: '#8753de' }}>
                             <ListItemButton onClick={handleOpenAdminOrderList}>
                               <ListItemIcon sx={{ fontSize: '24px' }}>
-                                {location.pathname === '/admin/orders' ? (
+                                {location.pathname.includes('/admin/orders') ? (
                                   <AdminPanelSettingsIcon sx={{ color: '#8753de' }} />
                                 ) : (
                                   <AdminPanelSettingsOutlinedIcon sx={{ color: '#8753de' }} />
@@ -229,8 +230,9 @@ const Profile = () => {
                                 primaryTypographyProps={{
                                   paddingLeft: '20px',
                                   fontSize: '15px',
-                                  fontWeight:
-                                    location.pathname === '/admin/orders' ? 'bold' : 'inherit'
+                                  fontWeight: location.pathname.includes('/admin/orders')
+                                    ? 'bold'
+                                    : 'inherit'
                                 }}
                               />
                             </ListItemButton>
@@ -239,7 +241,7 @@ const Profile = () => {
                           <ListItem disablePadding sx={{ color: '#8753de' }}>
                             <ListItemButton onClick={handleOpenAdminOrganizationList}>
                               <ListItemIcon sx={{ fontSize: '24px' }}>
-                                {location.pathname === '/admin/organizations' ? (
+                                {location.pathname.includes('/admin/organizations') ? (
                                   <AdminPanelSettingsIcon sx={{ color: '#8753de' }} />
                                 ) : (
                                   <AdminPanelSettingsOutlinedIcon sx={{ color: '#8753de' }} />
@@ -250,10 +252,9 @@ const Profile = () => {
                                 primaryTypographyProps={{
                                   paddingLeft: '20px',
                                   fontSize: '15px',
-                                  fontWeight:
-                                    location.pathname === '/admin/organizations'
-                                      ? 'bold'
-                                      : 'inherit'
+                                  fontWeight: location.pathname.includes('/admin/organizations')
+                                    ? 'bold'
+                                    : 'inherit'
                                 }}
                               />
                             </ListItemButton>

@@ -18,4 +18,7 @@ export interface OrdersState {
       [status in OrderStatusType | OrderStatusExtendedType]: OrderVM[] | undefined;
     };
   };
+  statuses: {
+    isOrderCreating: boolean;
+  };
 }

@@ -5,3 +5,4 @@ declare module '*.svg' {
   export default src;
 }
 declare module 'google.maps';
+declare module '*.gif';

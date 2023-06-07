@@ -22,7 +22,7 @@ const Overlay = () => {
       <Stack spacing={2}>
         <Stack sx={{ alignItems: 'center' }}>
           <Logo Size="large" />
-          <LogoText />
+          <LogoText Size="large" />
         </Stack>
         <LinearProgress />
       </Stack>

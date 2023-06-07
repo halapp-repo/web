@@ -16,7 +16,10 @@ const initialState = {
   IsLoading: false,
   List: {},
   Edit: {},
-  AdminList: {}
+  AdminList: {},
+  statuses: {
+    isOrderCreating: false
+  }
 } as OrdersState;
 
 export const createOrder = createAsyncThunk<OrderVM, OrderVM, { state: RootState }>(
@@ -137,16 +140,17 @@ const OrderSlice = createSlice({
     //Create Order
     builder.addCase(createOrder.fulfilled, (state, action) => {
       const { OrganizationId } = action.meta.arg;
-      state.IsLoading = false;
+      state.statuses.isOrderCreating = false;
       state.List[OrganizationId] = {
         ...state.List[OrganizationId],
         [trMoment().format('MMYYYY')]: undefined
       };
     });
     builder.addCase(createOrder.pending, (state) => {
-      state.IsLoading = true;
+      state.statuses.isOrderCreating = true;
     });
     builder.addCase(createOrder.rejected, (state) => {
+      state.statuses.isOrderCreating = false;
       state.IsLoading = false;
     });
     // Fetch Orders By OrgId
@@ -291,6 +295,10 @@ export const selectOrdersByOrgId = createSelector(
 export const selectOrderIsLoading = createSelector(
   [(state: RootState) => state.orders],
   (ord: OrdersState) => ord.IsLoading
+);
+export const selectIsOrderCreating = createSelector(
+  [(state: RootState) => state.orders],
+  (ord: OrdersState) => ord.statuses.isOrderCreating
 );
 export const selectOrder = createSelector(
   [
